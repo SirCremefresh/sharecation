@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "907454945637",
+    "project_id": "sharecation-production",
+    "storage_bucket": "sharecation-production.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:907454945637:android:05a93d13157dae8bcd698c",
+        "android_client_info": {
+          "package_name": "dev.wolfisberg.sharecation"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "907454945637-85qlip23r151aspsct3lo5f86s1mrd11.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "dev.wolfisberg.sharecation",
+            "certificate_hash": "75b66036995ff5094b261cebaed093a987722f5c"
+          }
+        },
+        {
+          "client_id": "907454945637-be09k2vnpd6qcniu9rto8nrdghi9uhg5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCX5VqgMXkzkAVkoThuIq-KFX3JAETOInM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "907454945637-be09k2vnpd6qcniu9rto8nrdghi9uhg5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

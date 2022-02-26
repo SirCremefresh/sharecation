@@ -1,0 +1,24 @@
+POST https://logs-prod-eu-west-0.grafana.net/loki/api/v1/push
+Content-Type: application/json
+Authorization: Basic MTU0MTMxOmV5SnJJam9pTW1Nd01ERXpPVEZtTmpGbVpESmtOR0V4TXprMU4yUTFOMkUyWldReVpHSmxNRFl5WkRkak9TSXNJbTRpT2lKc2IyZG5aWElpTENKcFpDSTZOVGt5TXpVNGZRPT0=
+
+{
+  "streams": [
+    {
+      "stream": {
+        "test": "test"
+      },
+      "values": [
+        [
+          "1643322370667000007",
+          "userId=8d329832 requestId=1234 fizzbuzz sd asdf d"
+        ]
+      ]
+    }
+  ]
+}
+
+
+
+###
+

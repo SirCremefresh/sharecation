@@ -1,0 +1,35 @@
+{
+  "private": true,
+  "name": "sharecation-worker",
+  "version": "1.0.0",
+  "description": "A template for kick starting a Cloudflare Workers project",
+  "main": "index.mjs",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc --noEmit",
+    "clean": "node clean.mjs",
+    "format": "prettier --write '**/*.{ts,mjs,css,json,md}'",
+    "jest": "NODE_OPTIONS=--experimental-vm-modules npx jest",
+    "publish:developement": "node publish.mjs --environment=development",
+    "publish:developement:ping": "node publish.mjs --environment=development --bins=ping",
+    "publish:developement:images": "node publish.mjs --environment=development --bins=images",
+    "publish:developement:groups": "node publish.mjs --environment=development --bins=groups",
+    "publish:developement:authentication": "node publish.mjs --environment=development --bins=authentication",
+    "publish:developement:dev-tools": "node publish.mjs --environment=development --bins=dev-tools",
+    "publish:production": "node publish.mjs --environment=production"
+  },
+  "author": "donatowolfisberg <donato@wolfisberg.dev>",
+  "license": "MIT",
+  "devDependencies": {
+    "@cloudflare/workers-types": "^3.3.1",
+    "@miniflare/kv": "^2.2.0",
+    "@types/jest": "^27.4.0",
+    "jest": "^27.4.7",
+    "jest-config": "^27.4.7",
+    "jest-environment-miniflare": "^2.2.0",
+    "miniflare": "^2.2.0",
+    "prettier": "^1.18.2",
+    "typescript": "^4.5.5",
+    "wrangler": "beta"
+  }
+}

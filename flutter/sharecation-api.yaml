@@ -1,0 +1,82 @@
+openapi: 3.0.0
+info:
+  title: Images
+  description: Images API
+  version: 1.0.0
+servers:
+  - url: https://development.gigantic-server.com/v1
+    description: DEVELOPMENT
+  - url: https://api.gigantic-server.com/v1
+    description: PRODUCTION
+paths:
+  /v1/images:
+
+    get:
+      servers:
+        - url: https://dddevelopment.gigantic-server.com/v1
+          description: DEVdddELOPMENT
+        - url: https://apdddi.gigantic-server.com/v1
+          description: PROdddDUCTION
+      summary: List images
+      operationId: listImages
+      security:
+        - sharecationJwt: [ ]
+      responses:
+        '200':
+          description: OK.
+          content:
+            application/json:
+              schema:
+                title: ListImagesResponse
+                type: object
+                properties:
+                  images:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        name:
+                          type: string
+  /v1/auth:
+    post:
+      summary: create JWT
+      operationId: createJwt
+      requestBody:
+        content:
+          application/json:
+            schema:
+              title: CreateJwtRequest
+              type: object
+              properties:
+                jwtString:
+                  type: string
+      responses:
+        '200':
+          description: OK.
+          content:
+            application/json:
+              schema:
+                title: GeneratedJwt
+                type: object
+                properties:
+                  jwtString:
+                    type: string
+                  payload:
+                    type: object
+                    properties:
+                      sub:
+                        type: string
+                      exp:
+                        type: integer
+                      rights:
+                        type: array
+                        items:
+                          type: string
+components:
+  securitySchemes:
+    sharecationJwt:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

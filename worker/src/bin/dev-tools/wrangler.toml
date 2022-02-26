@@ -1,0 +1,17 @@
+name = "sharecation-dev-tools"
+compatibility_date = "2022-01-17"
+
+[vars]
+ENVIRONMENT = ""
+
+[env.development]
+vars = { ENVIRONMENT = "development" }
+kv_namespaces = [
+    { binding = "COMMON", id = "31cfb304e7994d62b9d31321d3ca52bc", preview_id = "31cfb304e7994d62b9d31321d3ca52bc" }
+]
+
+[env.production]
+vars = { ENVIRONMENT = "production" }
+kv_namespaces = [
+    { binding = "COMMON", id = "00000000000000000000000000000000" }
+]

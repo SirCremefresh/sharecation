@@ -1,0 +1,11 @@
+name = "sharecation-ping"
+compatibility_date = "2022-01-17"
+
+[vars]
+ENVIRONMENT = ""
+
+[env.development]
+vars = { ENVIRONMENT = "development" }
+
+[env.production]
+vars = { ENVIRONMENT = "production" }

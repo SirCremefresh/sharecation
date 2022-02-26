@@ -1,0 +1,19 @@
+name = "sharecation-images"
+compatibility_date = "2022-01-17"
+
+[vars]
+ENVIRONMENT = ""
+
+[env.development]
+vars = { ENVIRONMENT = "development" }
+kv_namespaces = [
+    { binding = "COMMON", id = "31cfb304e7994d62b9d31321d3ca52bc", preview_id = "31cfb304e7994d62b9d31321d3ca52bc" },
+    { binding = "IMAGES", id = "7a17f45706d94573b218fbdad2889ff4", preview_id = "7a17f45706d94573b218fbdad2889ff4" }
+]
+
+[env.production]
+vars = { ENVIRONMENT = "production" }
+kv_namespaces = [
+    { binding = "COMMON", id = "9fd8a473258d4e9ca3d601b9bd74ebcf" },
+    { binding = "IMAGES", id = "5881da91ccc54a0ea7801c751e34b449" }
+]

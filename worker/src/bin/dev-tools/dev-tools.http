@@ -1,0 +1,27 @@
+### Generate a testing JWT
+POST development.sharecation-dev-tools.donato-wolfisberg.workers.dev/v1/jwt
+Content-Type: application/json
+Accept: application/json
+
+> {%
+    client.global.set("jwtString", response.body.jwtString);
+%}
+
+### Upload a image
+POST development.sharecation-images.donato-wolfisberg.workers.dev/v1/images/asdf
+Content-Type: multipart/form-data; boundary=boundary
+Accept: application/json
+Authorization: Bearer {{jwtString}}
+
+--boundary
+Content-Disposition: form-data; name="file"; filename="file.png"
+Content-Type: image/png
+
+< ./../../testing-image.png
+--boundary
+
+### Get images
+GET development.sharecation-images.donato-wolfisberg.workers.dev/v1/images/groasdfasdup-id
+Accept: application/json
+Authorization: Bearer {{jwtString}}
+

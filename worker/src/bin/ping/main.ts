@@ -9,27 +9,19 @@ const CORS_HEADERS = {
   'Access-Control-Max-Age': '3600',
 };
 
-type UnboxMessageType<T> =
-  T extends MessageType<infer U>
-    ? U
-    : never;
-
-
-function onFetch<REQUEST_BODY extends MessageType<any>,
-  RESPONSE_BODY extends MessageType<any>,
-  REQUEST_BODY_UNBOXED extends UnboxMessageType<REQUEST_BODY> = UnboxMessageType<REQUEST_BODY>,
-  RESPONSE_BODY_UNBOXED extends UnboxMessageType<RESPONSE_BODY> = UnboxMessageType<RESPONSE_BODY>,
+function onFetch<REQUEST_BODY extends {},
+  RESPONSE_BODY extends {},
   ENV extends {} = {},
   REQUEST extends Request = Request,
   CONTEXT extends ExecutionContext = ExecutionContext,
   RESPONSE extends Response = Response>(
-  reg: REQUEST_BODY,
-  res: RESPONSE_BODY,
+  reg: MessageType<REQUEST_BODY>,
+  res: MessageType<RESPONSE_BODY>,
   fn: (
     request: REQUEST,
     env: ENV,
-    context: CONTEXT & { body: REQUEST_BODY_UNBOXED },
-  ) => Promise<RESPONSE_BODY_UNBOXED>,
+    context: CONTEXT & { body: REQUEST_BODY },
+  ) => Promise<RESPONSE_BODY>,
 ) {
   return async (request: REQUEST, env: ENV, context: CONTEXT) => {
     if (request.method === 'OPTIONS') {
@@ -47,9 +39,9 @@ function onFetch<REQUEST_BODY extends MessageType<any>,
       body: ping,
     });
 
-    await fn(request, env, aa);
+    const ress = await fn(request, env, aa);
 
-    return new Response(ping, {
+    return new Response(res.toBinary(res.fromJson(ress)), {
       status: 200,
       headers: CORS_HEADERS,
     });

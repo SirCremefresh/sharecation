@@ -9,25 +9,27 @@ const CORS_HEADERS = {
   'Access-Control-Max-Age': '3600',
 };
 
-type Unboxed<T> =
+type UnboxMessageType<T> =
   T extends MessageType<infer U>
     ? U
     : never;
 
 
 function onFetch<REQUEST_BODY extends MessageType<any>,
-  RR extends Unboxed<REQUEST_BODY> = Unboxed<REQUEST_BODY>,
+  RESPONSE_BODY extends MessageType<any>,
+  REQUEST_BODY_UNBOXED extends UnboxMessageType<REQUEST_BODY> = UnboxMessageType<REQUEST_BODY>,
+  RESPONSE_BODY_UNBOXED extends UnboxMessageType<RESPONSE_BODY> = UnboxMessageType<RESPONSE_BODY>,
   ENV extends {} = {},
   REQUEST extends Request = Request,
   CONTEXT extends ExecutionContext = ExecutionContext,
   RESPONSE extends Response = Response>(
   reg: REQUEST_BODY,
-  res: MessageType<any>,
+  res: RESPONSE_BODY,
   fn: (
     request: REQUEST,
     env: ENV,
-    context: CONTEXT & { body: RR },
-  ) => Promise<RR>,
+    context: CONTEXT & { body: REQUEST_BODY_UNBOXED },
+  ) => Promise<RESPONSE_BODY_UNBOXED>,
 ) {
   return async (request: REQUEST, env: ENV, context: CONTEXT) => {
     if (request.method === 'OPTIONS') {
@@ -54,17 +56,13 @@ function onFetch<REQUEST_BODY extends MessageType<any>,
   };
 }
 
-const aa = onFetch(GetPingRequest, GetPingRequest, async (request, env, context) => {
-  type JJ = Unboxed<typeof GetPingRequest>;
-
-  type AA = typeof GetPingRequest extends MessageType<infer U>
-    ? U
-    : never;
-
-  const aa = context.body;
-
-  context.body;
-  return context.body;
+const aa = onFetch(GetPingRequest, GetPingResponse, async (request, env, context) => {
+  return {
+    ping: {
+      pingId: context.body.pingId,
+      message: 'pong',
+    }
+  };
 });
 
 // noinspection JSUnusedGlobalSymbols

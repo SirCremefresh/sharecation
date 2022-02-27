@@ -4,5 +4,6 @@ plugins:
     out: gen/proto/typescript
     strategy: all
     path: /usr/lib/node_modules/ts-proto/protoc-gen-ts_proto
+    opt: esModuleInterop=true
   - name: dart
     out: gen/proto/dart

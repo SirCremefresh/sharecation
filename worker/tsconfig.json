@@ -10,6 +10,7 @@
     "noImplicitThis": true,
     "noImplicitAny": true,
     "noUnusedLocals": true,
+    "allowSyntheticDefaultImports": true,
     "baseUrl": "./src",
     "moduleResolution": "Node"
   }

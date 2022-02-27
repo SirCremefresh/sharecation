@@ -18,6 +18,8 @@ docker buildx build -t proto-generator .
 ### Generate code
 
 ```bash
-docker run -it --rm -v $(pwd):/tmp/  proto-generator bash && cd tmp
-buf generate
+docker run -it --rm -v $(pwd):/tmp/  proto-generator bash
+cd tmp && buf generate
+exit
+cp -rf gen/proto/typescript/* ../worker/src/contracts/
 ```

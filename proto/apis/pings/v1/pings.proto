@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package pings.v1;
+
+message Ping {
+  string ping_id = 1;
+  string message = 2;
+}
+
+message GetPingRequest {
+  string ping_id = 1;
+}
+
+message GetPingResponse {
+  Ping ping = 1;
+}

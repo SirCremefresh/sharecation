@@ -1,6 +1,6 @@
 import {HttpClient} from '@angular/common/http';
 import {Component} from '@angular/core';
-import {GetPingRequest, GetPingResponse} from './contracts/pings/v1/images';
+import {GetPingRequest, GetPingResponse} from './contracts/pings/v1/pings';
 
 @Component({
   selector: 'app-root',
@@ -14,35 +14,36 @@ export class AppComponent {
   }
 
   tesst() {
-    const pingRequest = GetPingRequest.encode({
+    const aa = GetPingRequest.create({
       pingId: 'hello-there'
-    }).finish();
+    });
+
+    const pingRequest = GetPingRequest.toBinary(aa);
 
     console.log('buffer: ', pingRequest.byteLength);
-    console.log(pingRequest)
-    console.log(new Uint8Array(pingRequest))
-    const res = GetPingRequest.decode(pingRequest);
-    console.log('res: ', res);
   }
 
   send() {
-    const pingRequest = GetPingRequest.encode({
+    const aa = GetPingRequest.create({
       pingId: 'hello-there'
-    }).finish();
+    });
+
+    const pingRequest = GetPingRequest.toBinary(aa);
+
+    console.log('buffer: ', pingRequest);
 
     this.http.post(
       'https://development.sharecation-ping.donato-wolfisberg.workers.dev',
-      new Uint8Array(pingRequest).buffer,
+      pingRequest.buffer,
       {
         headers: {
           'Content-Type': 'application/octet-stream',
         },
         responseType: 'arraybuffer'
       }).subscribe((res) => {
-       const ress =  GetPingResponse.decode(new Uint8Array(res));
+      const ress = GetPingResponse.fromBinary(new Uint8Array(res));
       console.log('pinged', ress);
-      console.log('pinged', res);
-    },(err) => {
+    }, (err) => {
       console.log('error', err);
     });
   }

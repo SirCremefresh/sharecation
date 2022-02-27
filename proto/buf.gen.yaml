@@ -1,9 +1,7 @@
 version: v1
 plugins:
   - name: ts
-    out: gen/proto/typescript
-    strategy: all
-    path: /usr/lib/node_modules/ts-proto/protoc-gen-ts_proto
-    opt: esModuleInterop=true
+    out: gen/proto/typescript2
+    path: /usr/lib/node_modules/@protobuf-ts/plugin/bin/protoc-gen-ts
   - name: dart
     out: gen/proto/dart

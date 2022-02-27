@@ -1,4 +1,4 @@
-import {GetPingRequest, GetPingResponse} from '../../contracts/pings/v1/images';
+import {GetPingRequest, GetPingResponse} from '../../contracts/pings/v1/pings';
 import {addLoggerContext} from '../../lib/middleware/logger-middleware';
 
 // noinspection JSUnusedGlobalSymbols
@@ -21,20 +21,18 @@ export default {
       // console.log(await request.text());
       // return responseOk(`pong`);
       const buffer = await request.arrayBuffer();
-      console.log('buffer: ', buffer.byteLength);
       const uint8Array = new Uint8Array(buffer);
-      console.log('uint8Array:', uint8Array.byteLength);
-      const ping = GetPingRequest.decode(uint8Array);
+      const ping = GetPingRequest.fromBinary(uint8Array);
 
       context.logger.info(`ping with id ${ping.pingId}`);
-      const response: GetPingResponse = {
+      const response = GetPingResponse.fromJson({
         ping: {
           pingId: ping.pingId,
           message: 'pong',
         }
-      };
+      });
       return new Response(
-        new Uint8Array(GetPingResponse.encode(response).finish()),
+        GetPingResponse.toBinary(response),
         {
           status: 200,
           headers: {

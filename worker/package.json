@@ -33,7 +33,6 @@
     "wrangler": "beta"
   },
   "dependencies": {
-    "long": "^5.2.0",
-    "protobufjs": "^6.11.2"
+    "@protobuf-ts/runtime": "^2.2.2"
   }
 }

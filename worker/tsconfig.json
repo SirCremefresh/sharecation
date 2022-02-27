@@ -9,6 +9,7 @@
     "noImplicitReturns": true,
     "noImplicitThis": true,
     "noImplicitAny": true,
+    "noImplicitOverride": false,
     "noUnusedLocals": true,
     "allowSyntheticDefaultImports": true,
     "baseUrl": "./src",

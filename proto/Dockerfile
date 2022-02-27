@@ -1,18 +1,25 @@
 FROM ubuntu:20.04
 
-RUN apt-get update  \
-    && apt-get install -y \
-        apt-transport-https \
+ARG DART_VERSION="2.16.1"
+
+ENV DART_SDK /usr/lib/dart
+ENV PATH $DART_SDK/bin:/root/.pub-cache/bin:$PATH
+
+RUN \
+  apt-get -q update  \
+    && apt-get install --no-install-recommends -y -q \
+        gnupg2  \
+        curl  \
+        git  \
         ca-certificates  \
-        wget \
-        gpg \
-    && wget -qO- https://dl-ssl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /usr/share/keyrings/dart.gpg \
-    && echo 'deb [signed-by=/usr/share/keyrings/dart.gpg arch=amd64] https://storage.googleapis.com/download.dartlang.org/linux/debian stable main' | tee /etc/apt/sources.list.d/dart_stable.list \
-    && apt-get update
-RUN apt-get install -y  \
-        dart \
-        nodejs
-
-
+        unzip  \
+        openssh-client  \
+    && case "$(uname -m)" in armv7l | armv7) ARCH="arm";; aarch64) ARCH="arm64";; *) ARCH="x64";; esac \
+    && echo "Downloading and installing dart sdk for architecture: $ARCH" \
+    && curl -O https://storage.googleapis.com/dart-archive/channels/stable/release/$DART_VERSION/sdk/dartsdk-linux-$ARCH-release.zip  \
+    && unzip dartsdk-linux-$ARCH-release.zip -d /usr/lib/  \
+    && rm dartsdk-linux-$ARCH-release.zip  \
+    && mv /usr/lib/dart-sdk /usr/lib/dart \
+    && dart pub global activate protoc_plugin
 
 

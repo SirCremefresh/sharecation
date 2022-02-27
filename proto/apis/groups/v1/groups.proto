@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package groups.v1;
+
+message Group {
+  string group_id = 1;
+  string name = 2;
+}
+
+message GetPetRequest {
+  string pet_id = 1;
+}
+
+message GetPetResponse {
+  Group pet = 1;
+}

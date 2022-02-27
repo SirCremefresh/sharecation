@@ -1,15 +1,7 @@
 version: v1
 plugins:
-  - name: cpp
-    out: gen/proto/cpp
-  - name: java
-    out: gen/proto/java
-  - name: js
-    out: gen/proto/nodejs
-    opt: import_style=commonjs,binary
-  - name: ts
-    out: gen/proto/typescript
-    strategy: all
-    path: ./node_modules/ts-proto/protoc-gen-ts_proto
+#    out: gen/proto/typescript
+  #    strategy: all
+  #    path: ./node_modules/ts-proto/protoc-gen-ts_proto
   - name: dart
     out: gen/proto/dart

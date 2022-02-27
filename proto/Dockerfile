@@ -2,6 +2,7 @@ FROM ubuntu:20.04
 
 ARG DART_VERSION="2.16.1"
 ARG NODE_VERSION="16"
+ARG BUF_VERSION="1.0.0"
 
 ENV DART_SDK /usr/lib/dart
 ENV PATH $DART_SDK/bin:/root/.pub-cache/bin:$PATH
@@ -11,10 +12,10 @@ RUN \
     && apt-get install --no-install-recommends -y -q \
         gnupg2  \
         curl  \
-        git  \
+        git \
         ca-certificates  \
         unzip  \
-        openssh-client  \
+        protobuf-compiler  \
     && case "$(uname -m)" in armv7l | armv7) ARCH="arm";; aarch64) ARCH="arm64";; *) ARCH="x64";; esac \
     && echo "Downloading and installing dart sdk version $DART_VERSION for architecture: $ARCH" \
     && curl -O https://storage.googleapis.com/dart-archive/channels/stable/release/$DART_VERSION/sdk/dartsdk-linux-$ARCH-release.zip  \
@@ -25,6 +26,14 @@ RUN \
     && echo "Downloading and installing node version $NODE_VERSION" \
     && curl -sL https://deb.nodesource.com/setup_$NODE_VERSION.x  | bash - \
     && apt-get install --no-install-recommends -y -q \
-        nodejs
+        nodejs \
+    && curl -sSL "https://github.com/bufbuild/buf/releases/download/v${BUF_VERSION}/buf-$(uname -s)-$(uname -m)" -o "/usr/local/bin/buf" \
+    && chmod +x "/usr/local/bin/buf"  \
+    && apt-get purge --auto-remove -y -q \
+        gnupg2  \
+        unzip  \
+        git \
+    && apt-get clean  \
+    && rm -rf /var/lib/apt/lists/*
 
 

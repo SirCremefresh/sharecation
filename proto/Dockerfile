@@ -3,6 +3,7 @@ FROM ubuntu:20.04
 ARG DART_VERSION="2.16.1"
 ARG NODE_VERSION="16"
 ARG BUF_VERSION="1.0.0"
+ARG TS_PROTO_VERSION="1.106.1"
 
 ENV DART_SDK /usr/lib/dart
 ENV PATH $DART_SDK/bin:/root/.pub-cache/bin:$PATH
@@ -29,10 +30,10 @@ RUN \
         nodejs \
     && curl -sSL "https://github.com/bufbuild/buf/releases/download/v${BUF_VERSION}/buf-$(uname -s)-$(uname -m)" -o "/usr/local/bin/buf" \
     && chmod +x "/usr/local/bin/buf"  \
+    && npm install -g ts-proto@${TS_PROTO_VERSION} \
     && apt-get purge --auto-remove -y -q \
         gnupg2  \
         unzip  \
-        git \
     && apt-get clean  \
     && rm -rf /var/lib/apt/lists/*
 

@@ -40,7 +40,7 @@ export class AppComponent {
           'Content-Type': 'application/octet-stream',
         },
         responseType: 'arraybuffer'
-      }).subscribe((res) => {
+      }).pipe().subscribe((res) => {
       const ress = GetPingResponse.fromBinary(new Uint8Array(res));
       console.log('pinged', ress);
     }, (err) => {

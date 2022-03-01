@@ -3,7 +3,7 @@ import {addAuthenticationGuard} from '../../lib/middleware/authenticated-middlew
 import {LoggerContext} from '../../lib/middleware/context';
 import {addLoggerContext} from '../../lib/middleware/logger-middleware';
 import {addRequestId} from '../../lib/middleware/request-id-middleware';
-import {addRouter, pathParam, route, routePath,} from '../../lib/middleware/router-middleware';
+import {addRouter, onGet, pathParam, route, routePath,} from '../../lib/middleware/router-middleware';
 import {getRights, hasRight, RIGHTS} from '../../lib/rights';
 import {IMAGES_KV} from './images-kv';
 
@@ -65,7 +65,7 @@ export default {
     addRequestId(
       addAuthenticationGuard(
         addRouter([
-          route(
+          onGet(
             'GET',
             routePath('v1', 'images', pathParam('groupId')),
             async (request, env, context) => {

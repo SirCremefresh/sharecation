@@ -1,3 +1,4 @@
+import {MessageType} from '@protobuf-ts/runtime';
 import {isNotNullOrUndefined, responseErrReason} from '../lib';
 import {LoggerContext, RouteContext} from './context';
 
@@ -24,7 +25,7 @@ type RouteFunction<REQUEST extends Request,
   ENV,
   CONTEXT,
   PATH extends Array<ParamConfig<string> | string>,
-  RESPONSE extends Response> = (
+  RESPONSE> = (
   request: REQUEST,
   env: ENV,
   context: CONTEXT & RouteContext<ParamObject<PATH>>,
@@ -39,6 +40,34 @@ interface RouteConfig<ENV,
   fn: ROUTE_FUNCTION;
 }
 
+export function onPost<REQUEST extends Request,
+  ENV,
+  CONTEXT,
+  PATH extends Array<ParamConfig<string> | string>,
+  REQUEST_BODY extends {},
+  RESPONSE_BODY extends {}>(
+  path: PATH,
+  requestBodyType: MessageType<REQUEST_BODY>,
+  responseBodyType: MessageType<RESPONSE_BODY>,
+  fn: RouteFunction<REQUEST, ENV, CONTEXT & { body: REQUEST_BODY }, PATH, Promise<RESPONSE_BODY>>,
+): RouteConfig<ENV, CONTEXT, PATH, RouteFunction<REQUEST, ENV, CONTEXT, PATH, Response>> {
+  return {
+    method: 'POST',
+    path,
+    fn: async (request, env, context) => {
+      const buffer = await request.arrayBuffer();
+      const uint8Array = new Uint8Array(buffer);
+      const body = requestBodyType.fromBinary(uint8Array);
+
+      const response = await fn(request, env, Object.assign(context, {
+        body,
+      }));
+
+      return new Response(responseBodyType.toBinary(responseBodyType.fromJson(response)));
+    },
+  };
+}
+
 export function route<REQUEST extends Request,
   ENV,
   CONTEXT,
@@ -48,7 +77,22 @@ export function route<REQUEST extends Request,
   fn: RouteFunction<REQUEST, ENV, CONTEXT, PATH, RESPONSE>,
 ): RouteConfig<ENV, CONTEXT, PATH, RouteFunction<REQUEST, ENV, CONTEXT, PATH, RESPONSE>> {
   return {
-    method,
+    method: 'POST',
+    path,
+    fn,
+  };
+}
+
+export function onGet<REQUEST extends Request,
+  ENV,
+  CONTEXT,
+  PATH extends Array<ParamConfig<string> | string>, RESPONSE extends Response>(
+  method: Method,
+  path: PATH,
+  fn: RouteFunction<REQUEST, ENV, CONTEXT, PATH, RESPONSE>,
+): RouteConfig<ENV, CONTEXT, PATH, RouteFunction<REQUEST, ENV, CONTEXT, PATH, RESPONSE>> {
+  return {
+    method: 'POST',
     path,
     fn,
   };

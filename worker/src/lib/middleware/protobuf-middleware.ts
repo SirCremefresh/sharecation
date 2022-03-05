@@ -1,12 +1,12 @@
 import {MessageType} from '@protobuf-ts/runtime';
 import {createResponse, isNotNullOrUndefined} from '../lib';
 
-export function protoBuf<REQUEST_BODY extends {},
-  RESPONSE_BODY extends {},
-  ENV extends {} = {},
-  REQUEST extends Request = Request,
-  CONTEXT extends ExecutionContext = ExecutionContext,
-  RESPONSE extends Response = Response>(
+export function protoBuf<REQUEST extends Request,
+  ENV extends {},
+  CONTEXT extends ExecutionContext,
+  RESPONSE extends Response,
+  REQUEST_BODY extends {},
+  RESPONSE_BODY extends {}>(
   requestType: MessageType<REQUEST_BODY> | null,
   responseType: MessageType<RESPONSE_BODY>,
   fn: (
@@ -14,7 +14,7 @@ export function protoBuf<REQUEST_BODY extends {},
     env: ENV,
     context: CONTEXT & { body: REQUEST_BODY },
   ) => Promise<RESPONSE_BODY>,
-) {
+): (request: REQUEST, env: ENV, context: CONTEXT) => Promise<Response> {
   return async (request: REQUEST, env: ENV, context: CONTEXT): Promise<Response> => {
     let newContext;
     if (isNotNullOrUndefined(requestType)) {

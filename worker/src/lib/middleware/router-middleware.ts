@@ -27,7 +27,6 @@ type RouteFunction<REQUEST extends Request,
   RESPONSE> = (
   request: REQUEST,
   env: ENV,
-  // context: CONTEXT,
   context: CONTEXT & RouteContext<ParamObject<PATH>>,
 ) => Promise<RESPONSE>;
 

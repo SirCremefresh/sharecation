@@ -1,9 +1,10 @@
 import {MessageType} from '@protobuf-ts/runtime';
 import {createResponse, isNotNullOrUndefined} from '../lib';
+import {ProtoBufContext} from './context';
 
 export function protoBuf<REQUEST extends Request,
   ENV extends {},
-  CONTEXT extends ExecutionContext,
+  CONTEXT,
   RESPONSE extends Response,
   REQUEST_BODY extends {},
   RESPONSE_BODY extends {}>(
@@ -12,7 +13,7 @@ export function protoBuf<REQUEST extends Request,
   fn: (
     request: REQUEST,
     env: ENV,
-    context: CONTEXT & { body: REQUEST_BODY },
+    context: CONTEXT & ProtoBufContext<REQUEST_BODY>,
   ) => Promise<RESPONSE_BODY>,
 ): (request: REQUEST, env: ENV, context: CONTEXT) => Promise<Response> {
   return async (request: REQUEST, env: ENV, context: CONTEXT): Promise<Response> => {
@@ -22,15 +23,15 @@ export function protoBuf<REQUEST extends Request,
       const uint8Array = new Uint8Array(buffer);
       const requestBody = requestType.fromBinary(uint8Array);
       newContext = Object.assign(context, {
-        body: requestBody,
+        proto: {body: requestBody},
       });
     } else {
       newContext = Object.assign(context, {
-        body: {},
+        proto: {body: {}},
       });
     }
 
-    const response = await fn(request, env, newContext as CONTEXT & { body: REQUEST_BODY });
+    const response = await fn(request, env, newContext as CONTEXT & ProtoBufContext<REQUEST_BODY>);
 
     return createResponse(
       responseType.toBinary(responseType.fromJson(response))

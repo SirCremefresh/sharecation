@@ -2,8 +2,9 @@ import {isNotNullOrUndefined, responseErrForbidden, responseErrReason, responseO
 import {addAuthenticationGuard} from '../../lib/middleware/authenticated-middleware';
 import {LoggerContext} from '../../lib/middleware/context';
 import {addLoggerContext} from '../../lib/middleware/logger-middleware';
+import {addNoop} from '../../lib/middleware/noop-middleware';
 import {addRequestId} from '../../lib/middleware/request-id-middleware';
-import {addRouter, onGet, pathParam, route, routePath,} from '../../lib/middleware/router-middleware';
+import {addRouter, pathParam, route, routePath,} from '../../lib/middleware/router-middleware';
 import {getRights, hasRight, RIGHTS} from '../../lib/rights';
 import {IMAGES_KV} from './images-kv';
 
@@ -64,80 +65,82 @@ export default {
     'images',
     addRequestId(
       addAuthenticationGuard(
-        addRouter([
-          onGet(
-            'GET',
-            routePath('v1', 'images', pathParam('groupId')),
-            async (request, env, context) => {
-              const results = await env.IMAGES.list<{ imageId: string }>({
-                prefix: IMAGES_KV.IMAGES_USER(context.user.userId),
-              });
-              const imageUrls = [];
-              for (const key of results.keys) {
-                const metadata = key.metadata;
-                if (!isImageMetadata(metadata)) {
-                  context.logger.error(
-                    `Invalid metadata for image ${key.name}`,
+        addNoop(
+          addRouter([
+            route(
+              'GET',
+              routePath('v1', 'images', pathParam('groupId')),
+              async (request, env, context) => {
+                const results = await env.IMAGES.list<{ imageId: string }>({
+                  prefix: IMAGES_KV.IMAGES_USER(context.user.userId),
+                });
+                const imageUrls = [];
+                for (const key of results.keys) {
+                  const metadata = key.metadata;
+                  if (!isImageMetadata(metadata)) {
+                    context.logger.error(
+                      `Invalid metadata for image ${key.name}`,
+                    );
+                    return responseErrReason('INTERNAL_SERVER_ERROR', 500);
+                  }
+                  imageUrls.push(
+                    `https://imagedelivery.net/lBSTOnVnm_g3jeLWNwAYiA/${metadata.imageId}/preview`,
                   );
-                  return responseErrReason('INTERNAL_SERVER_ERROR', 500);
                 }
-                imageUrls.push(
-                  `https://imagedelivery.net/lBSTOnVnm_g3jeLWNwAYiA/${metadata.imageId}/preview`,
+
+                return responseOk({
+                  imageUrls,
+                  group: context.route.params.groupId,
+                });
+              },
+            ),
+            route(
+              'POST',
+              routePath('v1', 'images', pathParam('groupId')),
+              async (request, env, context) => {
+                const groupId = context.route.params.groupId;
+                if (!hasRight(RIGHTS.GROUP(groupId), context)) {
+                  context.logger.error(`User tried to upload photo to group without rights. groupId=${groupId}, rights=${getRights(context)}`);
+                  return responseErrForbidden();
+                }
+                const formData = await request.formData();
+                const file = formData.get('file');
+
+                if (!(file instanceof File)) {
+                  return responseErrReason('BAD_REQUEST', 400);
+                }
+
+                const res = await uploadFile(
+                  file,
+                  env.SHARECATION_IMAGES_ACCOUNT_TOKEN,
+                  context,
                 );
-              }
 
-              return responseOk({
-                imageUrls,
-                group: context.route.params.groupId,
-              });
-            },
-          ),
-          route(
-            'POST',
-            routePath('v1', 'images', pathParam('groupId')),
-            async (request, env, context) => {
-              const groupId = context.route.params.groupId;
-              if (!hasRight(RIGHTS.GROUP(groupId), context)) {
-                context.logger.error(`User tried to upload photo to group without rights. groupId=${groupId}, rights=${getRights(context)}`);
-                return responseErrForbidden();
-              }
-              const formData = await request.formData();
-              const file = formData.get('file');
+                if (!res.success) {
+                  context.logger.error(
+                    `Error uploading image with response: ${JSON.stringify(res)}`,
+                  );
+                  return responseErrReason('FAILED_TO_UPLOAD_IMAGE', 500);
+                }
 
-              if (!(file instanceof File)) {
-                return responseErrReason('BAD_REQUEST', 400);
-              }
-
-              const res = await uploadFile(
-                file,
-                env.SHARECATION_IMAGES_ACCOUNT_TOKEN,
-                context,
-              );
-
-              if (!res.success) {
-                context.logger.error(
-                  `Error uploading image with response: ${JSON.stringify(res)}`,
+                const imageKey = IMAGES_KV.IMAGE(
+                  context.user.userId,
+                  new Date().toISOString(),
+                  res.result.id,
                 );
-                return responseErrReason('FAILED_TO_UPLOAD_IMAGE', 500);
-              }
+                env.IMAGES.put(
+                  imageKey,
+                  JSON.stringify({imageId: res.result.id}),
+                  {
+                    metadata: {imageId: res.result.id},
+                  },
+                );
 
-              const imageKey = IMAGES_KV.IMAGE(
-                context.user.userId,
-                new Date().toISOString(),
-                res.result.id,
-              );
-              env.IMAGES.put(
-                imageKey,
-                JSON.stringify({imageId: res.result.id}),
-                {
-                  metadata: {imageId: res.result.id},
-                },
-              );
-
-              return responseOk({file: file.type, imageId: res.result.id});
-            },
-          ),
-        ]),
+                return responseOk({file: file.type, imageId: res.result.id});
+              },
+            ),
+          ]),
+        ),
       ),
     ),
   ),

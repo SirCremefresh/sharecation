@@ -1,41 +1,37 @@
-import {GetPingRequest, GetPingResponse} from '../../contracts/pings/v1/pings';
 import {createResponse} from '../../lib/lib';
+import {addLoggerContext} from '../../lib/middleware/logger-middleware';
 import {addNoop} from '../../lib/middleware/noop-middleware';
-import {protoBuf} from '../../lib/middleware/protobuf-middleware';
 import {addRouter, pathParam, route, routePath} from '../../lib/middleware/router-middleware';
-
 
 // noinspection JSUnusedGlobalSymbols
 export default {
-  // fetch: addLoggerContext<{ LOKI_SECRET: string; ENVIRONMENT: string, COMMON: KVNamespace }>(
-  // fetch: addNoop(
-  fetch:
-  // 'ping',
-  // addNoop(
+  fetch: addLoggerContext<{ LOKI_SECRET: string; ENVIRONMENT: string, COMMON: KVNamespace }>(
+    // fetch: addNoop(
     addRouter([
       route(
         'POST',
         routePath('hello', pathParam('asd')),
-        // addNoop(
-        //   async (request, env, context) => {
-        //     return createResponse('');
-        //   }
-        // )
-        protoBuf(GetPingRequest, GetPingResponse, async (request, env, context) => {
-          context
-          return {
-            ping: {
-              pingId: '',
-              message: 'pong'
-            }
-          };
-        })
+        addNoop(
+          async (request, env, context) => {
+            return createResponse('');
+          }
+        )
       )
     ])
-  // )
-  // )
+  )
 };
 
+
+// protoBuf(GetPingRequest, GetPingResponse, async (request, env, context) => {
+//   const groupId = context.route.params.groupId;
+//   console.log(groupId);
+//   return {
+//     ping: {
+//       pingId: '',
+//       message: 'pong'
+//     }
+//   };
+// })
 
 // const aa = addLoggerContext<{ LOKI_SECRET: string; ENVIRONMENT: string, COMMON: KVNamespace }>(
 //   'ping',

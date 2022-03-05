@@ -3,7 +3,7 @@ import {RouteContext} from './context';
 
 type Method = 'GET' | 'POST';
 
-type ParamConfig<PARAM_NAME extends string> = {
+export type ParamConfig<PARAM_NAME extends string> = {
   paramName: PARAM_NAME;
 };
 
@@ -16,22 +16,21 @@ type RemoveStringFromTuple<TUPLE extends Array<unknown>> = TUPLE extends [
     : [ITEM, ...RemoveStringFromTuple<REST>]
   : [];
 
-type ParamObject<ROUTE extends Array<string | ParamConfig<string>>> = RemoveStringFromTuple<ROUTE>[number] extends ParamConfig<infer PARAM_NAME>
+export type ParamObject<ROUTE extends Array<string | ParamConfig<string>>> = RemoveStringFromTuple<ROUTE>[number] extends ParamConfig<infer PARAM_NAME>
   ? { [key in PARAM_NAME]: string }
   : never;
 
 type RouteFunction<REQUEST extends Request,
   ENV,
   CONTEXT,
-  PATH extends Array<ParamConfig<string> | string>,
-  RESPONSE> = (
+  RESPONSE,
+  PATH extends Array<ParamConfig<string> | string>> = (
   request: REQUEST,
   env: ENV,
   context: CONTEXT & RouteContext<ParamObject<PATH>>,
 ) => Promise<RESPONSE>;
 
 interface RouteConfig<ENV,
-  CONTEXT,
   PATH extends Array<ParamConfig<string> | string>,
   ROUTE_FUNCTION> {
   method: Method;
@@ -42,28 +41,18 @@ interface RouteConfig<ENV,
 export function route<REQUEST extends Request,
   ENV,
   CONTEXT,
-  PATH extends Array<ParamConfig<string> | string>, RESPONSE extends Response>(
+  RESPONSE extends Response,
+  PATH extends Array<ParamConfig<string> | string>>(
   method: Method,
   path: PATH,
-  fn: RouteFunction<REQUEST, ENV, CONTEXT, PATH, RESPONSE>,
-): RouteConfig<ENV, CONTEXT, PATH, RouteFunction<REQUEST, ENV, CONTEXT, PATH, RESPONSE>> {
+  fn: (
+    request: REQUEST,
+    env: ENV,
+    context: CONTEXT & RouteContext<ParamObject<PATH>>,
+  ) => Promise<RESPONSE>,
+): RouteConfig<ENV, PATH, RouteFunction<REQUEST, ENV, CONTEXT, RESPONSE, PATH>> {
   return {
     method,
-    path,
-    fn,
-  };
-}
-
-export function onGet<REQUEST extends Request,
-  ENV,
-  CONTEXT,
-  PATH extends Array<ParamConfig<string> | string>, RESPONSE extends Response>(
-  method: Method,
-  path: PATH,
-  fn: RouteFunction<REQUEST, ENV, CONTEXT, PATH, RESPONSE>,
-): RouteConfig<ENV, CONTEXT, PATH, RouteFunction<REQUEST, ENV, CONTEXT, PATH, RESPONSE>> {
-  return {
-    method: 'POST',
     path,
     fn,
   };
@@ -116,11 +105,12 @@ const CORS_HEADERS = {
   'Access-Control-Max-Age': '3600',
 };
 
-export function addRouter<REQUEST extends Request, ENV, CONTEXT, RESPONSE extends Response>(
-  routes: RouteConfig<ENV,
-    CONTEXT,
-    Array<ParamConfig<string> | string>,
-    RouteFunction<REQUEST, ENV, CONTEXT, Array<ParamConfig<string> | string>, RESPONSE>>[],
+type Sooo<REQUEST extends Request, ENV, CONTEXT, RESPONSE extends Response, PATH extends Array<ParamConfig<string> | string> = Array<ParamConfig<string> | string>> = Array<RouteConfig<ENV,
+  PATH,
+  RouteFunction<REQUEST, ENV, CONTEXT, RESPONSE, PATH>>>
+
+export function addRouter<REQUEST extends Request, ENV, CONTEXT, RESPONSE extends Response, PATH extends Array<ParamConfig<string> | string>, AAA extends Sooo<REQUEST, ENV, CONTEXT, RESPONSE>>(
+  routes: AAA,
 ) {
   return async (request: REQUEST, env: ENV, context1: CONTEXT) => {
     if (request.method === 'OPTIONS') {

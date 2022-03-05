@@ -39,3 +39,9 @@ export interface RouteContext<PARAMS extends {}> {
     params: PARAMS;
   };
 }
+
+export interface ProtoBufContext<TYPE extends {}> {
+  proto: {
+    body: TYPE
+  };
+}

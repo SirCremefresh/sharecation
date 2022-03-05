@@ -19,7 +19,7 @@ export function addLoggerContext<ENV extends LoggerConfig = LoggerConfig,
   fn: (
     request: REQUEST,
     env: ENV,
-    context: CONTEXT & LoggerContext,
+    context2: CONTEXT & LoggerContext,
   ) => Promise<Response>,
 ) {
   return async (request: REQUEST, env: ENV, cfContext: CONTEXT) => {

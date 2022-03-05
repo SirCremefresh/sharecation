@@ -1,6 +1,5 @@
-import {MessageType} from '@protobuf-ts/runtime';
 import {isNotNullOrUndefined, responseErrReason} from '../lib';
-import {LoggerContext, RouteContext} from './context';
+import {RouteContext} from './context';
 
 type Method = 'GET' | 'POST';
 
@@ -28,6 +27,7 @@ type RouteFunction<REQUEST extends Request,
   RESPONSE> = (
   request: REQUEST,
   env: ENV,
+  // context: CONTEXT,
   context: CONTEXT & RouteContext<ParamObject<PATH>>,
 ) => Promise<RESPONSE>;
 
@@ -49,7 +49,7 @@ export function route<REQUEST extends Request,
   fn: RouteFunction<REQUEST, ENV, CONTEXT, PATH, RESPONSE>,
 ): RouteConfig<ENV, CONTEXT, PATH, RouteFunction<REQUEST, ENV, CONTEXT, PATH, RESPONSE>> {
   return {
-    method: 'POST',
+    method,
     path,
     fn,
   };
@@ -110,13 +110,27 @@ function checkRouteMatchAndParseContext(
   };
 }
 
-export function addRouter<REQUEST extends Request, ENV, CONTEXT extends LoggerContext, RESPONSE extends Response>(
+const CORS_HEADERS = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+  'Access-Control-Max-Age': '3600',
+};
+
+export function addRouter<REQUEST extends Request, ENV, CONTEXT, RESPONSE extends Response>(
   routes: RouteConfig<ENV,
     CONTEXT,
     Array<ParamConfig<string> | string>,
     RouteFunction<REQUEST, ENV, CONTEXT, Array<ParamConfig<string> | string>, RESPONSE>>[],
 ) {
-  return async (request: REQUEST, env: ENV, context: CONTEXT) => {
+  return async (request: REQUEST, env: ENV, context1: CONTEXT) => {
+    if (request.method === 'OPTIONS') {
+      return new Response(null, {
+        status: 200,
+        headers: CORS_HEADERS,
+      });
+    }
+
     let pathname = new URL(request.url).pathname;
     const urlSegments = pathname
       .split('/')
@@ -132,19 +146,19 @@ export function addRouter<REQUEST extends Request, ENV, CONTEXT extends LoggerCo
         urlSegments,
       );
       if (isNotNullOrUndefined(routeContext)) {
-        context.logger.info(
-          `Handling request for method=${request.method} pathname=${pathname}`,
-        );
+        // context1.logger.info(
+        //   `Handling request for method=${request.method} pathname=${pathname}`,
+        // );
         return await route.fn(
           request,
           env,
-          Object.assign(context, routeContext),
+          Object.assign(context1, routeContext),
         );
       }
     }
-    context.logger.info(
-      `No route found for method=${request.method} pathname=${pathname}`,
-    );
+    // context1.logger.info(
+    //   `No route found for method=${request.method} pathname=${pathname}`,
+    // );
     return responseErrReason('NOT_FOUND', 404);
   };
 }

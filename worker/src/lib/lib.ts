@@ -7,7 +7,7 @@ export function isNotNullOrUndefined<T>(val: T | null | undefined): val is T {
 }
 
 export function responseOk(body: unknown): Response {
-  return response(body, 200);
+  return createResponse(body, 200);
 }
 
 export function responseErrForbidden() {
@@ -18,14 +18,16 @@ export function responseErrReason(
   reason: string,
   statusCode: number,
 ): Response {
-  return response({reason}, statusCode);
+  return createResponse({reason}, statusCode);
 }
 
-export function response(body: unknown, statusCode: number = 200): Response {
+export function createResponse(body: unknown, statusCode: number = 200, contentType: string = 'application/octet-stream'): Response {
   return new Response(JSON.stringify(body), {
     status: statusCode,
     headers: {
-      'Content-Type': 'application/json',
+      'Content-Type': contentType,
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
     },
   });
 }

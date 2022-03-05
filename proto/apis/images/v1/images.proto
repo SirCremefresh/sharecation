@@ -3,14 +3,14 @@ syntax = "proto3";
 package images.v1;
 
 message Image {
-  string group_id = 1;
+  string image_id = 1;
   string name = 2;
 }
 
-message GetPetRequest {
-  string pet_id = 1;
+message GetImageRequest {
+  string image_id = 1;
 }
 
-message GetPetResponse {
-  Image pet = 1;
+message GetImageResponse {
+  Image image = 1;
 }

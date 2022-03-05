@@ -16,42 +16,42 @@ import { MessageType } from "@protobuf-ts/runtime";
  */
 export interface Image {
     /**
-     * @generated from protobuf field: string group_id = 1;
+     * @generated from protobuf field: string image_id = 1;
      */
-    groupId: string;
+    imageId: string;
     /**
      * @generated from protobuf field: string name = 2;
      */
     name: string;
 }
 /**
- * @generated from protobuf message images.v1.GetPetRequest
+ * @generated from protobuf message images.v1.GetImageRequest
  */
-export interface GetPetRequest {
+export interface GetImageRequest {
     /**
-     * @generated from protobuf field: string pet_id = 1;
+     * @generated from protobuf field: string image_id = 1;
      */
-    petId: string;
+    imageId: string;
 }
 /**
- * @generated from protobuf message images.v1.GetPetResponse
+ * @generated from protobuf message images.v1.GetImageResponse
  */
-export interface GetPetResponse {
+export interface GetImageResponse {
     /**
-     * @generated from protobuf field: images.v1.Image pet = 1;
+     * @generated from protobuf field: images.v1.Image image = 1;
      */
-    pet?: Image;
+    image?: Image;
 }
 // @generated message type with reflection information, may provide speed optimized methods
 class Image$Type extends MessageType<Image> {
     constructor() {
         super("images.v1.Image", [
-            { no: 1, name: "group_id", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 1, name: "image_id", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
             { no: 2, name: "name", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
         ]);
     }
     create(value?: PartialMessage<Image>): Image {
-        const message = { groupId: "", name: "" };
+        const message = { imageId: "", name: "" };
         globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
         if (value !== undefined)
             reflectionMergePartial<Image>(this, message, value);
@@ -62,8 +62,8 @@ class Image$Type extends MessageType<Image> {
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
-                case /* string group_id */ 1:
-                    message.groupId = reader.string();
+                case /* string image_id */ 1:
+                    message.imageId = reader.string();
                     break;
                 case /* string name */ 2:
                     message.name = reader.string();
@@ -80,9 +80,9 @@ class Image$Type extends MessageType<Image> {
         return message;
     }
     internalBinaryWrite(message: Image, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
-        /* string group_id = 1; */
-        if (message.groupId !== "")
-            writer.tag(1, WireType.LengthDelimited).string(message.groupId);
+        /* string image_id = 1; */
+        if (message.imageId !== "")
+            writer.tag(1, WireType.LengthDelimited).string(message.imageId);
         /* string name = 2; */
         if (message.name !== "")
             writer.tag(2, WireType.LengthDelimited).string(message.name);
@@ -97,26 +97,26 @@ class Image$Type extends MessageType<Image> {
  */
 export const Image = new Image$Type();
 // @generated message type with reflection information, may provide speed optimized methods
-class GetPetRequest$Type extends MessageType<GetPetRequest> {
+class GetImageRequest$Type extends MessageType<GetImageRequest> {
     constructor() {
-        super("images.v1.GetPetRequest", [
-            { no: 1, name: "pet_id", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
+        super("images.v1.GetImageRequest", [
+            { no: 1, name: "image_id", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
         ]);
     }
-    create(value?: PartialMessage<GetPetRequest>): GetPetRequest {
-        const message = { petId: "" };
+    create(value?: PartialMessage<GetImageRequest>): GetImageRequest {
+        const message = { imageId: "" };
         globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
         if (value !== undefined)
-            reflectionMergePartial<GetPetRequest>(this, message, value);
+            reflectionMergePartial<GetImageRequest>(this, message, value);
         return message;
     }
-    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: GetPetRequest): GetPetRequest {
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: GetImageRequest): GetImageRequest {
         let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
-                case /* string pet_id */ 1:
-                    message.petId = reader.string();
+                case /* string image_id */ 1:
+                    message.imageId = reader.string();
                     break;
                 default:
                     let u = options.readUnknownField;
@@ -129,10 +129,10 @@ class GetPetRequest$Type extends MessageType<GetPetRequest> {
         }
         return message;
     }
-    internalBinaryWrite(message: GetPetRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
-        /* string pet_id = 1; */
-        if (message.petId !== "")
-            writer.tag(1, WireType.LengthDelimited).string(message.petId);
+    internalBinaryWrite(message: GetImageRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* string image_id = 1; */
+        if (message.imageId !== "")
+            writer.tag(1, WireType.LengthDelimited).string(message.imageId);
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
@@ -140,30 +140,30 @@ class GetPetRequest$Type extends MessageType<GetPetRequest> {
     }
 }
 /**
- * @generated MessageType for protobuf message images.v1.GetPetRequest
+ * @generated MessageType for protobuf message images.v1.GetImageRequest
  */
-export const GetPetRequest = new GetPetRequest$Type();
+export const GetImageRequest = new GetImageRequest$Type();
 // @generated message type with reflection information, may provide speed optimized methods
-class GetPetResponse$Type extends MessageType<GetPetResponse> {
+class GetImageResponse$Type extends MessageType<GetImageResponse> {
     constructor() {
-        super("images.v1.GetPetResponse", [
-            { no: 1, name: "pet", kind: "message", T: () => Image }
+        super("images.v1.GetImageResponse", [
+            { no: 1, name: "image", kind: "message", T: () => Image }
         ]);
     }
-    create(value?: PartialMessage<GetPetResponse>): GetPetResponse {
+    create(value?: PartialMessage<GetImageResponse>): GetImageResponse {
         const message = {};
         globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
         if (value !== undefined)
-            reflectionMergePartial<GetPetResponse>(this, message, value);
+            reflectionMergePartial<GetImageResponse>(this, message, value);
         return message;
     }
-    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: GetPetResponse): GetPetResponse {
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: GetImageResponse): GetImageResponse {
         let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
-                case /* images.v1.Image pet */ 1:
-                    message.pet = Image.internalBinaryRead(reader, reader.uint32(), options, message.pet);
+                case /* images.v1.Image image */ 1:
+                    message.image = Image.internalBinaryRead(reader, reader.uint32(), options, message.image);
                     break;
                 default:
                     let u = options.readUnknownField;
@@ -176,10 +176,10 @@ class GetPetResponse$Type extends MessageType<GetPetResponse> {
         }
         return message;
     }
-    internalBinaryWrite(message: GetPetResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
-        /* images.v1.Image pet = 1; */
-        if (message.pet)
-            Image.internalBinaryWrite(message.pet, writer.tag(1, WireType.LengthDelimited).fork(), options).join();
+    internalBinaryWrite(message: GetImageResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* images.v1.Image image = 1; */
+        if (message.image)
+            Image.internalBinaryWrite(message.image, writer.tag(1, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
@@ -187,6 +187,6 @@ class GetPetResponse$Type extends MessageType<GetPetResponse> {
     }
 }
 /**
- * @generated MessageType for protobuf message images.v1.GetPetResponse
+ * @generated MessageType for protobuf message images.v1.GetImageResponse
  */
-export const GetPetResponse = new GetPetResponse$Type();
+export const GetImageResponse = new GetImageResponse$Type();

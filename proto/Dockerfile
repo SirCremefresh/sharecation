@@ -37,4 +37,5 @@ RUN \
     && apt-get clean  \
     && rm -rf /var/lib/apt/lists/*
 
-
+WORKDIR /tmp
+CMD ["buf", "generate"]

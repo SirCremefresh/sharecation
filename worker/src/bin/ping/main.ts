@@ -1,5 +1,6 @@
 import {MessageType} from '@protobuf-ts/runtime';
 import {GetPingRequest, GetPingResponse} from '../../contracts/pings/v1/pings';
+import {isNotNullOrUndefined} from '../../lib/lib';
 import {addLoggerContext} from '../../lib/middleware/logger-middleware';
 
 const CORS_HEADERS = {
@@ -9,55 +10,14 @@ const CORS_HEADERS = {
   'Access-Control-Max-Age': '3600',
 };
 
-interface Payload<E> {
-  request: Request;
-  response?: Response;
-  env: {};
-  context: E;
-}
-
-interface Middleware<A, B> {
-  aa(payload: Payload<A>, rest: Middleware<any, any>[]): Promise<Payload<A & B>>;
-}
-
-class M1 implements Middleware<{}, { a: string }> {
-  async aa(payload: Payload<{}>, rest: Middleware<any, any>[]): Promise<Payload<{} & { a: string }>> {
-    
-    await rest[0].aa(payload, rest.slice(1));
-
-    return {
-      ...payload,
-      context: {...payload.context, a: 'a'},
-    };
-  }
-}
-
-/* tslint:disable:max-line-length */
-function middleware(): Promise<Payload<{}>>;
-function middleware<A, B>(op1: Middleware<A, B>): Promise<Payload<B>>;
-function middleware<A, B, C>(op1: Middleware<A, B>, op2: Middleware<B, C>): Promise<Payload<C>>;
-function middleware<A, B, C, D>(op1: Middleware<A, B>, op2: Middleware<B, C>, op3: Middleware<C, D>): Promise<Payload<D>>;
-function middleware(...operations: Middleware<any, any>[]): any {
-  return async (payload: Payload<{}>): Promise<Response> => {
-    let result = payload;
-    for (let i = 0; i < operations.length - 1; i++) {
-      result = await operations[i].aa(result);
-    }
-    return result.response!;
-  };
-}
-
-middleware(new M1());
-
-
-function onFetch<REQUEST_BODY extends {},
+function protoBuf<REQUEST_BODY extends {},
   RESPONSE_BODY extends {},
   ENV extends {} = {},
   REQUEST extends Request = Request,
   CONTEXT extends ExecutionContext = ExecutionContext,
   RESPONSE extends Response = Response>(
-  reg: MessageType<REQUEST_BODY>,
-  res: MessageType<RESPONSE_BODY>,
+  requestType: MessageType<REQUEST_BODY> | null,
+  responseType: MessageType<RESPONSE_BODY>,
   fn: (
     request: REQUEST,
     env: ENV,
@@ -65,31 +25,39 @@ function onFetch<REQUEST_BODY extends {},
   ) => Promise<RESPONSE_BODY>,
 ) {
   return async (request: REQUEST, env: ENV, context: CONTEXT) => {
-    if (request.method === 'OPTIONS') {
-      return new Response(null, {
-        status: 200,
-        headers: CORS_HEADERS,
+    // if (request.method === 'OPTIONS') {
+    //   return new Response(null, {
+    //     status: 200,
+    //     headers: CORS_HEADERS,
+    //   });
+    // }
+
+    let newContext;
+    if (isNotNullOrUndefined(requestType)) {
+      const buffer = await request.arrayBuffer();
+      const uint8Array = new Uint8Array(buffer);
+      const ping = requestType.fromBinary(uint8Array);
+      newContext = Object.assign(context, {
+        body: ping,
+      });
+    } else {
+      newContext = Object.assign(context, {
+        body: {},
       });
     }
 
-    const buffer = await request.arrayBuffer();
-    const uint8Array = new Uint8Array(buffer);
-    const ping = reg.fromBinary(uint8Array);
 
-    const aa = Object.assign(context, {
-      body: ping,
-    });
+    const response = await fn(request, env, newContext as CONTEXT & { body: REQUEST_BODY });
 
-    const ress = await fn(request, env, aa);
-
-    return new Response(res.toBinary(res.fromJson(ress)), {
+    return new Response(responseType.toBinary(responseType.fromJson(response)), {
       status: 200,
       headers: CORS_HEADERS,
     });
   };
 }
 
-const aa = onFetch(GetPingRequest, GetPingResponse, async (request, env, context) => {
+const aa = protoBuf(GetPingRequest, GetPingResponse, async (request, env, context) => {
+
   return {
     ping: {
       pingId: context.body.pingId,

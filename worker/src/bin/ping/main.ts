@@ -1,19 +1,27 @@
-import {createResponse} from '../../lib/lib';
+import {GetPingRequest, GetPingResponse} from '../../contracts/pings/v1/pings';
 import {addLoggerContext} from '../../lib/middleware/logger-middleware';
-import {addNoop} from '../../lib/middleware/noop-middleware';
-import {addRouter, pathParam, route, routePath} from '../../lib/middleware/router-middleware';
+import {protoBuf} from '../../lib/middleware/protobuf-middleware';
+import {addRouter, route} from '../../lib/middleware/router-middleware';
 
 // noinspection JSUnusedGlobalSymbols
 export default {
   fetch: addLoggerContext<{ LOKI_SECRET: string; ENVIRONMENT: string, COMMON: KVNamespace }>(
+    'ping',
     // fetch: addNoop(
     addRouter([
       route(
         'POST',
-        routePath('hello', pathParam('asd')),
-        addNoop(
+        '/ping',
+        protoBuf(
+          GetPingRequest, GetPingResponse,
           async (request, env, context) => {
-            return createResponse('');
+            context.proto.body.pingId
+            return {
+              ping: {
+                pingId: 'request.pingId',
+                message: 'pong',
+              }
+            };
           }
         )
       )

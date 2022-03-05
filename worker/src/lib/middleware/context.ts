@@ -34,9 +34,9 @@ export function isRequestIdContext<T extends {}>(
   return isNotNullOrUndefined(context) && context.hasOwnProperty('requestId');
 }
 
-export interface RouteContext<PARAMS extends {}> {
+export interface RouteContext {
   route: {
-    params: PARAMS;
+    url: URL;
   };
 }
 

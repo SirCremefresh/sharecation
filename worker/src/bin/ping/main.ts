@@ -61,7 +61,7 @@ const aa = protoBuf(GetPingRequest, GetPingResponse, async (request, env, contex
   return {
     ping: {
       pingId: context.body.pingId,
-      message: 'pong',
+      message: 'dd',
     }
   };
 });

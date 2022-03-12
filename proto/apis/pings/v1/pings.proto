@@ -4,7 +4,7 @@ package pings.v1;
 
 message Ping {
   string ping_id = 1;
-  string message = 2;
+  string pong = 2;
 }
 
 message GetPingRequest {

@@ -36,9 +36,10 @@ export function isRequestIdContext<T extends {}>(
 
 export interface RouteContext {
   route: {
-    url: URL;
+    params: { [key: string]: string };
   };
 }
+
 
 export interface ProtoBufContext<TYPE extends {}> {
   proto: {

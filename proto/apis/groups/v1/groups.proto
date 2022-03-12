@@ -1,4 +1,5 @@
 syntax = "proto3";
+import "errors/v1/errors.proto";
 
 package groups.v1;
 
@@ -7,10 +8,13 @@ message Group {
   string name = 2;
 }
 
-message GetPetRequest {
-  string pet_id = 1;
+message CreateGroupRequest {
+  string name = 1;
 }
 
-message GetPetResponse {
-  Group pet = 1;
+message CreateGroupResponse {
+  oneof response {
+    Group group = 1;
+    errors.v1.BasicError error = 2;
+  }
 }

@@ -25,3 +25,9 @@ docker run -t --rm -v $(pwd):/tmp/ proto-generator
 cp -rf gen/proto/typescript/* ../worker/src/contracts/
 cp -rf gen/proto/typescript/* ../admin/src/app/contracts/
 ```
+
+### Generate code
+
+```bash
+docker run -t --rm -v $(pwd):/tmp/ proto-generator buf lint
+```

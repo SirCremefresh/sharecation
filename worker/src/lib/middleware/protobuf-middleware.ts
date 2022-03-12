@@ -27,7 +27,9 @@ export function protoBuf<REQUEST extends Request,
       });
     } else {
       newContext = Object.assign(context, {
-        proto: {body: {}},
+        proto: {body: {
+
+          }},
       });
     }
 

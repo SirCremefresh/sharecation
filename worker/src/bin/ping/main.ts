@@ -11,11 +11,11 @@ export default {
     addRouter([
       route(
         'POST',
-        '/ping',
+        [],
         protoBuf(
           GetPingRequest, GetPingResponse,
           async (request, env, context) => {
-            context.proto.body.pingId
+            // context.proto.body.pingId
             return {
               ping: {
                 pingId: 'request.pingId',

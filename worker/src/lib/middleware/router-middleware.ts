@@ -1,7 +1,11 @@
-import {responseErrReason} from '../lib';
-import {LoggerContext, RouteContext} from './context';
+import {isNotNullOrUndefined, responseErrReason} from '../lib';
+import {RouteContext} from './context';
 
 type Method = 'GET' | 'POST';
+
+type ParamConfig = {
+  paramName: string;
+};
 
 type RouteFunction<REQUEST extends Request,
   ENV,
@@ -12,24 +16,59 @@ type RouteFunction<REQUEST extends Request,
   context: CONTEXT & RouteContext,
 ) => Promise<RESPONSE>;
 
-interface RouteConfig<ROUTE_FUNCTION> {
+interface RouteConfig<ENV,
+  CONTEXT,
+  ROUTE_FUNCTION> {
   method: Method;
-  path: string;
+  path: Array<ParamConfig | string>;
   fn: ROUTE_FUNCTION;
 }
 
 export function route<REQUEST extends Request,
   ENV,
-  CONTEXT,
-  RESPONSE extends Response>(
+  CONTEXT, RESPONSE extends Response>(
   method: Method,
-  path: string,
+  path: Array<ParamConfig | string>,
   fn: RouteFunction<REQUEST, ENV, CONTEXT, RESPONSE>,
-): RouteConfig<RouteFunction<REQUEST, ENV, CONTEXT, RESPONSE>> {
+): RouteConfig<ENV, CONTEXT, RouteFunction<REQUEST, ENV, CONTEXT, RESPONSE>> {
   return {
     method,
     path,
     fn,
+  };
+}
+
+export function pathParam(paramName: string): ParamConfig {
+  return {paramName};
+}
+
+function checkRouteMatchAndParseContext(
+  routeSegments: Array<ParamConfig | string>,
+  urlSegments: string[],
+): null | RouteContext {
+  if (routeSegments.length !== urlSegments.length) {
+    return null;
+  }
+  const params = {};
+  for (
+    let segmentIndex = 0;
+    segmentIndex < routeSegments.length;
+    segmentIndex++
+  ) {
+    const routeSegment = routeSegments[segmentIndex];
+    const urlSegment = urlSegments[segmentIndex];
+    if (typeof routeSegment === 'string') {
+      if (routeSegment !== urlSegment) {
+        return null;
+      }
+    } else {
+      Object.assign(params, {[routeSegment.paramName]: urlSegment});
+    }
+  }
+  return {
+    route: {
+      params,
+    },
   };
 }
 
@@ -40,13 +79,12 @@ const CORS_HEADERS = {
   'Access-Control-Max-Age': '3600',
 };
 
-export function addRouter<REQUEST extends Request, ENV, CONTEXT extends LoggerContext, RESPONSE extends Response>(
-  routes: Array<RouteConfig<RouteFunction<REQUEST, ENV, CONTEXT, RESPONSE>>>,
+export function addRouter<REQUEST extends Request, ENV, CONTEXT, RESPONSE extends Response>(
+  routes: RouteConfig<ENV,
+    CONTEXT,
+    RouteFunction<REQUEST, ENV, CONTEXT, RESPONSE>>[],
 ) {
-  for (const route of routes) {
-    route.path = route.path.trim().replace(/\/$/, '');
-  }
-  return async (request: REQUEST, env: ENV, context: CONTEXT) => {
+  return async (request: REQUEST, env: ENV, context1: CONTEXT) => {
     if (request.method === 'OPTIONS') {
       return new Response(null, {
         status: 200,
@@ -54,32 +92,34 @@ export function addRouter<REQUEST extends Request, ENV, CONTEXT extends LoggerCo
       });
     }
 
-    const url = new URL(request.url);
-    let pathname = url.pathname.replace(/\/$/, '');
+    let pathname = new URL(request.url).pathname;
+    const urlSegments = pathname
+      .split('/')
+      .map(s => s.trim())
+      .filter(s => s.length > 0);
     for (let routeIndex = 0; routeIndex < routes.length; routeIndex++) {
       const route = routes[routeIndex];
       if (route.method !== request.method) {
         continue;
       }
-      if (route.path !== pathname) {
-        continue;
+      let routeContext = checkRouteMatchAndParseContext(
+        route.path,
+        urlSegments,
+      );
+      if (isNotNullOrUndefined(routeContext)) {
+        // context1.logger.info(
+        //   `Handling request for method=${request.method} pathname=${pathname}`,
+        // );
+        return await route.fn(
+          request,
+          env,
+          Object.assign(context1, routeContext),
+        );
       }
-      context.logger.info(
-        `Handling request for method=${request.method} pathname=${pathname}`,
-      );
-      return await route.fn(
-        request,
-        env,
-        Object.assign(context, {
-          route: {
-            url
-          }
-        }),
-      );
     }
-    context.logger.info(
-      `No route found for method=${request.method} pathname=${pathname}`,
-    );
+    // context1.logger.info(
+    //   `No route found for method=${request.method} pathname=${pathname}`,
+    // );
     return responseErrReason('NOT_FOUND', 404);
   };
 }

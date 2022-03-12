@@ -20,9 +20,9 @@ export interface Ping {
      */
     pingId: string;
     /**
-     * @generated from protobuf field: string message = 2;
+     * @generated from protobuf field: string pong = 2;
      */
-    message: string;
+    pong: string;
 }
 /**
  * @generated from protobuf message pings.v1.GetPingRequest
@@ -47,11 +47,11 @@ class Ping$Type extends MessageType<Ping> {
     constructor() {
         super("pings.v1.Ping", [
             { no: 1, name: "ping_id", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 2, name: "message", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
+            { no: 2, name: "pong", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
         ]);
     }
     create(value?: PartialMessage<Ping>): Ping {
-        const message = { pingId: "", message: "" };
+        const message = { pingId: "", pong: "" };
         globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
         if (value !== undefined)
             reflectionMergePartial<Ping>(this, message, value);
@@ -65,8 +65,8 @@ class Ping$Type extends MessageType<Ping> {
                 case /* string ping_id */ 1:
                     message.pingId = reader.string();
                     break;
-                case /* string message */ 2:
-                    message.message = reader.string();
+                case /* string pong */ 2:
+                    message.pong = reader.string();
                     break;
                 default:
                     let u = options.readUnknownField;
@@ -83,9 +83,9 @@ class Ping$Type extends MessageType<Ping> {
         /* string ping_id = 1; */
         if (message.pingId !== "")
             writer.tag(1, WireType.LengthDelimited).string(message.pingId);
-        /* string message = 2; */
-        if (message.message !== "")
-            writer.tag(2, WireType.LengthDelimited).string(message.message);
+        /* string pong = 2; */
+        if (message.pong !== "")
+            writer.tag(2, WireType.LengthDelimited).string(message.pong);
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);

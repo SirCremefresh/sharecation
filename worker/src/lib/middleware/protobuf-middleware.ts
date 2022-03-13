@@ -59,10 +59,23 @@ export function protoBuf<REQUEST extends Request,
   return async (request: REQUEST, env: ENV, context: CONTEXT): Promise<Response> => {
     let requestBody = {};
     let responseFormat = getResponseFormat(request);
+    let requestFormat = getRequestFormat(request);
     if (isNotNullOrUndefined(requestType)) {
-      const buffer = await request.arrayBuffer();
-      const uint8Array = new Uint8Array(buffer);
-      requestBody = requestType.fromBinary(uint8Array);
+      if (requestFormat === 'protobuf') {
+        const buffer = await request.arrayBuffer();
+        const uint8Array = new Uint8Array(buffer);
+        requestBody = requestType.fromBinary(uint8Array);
+      } else {
+        requestBody = requestType.fromJson(await request.json());
+        if (!requestType.is(requestBody)) {
+          context.logger.error(`Request body does not match schema. ${requestBody}`);
+          const basicError: BasicError = {
+            message: 'Could not parse requestBody',
+            code: BasicError_BasicErrorCode.BAD_REQUEST
+          };
+          return createResponse(convertBody(responseType, {error: basicError}, responseFormat));
+        }
+      }
     }
     const newContext = Object.assign(context, {
       proto: {body: requestBody},
@@ -90,6 +103,14 @@ export function protoBuf<REQUEST extends Request,
 function getResponseFormat(request: Request): 'protobuf' | 'json' {
   const acceptHeader = request.headers.get('Accept');
   if (acceptHeader === 'application/octet-stream') {
+    return 'protobuf';
+  }
+  return 'json';
+}
+
+function getRequestFormat(request: Request): 'protobuf' | 'json' {
+  const contentType = request.headers.get('Content-Type');
+  if (contentType === 'application/octet-stream') {
     return 'protobuf';
   }
   return 'json';

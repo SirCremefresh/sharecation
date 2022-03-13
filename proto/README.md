@@ -12,7 +12,7 @@ buf mod update
 docker buildx build --platform linux/amd64,linux/arm64 -t proto-generator .
 ```
 
-### run
+### Build
 
 ```bash
 docker buildx build -t proto-generator .

@@ -14,14 +14,16 @@ export function responseErrForbidden() {
   return responseErrReason('FORBIDDEN', 403);
 }
 
+type ContentType = 'application/octet-stream' | 'application/json'
+
 export function responseErrReason(
   reason: string,
   statusCode: number,
 ): Response {
-  return createResponse({reason}, statusCode);
+  return createResponse({reason}, statusCode, 'application/json');
 }
 
-export function createResponse(body: unknown, statusCode: number = 200, contentType: string = 'application/octet-stream'): Response {
+export function createResponse(body: unknown, statusCode: number = 200, contentType: ContentType = 'application/octet-stream'): Response {
   return new Response(JSON.stringify(body), {
     status: statusCode,
     headers: {

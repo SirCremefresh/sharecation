@@ -1,10 +1,10 @@
 import {MessageType} from '@protobuf-ts/runtime';
-import {createResponse, isNotNullOrUndefined} from '../lib';
-import {ProtoBufContext} from './context';
+import {createResponse, isNotNullOrUndefined, responseErrReason} from '../lib';
+import {LoggerContext, ProtoBufContext} from './context';
 
 export function protoBuf<REQUEST extends Request,
   ENV extends {},
-  CONTEXT,
+  CONTEXT extends LoggerContext,
   RESPONSE extends Response,
   REQUEST_BODY extends {},
   RESPONSE_BODY extends {}>(
@@ -27,16 +27,18 @@ export function protoBuf<REQUEST extends Request,
       });
     } else {
       newContext = Object.assign(context, {
-        proto: {body: {
-
-          }},
+        proto: {body: {}},
       });
     }
 
-    const response = await fn(request, env, newContext as CONTEXT & ProtoBufContext<REQUEST_BODY>);
-
-    return createResponse(
-      responseType.toBinary(responseType.fromJson(response))
-    );
+    try {
+      const response = await fn(request, env, newContext as CONTEXT & ProtoBufContext<REQUEST_BODY>);
+      return createResponse(
+        responseType.toBinary(responseType.fromJson(response))
+      );
+    } catch (e) {
+      context.logger.error(`An Error occurred while handling the request. ${e}`);
+      return responseErrReason('UNKNOWN', 500);
+    }
   };
 }

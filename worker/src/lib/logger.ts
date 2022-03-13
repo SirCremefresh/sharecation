@@ -1,4 +1,4 @@
-import {isAuthenticatedContext, isRequestIdContext,} from './middleware/context';
+import {isAuthenticatedContext, isRequestIdContext, isRouteContext,} from './middleware/context';
 
 export interface LoggerConfig {
   LOKI_SECRET: string;
@@ -37,6 +37,9 @@ export class Logger {
     const userIdSnipped = isAuthenticatedContext(this.context)
       ? 'userId=' + this.context.user.userId
       : '';
+    const pathSnipped = isRouteContext(this.context)
+      ? 'path=' + this.context.route.path
+      : '';
     const request = {
       streams: [
         {
@@ -46,7 +49,7 @@ export class Logger {
           },
           values: this.messages.map(messageEntry => [
             messageEntry.time.toString(),
-            `${serviceSnipped} ${requestIdSnipped} ${userIdSnipped} level=${messageEntry.level} ${messageEntry.message}`,
+            `${serviceSnipped} ${requestIdSnipped} ${userIdSnipped} ${pathSnipped} level=${messageEntry.level} ${messageEntry.message}`,
           ]),
         },
       ],

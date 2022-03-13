@@ -36,8 +36,15 @@ export function isRequestIdContext<T extends {}>(
 
 export interface RouteContext {
   route: {
+    path: string
     params: { [key: string]: string };
   };
+}
+
+export function isRouteContext<T extends {}>(
+  context: T | undefined | null,
+): context is T & RouteContext {
+  return isNotNullOrUndefined(context) && context.hasOwnProperty('route');
 }
 
 

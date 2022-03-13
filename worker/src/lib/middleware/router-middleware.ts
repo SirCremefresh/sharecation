@@ -45,6 +45,7 @@ export function pathParam(paramName: string): ParamConfig {
 function checkRouteMatchAndParseContext(
   routeSegments: Array<ParamConfig | string>,
   urlSegments: string[],
+  path: string
 ): null | RouteContext {
   if (routeSegments.length !== urlSegments.length) {
     return null;
@@ -67,6 +68,7 @@ function checkRouteMatchAndParseContext(
   }
   return {
     route: {
+      path,
       params,
     },
   };
@@ -105,6 +107,7 @@ export function addRouter<REQUEST extends Request, ENV, CONTEXT, RESPONSE extend
       let routeContext = checkRouteMatchAndParseContext(
         route.path,
         urlSegments,
+        pathname
       );
       if (isNotNullOrUndefined(routeContext)) {
         // context1.logger.info(

@@ -42,11 +42,11 @@ export interface CreateGroupResponse {
      * @generated from protobuf oneof: response
      */
     response: {
-        oneofKind: "group";
+        oneofKind: "ok";
         /**
-         * @generated from protobuf field: groups.v1.Group group = 1;
+         * @generated from protobuf field: groups.v1.Group ok = 1;
          */
-        group: Group;
+        ok: Group;
     } | {
         oneofKind: "error";
         /**
@@ -162,7 +162,7 @@ export const CreateGroupRequest = new CreateGroupRequest$Type();
 class CreateGroupResponse$Type extends MessageType<CreateGroupResponse> {
     constructor() {
         super("groups.v1.CreateGroupResponse", [
-            { no: 1, name: "group", kind: "message", oneof: "response", T: () => Group },
+            { no: 1, name: "ok", kind: "message", oneof: "response", T: () => Group },
             { no: 2, name: "error", kind: "message", oneof: "response", T: () => BasicError }
         ]);
     }
@@ -178,10 +178,10 @@ class CreateGroupResponse$Type extends MessageType<CreateGroupResponse> {
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
-                case /* groups.v1.Group group */ 1:
+                case /* groups.v1.Group ok */ 1:
                     message.response = {
-                        oneofKind: "group",
-                        group: Group.internalBinaryRead(reader, reader.uint32(), options, (message.response as any).group)
+                        oneofKind: "ok",
+                        ok: Group.internalBinaryRead(reader, reader.uint32(), options, (message.response as any).ok)
                     };
                     break;
                 case /* errors.v1.BasicError error */ 2:
@@ -202,9 +202,9 @@ class CreateGroupResponse$Type extends MessageType<CreateGroupResponse> {
         return message;
     }
     internalBinaryWrite(message: CreateGroupResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
-        /* groups.v1.Group group = 1; */
-        if (message.response.oneofKind === "group")
-            Group.internalBinaryWrite(message.response.group, writer.tag(1, WireType.LengthDelimited).fork(), options).join();
+        /* groups.v1.Group ok = 1; */
+        if (message.response.oneofKind === "ok")
+            Group.internalBinaryWrite(message.response.ok, writer.tag(1, WireType.LengthDelimited).fork(), options).join();
         /* errors.v1.BasicError error = 2; */
         if (message.response.oneofKind === "error")
             BasicError.internalBinaryWrite(message.response.error, writer.tag(2, WireType.LengthDelimited).fork(), options).join();

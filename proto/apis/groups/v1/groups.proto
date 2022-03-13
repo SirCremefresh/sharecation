@@ -14,7 +14,7 @@ message CreateGroupRequest {
 
 message CreateGroupResponse {
   oneof response {
-    Group group = 1;
+    Group ok = 1;
     errors.v1.BasicError error = 2;
   }
 }

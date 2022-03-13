@@ -3,5 +3,14 @@ syntax = "proto3";
 package errors.v1;
 
 message BasicError {
+  enum BasicErrorCode {
+    BASIC_ERROR_CODE_UNSPECIFIED = 0;
+    BASIC_ERROR_CODE_BAD_REQUEST = 1;
+    BASIC_ERROR_CODE_UNAUTHENTICATED = 2;
+    BASIC_ERROR_CODE_NOT_FOUND = 3;
+    BASIC_ERROR_CODE_INTERNAL = 4;
+    BASIC_ERROR_CODE_UNKNOWN = 5;
+  }
   string message = 1;
+  BasicErrorCode code = 2;
 }

@@ -83,9 +83,7 @@ export function protoBuf<REQUEST extends Request,
 
     try {
       const response = await fn(request, env, newContext as CONTEXT & ProtoBufContext<REQUEST_BODY>);
-      return createResponse(
-        responseType.toBinary(responseType.fromJson(response))
-      );
+      return createResponse(convertBody(responseType, response, responseFormat), 200, responseFormat === 'json' ? 'application/json' : 'application/octet-stream');
     } catch (e) {
       context.logger.fatal(`An unknown error occurred while handling the request. requestBody=${requestBody} error=${e}`);
       if (responseContainsBasicError(responseType)) {

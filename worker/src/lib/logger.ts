@@ -1,7 +1,4 @@
-import {
-  isAuthenticatedContext,
-  isRequestIdContext,
-} from './middleware/context';
+import {isAuthenticatedContext, isRequestIdContext,} from './middleware/context';
 
 export interface LoggerConfig {
   LOKI_SECRET: string;
@@ -10,13 +7,14 @@ export interface LoggerConfig {
 
 export class Logger {
   timeNanoSeconds = Date.now() * 1000000;
-  messages: { time: number; message: string; level: 'info' | 'error' }[] = [];
+  messages: { time: number; message: string; level: 'info' | 'error' | 'fatal' }[] = [];
 
   constructor(
     private config: LoggerConfig,
     private context: ExecutionContext,
     private serviceName: string,
-  ) {}
+  ) {
+  }
 
   info(message: string) {
     this.messages.push({
@@ -70,6 +68,15 @@ export class Logger {
       time: ++this.timeNanoSeconds,
       message,
       level: 'error',
+    });
+    console.error(`${this.serviceName}: ${message}`);
+  }
+
+  fatal(message: string) {
+    this.messages.push({
+      time: ++this.timeNanoSeconds,
+      message,
+      level: 'fatal',
     });
     console.error(`${this.serviceName}: ${message}`);
   }

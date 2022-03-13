@@ -1,5 +1,6 @@
 import {MessageType} from '@protobuf-ts/runtime';
-import {createResponse, isNotNullOrUndefined, responseErrReason} from '../lib';
+import {BasicError, BasicError_BasicErrorCode} from '../../contracts/errors/v1/errors';
+import {createResponse, isNotNullOrUndefined, isNullOrUndefined, responseErrReason} from '../lib';
 import {LoggerContext, ProtoBufContext} from './context';
 
 export function createProtoBufOkResponse<TYPE>(data: TYPE): {
@@ -14,6 +15,14 @@ export function createProtoBufOkResponse<TYPE>(data: TYPE): {
       ok: data
     }
   };
+}
+
+function responseContainsBasicError(responseType: MessageType<any>): boolean {
+  const errorType = responseType.fields.find(field => field.name === 'error');
+  if (isNullOrUndefined(errorType) || errorType.kind !== 'message') {
+    return false;
+  }
+  return errorType.T() === BasicError;
 }
 
 export function protoBuf<REQUEST extends Request,
@@ -31,19 +40,15 @@ export function protoBuf<REQUEST extends Request,
   ) => Promise<RESPONSE_BODY>,
 ): (request: REQUEST, env: ENV, context: CONTEXT) => Promise<Response> {
   return async (request: REQUEST, env: ENV, context: CONTEXT): Promise<Response> => {
-    let newContext;
+    let requestBody = {};
     if (isNotNullOrUndefined(requestType)) {
       const buffer = await request.arrayBuffer();
       const uint8Array = new Uint8Array(buffer);
-      const requestBody = requestType.fromBinary(uint8Array);
-      newContext = Object.assign(context, {
-        proto: {body: requestBody},
-      });
-    } else {
-      newContext = Object.assign(context, {
-        proto: {body: {}},
-      });
+      requestBody = requestType.fromBinary(uint8Array);
     }
+    const newContext = Object.assign(context, {
+      proto: {body: requestBody},
+    });
 
     try {
       const response = await fn(request, env, newContext as CONTEXT & ProtoBufContext<REQUEST_BODY>);
@@ -51,7 +56,18 @@ export function protoBuf<REQUEST extends Request,
         responseType.toBinary(responseType.fromJson(response))
       );
     } catch (e) {
-      context.logger.error(`An Error occurred while handling the request. ${e}`);
+      context.logger.fatal(`An unknown error occurred while handling the request. requestBody=${requestBody} error=${e}`);
+      if (responseContainsBasicError(responseType)) {
+        const basicError: BasicError = {
+          message: 'An unknown error occurred',
+          code: BasicError_BasicErrorCode.UNKNOWN
+        };
+        return createResponse(
+          responseType.toBinary(responseType.fromJson({
+            error: basicError
+          } as any))
+        );
+      }
       return responseErrReason('UNKNOWN', 500);
     }
   };

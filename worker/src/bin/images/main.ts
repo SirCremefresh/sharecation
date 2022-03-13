@@ -1,4 +1,4 @@
-import {isNotNullOrUndefined, responseErrForbidden, responseErrReason, responseOk,} from '../../lib/lib';
+import {isNotNullOrUndefined, responseErrForbidden, responseJsonErrorReason, responseOk,} from '../../lib/lib';
 import {addAuthenticationGuard} from '../../lib/middleware/authenticated-middleware';
 import {LoggerContext} from '../../lib/middleware/context';
 import {addLoggerContext} from '../../lib/middleware/logger-middleware';
@@ -81,17 +81,17 @@ export default {
                     context.logger.error(
                       `Invalid metadata for image ${key.name}`,
                     );
-                    return responseErrReason('INTERNAL_SERVER_ERROR', 500);
+                    return responseJsonErrorReason('INTERNAL_SERVER_ERROR', 500);
                   }
                   imageUrls.push(
                     `https://imagedelivery.net/lBSTOnVnm_g3jeLWNwAYiA/${metadata.imageId}/preview`,
                   );
                 }
 
-                return responseOk({
+                return responseOk(JSON.stringify({
                   imageUrls,
                   group: context.route.params.groupId,
-                });
+                }));
               },
             ),
             route(
@@ -107,7 +107,7 @@ export default {
                 const file = formData.get('file');
 
                 if (!(file instanceof File)) {
-                  return responseErrReason('BAD_REQUEST', 400);
+                  return responseJsonErrorReason('BAD_REQUEST', 400);
                 }
 
                 const res = await uploadFile(
@@ -120,7 +120,7 @@ export default {
                   context.logger.error(
                     `Error uploading image with response: ${JSON.stringify(res)}`,
                   );
-                  return responseErrReason('FAILED_TO_UPLOAD_IMAGE', 500);
+                  return responseJsonErrorReason('FAILED_TO_UPLOAD_IMAGE', 500);
                 }
 
                 const imageKey = IMAGES_KV.IMAGE(
@@ -136,7 +136,7 @@ export default {
                   },
                 );
 
-                return responseOk({file: file.type, imageId: res.result.id});
+                return responseOk(JSON.stringify({file: file.type, imageId: res.result.id}));
               },
             ),
           ]),

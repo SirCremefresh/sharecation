@@ -1,6 +1,6 @@
 import {MessageType} from '@protobuf-ts/runtime';
 import {BasicError, BasicError_BasicErrorCode} from '../../contracts/errors/v1/errors';
-import {createResponse, isNotNullOrUndefined, isNullOrUndefined, responseErrReason} from '../lib';
+import {createResponse, isNotNullOrUndefined, isNullOrUndefined, responseJsonErrorReason} from '../lib';
 import {LoggerContext, ProtoBufContext} from './context';
 
 export function createProtoBufOkResponse<TYPE>(data: TYPE): {
@@ -41,6 +41,7 @@ export function protoBuf<REQUEST extends Request,
 ): (request: REQUEST, env: ENV, context: CONTEXT) => Promise<Response> {
   return async (request: REQUEST, env: ENV, context: CONTEXT): Promise<Response> => {
     let requestBody = {};
+    let responseFormat = getResponseFormat(request);
     if (isNotNullOrUndefined(requestType)) {
       const buffer = await request.arrayBuffer();
       const uint8Array = new Uint8Array(buffer);
@@ -62,13 +63,24 @@ export function protoBuf<REQUEST extends Request,
           message: 'An unknown error occurred',
           code: BasicError_BasicErrorCode.UNKNOWN
         };
-        return createResponse(
-          responseType.toBinary(responseType.fromJson({
-            error: basicError
-          } as any))
-        );
+        return createResponse(convertBody(responseType, {error: basicError}, responseFormat));
       }
-      return responseErrReason('UNKNOWN', 500);
+      return responseJsonErrorReason('UNKNOWN', 500);
     }
   };
+}
+
+function getResponseFormat(request: Request): 'protobuf' | 'json' {
+  const acceptHeader = request.headers.get('Accept');
+  if (acceptHeader === 'application/octet-stream') {
+    return 'protobuf';
+  }
+  return 'json';
+}
+
+function convertBody(responseType: MessageType<any>, body: any, format: 'protobuf' | 'json'): string | Uint8Array {
+  if (format === 'protobuf') {
+    return responseType.toBinary(responseType.fromJson(body));
+  }
+  return responseType.toJsonString(responseType.fromJson(body));
 }

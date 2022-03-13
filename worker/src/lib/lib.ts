@@ -6,25 +6,25 @@ export function isNotNullOrUndefined<T>(val: T | null | undefined): val is T {
   return val !== null && val !== undefined;
 }
 
-export function responseOk(body: unknown): Response {
+export function responseOk(body: string | Uint8Array): Response {
   return createResponse(body, 200);
 }
 
 export function responseErrForbidden() {
-  return responseErrReason('FORBIDDEN', 403);
+  return responseJsonErrorReason('FORBIDDEN', 403);
 }
 
 type ContentType = 'application/octet-stream' | 'application/json'
 
-export function responseErrReason(
+export function responseJsonErrorReason(
   reason: string,
   statusCode: number,
 ): Response {
-  return createResponse({reason}, statusCode, 'application/json');
+  return createResponse(JSON.stringify({reason}), statusCode, 'application/json');
 }
 
-export function createResponse(body: unknown, statusCode: number = 200, contentType: ContentType = 'application/octet-stream'): Response {
-  return new Response(JSON.stringify(body), {
+export function createResponse(body: string | Uint8Array, statusCode: number = 200, contentType: ContentType = 'application/octet-stream'): Response {
+  return new Response(body, {
     status: statusCode,
     headers: {
       'Content-Type': contentType,

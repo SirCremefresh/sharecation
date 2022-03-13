@@ -1,4 +1,4 @@
-import {isNotNullOrUndefined, responseErrReason} from '../lib';
+import {isNotNullOrUndefined, responseJsonErrorReason} from '../lib';
 import {RouteContext} from './context';
 
 type Method = 'GET' | 'POST';
@@ -123,6 +123,6 @@ export function addRouter<REQUEST extends Request, ENV, CONTEXT, RESPONSE extend
     // context1.logger.info(
     //   `No route found for method=${request.method} pathname=${pathname}`,
     // );
-    return responseErrReason('NOT_FOUND', 404);
+    return responseJsonErrorReason('NOT_FOUND', 404);
   };
 }

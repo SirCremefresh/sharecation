@@ -1,4 +1,4 @@
-import {responseErrReason} from '../lib';
+import {responseJsonErrorReason} from '../lib';
 import {Logger, LoggerConfig} from '../logger';
 import {LoggerContext} from './context';
 
@@ -28,7 +28,7 @@ export function addLoggerContext<ENV extends LoggerConfig = LoggerConfig,
     try {
       response = await fn(request, env, context);
     } catch (e) {
-      response = responseErrReason('UNKNOWN', 500);
+      response = responseJsonErrorReason('UNKNOWN', 500);
       context.logger.error('Error handling request: ' + e);
     } finally {
       context.logger.flush();

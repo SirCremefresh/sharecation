@@ -18,10 +18,10 @@ export default {
         route('POST', ['v1', 'jwt'], async (request, env, context) => {
           const userId = crypto.randomUUID();
           const jwtString = await generateSharecationJwt(userId, ['group:abcd'], env.COMMON, context);
-          return responseOk({
+          return responseOk(JSON.stringify({
             userId,
             jwtString,
-          });
+          }));
         }),
       ]),
     ),

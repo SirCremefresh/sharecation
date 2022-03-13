@@ -4,7 +4,7 @@ import {LoggerContext} from '../../lib/middleware/context';
 import {addLoggerContext} from '../../lib/middleware/logger-middleware';
 import {addNoop} from '../../lib/middleware/noop-middleware';
 import {addRequestId} from '../../lib/middleware/request-id-middleware';
-import {addRouter, pathParam, route, routePath,} from '../../lib/middleware/router-middleware';
+import {addRouter, pathParam, route,} from '../../lib/middleware/router-middleware';
 import {getRights, hasRight, RIGHTS} from '../../lib/rights';
 import {IMAGES_KV} from './images-kv';
 
@@ -69,7 +69,7 @@ export default {
           addRouter([
             route(
               'GET',
-              routePath('v1', 'images', pathParam('groupId')),
+              ['v1', 'images', pathParam('groupId')],
               async (request, env, context) => {
                 const results = await env.IMAGES.list<{ imageId: string }>({
                   prefix: IMAGES_KV.IMAGES_USER(context.user.userId),
@@ -96,7 +96,7 @@ export default {
             ),
             route(
               'POST',
-              routePath('v1', 'images', pathParam('groupId')),
+              ['v1', 'images', pathParam('groupId')],
               async (request, env, context) => {
                 const groupId = context.route.params.groupId;
                 if (!hasRight(RIGHTS.GROUP(groupId), context)) {

@@ -2,6 +2,20 @@ import {MessageType} from '@protobuf-ts/runtime';
 import {createResponse, isNotNullOrUndefined, responseErrReason} from '../lib';
 import {LoggerContext, ProtoBufContext} from './context';
 
+export function createProtoBufOkResponse<TYPE>(data: TYPE): {
+  response: {
+    oneofKind: 'ok',
+    ok: TYPE
+  }
+} {
+  return {
+    response: {
+      oneofKind: 'ok',
+      ok: data
+    }
+  };
+}
+
 export function protoBuf<REQUEST extends Request,
   ENV extends {},
   CONTEXT extends LoggerContext,

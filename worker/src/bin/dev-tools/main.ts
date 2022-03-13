@@ -1,12 +1,8 @@
-import { responseOk } from '../../lib/lib';
-import { addGuard } from '../../lib/middleware/guard-middleware';
-import { addLoggerContext } from '../../lib/middleware/logger-middleware';
-import {
-  addRouter,
-  route,
-  routePath,
-} from '../../lib/middleware/router-middleware';
-import { generateSharecationJwt } from '../authentication/sharecation-keys';
+import {responseOk} from '../../lib/lib';
+import {addGuard} from '../../lib/middleware/guard-middleware';
+import {addLoggerContext} from '../../lib/middleware/logger-middleware';
+import {addRouter, route,} from '../../lib/middleware/router-middleware';
+import {generateSharecationJwt} from '../authentication/sharecation-keys';
 
 // noinspection JSUnusedGlobalSymbols
 export default {
@@ -19,9 +15,9 @@ export default {
     addGuard(
       (_request, env, _context) => env.ENVIRONMENT === 'development',
       addRouter([
-        route('POST', routePath('v1', 'jwt'), async (request, env, context) => {
+        route('POST', ['v1', 'jwt'], async (request, env, context) => {
           const userId = crypto.randomUUID();
-          const jwtString = await generateSharecationJwt(userId, ['group:abcd'],env.COMMON, context);
+          const jwtString = await generateSharecationJwt(userId, ['group:abcd'], env.COMMON, context);
           return responseOk({
             userId,
             jwtString,

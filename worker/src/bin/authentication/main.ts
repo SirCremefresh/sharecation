@@ -2,7 +2,7 @@ import {isNullOrUndefined, responseErrReason, responseOk,} from '../../lib/lib';
 import {addAuthenticatedToContext} from '../../lib/middleware/authenticated-middleware';
 import {LoggerContext} from '../../lib/middleware/context';
 import {addLoggerContext,} from '../../lib/middleware/logger-middleware';
-import {addRouter, route, routePath} from '../../lib/middleware/router-middleware';
+import {addRouter, route} from '../../lib/middleware/router-middleware';
 import {verifyGoogleJwt} from './google-keys';
 import {generateSharecationJwt,} from './sharecation-keys';
 
@@ -47,14 +47,14 @@ export default {
   fetch: addLoggerContext<Env>(SERVICE_NAME, addRouter([
       route(
         'POST',
-        routePath('v1', 'token'),
+        ['v1', 'token'],
         async (request, env, context) => {
           return await authenticateUser(request, context, env);
         },
       ),
       route(
         'POST',
-        routePath('v1', 'admin', 'rights'),
+        ['v1', 'admin', 'rights'],
         async (request, env, context) => {
           return await authenticateUser(request, context, env);
         },

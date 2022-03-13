@@ -1,0 +1,25 @@
+syntax = "proto3";
+import "errors/v1/errors.proto";
+
+package authentications.v1;
+
+message AuthenticatedData {
+  string sub = 1;
+  int32 exp = 2;
+}
+
+message Authenticated {
+  string jwtString = 1;
+  AuthenticatedData data = 2;
+}
+
+message CreateAuthenticationRequest {
+  string jwtString = 1;
+}
+
+message CreateAuthenticationResponse {
+  oneof response {
+    Authenticated ok = 1;
+    errors.v1.BasicError error = 2;
+  }
+}

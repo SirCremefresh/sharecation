@@ -17,6 +17,23 @@ export function createProtoBufOkResponse<TYPE>(data: TYPE): {
   };
 }
 
+export function createProtoBufBasicErrorResponse(message: string, code: BasicError_BasicErrorCode): {
+  response: {
+    oneofKind: 'error',
+    error: BasicError
+  }
+} {
+  return {
+    response: {
+      oneofKind: 'error',
+      error: {
+        message,
+        code
+      }
+    }
+  };
+}
+
 function responseContainsBasicError(responseType: MessageType<any>): boolean {
   const errorType = responseType.fields.find(field => field.name === 'error');
   if (isNullOrUndefined(errorType) || errorType.kind !== 'message') {

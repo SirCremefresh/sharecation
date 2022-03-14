@@ -38,6 +38,7 @@ export class AppComponent {
       {
         headers: {
           'Content-Type': 'application/octet-stream',
+          'Accept': 'application/octet-stream'
         },
         responseType: 'arraybuffer'
       }).pipe().subscribe((res) => {

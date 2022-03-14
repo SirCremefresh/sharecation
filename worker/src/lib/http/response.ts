@@ -5,7 +5,7 @@ import {ProtoBufContext} from '../middleware/context';
 import {MessageFormat, messageFormatToMediaType} from './types';
 
 
-export function createProtobufResponse(body: {}, context: ProtoBufContext<{}>): Response {
+export function createProtobufResponse(body: {}, context: { proto: { responseFormat: MessageFormat, responseType: MessageType<any> } }): Response {
   const protoContext = context.proto;
   const serializedBody = protoContext.responseFormat === MessageFormat.PROTOBUF
     ? protoContext.responseType.toBinary(protoContext.responseType.fromJson(body))

@@ -36,6 +36,21 @@ export function createProtoBufBasicErrorResponse(message: string, code: BasicErr
   };
 }
 
+async function extractedRequestBody<REQUEST_BODY extends {}>(requestFormat: MessageFormat, request: Request, requestType: MessageType<REQUEST_BODY>) {
+  let requestBody;
+  if (requestFormat === MessageFormat.PROTOBUF) {
+    const buffer = await request.arrayBuffer();
+    const uint8Array = new Uint8Array(buffer);
+    requestBody = requestType.fromBinary(uint8Array);
+  } else {
+    requestBody = requestType.fromJson(await request.json());
+    if (!requestType.is(requestBody)) {
+      throw new Error(`Request body does not match schema. ${requestBody}`);
+    }
+  }
+  return requestBody;
+}
+
 export function protoBuf<REQUEST extends Request,
   ENV extends {},
   CONTEXT extends LoggerContext,
@@ -54,22 +69,21 @@ export function protoBuf<REQUEST extends Request,
     let requestBody;
     let responseFormat = getResponseFormat(request);
     let requestFormat = getRequestFormat(request);
-    if (requestFormat === MessageFormat.PROTOBUF) {
-      const buffer = await request.arrayBuffer();
-      const uint8Array = new Uint8Array(buffer);
-      requestBody = requestType.fromBinary(uint8Array);
-    } else {
-      requestBody = requestType.fromJson(await request.json());
-      if (!requestType.is(requestBody)) {
-        context.logger.error(`Request body does not match schema. ${requestBody}`);
-      }
+    try {
+      requestBody = await extractedRequestBody<REQUEST_BODY>(requestFormat, request, requestType);
+    } catch (e) {
+      context.logger.error(`could not parse request body. error=${e}`);
+      const basicError: BasicError = {
+        message: 'Could not parse requestBody',
+        code: BasicError_BasicErrorCode.BAD_REQUEST
+      };
+      return createProtobufResponse(basicError, {
+        proto: {
+          responseFormat,
+          responseType
+        }
+      });
     }
-
-    // const basicError: BasicError = {
-    //   message: 'Could not parse requestBody',
-    //   code: BasicError_BasicErrorCode.BAD_REQUEST
-    // };
-    // return createResponse(convertBody(responseType, {error: basicError}, responseFormat));
 
     const protobufContext: ProtoBufContext<REQUEST_BODY> = {
       proto: {

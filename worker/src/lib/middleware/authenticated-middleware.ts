@@ -1,11 +1,9 @@
+import {BasicError_BasicErrorCode} from '../../contracts/errors/v1/errors';
 import {DecodedJwt, isExpired, tryDecodeJwt} from '../authentication/jwt';
 import {verifyJwt} from '../authentication/sharecation-verify-keys';
+import {createBasicErrorResponse} from '../http/response';
 import {isNullOrUndefined} from '../lib';
 import {AuthenticatedContext, LoggerContext} from './context';
-
-const UNAUTHORIZED = JSON.stringify({
-  reason: 'UNAUTHORIZED',
-});
 
 export function addAuthenticatedToContext<CONTEXT>(
   userId: string,
@@ -34,6 +32,13 @@ export function decodeJwtFromAuthorizationHeader(
   return tryDecodeJwt(jwtString, context);
 }
 
+function createUnauthorizedErrorResponse(context: {}): Response {
+  return createBasicErrorResponse({
+    message: 'Authentication was unsuccessful',
+    code: BasicError_BasicErrorCode.UNAUTHENTICATED
+  }, context);
+}
+
 export function addAuthenticationGuard<REQUEST extends Request,
   ENV extends { COMMON: KVNamespace },
   CONTEXT extends LoggerContext,
@@ -48,9 +53,7 @@ export function addAuthenticationGuard<REQUEST extends Request,
     const jwt = decodeJwtFromAuthorizationHeader(request, context);
     if (isNullOrUndefined(jwt)) {
       context.logger.error('Could not get JWT from authorization header');
-      return new Response(UNAUTHORIZED, {
-        status: 401,
-      });
+      return createUnauthorizedErrorResponse(context);
     }
 
     const valid = await verifyJwt(jwt, env.COMMON, context);
@@ -58,18 +61,14 @@ export function addAuthenticationGuard<REQUEST extends Request,
       context.logger.error(
         `Jwt is not valid. payload: ${JSON.stringify(jwt.payload)}`,
       );
-      return new Response(UNAUTHORIZED, {
-        status: 401,
-      });
+      return createUnauthorizedErrorResponse(context);
     }
 
     if (isExpired(jwt)) {
       context.logger.error(
         `Jwt is expired. payload: ${JSON.stringify(jwt.payload)}`,
       );
-      return new Response(UNAUTHORIZED, {
-        status: 401,
-      });
+      return createUnauthorizedErrorResponse(context);
     }
 
     return fn(

@@ -32,7 +32,7 @@ function responseContainsBasicError(responseType: MessageType<any>): boolean {
   return errorType.T() === BasicError;
 }
 
-export function createProtobufBasicErrorResponse(basicError: BasicError, context: {}) {
+export function createBasicErrorResponse(basicError: BasicError, context: {}) {
   const wrappedBody = {error: basicError};
   if (isProtoBufContext(context) && responseContainsBasicError(context.proto.responseType)) {
     return createProtobufResponse(wrappedBody, context);

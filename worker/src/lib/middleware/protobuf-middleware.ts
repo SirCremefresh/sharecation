@@ -1,8 +1,9 @@
 import {MessageType} from '@protobuf-ts/runtime';
 import {BasicError, BasicError_BasicErrorCode} from '../../contracts/errors/v1/errors';
 import {getRequestFormat, getResponseFormat} from '../http/request';
-import {createProtobufBasicErrorResponse, createProtobufResponse} from '../http/response';
+import {createBasicErrorResponse, createProtobufResponse} from '../http/response';
 import {MessageFormat} from '../http/types';
+import {isNotNullOrUndefined} from '../lib';
 import {LoggerContext, ProtoBufContext} from './context';
 
 export function createProtoBufOkResponse<TYPE>(data: TYPE): {
@@ -57,7 +58,7 @@ export function protoBuf<REQUEST extends Request,
   RESPONSE extends Response,
   REQUEST_BODY extends {},
   RESPONSE_BODY extends {}>(
-  requestType: MessageType<REQUEST_BODY>,
+  requestType: MessageType<REQUEST_BODY> | null,
   responseType: MessageType<RESPONSE_BODY>,
   fn: (
     request: REQUEST,
@@ -66,11 +67,13 @@ export function protoBuf<REQUEST extends Request,
   ) => Promise<RESPONSE_BODY>,
 ): (request: REQUEST, env: ENV, context: CONTEXT) => Promise<Response> {
   return async (request: REQUEST, env: ENV, context: CONTEXT): Promise<Response> => {
-    let requestBody;
+    let requestBody = null;
     let responseFormat = getResponseFormat(request);
     let requestFormat = getRequestFormat(request);
     try {
-      requestBody = await extractedRequestBody<REQUEST_BODY>(requestFormat, request, requestType);
+      if (isNotNullOrUndefined(requestType)) {
+        requestBody = await extractedRequestBody<REQUEST_BODY>(requestFormat, request, requestType);
+      }
     } catch (e) {
       context.logger.error(`could not parse request body. error=${e}`);
       const basicError: BasicError = {
@@ -85,7 +88,7 @@ export function protoBuf<REQUEST extends Request,
       });
     }
 
-    const protobufContext: ProtoBufContext<REQUEST_BODY> = {
+    const protobufContext: ProtoBufContext<REQUEST_BODY | null> = {
       proto: {
         body: requestBody,
         responseType,
@@ -105,7 +108,7 @@ export function protoBuf<REQUEST extends Request,
         message: 'An unknown error occurred',
         code: BasicError_BasicErrorCode.UNKNOWN
       };
-      return createProtobufBasicErrorResponse(basicError, newContext);
+      return createBasicErrorResponse(basicError, newContext);
     }
   };
 }

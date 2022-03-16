@@ -50,10 +50,10 @@ export function isRouteContext<T extends {}>(
 }
 
 
-export interface ProtoBufContext<TYPE extends {}> {
+export interface ProtoBufContext<TYPE extends {} | null> {
   proto: {
     body: TYPE,
-    requestType: MessageType<any>,
+    requestType: MessageType<any>| null,
     responseType: MessageType<any>,
     responseFormat: MessageFormat,
     requestFormat: MessageFormat

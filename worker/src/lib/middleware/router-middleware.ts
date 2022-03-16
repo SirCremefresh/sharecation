@@ -1,5 +1,5 @@
 import {BasicError_BasicErrorCode} from '../../contracts/errors/v1/errors';
-import {createProtobufBasicErrorResponse} from '../http/response';
+import {createBasicErrorResponse} from '../http/response';
 import {isNotNullOrUndefined} from '../lib';
 import {LoggerContext, RouteContext} from './context';
 
@@ -124,7 +124,7 @@ export function addRouter<REQUEST extends Request, ENV, CONTEXT extends LoggerCo
     }
     const notFoundErrorMessage = `No route found for method=${request.method} pathname=${pathname}`;
     context.logger.info(notFoundErrorMessage);
-    return createProtobufBasicErrorResponse({
+    return createBasicErrorResponse({
       message: notFoundErrorMessage,
       code: BasicError_BasicErrorCode.NOT_FOUND
     }, context);

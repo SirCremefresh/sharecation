@@ -1,10 +1,11 @@
 syntax = "proto3";
+import "errors/v1/errors.proto";
 
 package images.v1;
 
 message Image {
   string image_id = 1;
-  string name = 2;
+  string type = 2;
 }
 
 message GetImageRequest {
@@ -13,4 +14,11 @@ message GetImageRequest {
 
 message GetImageResponse {
   Image image = 1;
+}
+
+message CreateImageResponse {
+  oneof response {
+    Image ok = 1;
+    errors.v1.BasicError error = 2;
+  }
 }

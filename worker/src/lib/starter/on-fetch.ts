@@ -1,5 +1,5 @@
 import {BasicError_BasicErrorCode} from '../../contracts/errors/v1/errors';
-import {createProtobufBasicErrorResponse} from '../http/response';
+import {createBasicErrorResponse} from '../http/response';
 
 export function onFetch<ENV extends {} = {}>(
   fn: (
@@ -13,7 +13,7 @@ export function onFetch<ENV extends {} = {}>(
       return await fn(request, env, context);
     } catch (e) {
       console.error('Error handling request', e);
-      return createProtobufBasicErrorResponse({
+      return createBasicErrorResponse({
         message: 'Error handling request',
         code: BasicError_BasicErrorCode.UNKNOWN
       }, context);

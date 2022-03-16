@@ -1,4 +1,3 @@
-import {responseJsonErrorReason} from '../lib';
 import {Logger, LoggerConfig} from '../logger';
 import {LoggerContext} from './context';
 
@@ -11,25 +10,22 @@ function addLoggerToContext<CONTEXT extends ExecutionContext>(
   return Object.assign(context, {logger});
 }
 
-export function addLoggerContext<ENV extends LoggerConfig = LoggerConfig,
-  REQUEST = Request,
-  CONTEXT extends ExecutionContext = ExecutionContext,
-  RESPONSE extends Response = Response>(
+export function addLoggerContext<ENV extends LoggerConfig,
+  REQUEST,
+  CONTEXT extends ExecutionContext,
+  RESPONSE>(
   serviceName: string,
   fn: (
     request: REQUEST,
     env: ENV,
-    context2: CONTEXT & LoggerContext,
-  ) => Promise<Response>,
+    context: CONTEXT & LoggerContext,
+  ) => Promise<RESPONSE>,
 ) {
   return async (request: REQUEST, env: ENV, cfContext: CONTEXT) => {
     const context = addLoggerToContext(serviceName, env, cfContext);
     let response;
     try {
       response = await fn(request, env, context);
-    } catch (e) {
-      response = responseJsonErrorReason('UNKNOWN', 500);
-      context.logger.error('Error handling request: ' + e);
     } finally {
       context.logger.flush();
     }

@@ -13,12 +13,13 @@ import {
   protoBuf
 } from '../../lib/middleware/protobuf-middleware';
 import {addRouter, route} from '../../lib/middleware/router-middleware';
+import {onFetch} from '../../lib/starter/on-fetch';
 import {verifyGoogleJwt} from './google-keys';
 import {generateSharecationJwt,} from './sharecation-keys';
 
 const SERVICE_NAME = 'authentication';
 
-interface Env {
+interface EnvironmentVariables {
   ENVIRONMENT: string;
   COMMON: KVNamespace;
   LOKI_SECRET: string;
@@ -26,32 +27,35 @@ interface Env {
 
 // noinspection JSUnusedGlobalSymbols
 export default {
-  fetch: addLoggerContext<Env>(SERVICE_NAME, addRouter([
-      route(
-        'POST',
-        ['v1', 'token'],
-        protoBuf(CreateAuthenticationRequest, CreateAuthenticationResponse,
-          async (request, env, context) => {
-            const jwtString = context.proto.body.jwtString;
-            const userId = await verifyGoogleJwt(jwtString, env.COMMON, context);
-            if (isNullOrUndefined(userId)) {
-              context.logger.error('JWT is not valid or expired');
-              return createProtoBufBasicErrorResponse('INVALID_JWT', BasicError_BasicErrorCode.BAD_REQUEST);
-            }
-            context = addAuthenticatedToContext(userId, new Set(), context);
-
-            context.logger.info('generating jwt for userId=' + userId);
-            const generated = await generateSharecationJwt(userId, [], env.COMMON, context);
-            return createProtoBufOkResponse<Authenticated>({
-              jwtString: generated.jwtString,
-              data: {
-                sub: generated.payload.sub,
-                exp: generated.payload.exp,
+  fetch: onFetch<EnvironmentVariables>(
+    addLoggerContext(SERVICE_NAME,
+      addRouter([
+        route(
+          'POST',
+          ['v1', 'token'],
+          protoBuf(CreateAuthenticationRequest, CreateAuthenticationResponse,
+            async (request, env, context) => {
+              const jwtString = context.proto.body.jwtString;
+              const userId = await verifyGoogleJwt(jwtString, env.COMMON, context);
+              if (isNullOrUndefined(userId)) {
+                context.logger.error('JWT is not valid or expired');
+                return createProtoBufBasicErrorResponse('INVALID_JWT', BasicError_BasicErrorCode.BAD_REQUEST);
               }
-            });
-          },
+              context = addAuthenticatedToContext(userId, new Set(), context);
+
+              context.logger.info('generating jwt for userId=' + userId);
+              const generated = await generateSharecationJwt(userId, [], env.COMMON, context);
+              return createProtoBufOkResponse<Authenticated>({
+                jwtString: generated.jwtString,
+                data: {
+                  sub: generated.payload.sub,
+                  exp: generated.payload.exp,
+                }
+              });
+            },
+          )
         )
-      )
-    ]),
-  ),
+      ]),
+    ),
+  )
 };

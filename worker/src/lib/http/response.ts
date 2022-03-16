@@ -1,7 +1,7 @@
 import {MessageType} from '@protobuf-ts/runtime';
 import {BasicError} from '../../contracts/errors/v1/errors';
 import {isNullOrUndefined} from '../lib';
-import {ProtoBufContext} from '../middleware/context';
+import {isProtoBufContext} from '../middleware/context';
 import {MessageFormat, messageFormatToMediaType} from './types';
 
 
@@ -32,10 +32,9 @@ function responseContainsBasicError(responseType: MessageType<any>): boolean {
   return errorType.T() === BasicError;
 }
 
-export function createProtobufBasicErrorResponse(basicError: BasicError, context: ProtoBufContext<{}>) {
-  const protoContext = context.proto;
+export function createProtobufBasicErrorResponse(basicError: BasicError, context: {}) {
   const wrappedBody = {error: basicError};
-  if (responseContainsBasicError(protoContext.responseType)) {
+  if (isProtoBufContext(context) && responseContainsBasicError(context.proto.responseType)) {
     return createProtobufResponse(wrappedBody, context);
   }
   return createResponse(JSON.stringify(wrappedBody), MessageFormat.JSON, 500);

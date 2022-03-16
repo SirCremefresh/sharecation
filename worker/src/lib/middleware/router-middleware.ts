@@ -1,5 +1,7 @@
-import {isNotNullOrUndefined, responseJsonErrorReason} from '../lib';
-import {RouteContext} from './context';
+import {BasicError_BasicErrorCode} from '../../contracts/errors/v1/errors';
+import {createProtobufBasicErrorResponse} from '../http/response';
+import {isNotNullOrUndefined} from '../lib';
+import {LoggerContext, RouteContext} from './context';
 
 type Method = 'GET' | 'POST';
 
@@ -81,12 +83,12 @@ const CORS_HEADERS = {
   'Access-Control-Max-Age': '3600',
 };
 
-export function addRouter<REQUEST extends Request, ENV, CONTEXT, RESPONSE extends Response>(
+export function addRouter<REQUEST extends Request, ENV, CONTEXT extends LoggerContext, RESPONSE extends Response>(
   routes: RouteConfig<ENV,
     CONTEXT,
     RouteFunction<REQUEST, ENV, CONTEXT, RESPONSE>>[],
 ) {
-  return async (request: REQUEST, env: ENV, context1: CONTEXT) => {
+  return async (request: REQUEST, env: ENV, context: CONTEXT) => {
     if (request.method === 'OPTIONS') {
       return new Response(null, {
         status: 200,
@@ -110,19 +112,21 @@ export function addRouter<REQUEST extends Request, ENV, CONTEXT, RESPONSE extend
         pathname
       );
       if (isNotNullOrUndefined(routeContext)) {
-        // context1.logger.info(
-        //   `Handling request for method=${request.method} pathname=${pathname}`,
-        // );
+        context.logger.info(
+          `Handling request for method=${request.method} pathname=${pathname}`,
+        );
         return await route.fn(
           request,
           env,
-          Object.assign(context1, routeContext),
+          Object.assign(context, routeContext),
         );
       }
     }
-    // context1.logger.info(
-    //   `No route found for method=${request.method} pathname=${pathname}`,
-    // );
-    return responseJsonErrorReason('NOT_FOUND', 404);
+    const notFoundErrorMessage = `No route found for method=${request.method} pathname=${pathname}`;
+    context.logger.info(notFoundErrorMessage);
+    return createProtobufBasicErrorResponse({
+      message: notFoundErrorMessage,
+      code: BasicError_BasicErrorCode.NOT_FOUND
+    }, context);
   };
 }

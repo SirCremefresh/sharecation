@@ -1,7 +1,12 @@
 import {BasicError_BasicErrorCode} from '../../contracts/errors/v1/errors';
-import {CreateImageResponse, Image} from '../../contracts/images/v1/images';
-import {createBasicErrorResponse} from '../../lib/http/response';
-import {isNotNullOrUndefined, responseOk,} from '../../lib/lib';
+import {
+  CreateImageResponse,
+  GetImagesByGroupIdRequest,
+  GetImagesByGroupIdResponse,
+  Image,
+  Images
+} from '../../contracts/images/v1/images';
+import {isNotNullOrUndefined,} from '../../lib/lib';
 import {addAuthenticationGuard} from '../../lib/middleware/authenticated-middleware';
 import {LoggerContext} from '../../lib/middleware/context';
 import {addLoggerContext} from '../../lib/middleware/logger-middleware';
@@ -74,34 +79,40 @@ export default {
       addAuthenticationGuard(
         addRouter([
           route(
-            'GET',
-            ['v1', 'images', pathParam('groupId')],
-            async (request, env, context) => {
-              const results = await env.IMAGES.list<{ imageId: string }>({
-                prefix: IMAGES_KV.IMAGES_USER(context.user.userId),
-              });
-              const imageUrls = [];
-              for (const key of results.keys) {
-                const metadata = key.metadata;
-                if (!isImageMetadata(metadata)) {
-                  context.logger.error(
-                    `Invalid metadata for image ${key.name}`,
+            'POST',
+            ['v1', 'images', 'get-images-by-group-id'],
+            protoBuf(GetImagesByGroupIdRequest, GetImagesByGroupIdResponse,
+              async (request, env, context) => {
+                const results = await env.IMAGES.list<{ imageId: string }>({
+                  prefix: IMAGES_KV.IMAGES_USER(context.user.userId),
+                  cursor: context.proto.body.cursor
+                });
+                const imageUrls = [];
+                for (const key of results.keys) {
+                  const metadata = key.metadata;
+                  if (!isImageMetadata(metadata)) {
+                    context.logger.error(
+                      `Invalid metadata for image ${key.name}`,
+                    );
+                    return createProtoBufBasicErrorResponse(
+                      'Could not fetch images',
+                      BasicError_BasicErrorCode.INTERNAL
+                    );
+                  }
+                  imageUrls.push(
+                    `https://imagedelivery.net/lBSTOnVnm_g3jeLWNwAYiA/${metadata.imageId}/preview`,
                   );
-                  return createBasicErrorResponse({
-                    message: 'Could not fetch images',
-                    code: BasicError_BasicErrorCode.INTERNAL
-                  }, context);
                 }
-                imageUrls.push(
-                  `https://imagedelivery.net/lBSTOnVnm_g3jeLWNwAYiA/${metadata.imageId}/preview`,
-                );
-              }
 
-              return responseOk(JSON.stringify({
-                imageUrls,
-                group: context.route.params.groupId,
-              }));
-            },
+                return createProtoBufOkResponse<Images>({
+                  images: imageUrls.map(url => ({
+                    imageId: url,
+                    type: ''
+                  })),
+                  cursor: results.cursor
+                });
+              },
+            ),
           ),
           route(
             'POST',

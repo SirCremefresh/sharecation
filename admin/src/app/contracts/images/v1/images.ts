@@ -26,22 +26,56 @@ export interface Image {
     type: string;
 }
 /**
- * @generated from protobuf message images.v1.GetImageRequest
+ * @generated from protobuf message images.v1.Images
  */
-export interface GetImageRequest {
+export interface Images {
     /**
-     * @generated from protobuf field: string image_id = 1;
+     * @generated from protobuf field: repeated images.v1.Image images = 1;
      */
-    imageId: string;
+    images: Image[];
+    /**
+     * If cursor is not null
+     * More Images can be loaded
+     *
+     * @generated from protobuf field: optional string cursor = 2;
+     */
+    cursor?: string;
 }
 /**
- * @generated from protobuf message images.v1.GetImageResponse
+ * @generated from protobuf message images.v1.GetImagesByGroupIdRequest
  */
-export interface GetImageResponse {
+export interface GetImagesByGroupIdRequest {
     /**
-     * @generated from protobuf field: images.v1.Image image = 1;
+     * @generated from protobuf field: string group_id = 1;
      */
-    image?: Image;
+    groupId: string;
+    /**
+     * @generated from protobuf field: optional string cursor = 2;
+     */
+    cursor?: string;
+}
+/**
+ * @generated from protobuf message images.v1.GetImagesByGroupIdResponse
+ */
+export interface GetImagesByGroupIdResponse {
+    /**
+     * @generated from protobuf oneof: response
+     */
+    response: {
+        oneofKind: "ok";
+        /**
+         * @generated from protobuf field: images.v1.Images ok = 1;
+         */
+        ok: Images;
+    } | {
+        oneofKind: "error";
+        /**
+         * @generated from protobuf field: errors.v1.BasicError error = 2;
+         */
+        error: BasicError;
+    } | {
+        oneofKind: undefined;
+    };
 }
 /**
  * @generated from protobuf message images.v1.CreateImageResponse
@@ -121,26 +155,30 @@ class Image$Type extends MessageType<Image> {
  */
 export const Image = new Image$Type();
 // @generated message type with reflection information, may provide speed optimized methods
-class GetImageRequest$Type extends MessageType<GetImageRequest> {
+class Images$Type extends MessageType<Images> {
     constructor() {
-        super("images.v1.GetImageRequest", [
-            { no: 1, name: "image_id", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
+        super("images.v1.Images", [
+            { no: 1, name: "images", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => Image },
+            { no: 2, name: "cursor", kind: "scalar", opt: true, T: 9 /*ScalarType.STRING*/ }
         ]);
     }
-    create(value?: PartialMessage<GetImageRequest>): GetImageRequest {
-        const message = { imageId: "" };
+    create(value?: PartialMessage<Images>): Images {
+        const message = { images: [] };
         globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
         if (value !== undefined)
-            reflectionMergePartial<GetImageRequest>(this, message, value);
+            reflectionMergePartial<Images>(this, message, value);
         return message;
     }
-    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: GetImageRequest): GetImageRequest {
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: Images): Images {
         let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
-                case /* string image_id */ 1:
-                    message.imageId = reader.string();
+                case /* repeated images.v1.Image images */ 1:
+                    message.images.push(Image.internalBinaryRead(reader, reader.uint32(), options));
+                    break;
+                case /* optional string cursor */ 2:
+                    message.cursor = reader.string();
                     break;
                 default:
                     let u = options.readUnknownField;
@@ -153,10 +191,13 @@ class GetImageRequest$Type extends MessageType<GetImageRequest> {
         }
         return message;
     }
-    internalBinaryWrite(message: GetImageRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
-        /* string image_id = 1; */
-        if (message.imageId !== "")
-            writer.tag(1, WireType.LengthDelimited).string(message.imageId);
+    internalBinaryWrite(message: Images, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* repeated images.v1.Image images = 1; */
+        for (let i = 0; i < message.images.length; i++)
+            Image.internalBinaryWrite(message.images[i], writer.tag(1, WireType.LengthDelimited).fork(), options).join();
+        /* optional string cursor = 2; */
+        if (message.cursor !== undefined)
+            writer.tag(2, WireType.LengthDelimited).string(message.cursor);
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
@@ -164,30 +205,34 @@ class GetImageRequest$Type extends MessageType<GetImageRequest> {
     }
 }
 /**
- * @generated MessageType for protobuf message images.v1.GetImageRequest
+ * @generated MessageType for protobuf message images.v1.Images
  */
-export const GetImageRequest = new GetImageRequest$Type();
+export const Images = new Images$Type();
 // @generated message type with reflection information, may provide speed optimized methods
-class GetImageResponse$Type extends MessageType<GetImageResponse> {
+class GetImagesByGroupIdRequest$Type extends MessageType<GetImagesByGroupIdRequest> {
     constructor() {
-        super("images.v1.GetImageResponse", [
-            { no: 1, name: "image", kind: "message", T: () => Image }
+        super("images.v1.GetImagesByGroupIdRequest", [
+            { no: 1, name: "group_id", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 2, name: "cursor", kind: "scalar", opt: true, T: 9 /*ScalarType.STRING*/ }
         ]);
     }
-    create(value?: PartialMessage<GetImageResponse>): GetImageResponse {
-        const message = {};
+    create(value?: PartialMessage<GetImagesByGroupIdRequest>): GetImagesByGroupIdRequest {
+        const message = { groupId: "" };
         globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
         if (value !== undefined)
-            reflectionMergePartial<GetImageResponse>(this, message, value);
+            reflectionMergePartial<GetImagesByGroupIdRequest>(this, message, value);
         return message;
     }
-    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: GetImageResponse): GetImageResponse {
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: GetImagesByGroupIdRequest): GetImagesByGroupIdRequest {
         let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
-                case /* images.v1.Image image */ 1:
-                    message.image = Image.internalBinaryRead(reader, reader.uint32(), options, message.image);
+                case /* string group_id */ 1:
+                    message.groupId = reader.string();
+                    break;
+                case /* optional string cursor */ 2:
+                    message.cursor = reader.string();
                     break;
                 default:
                     let u = options.readUnknownField;
@@ -200,10 +245,13 @@ class GetImageResponse$Type extends MessageType<GetImageResponse> {
         }
         return message;
     }
-    internalBinaryWrite(message: GetImageResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
-        /* images.v1.Image image = 1; */
-        if (message.image)
-            Image.internalBinaryWrite(message.image, writer.tag(1, WireType.LengthDelimited).fork(), options).join();
+    internalBinaryWrite(message: GetImagesByGroupIdRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* string group_id = 1; */
+        if (message.groupId !== "")
+            writer.tag(1, WireType.LengthDelimited).string(message.groupId);
+        /* optional string cursor = 2; */
+        if (message.cursor !== undefined)
+            writer.tag(2, WireType.LengthDelimited).string(message.cursor);
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
@@ -211,9 +259,69 @@ class GetImageResponse$Type extends MessageType<GetImageResponse> {
     }
 }
 /**
- * @generated MessageType for protobuf message images.v1.GetImageResponse
+ * @generated MessageType for protobuf message images.v1.GetImagesByGroupIdRequest
  */
-export const GetImageResponse = new GetImageResponse$Type();
+export const GetImagesByGroupIdRequest = new GetImagesByGroupIdRequest$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class GetImagesByGroupIdResponse$Type extends MessageType<GetImagesByGroupIdResponse> {
+    constructor() {
+        super("images.v1.GetImagesByGroupIdResponse", [
+            { no: 1, name: "ok", kind: "message", oneof: "response", T: () => Images },
+            { no: 2, name: "error", kind: "message", oneof: "response", T: () => BasicError }
+        ]);
+    }
+    create(value?: PartialMessage<GetImagesByGroupIdResponse>): GetImagesByGroupIdResponse {
+        const message = { response: { oneofKind: undefined } };
+        globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
+        if (value !== undefined)
+            reflectionMergePartial<GetImagesByGroupIdResponse>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: GetImagesByGroupIdResponse): GetImagesByGroupIdResponse {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* images.v1.Images ok */ 1:
+                    message.response = {
+                        oneofKind: "ok",
+                        ok: Images.internalBinaryRead(reader, reader.uint32(), options, (message.response as any).ok)
+                    };
+                    break;
+                case /* errors.v1.BasicError error */ 2:
+                    message.response = {
+                        oneofKind: "error",
+                        error: BasicError.internalBinaryRead(reader, reader.uint32(), options, (message.response as any).error)
+                    };
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: GetImagesByGroupIdResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* images.v1.Images ok = 1; */
+        if (message.response.oneofKind === "ok")
+            Images.internalBinaryWrite(message.response.ok, writer.tag(1, WireType.LengthDelimited).fork(), options).join();
+        /* errors.v1.BasicError error = 2; */
+        if (message.response.oneofKind === "error")
+            BasicError.internalBinaryWrite(message.response.error, writer.tag(2, WireType.LengthDelimited).fork(), options).join();
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message images.v1.GetImagesByGroupIdResponse
+ */
+export const GetImagesByGroupIdResponse = new GetImagesByGroupIdResponse$Type();
 // @generated message type with reflection information, may provide speed optimized methods
 class CreateImageResponse$Type extends MessageType<CreateImageResponse> {
     constructor() {

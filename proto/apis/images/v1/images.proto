@@ -8,12 +8,23 @@ message Image {
   string type = 2;
 }
 
-message GetImageRequest {
-  string image_id = 1;
+message Images {
+  repeated Image images = 1;
+  // If cursor is not null
+  // More Images can be loaded
+  optional string cursor = 2;
 }
 
-message GetImageResponse {
-  Image image = 1;
+message GetImagesByGroupIdRequest {
+  string group_id = 1;
+  optional string cursor = 2;
+}
+
+message GetImagesByGroupIdResponse {
+  oneof response {
+    Images ok = 1;
+    errors.v1.BasicError error = 2;
+  }
 }
 
 message CreateImageResponse {

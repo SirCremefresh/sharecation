@@ -1,7 +1,7 @@
 import {MessageType} from '@protobuf-ts/runtime';
 import {BasicError, BasicError_BasicErrorCode} from '../../contracts/errors/v1/errors';
 import {getRequestFormat, getResponseFormat} from '../http/request';
-import {createBasicErrorResponse, createProtobufResponse} from '../http/response';
+import {createBasicErrorResponse, createProtoBufResponse} from '../http/response';
 import {MessageFormat} from '../http/types';
 import {isNotNullOrUndefined} from '../lib';
 import {LoggerContext, ProtoBufContext} from './context';
@@ -80,7 +80,7 @@ export function protoBuf<REQUEST extends Request,
         message: 'Could not parse requestBody',
         code: BasicError_BasicErrorCode.BAD_REQUEST
       };
-      return createProtobufResponse(basicError, {
+      return createProtoBufResponse(basicError, {
         proto: {
           responseFormat,
           responseType
@@ -101,7 +101,7 @@ export function protoBuf<REQUEST extends Request,
 
     try {
       const response = await fn(request, env, newContext);
-      return createProtobufResponse(response, newContext);
+      return createProtoBufResponse(response, newContext);
     } catch (e) {
       context.logger.fatal(`An unknown error occurred while handling the request. requestBody=${requestBody} error=${e}`);
       const basicError: BasicError = {

@@ -15,7 +15,7 @@ import {addRouter, pathParam, route,} from '../../lib/middleware/router-middlewa
 import {getRights, hasRight, RIGHTS} from '../../lib/rights';
 import {IMAGES_KV} from './images-kv';
 
-interface Env {
+interface EnvironmentVariables {
   LOKI_SECRET: string;
   ENVIRONMENT: string;
   SHARECATION_IMAGES_ACCOUNT_TOKEN: string;
@@ -68,7 +68,7 @@ async function uploadFile(
 
 // noinspection JSUnusedGlobalSymbols
 export default {
-  fetch: addLoggerContext<Env, Request, FetchEvent, Response>(
+  fetch: addLoggerContext<EnvironmentVariables, Request, FetchEvent, Response>(
     'images',
     addRequestId(
       addAuthenticationGuard(

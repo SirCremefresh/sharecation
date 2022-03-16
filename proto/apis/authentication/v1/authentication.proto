@@ -1,7 +1,7 @@
 syntax = "proto3";
 import "errors/v1/errors.proto";
 
-package authentications.v1;
+package authentication.v1;
 
 message AuthenticatedData {
   string sub = 1;
@@ -9,12 +9,12 @@ message AuthenticatedData {
 }
 
 message Authenticated {
-  string jwtString = 1;
+  string jwt_string = 1;
   AuthenticatedData data = 2;
 }
 
 message CreateAuthenticationRequest {
-  string jwtString = 1;
+  string jwt_string = 1;
 }
 
 message CreateAuthenticationResponse {

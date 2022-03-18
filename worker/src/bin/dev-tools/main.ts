@@ -1,4 +1,4 @@
-import {CreateUserRequest, CreateUserResponse, User} from '../../contracts/dev_tools/v1/jwt';
+import {CreateUserRequest, CreateUserResponse, User} from '../../contracts/dev-tools/v1/jwt';
 import {addGuard} from '../../lib/middleware/guard-middleware';
 import {addLoggerContext} from '../../lib/middleware/logger-middleware';
 import {createProtoBufOkResponse, protoBuf} from '../../lib/middleware/protobuf-middleware';

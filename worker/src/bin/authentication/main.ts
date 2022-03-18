@@ -1,7 +1,7 @@
 import {
   Authenticated,
-  CreateAuthenticationRequest,
-  CreateAuthenticationResponse
+  CreateAuthenticationWithFirebaseRequest,
+  CreateAuthenticationWithFirebaseResponse,
 } from '../../contracts/authentication/v1/authentication';
 import {BasicError_BasicErrorCode} from '../../contracts/errors/v1/errors';
 import {isNullOrUndefined,} from '../../lib/lib';
@@ -33,9 +33,9 @@ export default {
         route(
           'POST',
           ['v1', 'token'],
-          protoBuf(CreateAuthenticationRequest, CreateAuthenticationResponse,
+          protoBuf(CreateAuthenticationWithFirebaseRequest, CreateAuthenticationWithFirebaseResponse,
             async (request, env, context) => {
-              const jwtString = context.proto.body.jwtString;
+              const jwtString = context.proto.body.firebaseJwtString;
               const userId = await verifyGoogleJwt(jwtString, env.COMMON, context);
               if (isNullOrUndefined(userId)) {
                 context.logger.error('JWT is not valid or expired');

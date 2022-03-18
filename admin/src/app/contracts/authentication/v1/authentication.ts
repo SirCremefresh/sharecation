@@ -39,18 +39,18 @@ export interface Authenticated {
     data?: AuthenticatedData;
 }
 /**
- * @generated from protobuf message authentication.v1.CreateAuthenticationRequest
+ * @generated from protobuf message authentication.v1.CreateAuthenticationWithFirebaseRequest
  */
-export interface CreateAuthenticationRequest {
+export interface CreateAuthenticationWithFirebaseRequest {
     /**
-     * @generated from protobuf field: string jwt_string = 1;
+     * @generated from protobuf field: string firebase_jwt_string = 1;
      */
-    jwtString: string;
+    firebaseJwtString: string;
 }
 /**
- * @generated from protobuf message authentication.v1.CreateAuthenticationResponse
+ * @generated from protobuf message authentication.v1.CreateAuthenticationWithFirebaseResponse
  */
-export interface CreateAuthenticationResponse {
+export interface CreateAuthenticationWithFirebaseResponse {
     /**
      * @generated from protobuf oneof: response
      */
@@ -179,26 +179,26 @@ class Authenticated$Type extends MessageType<Authenticated> {
  */
 export const Authenticated = new Authenticated$Type();
 // @generated message type with reflection information, may provide speed optimized methods
-class CreateAuthenticationRequest$Type extends MessageType<CreateAuthenticationRequest> {
+class CreateAuthenticationWithFirebaseRequest$Type extends MessageType<CreateAuthenticationWithFirebaseRequest> {
     constructor() {
-        super("authentication.v1.CreateAuthenticationRequest", [
-            { no: 1, name: "jwt_string", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
+        super("authentication.v1.CreateAuthenticationWithFirebaseRequest", [
+            { no: 1, name: "firebase_jwt_string", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
         ]);
     }
-    create(value?: PartialMessage<CreateAuthenticationRequest>): CreateAuthenticationRequest {
-        const message = { jwtString: "" };
+    create(value?: PartialMessage<CreateAuthenticationWithFirebaseRequest>): CreateAuthenticationWithFirebaseRequest {
+        const message = { firebaseJwtString: "" };
         globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
         if (value !== undefined)
-            reflectionMergePartial<CreateAuthenticationRequest>(this, message, value);
+            reflectionMergePartial<CreateAuthenticationWithFirebaseRequest>(this, message, value);
         return message;
     }
-    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: CreateAuthenticationRequest): CreateAuthenticationRequest {
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: CreateAuthenticationWithFirebaseRequest): CreateAuthenticationWithFirebaseRequest {
         let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
-                case /* string jwt_string */ 1:
-                    message.jwtString = reader.string();
+                case /* string firebase_jwt_string */ 1:
+                    message.firebaseJwtString = reader.string();
                     break;
                 default:
                     let u = options.readUnknownField;
@@ -211,10 +211,10 @@ class CreateAuthenticationRequest$Type extends MessageType<CreateAuthenticationR
         }
         return message;
     }
-    internalBinaryWrite(message: CreateAuthenticationRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
-        /* string jwt_string = 1; */
-        if (message.jwtString !== "")
-            writer.tag(1, WireType.LengthDelimited).string(message.jwtString);
+    internalBinaryWrite(message: CreateAuthenticationWithFirebaseRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* string firebase_jwt_string = 1; */
+        if (message.firebaseJwtString !== "")
+            writer.tag(1, WireType.LengthDelimited).string(message.firebaseJwtString);
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
@@ -222,25 +222,25 @@ class CreateAuthenticationRequest$Type extends MessageType<CreateAuthenticationR
     }
 }
 /**
- * @generated MessageType for protobuf message authentication.v1.CreateAuthenticationRequest
+ * @generated MessageType for protobuf message authentication.v1.CreateAuthenticationWithFirebaseRequest
  */
-export const CreateAuthenticationRequest = new CreateAuthenticationRequest$Type();
+export const CreateAuthenticationWithFirebaseRequest = new CreateAuthenticationWithFirebaseRequest$Type();
 // @generated message type with reflection information, may provide speed optimized methods
-class CreateAuthenticationResponse$Type extends MessageType<CreateAuthenticationResponse> {
+class CreateAuthenticationWithFirebaseResponse$Type extends MessageType<CreateAuthenticationWithFirebaseResponse> {
     constructor() {
-        super("authentication.v1.CreateAuthenticationResponse", [
+        super("authentication.v1.CreateAuthenticationWithFirebaseResponse", [
             { no: 1, name: "ok", kind: "message", oneof: "response", T: () => Authenticated },
             { no: 2, name: "error", kind: "message", oneof: "response", T: () => BasicError }
         ]);
     }
-    create(value?: PartialMessage<CreateAuthenticationResponse>): CreateAuthenticationResponse {
+    create(value?: PartialMessage<CreateAuthenticationWithFirebaseResponse>): CreateAuthenticationWithFirebaseResponse {
         const message = { response: { oneofKind: undefined } };
         globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
         if (value !== undefined)
-            reflectionMergePartial<CreateAuthenticationResponse>(this, message, value);
+            reflectionMergePartial<CreateAuthenticationWithFirebaseResponse>(this, message, value);
         return message;
     }
-    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: CreateAuthenticationResponse): CreateAuthenticationResponse {
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: CreateAuthenticationWithFirebaseResponse): CreateAuthenticationWithFirebaseResponse {
         let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
@@ -268,7 +268,7 @@ class CreateAuthenticationResponse$Type extends MessageType<CreateAuthentication
         }
         return message;
     }
-    internalBinaryWrite(message: CreateAuthenticationResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+    internalBinaryWrite(message: CreateAuthenticationWithFirebaseResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* authentication.v1.Authenticated ok = 1; */
         if (message.response.oneofKind === "ok")
             Authenticated.internalBinaryWrite(message.response.ok, writer.tag(1, WireType.LengthDelimited).fork(), options).join();
@@ -282,6 +282,6 @@ class CreateAuthenticationResponse$Type extends MessageType<CreateAuthentication
     }
 }
 /**
- * @generated MessageType for protobuf message authentication.v1.CreateAuthenticationResponse
+ * @generated MessageType for protobuf message authentication.v1.CreateAuthenticationWithFirebaseResponse
  */
-export const CreateAuthenticationResponse = new CreateAuthenticationResponse$Type();
+export const CreateAuthenticationWithFirebaseResponse = new CreateAuthenticationWithFirebaseResponse$Type();

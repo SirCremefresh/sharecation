@@ -23,6 +23,7 @@ docker buildx build -t proto-generator .
 [//]: # (generate code)
 ```bash
 docker run -t --rm -v $(pwd):/tmp/ proto-generator
+node generate-code.mjs
 cp -rf gen/proto/typescript/* ../worker/src/contracts/
 cp -rf gen/proto/typescript/* ../admin/src/app/contracts/
 ```

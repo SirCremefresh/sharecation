@@ -13,11 +13,11 @@ message Authenticated {
   AuthenticatedData data = 2;
 }
 
-message CreateAuthenticationRequest {
-  string jwt_string = 1;
+message CreateAuthenticationWithFirebaseRequest {
+  string firebase_jwt_string = 1;
 }
 
-message CreateAuthenticationResponse {
+message CreateAuthenticationWithFirebaseResponse {
   oneof response {
     Authenticated ok = 1;
     errors.v1.BasicError error = 2;

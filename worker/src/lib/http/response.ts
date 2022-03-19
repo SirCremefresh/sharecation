@@ -8,7 +8,7 @@ import {MessageFormat, messageFormatToMediaType} from './types';
 export function createProtoBufResponse(body: {}, context: { proto: { responseFormat: MessageFormat, responseType: MessageType<any> } }): Response {
   const protoContext = context.proto;
   const serializedBody = protoContext.responseFormat === MessageFormat.PROTOBUF
-    ? protoContext.responseType.toBinary(protoContext.responseType.fromJson(body))
+    ? protoContext.responseType.toBinary(body)
     : protoContext.responseType.toJsonString(body);
   return _createRawResponse(serializedBody, protoContext.responseFormat);
 }

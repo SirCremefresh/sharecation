@@ -10,7 +10,7 @@
     "build:emit": "tsc",
     "clean": "node clean.mjs",
     "format": "prettier --write '**/*.{ts,mjs,css,json,md}'",
-    "jest": "npm run build:emit && NODE_OPTIONS=--experimental-vm-modules npx jest",
+    "jest": "NODE_OPTIONS=--experimental-vm-modules npx jest",
     "publish:developement": "node publish.mjs --environment=development",
     "publish:developement:ping": "node publish.mjs --environment=development --bins=ping",
     "publish:developement:images": "node publish.mjs --environment=development --bins=images",
@@ -22,7 +22,6 @@
   "author": "donatowolfisberg <donato@wolfisberg.dev>",
   "license": "MIT",
   "devDependencies": {
-    "@babel/preset-typescript": "^7.16.7",
     "@cloudflare/workers-types": "^3.3.1",
     "@miniflare/kv": "^2.2.0",
     "@types/jest": "^27.4.1",

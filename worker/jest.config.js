@@ -2,12 +2,12 @@ const { defaults } = require('jest-config')
 
 module.exports = {
   testEnvironment: 'miniflare',
-  testMatch: ['**/?(*.)+(spec|test).mjs'],
+  testMatch: ['**/?(*.)+(spec|test).ts'],
   testEnvironmentOptions: {
     bindings: {
       ENVIRONMENT: 'testing',
     },
     kvNamespaces: ['COMMON'],
   },
-  moduleFileExtensions: ['mjs', ...defaults.moduleFileExtensions],
+  moduleFileExtensions: ['js', ...defaults.moduleFileExtensions],
 }

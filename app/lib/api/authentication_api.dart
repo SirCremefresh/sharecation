@@ -1,27 +1,28 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
-
-import 'model/create_jwt_request.dart';
-import 'model/generated_jwt.dart';
+import 'package:sharecation/api/contracts/authentication/v1/authentication.pb.dart';
 
 class AuthenticationApi {
-  final Dio _dio = Dio(BaseOptions(baseUrl: 'https://development.sharecation-authentication.donato-wolfisberg.workers.dev'));
+  final Dio _dio = Dio(BaseOptions(
+      baseUrl:
+          'https://development.sharecation-authentication.donato-wolfisberg.workers.dev'));
 
-  Future<GeneratedJwt> createJwt({
-    required CreateJwtRequest createJwtRequest,
+  Future<CreateAuthenticationWithFirebaseResponse> createJwt({
+    required CreateAuthenticationWithFirebaseRequest createJwtRequest,
   }) async {
-    const _path = r'/v1/auth';
+    const _path = r'/v1/create-authentication-with-firebase';
     final _options = Options(
       method: r'POST',
       contentType: 'application/json',
+      responseType: ResponseType.plain,
     );
-
-    final _response = await _dio.request(_path,
-        data: createJwtRequest.toJson(), options: _options);
+    var requestBody = createJwtRequest.toProto3Json();
+    final _response =
+        await _dio.request(_path, data: requestBody, options: _options);
 
     try {
-      return GeneratedJwt.fromJson(_response.data!);
+      return CreateAuthenticationWithFirebaseResponse.fromJson(_response.data!);
     } catch (error, stackTrace) {
       throw DioError(
         requestOptions: _response.requestOptions,

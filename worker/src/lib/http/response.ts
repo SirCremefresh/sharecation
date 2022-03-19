@@ -9,7 +9,7 @@ export function createProtoBufResponse(body: {}, context: { proto: { responseFor
   const protoContext = context.proto;
   const serializedBody = protoContext.responseFormat === MessageFormat.PROTOBUF
     ? protoContext.responseType.toBinary(protoContext.responseType.fromJson(body))
-    : protoContext.responseType.toJsonString(protoContext.responseType.fromJson(body));
+    : protoContext.responseType.toJsonString(body);
   return _createRawResponse(serializedBody, protoContext.responseFormat);
 }
 

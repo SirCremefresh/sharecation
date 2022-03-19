@@ -32,7 +32,7 @@ export default {
       addRouter([
         route(
           'POST',
-          ['v1', 'token'],
+          ['v1', 'create-authentication-with-firebase'],
           protoBuf(CreateAuthenticationWithFirebaseRequest, CreateAuthenticationWithFirebaseResponse,
             async (request, env, context) => {
               const jwtString = context.proto.body.firebaseJwtString;

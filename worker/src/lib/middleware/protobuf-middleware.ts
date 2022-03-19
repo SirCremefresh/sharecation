@@ -103,7 +103,7 @@ export function protoBuf<REQUEST extends Request,
       const response = await fn(request, env, newContext);
       return createProtoBufResponse(response, newContext);
     } catch (e) {
-      context.logger.fatal(`An unknown error occurred while handling the request. requestBody=${requestBody} error=${e}`);
+      context.logger.fatal(`An unknown error occurred while handling the request. requestBody=${JSON.stringify(requestBody)} error=${e}`);
       const basicError: BasicError = {
         message: 'An unknown error occurred',
         code: BasicError_BasicErrorCode.UNKNOWN

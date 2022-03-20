@@ -44,6 +44,7 @@ dependencies:
   google_sign_in: ^5.2.3
   flutterfire_ui: ^0.3.1
   protobuf: ^2.0.1
+  fluttertoast: ^8.0.9
 
 dev_dependencies:
   json_serializable: ^6.1.4

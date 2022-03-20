@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterfire_ui/auth.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sharecation/pages/camera_page.dart';
 import 'package:sharecation/service/api_service.dart';
 
@@ -33,16 +34,24 @@ class MyApp extends StatelessWidget {
       routes: {
         '/sign-in': (context) => SignInScreen(
               providerConfigs: providerConfigs,
+              showAuthActionSwitch: false,
               actions: [
                 AuthStateChangeAction<SignedIn>((context, state) async {
                   try {
-                    var token = await authenticationService.getJwtString();
-                    debugPrint(token);
+                    await authenticationService.getJwtString();
+                    Navigator.of(context).pushReplacementNamed('/profile');
                   } catch (e) {
-                    debugPrint("could not log in");
+                    Fluttertoast.showToast(
+                        msg: "Error during Sign in",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                        timeInSecForIosWeb: 5,
+                        backgroundColor: Colors.red,
+                        textColor: Colors.white,
+                        fontSize: 16.0);
+                    await FirebaseAuth.instance.signOut();
                     return;
                   }
-                  Navigator.of(context).pushReplacementNamed('/profile');
                 }),
               ],
             ),

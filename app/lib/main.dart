@@ -1,17 +1,25 @@
 import 'dart:async';
 
+import 'package:camera/camera.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterfire_ui/auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:sharecation/pages/camera_page.dart';
+import 'package:sharecation/pages/camera_screen.dart';
 import 'package:sharecation/service/api_service.dart';
 
 import 'components/layout.dart';
 
+List<CameraDescription> cameras = [];
+
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  try {
+    WidgetsFlutterBinding.ensureInitialized();
+    cameras = await availableCameras();
+  } on CameraException catch (e) {
+    print('Error in fetching the cameras: $e');
+  }
   await Firebase.initializeApp();
 
   runApp(const MyApp());
@@ -61,7 +69,7 @@ class MyApp extends StatelessWidget {
                 Navigator.of(context).pushReplacementNamed('/sign-in');
               }),
             ])),
-        '/camera': (context) => const Layout(CameraApp()),
+        '/camera': (context) => Layout(CameraScreen()),
       },
     );
   }

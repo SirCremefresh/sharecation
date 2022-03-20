@@ -17,7 +17,7 @@ class ImagesApi {
           'https://development.sharecation-images.donato-wolfisberg.workers.dev'));
 
   Future<void> uploadImage(XFile file) async {
-    const _path = r'/v1/images/asdf';
+    const _path = r'/v1/images/create-image';
     final _options = Options(
       method: r'POST',
       headers: <String, dynamic>{
@@ -26,6 +26,7 @@ class ImagesApi {
     );
 
     var formData = FormData.fromMap({
+      'groupId': 'asdf',
       'file': await MultipartFile.fromFile(file.path, filename: file.name),
     });
 

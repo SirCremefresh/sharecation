@@ -16,8 +16,8 @@ import {
   protoBuf
 } from '../../lib/middleware/protobuf-middleware';
 import {addRequestId} from '../../lib/middleware/request-id-middleware';
-import {addRouter, pathParam, route,} from '../../lib/middleware/router-middleware';
-import {getRights, hasRight, RIGHTS} from '../../lib/rights';
+import {addRouter, route,} from '../../lib/middleware/router-middleware';
+import {getRights} from '../../lib/rights';
 import {IMAGES_KV} from './images-kv';
 
 interface EnvironmentVariables {
@@ -116,15 +116,19 @@ export default {
           ),
           route(
             'POST',
-            ['v1', 'images', pathParam('groupId')],
+            ['v1', 'images', 'create-image'],
             protoBuf(null, CreateImageResponse,
               async (request, env, context) => {
-                const groupId = context.route.params.groupId;
-                if (!hasRight(RIGHTS.GROUP(groupId), context)) {
-                  context.logger.error(`User tried to upload photo to group without rights. groupId=${groupId}, rights=${getRights(context)}`);
-                  return createProtoBufBasicErrorResponse('UNAUTHENTICATED', BasicError_BasicErrorCode.UNAUTHENTICATED);
-                }
                 const formData = await request.formData();
+                const groupId = formData.get('groupId');
+                if (typeof groupId !== 'string') {
+                  context.logger.error(`User tried to upload photo to group without rights. groupId=${groupId}, rights=${getRights(context)}`);
+                  return createProtoBufBasicErrorResponse('No groupId provided', BasicError_BasicErrorCode.BAD_REQUEST);
+                }
+                // if (!hasRight(RIGHTS.GROUP(groupId), context)) {
+                //   context.logger.error(`User tried to upload photo to group without rights. groupId=${groupId}, rights=${getRights(context)}`);
+                //   return createProtoBufBasicErrorResponse('UNAUTHENTICATED', BasicError_BasicErrorCode.UNAUTHENTICATED);
+                // }
                 const file = formData.get('file');
 
                 if (!(file instanceof File)) {

@@ -8,6 +8,7 @@ const GOOGLE_VERIFY_ALGORITHM = {
   hash: 'SHA-256',
 };
 const LOADED_SIGNING_KEYS: Map<string, CryptoKey> = new Map();
+const GOOGLE_AUD = 'sharecation-production';
 
 async function getGoogleVerifyingKey(
   kid: string,
@@ -47,6 +48,11 @@ export async function verifyGoogleJwt(
   }
   const kid = getKidFromDecodedJwt(jwt);
   if (isNullOrUndefined(kid)) {
+    return null;
+  }
+
+  if (jwt.payload?.aud !== GOOGLE_AUD) {
+    context.logger.error(`User tried to verify googleJwt with wrong aud googleAud=${GOOGLE_AUD} , jwt=${JSON.stringify(jwt)}`);
     return null;
   }
 

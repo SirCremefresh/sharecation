@@ -2,6 +2,9 @@ import {
   Authenticated,
   CreateAuthenticationWithFirebaseRequest,
   CreateAuthenticationWithFirebaseResponse,
+  GetRightOfUserRequest,
+  GetRightOfUserResponse,
+  GetRightOfUserResponse_Right,
   UpdateRightOfUserRequest,
   UpdateRightOfUserRequest_MutationType,
   UpdateRightOfUserResponse,
@@ -104,7 +107,25 @@ export default {
               },
             )
           )
-        )
+        ),
+        route(
+          'POST',
+          ['v1', 'get-right-of-user'],
+          addAuthenticationGuard(
+            protoBuf(GetRightOfUserRequest, GetRightOfUserResponse,
+              async (request, env, context) => {
+                const {userId, right} = context.proto.body;
+
+                const key = AUTHENTICATION_KV.USER_RIGHT(userId, right);
+                const hasRight = (await env.AUTHENTICATION.get(key)) !== null;
+
+                return createProtoBufOkResponse<GetRightOfUserResponse_Right>({
+                  hasRight
+                });
+              },
+            )
+          )
+        ),
       ]),
     ),
   )

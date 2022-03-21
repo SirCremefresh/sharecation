@@ -91,3 +91,37 @@ const UpdateRightOfUserResponse$json = const {
 
 /// Descriptor for `UpdateRightOfUserResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List updateRightOfUserResponseDescriptor = $convert.base64Decode('ChlVcGRhdGVSaWdodE9mVXNlclJlc3BvbnNlEhAKAm9rGAEgASgJSABSAm9rEi0KBWVycm9yGAIgASgLMhUuZXJyb3JzLnYxLkJhc2ljRXJyb3JIAFIFZXJyb3JCCgoIcmVzcG9uc2U=');
+@$core.Deprecated('Use getRightOfUserRequestDescriptor instead')
+const GetRightOfUserRequest$json = const {
+  '1': 'GetRightOfUserRequest',
+  '2': const [
+    const {'1': 'user_id', '3': 1, '4': 1, '5': 9, '10': 'userId'},
+    const {'1': 'right', '3': 2, '4': 1, '5': 9, '10': 'right'},
+  ],
+};
+
+/// Descriptor for `GetRightOfUserRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getRightOfUserRequestDescriptor = $convert.base64Decode('ChVHZXRSaWdodE9mVXNlclJlcXVlc3QSFwoHdXNlcl9pZBgBIAEoCVIGdXNlcklkEhQKBXJpZ2h0GAIgASgJUgVyaWdodA==');
+@$core.Deprecated('Use getRightOfUserResponseDescriptor instead')
+const GetRightOfUserResponse$json = const {
+  '1': 'GetRightOfUserResponse',
+  '2': const [
+    const {'1': 'ok', '3': 1, '4': 1, '5': 11, '6': '.authentication.v1.GetRightOfUserResponse.Right', '9': 0, '10': 'ok'},
+    const {'1': 'error', '3': 2, '4': 1, '5': 11, '6': '.errors.v1.BasicError', '9': 0, '10': 'error'},
+  ],
+  '3': const [GetRightOfUserResponse_Right$json],
+  '8': const [
+    const {'1': 'response'},
+  ],
+};
+
+@$core.Deprecated('Use getRightOfUserResponseDescriptor instead')
+const GetRightOfUserResponse_Right$json = const {
+  '1': 'Right',
+  '2': const [
+    const {'1': 'hasRight', '3': 1, '4': 1, '5': 8, '10': 'hasRight'},
+  ],
+};
+
+/// Descriptor for `GetRightOfUserResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getRightOfUserResponseDescriptor = $convert.base64Decode('ChZHZXRSaWdodE9mVXNlclJlc3BvbnNlEkEKAm9rGAEgASgLMi8uYXV0aGVudGljYXRpb24udjEuR2V0UmlnaHRPZlVzZXJSZXNwb25zZS5SaWdodEgAUgJvaxItCgVlcnJvchgCIAEoCzIVLmVycm9ycy52MS5CYXNpY0Vycm9ySABSBWVycm9yGiMKBVJpZ2h0EhoKCGhhc1JpZ2h0GAEgASgIUghoYXNSaWdodEIKCghyZXNwb25zZQ==');

@@ -42,3 +42,18 @@ message UpdateRightOfUserResponse {
     errors.v1.BasicError error = 2;
   }
 }
+
+message GetRightOfUserRequest {
+  string user_id = 1;
+  string right = 2;
+}
+
+message GetRightOfUserResponse {
+  message Right {
+    bool hasRight = 1;
+  }
+  oneof response {
+    Right ok = 1;
+    errors.v1.BasicError error = 2;
+  }
+}

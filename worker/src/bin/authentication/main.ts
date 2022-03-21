@@ -16,7 +16,7 @@ import {
   protoBuf
 } from '../../lib/middleware/protobuf-middleware';
 import {addRouter, route} from '../../lib/middleware/router-middleware';
-import {hasRight, RIGHTS} from '../../lib/rights';
+import {hasRight} from '../../lib/rights';
 import {onFetch} from '../../lib/starter/on-fetch';
 import {AUTHENTICATION_KV} from './authentication-kv';
 import {verifyGoogleJwt} from './google-keys';
@@ -69,10 +69,11 @@ export default {
           addAuthenticationGuard(
             protoBuf(UpdateRightOfUserRequest, UpdateRightOfUserResponse,
               async (request, env, context) => {
-                if (!hasRight(RIGHTS.ADMIN_GROUP, context)) {
+                const {userId, right, mutationType} = context.proto.body;
+                const ADMIN_RIGHT = 'ADMIN:' + right.split(':', 1)[0];
+                if (!hasRight(ADMIN_RIGHT, context)) {
                   return createProtoBufBasicErrorResponse('MutationType could not be parsed', BasicError_BasicErrorCode.UNAUTHENTICATED);
                 }
-                const {userId, right, mutationType} = context.proto.body;
 
                 const key = AUTHENTICATION_KV.USER_RIGHT(userId, right);
                 switch (mutationType) {

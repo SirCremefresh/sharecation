@@ -11,6 +11,10 @@ import 'package:protobuf/protobuf.dart' as $pb;
 
 import '../../errors/v1/errors.pb.dart' as $0;
 
+import 'authentication.pbenum.dart';
+
+export 'authentication.pbenum.dart';
+
 class AuthenticatedData extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'AuthenticatedData', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'authentication.v1'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'sub')
@@ -249,6 +253,159 @@ class CreateAuthenticationWithFirebaseResponse extends $pb.GeneratedMessage {
   void clearOk() => clearField(1);
   @$pb.TagNumber(1)
   Authenticated ensureOk() => $_ensure(0);
+
+  @$pb.TagNumber(2)
+  $0.BasicError get error => $_getN(1);
+  @$pb.TagNumber(2)
+  set error($0.BasicError v) { setField(2, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasError() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearError() => clearField(2);
+  @$pb.TagNumber(2)
+  $0.BasicError ensureError() => $_ensure(1);
+}
+
+class UpdateRightOfUserRequest extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'UpdateRightOfUserRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'authentication.v1'), createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'userId')
+    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'right')
+    ..e<UpdateRightOfUserRequest_MutationType>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'mutationType', $pb.PbFieldType.OE, defaultOrMaker: UpdateRightOfUserRequest_MutationType.MUTATION_TYPE_UNSPECIFIED, valueOf: UpdateRightOfUserRequest_MutationType.valueOf, enumValues: UpdateRightOfUserRequest_MutationType.values)
+    ..hasRequiredFields = false
+  ;
+
+  UpdateRightOfUserRequest._() : super();
+  factory UpdateRightOfUserRequest({
+    $core.String? userId,
+    $core.String? right,
+    UpdateRightOfUserRequest_MutationType? mutationType,
+  }) {
+    final _result = create();
+    if (userId != null) {
+      _result.userId = userId;
+    }
+    if (right != null) {
+      _result.right = right;
+    }
+    if (mutationType != null) {
+      _result.mutationType = mutationType;
+    }
+    return _result;
+  }
+  factory UpdateRightOfUserRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory UpdateRightOfUserRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  UpdateRightOfUserRequest clone() => UpdateRightOfUserRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  UpdateRightOfUserRequest copyWith(void Function(UpdateRightOfUserRequest) updates) => super.copyWith((message) => updates(message as UpdateRightOfUserRequest)) as UpdateRightOfUserRequest; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static UpdateRightOfUserRequest create() => UpdateRightOfUserRequest._();
+  UpdateRightOfUserRequest createEmptyInstance() => create();
+  static $pb.PbList<UpdateRightOfUserRequest> createRepeated() => $pb.PbList<UpdateRightOfUserRequest>();
+  @$core.pragma('dart2js:noInline')
+  static UpdateRightOfUserRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<UpdateRightOfUserRequest>(create);
+  static UpdateRightOfUserRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get userId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set userId($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasUserId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearUserId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get right => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set right($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasRight() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearRight() => clearField(2);
+
+  @$pb.TagNumber(3)
+  UpdateRightOfUserRequest_MutationType get mutationType => $_getN(2);
+  @$pb.TagNumber(3)
+  set mutationType(UpdateRightOfUserRequest_MutationType v) { setField(3, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasMutationType() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearMutationType() => clearField(3);
+}
+
+enum UpdateRightOfUserResponse_Response {
+  ok, 
+  error, 
+  notSet
+}
+
+class UpdateRightOfUserResponse extends $pb.GeneratedMessage {
+  static const $core.Map<$core.int, UpdateRightOfUserResponse_Response> _UpdateRightOfUserResponse_ResponseByTag = {
+    1 : UpdateRightOfUserResponse_Response.ok,
+    2 : UpdateRightOfUserResponse_Response.error,
+    0 : UpdateRightOfUserResponse_Response.notSet
+  };
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'UpdateRightOfUserResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'authentication.v1'), createEmptyInstance: create)
+    ..oo(0, [1, 2])
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'ok')
+    ..aOM<$0.BasicError>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'error', subBuilder: $0.BasicError.create)
+    ..hasRequiredFields = false
+  ;
+
+  UpdateRightOfUserResponse._() : super();
+  factory UpdateRightOfUserResponse({
+    $core.String? ok,
+    $0.BasicError? error,
+  }) {
+    final _result = create();
+    if (ok != null) {
+      _result.ok = ok;
+    }
+    if (error != null) {
+      _result.error = error;
+    }
+    return _result;
+  }
+  factory UpdateRightOfUserResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory UpdateRightOfUserResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  UpdateRightOfUserResponse clone() => UpdateRightOfUserResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  UpdateRightOfUserResponse copyWith(void Function(UpdateRightOfUserResponse) updates) => super.copyWith((message) => updates(message as UpdateRightOfUserResponse)) as UpdateRightOfUserResponse; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static UpdateRightOfUserResponse create() => UpdateRightOfUserResponse._();
+  UpdateRightOfUserResponse createEmptyInstance() => create();
+  static $pb.PbList<UpdateRightOfUserResponse> createRepeated() => $pb.PbList<UpdateRightOfUserResponse>();
+  @$core.pragma('dart2js:noInline')
+  static UpdateRightOfUserResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<UpdateRightOfUserResponse>(create);
+  static UpdateRightOfUserResponse? _defaultInstance;
+
+  UpdateRightOfUserResponse_Response whichResponse() => _UpdateRightOfUserResponse_ResponseByTag[$_whichOneof(0)]!;
+  void clearResponse() => clearField($_whichOneof(0));
+
+  @$pb.TagNumber(1)
+  $core.String get ok => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set ok($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasOk() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearOk() => clearField(1);
 
   @$pb.TagNumber(2)
   $0.BasicError get error => $_getN(1);

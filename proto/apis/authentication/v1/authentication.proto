@@ -23,3 +23,22 @@ message CreateAuthenticationWithFirebaseResponse {
     errors.v1.BasicError error = 2;
   }
 }
+
+message UpdateRightOfUserRequest {
+  enum MutationType {
+    MUTATION_TYPE_UNSPECIFIED = 0;
+    MUTATION_TYPE_ADD = 1;
+    MUTATION_TYPE_DELETE = 2;
+  }
+  string user_id = 1;
+  string right = 2;
+  MutationType mutation_type = 3;
+}
+
+
+message UpdateRightOfUserResponse {
+  oneof response {
+    string ok = 1;
+    errors.v1.BasicError error = 2;
+  }
+}

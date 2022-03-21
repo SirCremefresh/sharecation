@@ -6,6 +6,5 @@ export function isNotNullOrUndefined<T>(val: T | null | undefined): val is T {
   return val !== null && val !== undefined;
 }
 
-export function responseOk(body: string | Uint8Array): Response {
-  return new Response(body);
-}
+export const NEVER_FN = (_: never): void => {
+};

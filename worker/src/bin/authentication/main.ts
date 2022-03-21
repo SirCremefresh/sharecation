@@ -2,10 +2,13 @@ import {
   Authenticated,
   CreateAuthenticationWithFirebaseRequest,
   CreateAuthenticationWithFirebaseResponse,
+  UpdateRightOfUserRequest,
+  UpdateRightOfUserRequest_MutationType,
+  UpdateRightOfUserResponse,
 } from '../../contracts/authentication/v1/authentication';
 import {BasicError_BasicErrorCode} from '../../contracts/errors/v1/errors';
-import {isNullOrUndefined,} from '../../lib/lib';
-import {addAuthenticatedToContext} from '../../lib/middleware/authenticated-middleware';
+import {isNullOrUndefined, NEVER_FN,} from '../../lib/lib';
+import {addAuthenticatedToContext, addAuthenticationGuard} from '../../lib/middleware/authenticated-middleware';
 import {addLoggerContext,} from '../../lib/middleware/logger-middleware';
 import {
   createProtoBufBasicErrorResponse,
@@ -13,7 +16,9 @@ import {
   protoBuf
 } from '../../lib/middleware/protobuf-middleware';
 import {addRouter, route} from '../../lib/middleware/router-middleware';
+import {hasRight, RIGHTS} from '../../lib/rights';
 import {onFetch} from '../../lib/starter/on-fetch';
+import {AUTHENTICATION_KV} from './authentication-kv';
 import {verifyGoogleJwt} from './google-keys';
 import {generateSharecationJwt,} from './sharecation-keys';
 
@@ -22,8 +27,11 @@ const SERVICE_NAME = 'authentication';
 interface EnvironmentVariables {
   ENVIRONMENT: string;
   COMMON: KVNamespace;
+  AUTHENTICATION: KVNamespace;
   LOKI_SECRET: string;
 }
+
+const EMPTY_ARRAY_BUFFER = new ArrayBuffer(1);
 
 // noinspection JSUnusedGlobalSymbols
 export default {
@@ -53,6 +61,38 @@ export default {
                 }
               });
             },
+          )
+        ),
+        route(
+          'POST',
+          ['v1', 'update-right-of-user'],
+          addAuthenticationGuard(
+            protoBuf(UpdateRightOfUserRequest, UpdateRightOfUserResponse,
+              async (request, env, context) => {
+                if (!hasRight(RIGHTS.ADMIN_GROUP, context)) {
+                  return createProtoBufBasicErrorResponse('MutationType could not be parsed', BasicError_BasicErrorCode.UNAUTHENTICATED);
+                }
+                const {userId, right, mutationType} = context.proto.body;
+
+                const key = AUTHENTICATION_KV.USER_RIGHT(userId, right);
+                switch (mutationType) {
+                  case UpdateRightOfUserRequest_MutationType.UNSPECIFIED:
+                    return createProtoBufBasicErrorResponse('MutationType could not be parsed', BasicError_BasicErrorCode.BAD_REQUEST);
+                  case UpdateRightOfUserRequest_MutationType.ADD:
+                    context.logger.info(`Adding right ${right}`);
+                    await env.AUTHENTICATION.put(key, EMPTY_ARRAY_BUFFER);
+                    break;
+                  case UpdateRightOfUserRequest_MutationType.DELETE:
+                    context.logger.info(`Deleting right ${right}`);
+                    await env.AUTHENTICATION.delete(key);
+                    break;
+                  default:
+                    NEVER_FN(mutationType);
+                }
+
+                return createProtoBufOkResponse<string>(userId);
+              },
+            )
           )
         )
       ]),

@@ -70,6 +70,63 @@ export interface CreateAuthenticationWithFirebaseResponse {
         oneofKind: undefined;
     };
 }
+/**
+ * @generated from protobuf message authentication.v1.UpdateRightOfUserRequest
+ */
+export interface UpdateRightOfUserRequest {
+    /**
+     * @generated from protobuf field: string user_id = 1;
+     */
+    userId: string;
+    /**
+     * @generated from protobuf field: string right = 2;
+     */
+    right: string;
+    /**
+     * @generated from protobuf field: authentication.v1.UpdateRightOfUserRequest.MutationType mutation_type = 3;
+     */
+    mutationType: UpdateRightOfUserRequest_MutationType;
+}
+/**
+ * @generated from protobuf enum authentication.v1.UpdateRightOfUserRequest.MutationType
+ */
+export enum UpdateRightOfUserRequest_MutationType {
+    /**
+     * @generated from protobuf enum value: MUTATION_TYPE_UNSPECIFIED = 0;
+     */
+    UNSPECIFIED = 0,
+    /**
+     * @generated from protobuf enum value: MUTATION_TYPE_ADD = 1;
+     */
+    ADD = 1,
+    /**
+     * @generated from protobuf enum value: MUTATION_TYPE_DELETE = 2;
+     */
+    DELETE = 2
+}
+/**
+ * @generated from protobuf message authentication.v1.UpdateRightOfUserResponse
+ */
+export interface UpdateRightOfUserResponse {
+    /**
+     * @generated from protobuf oneof: response
+     */
+    response: {
+        oneofKind: "ok";
+        /**
+         * @generated from protobuf field: string ok = 1;
+         */
+        ok: string;
+    } | {
+        oneofKind: "error";
+        /**
+         * @generated from protobuf field: errors.v1.BasicError error = 2;
+         */
+        error: BasicError;
+    } | {
+        oneofKind: undefined;
+    };
+}
 // @generated message type with reflection information, may provide speed optimized methods
 class AuthenticatedData$Type extends MessageType<AuthenticatedData> {
     constructor() {
@@ -285,3 +342,124 @@ class CreateAuthenticationWithFirebaseResponse$Type extends MessageType<CreateAu
  * @generated MessageType for protobuf message authentication.v1.CreateAuthenticationWithFirebaseResponse
  */
 export const CreateAuthenticationWithFirebaseResponse = new CreateAuthenticationWithFirebaseResponse$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class UpdateRightOfUserRequest$Type extends MessageType<UpdateRightOfUserRequest> {
+    constructor() {
+        super("authentication.v1.UpdateRightOfUserRequest", [
+            { no: 1, name: "user_id", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 2, name: "right", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 3, name: "mutation_type", kind: "enum", T: () => ["authentication.v1.UpdateRightOfUserRequest.MutationType", UpdateRightOfUserRequest_MutationType, "MUTATION_TYPE_"] }
+        ]);
+    }
+    create(value?: PartialMessage<UpdateRightOfUserRequest>): UpdateRightOfUserRequest {
+        const message = { userId: "", right: "", mutationType: 0 };
+        globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
+        if (value !== undefined)
+            reflectionMergePartial<UpdateRightOfUserRequest>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: UpdateRightOfUserRequest): UpdateRightOfUserRequest {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* string user_id */ 1:
+                    message.userId = reader.string();
+                    break;
+                case /* string right */ 2:
+                    message.right = reader.string();
+                    break;
+                case /* authentication.v1.UpdateRightOfUserRequest.MutationType mutation_type */ 3:
+                    message.mutationType = reader.int32();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: UpdateRightOfUserRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* string user_id = 1; */
+        if (message.userId !== "")
+            writer.tag(1, WireType.LengthDelimited).string(message.userId);
+        /* string right = 2; */
+        if (message.right !== "")
+            writer.tag(2, WireType.LengthDelimited).string(message.right);
+        /* authentication.v1.UpdateRightOfUserRequest.MutationType mutation_type = 3; */
+        if (message.mutationType !== 0)
+            writer.tag(3, WireType.Varint).int32(message.mutationType);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message authentication.v1.UpdateRightOfUserRequest
+ */
+export const UpdateRightOfUserRequest = new UpdateRightOfUserRequest$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class UpdateRightOfUserResponse$Type extends MessageType<UpdateRightOfUserResponse> {
+    constructor() {
+        super("authentication.v1.UpdateRightOfUserResponse", [
+            { no: 1, name: "ok", kind: "scalar", oneof: "response", T: 9 /*ScalarType.STRING*/ },
+            { no: 2, name: "error", kind: "message", oneof: "response", T: () => BasicError }
+        ]);
+    }
+    create(value?: PartialMessage<UpdateRightOfUserResponse>): UpdateRightOfUserResponse {
+        const message = { response: { oneofKind: undefined } };
+        globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
+        if (value !== undefined)
+            reflectionMergePartial<UpdateRightOfUserResponse>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: UpdateRightOfUserResponse): UpdateRightOfUserResponse {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* string ok */ 1:
+                    message.response = {
+                        oneofKind: "ok",
+                        ok: reader.string()
+                    };
+                    break;
+                case /* errors.v1.BasicError error */ 2:
+                    message.response = {
+                        oneofKind: "error",
+                        error: BasicError.internalBinaryRead(reader, reader.uint32(), options, (message.response as any).error)
+                    };
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: UpdateRightOfUserResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* string ok = 1; */
+        if (message.response.oneofKind === "ok")
+            writer.tag(1, WireType.LengthDelimited).string(message.response.ok);
+        /* errors.v1.BasicError error = 2; */
+        if (message.response.oneofKind === "error")
+            BasicError.internalBinaryWrite(message.response.error, writer.tag(2, WireType.LengthDelimited).fork(), options).join();
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message authentication.v1.UpdateRightOfUserResponse
+ */
+export const UpdateRightOfUserResponse = new UpdateRightOfUserResponse$Type();

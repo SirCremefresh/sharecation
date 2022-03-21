@@ -60,7 +60,7 @@ export default {
               context = addAuthenticatedToContext(userId, new Set(rights), context);
 
 
-              context.logger.info('generating jwt for userId=' + userId);
+              context.logger.info(`generating jwt for userId=${userId}`);
               const generated = await generateSharecationJwt(userId, rights, env.COMMON, context);
               return createProtoBufOkResponse<Authenticated>({
                 jwtString: generated.jwtString,

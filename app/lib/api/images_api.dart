@@ -1,7 +1,8 @@
 import 'dart:async';
+import 'dart:developer';
 
-import 'package:camera/camera.dart' as $camera;
 import 'package:dio/dio.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:sharecation_app/api/contracts/images/v1/images.pb.dart';
 import 'package:sharecation_app/service/jwt_string_getter.dart';
 
@@ -12,9 +13,9 @@ class ImagesApi {
 
   final Dio _dio = Dio(BaseOptions(
       baseUrl:
-          'https://development.sharecation-images.donato-wolfisberg.workers.dev'));
+      'https://development.sharecation-images.donato-wolfisberg.workers.dev'));
 
-  Future<void> uploadImage($camera.XFile file) async {
+  Future<void> uploadImage(XFile file) async {
     const _path = r'/v1/images/create-image';
     final _options = Options(
       method: r'POST',
@@ -29,12 +30,13 @@ class ImagesApi {
     });
 
     var response = await _dio.request(_path, data: formData, options: _options);
+    log("uploaded image " + file.name);
   }
 
   Future<List<Image>> listImages() async {
     const _path = r'/v1/images';
     final _options =
-        Options(method: r'POST', responseType: ResponseType.bytes, headers: {
+    Options(method: r'POST', responseType: ResponseType.bytes, headers: {
       r'Authorization': 'Bearer ' + await _jwtStringGetter(),
       'Accept': 'application/octet-stream'
     });
@@ -46,7 +48,7 @@ class ImagesApi {
 
     try {
       var getImagesByGroupIdResponse =
-          GetImagesByGroupIdResponse.fromBuffer(_response.data!);
+      GetImagesByGroupIdResponse.fromBuffer(_response.data!);
       return getImagesByGroupIdResponse.ok.images;
     } catch (error, stackTrace) {
       throw DioError(
@@ -54,7 +56,8 @@ class ImagesApi {
         response: _response,
         type: DioErrorType.other,
         error: error,
-      )..stackTrace = stackTrace;
+      )
+        ..stackTrace = stackTrace;
     }
   }
 }

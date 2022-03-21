@@ -33,6 +33,13 @@ interface EnvironmentVariables {
 
 const EMPTY_ARRAY_BUFFER = new ArrayBuffer(1);
 
+async function getRightsOfUser(userId: string, AUTHENTICATION: KVNamespace) {
+  const rightsKey = AUTHENTICATION_KV.USER_RIGHTS(userId);
+  return (await AUTHENTICATION.list({
+    prefix: rightsKey,
+  })).keys.map(rightKey => rightKey.name.substring(rightsKey.length));
+}
+
 // noinspection JSUnusedGlobalSymbols
 export default {
   fetch: onFetch<EnvironmentVariables>(
@@ -49,10 +56,12 @@ export default {
                 context.logger.error('JWT is not valid or expired');
                 return createProtoBufBasicErrorResponse('INVALID_JWT', BasicError_BasicErrorCode.BAD_REQUEST);
               }
-              context = addAuthenticatedToContext(userId, new Set(), context);
+              const rights = await getRightsOfUser(userId, env.AUTHENTICATION);
+              context = addAuthenticatedToContext(userId, new Set(rights), context);
+
 
               context.logger.info('generating jwt for userId=' + userId);
-              const generated = await generateSharecationJwt(userId, [], env.COMMON, context);
+              const generated = await generateSharecationJwt(userId, rights, env.COMMON, context);
               return createProtoBufOkResponse<Authenticated>({
                 jwtString: generated.jwtString,
                 data: {

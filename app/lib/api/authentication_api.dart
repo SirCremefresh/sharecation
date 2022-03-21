@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
-import 'package:sharecation/api/contracts/authentication/v1/authentication.pb.dart';
+import 'package:sharecation_app/api/contracts/authentication/v1/authentication.pb.dart';
 
 class AuthenticationApi {
   final Dio _dio = Dio(BaseOptions(

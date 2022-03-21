@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:sharecation/pages/captures_screen.dart';
+import 'package:sharecation_app/pages/captures_screen.dart';
 
 class PreviewScreen extends StatelessWidget {
   final File imageFile;

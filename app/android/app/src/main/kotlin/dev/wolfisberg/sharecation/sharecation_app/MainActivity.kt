@@ -1,4 +1,4 @@
-package dev.wolfisberg.sharecation
+package dev.wolfisberg.sharecation.sharecation_app
 
 import io.flutter.embedding.android.FlutterActivity
 

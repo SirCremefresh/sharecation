@@ -6,8 +6,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterfire_ui/auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:sharecation/pages/camera_screen.dart';
-import 'package:sharecation/service/api_service.dart';
+import 'package:sharecation_app/pages/camera_screen.dart';
+import 'package:sharecation_app/service/api_service.dart';
 
 import 'components/layout.dart';
 
@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     const providerConfigs = [
       GoogleProviderConfiguration(
-        clientId: '1:907454945637:android:05a93d13157dae8bcd698c',
+        clientId: '1:907454945637:android:03a2244e3dc3224acd698c',
       ),
     ];
 

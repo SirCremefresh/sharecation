@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:sharecation/api/authentication_api.dart';
-import 'package:sharecation/api/contracts/authentication/v1/authentication.pb.dart';
+import 'package:sharecation_app/api/authentication_api.dart';
+import 'package:sharecation_app/api/contracts/authentication/v1/authentication.pb.dart';
 
 class _CurrentAuthentication {
   final String jwtString;

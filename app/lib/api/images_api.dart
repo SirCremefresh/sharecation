@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:camera/camera.dart' as $camera;
 import 'package:dio/dio.dart';
-import 'package:sharecation/api/contracts/images/v1/images.pb.dart';
-import 'package:sharecation/service/jwt_string_getter.dart';
+import 'package:sharecation_app/api/contracts/images/v1/images.pb.dart';
+import 'package:sharecation_app/service/jwt_string_getter.dart';
 
 class ImagesApi {
   final JwtStringGetter _jwtStringGetter;

@@ -1,5 +1,7 @@
 import {generateJwt} from '../../lib/authentication/jwt';
+import {createCommonKv} from '../../lib/common-kv';
 import {addLoggerContextToSchedule,} from '../../lib/middleware/logger-middleware';
+import {createAuthenticationKv} from '../authentication/authentication-kv';
 import {accounts, privateKeyConfigs, publicKeyConfigs, serviceAccountConfigs} from './accounts';
 import {generateAndStoreNewSigningKeys,} from './generate-sharecation-keys';
 import {loadAndSaveGoogleVerifyingKeys} from './load-google-keys';
@@ -10,6 +12,7 @@ const TWO_DAYS_IN_SECONDS = 2 * 24 * 60 * 60;
 interface Env {
   ENVIRONMENT: string;
   COMMON: KVNamespace;
+  AUTHENTICATION: KVNamespace;
   LOKI_SECRET: string;
   ACCOUNT_SECRET: string;
 }
@@ -50,11 +53,13 @@ export default {
     SERVICE_NAME,
     async (event, env, context) => {
       context.logger.info('Starting Authentication CronJob');
+      const authenticationKv = createAuthenticationKv(env.AUTHENTICATION);
+      const commonKv = createCommonKv(env.COMMON);
 
       const {
         privateKey, kid, privateJwkString, publicJwkString
-      } = await generateAndStoreNewSigningKeys(env.COMMON, context);
-      await loadAndSaveGoogleVerifyingKeys(env.COMMON, context);
+      } = await generateAndStoreNewSigningKeys(authenticationKv, commonKv, context);
+      await loadAndSaveGoogleVerifyingKeys(authenticationKv, context);
 
 
       await Promise.all([

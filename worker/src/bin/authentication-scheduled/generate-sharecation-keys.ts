@@ -1,5 +1,7 @@
 import {COMMON_KV} from '../../lib/common-kv';
 import {LoggerContext} from '../../lib/middleware/context';
+import {TypedKvNamespace} from '../../lib/typed-kv-namespace';
+import {AUTHENTICATION_KV} from '../authentication/authentication-kv';
 
 const KEY_ALGORITHM = {
   name: 'RSA-PSS',
@@ -10,9 +12,9 @@ const KEY_ALGORITHM = {
 const JWK_FORMAT = 'jwk';
 
 export async function generateAndStoreNewSigningKeys(
-  kv: KVNamespace,
-  context: LoggerContext,
-): Promise<{ privateKey: CryptoKey; publicJwkString: string; kid: string; privateJwkString: string }> {
+  authenticationKv: TypedKvNamespace<AUTHENTICATION_KV>,
+  commonKv: TypedKvNamespace<COMMON_KV>,
+  context: ExecutionContext & LoggerContext): Promise<{ privateKey: CryptoKey; publicJwkString: string; kid: string; privateJwkString: string }> {
   context.logger.info(
     `Generating new signing and verifying keys with algorithm: ${JSON.stringify(
       KEY_ALGORITHM,
@@ -38,14 +40,14 @@ export async function generateAndStoreNewSigningKeys(
   context.logger.info(
     `Storing new signing and verifying keys with kid: ${privateJkw.kid}`,
   );
-  const publicJwkKey = COMMON_KV.PUBLIC_JWK(privateJkw.kid);
-  const privateJwkKey = COMMON_KV.PRIVATE_JWK(privateJkw.kid);
+  const publicJwkKey = commonKv.keys.PUBLIC_JWK(privateJkw.kid);
+  const privateJwkKey = authenticationKv.keys.PRIVATE_JWK(privateJkw.kid);
   const publicJwkString = JSON.stringify(publicJkw);
   const privateJwkString = JSON.stringify(privateJkw);
   await Promise.all([
-    kv.put(publicJwkKey, publicJwkString),
-    kv.put(privateJwkKey, privateJwkString),
-    kv.put(COMMON_KV.CURRENT_PRIVATE_JWK, JSON.stringify(privateJkw)),
+    commonKv.namespace.put(publicJwkKey, publicJwkString),
+    authenticationKv.namespace.put(privateJwkKey, privateJwkString),
+    authenticationKv.namespace.put(authenticationKv.keys.CURRENT_PRIVATE_JWK, JSON.stringify(privateJkw)),
   ]);
 
   context.logger.info(

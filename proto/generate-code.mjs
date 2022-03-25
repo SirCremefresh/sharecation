@@ -30,6 +30,7 @@ async function changeDashToMinusInDirents(directory) {
     .map(direntPath => changeDashToMinusInDirents(direntPath)));
 
   const renames = await Promise.all(dirents
+    .filter(dirent => dirent.isDirectory())
     .filter(dirent => dirent.name.includes('_'))
     .map(async dirent => {
       const newName = dirent.name.replaceAll('_', '-');
@@ -65,7 +66,7 @@ await exec('docker', ['run', '-t', '--rm', '-v', `${WORKING_DIR}:/tmp/`, 'proto-
 
 console.log('Normalizing dirent names')
 const renamedCount = await changeDashToMinusInDirents(GEN_PROTO_DIR);
-console.log(`Renamed ${renamedCount} folders`);
+console.log(`Renamed ${renamedCount} dirents`);
 
 console.log('Copying generated code')
 const TYPESCRIPT_GEN_DIR = path.join(GEN_PROTO_DIR, 'typescript');

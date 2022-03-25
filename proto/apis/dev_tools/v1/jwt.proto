@@ -1,7 +1,8 @@
 syntax = "proto3";
-import "errors/v1/errors.proto";
 
 package dev_tools.v1;
+
+import "errors/v1/errors.proto";
 
 message User {
   string user_id = 1;

@@ -21,38 +21,28 @@ function exec(command, args) {
   });
 }
 
-async function getAllFoldersIn(rootDir) {
-  const folders = [];
-  const foldersTodo = [rootDir];
-  while (foldersTodo.length > 0) {
-    const folder = foldersTodo.pop();
-    folders.push(folder);
-    const files = await fs.readdir(folder, {withFileTypes: true})
-    foldersTodo.push(...files
-      .filter(file => file.isDirectory())
-      .map(file => path.join(folder, file.name)));
-  }
-  return folders
-    .map(folder => path.relative(rootDir, folder))
-    .filter(folder => folder.length > 0);
-}
 
-async function normalizeFolderNameDashToMinus(rootDir, folders) {
-  let renamedCount = 0;
-  for (const folder of folders) {
-    const basename = path.basename(folder);
-    if (basename.includes('_')) {
-      const newPath = path.join(rootDir, folder.replaceAll('_', '-'));
-      const oldPath = path.join(rootDir, path.dirname(folder).replaceAll('_', '-'), basename);
+async function changeDashToMinusInDirents(directory) {
+  const dirents = await fs.readdir(directory, {withFileTypes: true});
+  const childRenames = await Promise.all(dirents
+    .filter(dirent => dirent.isDirectory())
+    .map(dirent => path.join(directory, dirent.name))
+    .map(direntPath => changeDashToMinusInDirents(direntPath)));
+
+  const renames = await Promise.all(dirents
+    .filter(dirent => dirent.name.includes('_'))
+    .map(async dirent => {
+      const newName = dirent.name.replaceAll('_', '-');
+      const oldPath = path.join(directory, dirent.name);
+      const newPath = path.join(directory, newName)
       if (DEBUG) {
-        console.log(`Renaming folder: ${basename}\nFrom: ${oldPath}\nTo: ${newPath}`);
+        console.log(`Renaming ${dirent.isFile() ? 'file' : 'folder'}: ${dirent.name}\nFrom: ${oldPath}\nTo: ${newPath}`);
       }
-      await fs.rm(newPath, {recursive: true});
       await fs.rename(oldPath, newPath);
-      renamedCount++;
-    }
-  }
-  return renamedCount;
+      return 1;
+    }))
+
+  return [...childRenames, ...renames].reduce((accumulator, x) => accumulator + x, 0);
 }
 
 async function copyGeneratedCode(configs) {
@@ -67,28 +57,23 @@ const SCRIPT_FILE_PATH = fileURLToPath(import.meta.url);
 const WORKING_DIR = path.dirname(SCRIPT_FILE_PATH);
 const GEN_PROTO_DIR = path.join(WORKING_DIR, 'gen', 'proto');
 
+console.log('Cleaning Generator directory')
+await fs.rm(GEN_PROTO_DIR, {recursive: true, force: true})
+
 console.log('Generating code')
 await exec('docker', ['run', '-t', '--rm', '-v', `${WORKING_DIR}:/tmp/`, 'proto-generator']);
 
-console.log('Normalizing folder names')
-const folders = await getAllFoldersIn(GEN_PROTO_DIR);
-const renamedCount = await normalizeFolderNameDashToMinus(GEN_PROTO_DIR, folders);
+console.log('Normalizing dirent names')
+const renamedCount = await changeDashToMinusInDirents(GEN_PROTO_DIR);
 console.log(`Renamed ${renamedCount} folders`);
 
 console.log('Copying generated code')
 const TYPESCRIPT_GEN_DIR = path.join(GEN_PROTO_DIR, 'typescript');
 const DART_GEN_DIR = path.join(GEN_PROTO_DIR, 'dart');
-await copyGeneratedCode([
-  {
-    from: TYPESCRIPT_GEN_DIR,
-    to: path.join(WORKING_DIR, '..', 'worker', 'src', 'contracts'),
-  },
-  {
-    from: TYPESCRIPT_GEN_DIR,
-    to: path.join(WORKING_DIR, '..', 'admin', 'src', 'app', 'contracts'),
-  },
-  {
-    from: DART_GEN_DIR,
-    to: path.join(WORKING_DIR, '..', 'app', 'lib', 'api', 'contracts'),
-  },
-])
+await copyGeneratedCode([{
+  from: TYPESCRIPT_GEN_DIR, to: path.join(WORKING_DIR, '..', 'worker', 'src', 'contracts'),
+}, {
+  from: TYPESCRIPT_GEN_DIR, to: path.join(WORKING_DIR, '..', 'admin', 'src', 'app', 'contracts'),
+}, {
+  from: DART_GEN_DIR, to: path.join(WORKING_DIR, '..', 'app', 'lib', 'api', 'contracts'),
+},])

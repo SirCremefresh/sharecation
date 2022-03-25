@@ -119,9 +119,9 @@ const GetRightOfUserResponse$json = const {
 const GetRightOfUserResponse_Right$json = const {
   '1': 'Right',
   '2': const [
-    const {'1': 'hasRight', '3': 1, '4': 1, '5': 8, '10': 'hasRight'},
+    const {'1': 'has_right', '3': 1, '4': 1, '5': 8, '10': 'hasRight'},
   ],
 };
 
 /// Descriptor for `GetRightOfUserResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List getRightOfUserResponseDescriptor = $convert.base64Decode('ChZHZXRSaWdodE9mVXNlclJlc3BvbnNlEkEKAm9rGAEgASgLMi8uYXV0aGVudGljYXRpb24udjEuR2V0UmlnaHRPZlVzZXJSZXNwb25zZS5SaWdodEgAUgJvaxItCgVlcnJvchgCIAEoCzIVLmVycm9ycy52MS5CYXNpY0Vycm9ySABSBWVycm9yGiMKBVJpZ2h0EhoKCGhhc1JpZ2h0GAEgASgIUghoYXNSaWdodEIKCghyZXNwb25zZQ==');
+final $typed_data.Uint8List getRightOfUserResponseDescriptor = $convert.base64Decode('ChZHZXRSaWdodE9mVXNlclJlc3BvbnNlEkEKAm9rGAEgASgLMi8uYXV0aGVudGljYXRpb24udjEuR2V0UmlnaHRPZlVzZXJSZXNwb25zZS5SaWdodEgAUgJvaxItCgVlcnJvchgCIAEoCzIVLmVycm9ycy52MS5CYXNpY0Vycm9ySABSBWVycm9yGiQKBVJpZ2h0EhsKCWhhc19yaWdodBgBIAEoCFIIaGFzUmlnaHRCCgoIcmVzcG9uc2U=');

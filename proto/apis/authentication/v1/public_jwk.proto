@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package authentication.v1;
+
+import "errors/v1/errors.proto";
+
+message PublicJwk {
+  string kid = 3;
+  string jwk = 4;
+}
+
+message PublicJwks {
+  repeated PublicJwk jwks = 1;
+}
+
+message GetPublicJwksResponse {
+  oneof response {
+    PublicJwks ok = 1;
+    errors.v1.BasicError error = 2;
+  }
+}

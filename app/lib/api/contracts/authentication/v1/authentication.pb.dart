@@ -482,7 +482,7 @@ class GetRightOfUserRequest extends $pb.GeneratedMessage {
 
 class GetRightOfUserResponse_Right extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GetRightOfUserResponse.Right', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'authentication.v1'), createEmptyInstance: create)
-    ..aOB(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'hasRight', protoName: 'hasRight')
+    ..aOB(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'hasRight')
     ..hasRequiredFields = false
   ;
 

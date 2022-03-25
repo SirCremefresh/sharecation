@@ -50,6 +50,13 @@ export default {
     addLoggerContext(SERVICE_NAME,
       addRouter([
         route(
+          'GET',
+          ['v1', 'get-public-keys'],
+          async (request, env, context) => {
+            return new Response('from-auth');
+          }
+        ),
+        route(
           'POST',
           ['v1', 'create-authentication-with-firebase'],
           protoBuf(CreateAuthenticationWithFirebaseRequest, CreateAuthenticationWithFirebaseResponse,

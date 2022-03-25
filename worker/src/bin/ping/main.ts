@@ -11,6 +11,15 @@ export default {
       'ping',
       addRouter([
         route(
+          'GET',
+          ['test'],
+          async (request, env, context) => {
+            const as = await fetch('https://development.sharecation-authentication.dowo.ch/test')
+              .then(res => res.text());
+            return new Response('from-ping' + as);
+          }
+        ),
+        route(
           'POST',
           [],
           protoBuf(

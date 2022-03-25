@@ -30,3 +30,9 @@ node generate-code.mjs
 ```bash
 docker run -t --rm -v $(pwd):/tmp/ proto-generator buf lint
 ```
+
+### format
+
+```bash
+docker run -t --rm -v $(pwd):/tmp/ proto-generator buf format --write
+```

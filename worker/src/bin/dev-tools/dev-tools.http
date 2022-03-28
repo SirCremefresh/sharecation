@@ -34,3 +34,8 @@ GET development.sharecation-images.donato-wolfisberg.workers.dev/v1/images/groas
 Accept: application/json
 Authorization: Bearer {{jwtString}}
 
+
+### Get images
+GET sharecation-authentication-development.donato-wolfisberg.workers.dev/v1/get-public-keys
+Accept: application/json
+

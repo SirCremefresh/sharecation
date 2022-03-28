@@ -25,6 +25,8 @@ import {TypedKvNamespace} from '../../lib/typed-kv-namespace';
 import {AUTHENTICATION_KV, createAuthenticationKv} from './authentication-kv';
 import {verifyGoogleJwt} from './google-keys';
 import {generateSharecationJwt,} from './sharecation-keys';
+// Make durable object visible
+export {RightsStorage} from './rights-storage';
 
 const SERVICE_NAME = 'authentication';
 
@@ -32,6 +34,7 @@ interface EnvironmentVariables {
   ENVIRONMENT: string;
   COMMON: KVNamespace;
   AUTHENTICATION: KVNamespace;
+  RIGHTS_STORAGE: DurableObjectNamespace;
   LOKI_SECRET: string;
 }
 
@@ -53,7 +56,13 @@ export default {
           'GET',
           ['v1', 'get-public-keys'],
           async (request, env, context) => {
-            return new Response('from-auth');
+            try {
+              const proxy = env.RIGHTS_STORAGE.get(env.RIGHTS_STORAGE.idFromName('0'));
+              const res = await proxy.fetch(request).then(res => res.text());
+              return new Response(res);
+            } catch (e) {
+              return new Response('err' + e);
+            }
           }
         ),
         route(

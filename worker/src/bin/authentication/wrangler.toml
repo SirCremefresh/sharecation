@@ -8,11 +8,13 @@ ENVIRONMENT = ""
 [env.development]
 vars = { ENVIRONMENT = "development" }
 kv_namespaces = [
-    { binding = "COMMON", id = "31cfb304e7994d62b9d31321d3ca52bc", preview_id = "31cfb304e7994d62b9d31321d3ca52bc" }
+    { binding = "COMMON", id = "31cfb304e7994d62b9d31321d3ca52bc", preview_id = "31cfb304e7994d62b9d31321d3ca52bc" },
+    { binding = "AUTHENTICATION", id = "d63b4f16d315411aa89199e0b6a5a288", preview_id = "d63b4f16d315411aa89199e0b6a5a288" }
 ]
 
 [env.production]
 vars = { ENVIRONMENT = "production" }
 kv_namespaces = [
-    { binding = "COMMON", id = "9fd8a473258d4e9ca3d601b9bd74ebcf" }
+    { binding = "COMMON", id = "9fd8a473258d4e9ca3d601b9bd74ebcf" },
+    { binding = "AUTHENTICATION", id = "a7fb628fa0504ddebf9d44d1370b1dd6" }
 ]

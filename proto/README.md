@@ -1,6 +1,7 @@
 ### update dependencies lock file
 
 ```bash
+cd apis
 buf mod update
 ```
 
@@ -11,16 +12,27 @@ buf mod update
 docker buildx build --platform linux/amd64,linux/arm64 -t proto-generator .
 ```
 
+### Build
+
 ```bash
 docker buildx build -t proto-generator .
 ```
 
 ### Generate code
 
+[//]: # (generate code)
 ```bash
-docker run -it --rm -v $(pwd):/tmp/  proto-generator bash
-cd tmp && buf generate
-exit
-cp -rf gen/proto/typescript/* ../worker/src/contracts/
-cp -rf gen/proto/typescript/* ../admin/src/app/contracts/
+node generate-code.mjs
+```
+
+### lint
+
+```bash
+docker run -t --rm -v $(pwd):/tmp/ proto-generator buf lint
+```
+
+### format
+
+```bash
+docker run -t --rm -v $(pwd):/tmp/ proto-generator buf format --write
 ```

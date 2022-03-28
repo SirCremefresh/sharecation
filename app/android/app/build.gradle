@@ -43,8 +43,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "dev.wolfisberg.sharecation"
-//        minSdkVersion flutter.minSdkVersion
+        applicationId "dev.wolfisberg.sharecation.sharecation_app"
         minSdkVersion 21
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()

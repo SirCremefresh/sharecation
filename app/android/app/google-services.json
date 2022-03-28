@@ -7,17 +7,17 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:907454945637:android:05a93d13157dae8bcd698c",
+        "mobilesdk_app_id": "1:907454945637:android:03a2244e3dc3224acd698c",
         "android_client_info": {
-          "package_name": "dev.wolfisberg.sharecation"
+          "package_name": "dev.wolfisberg.sharecation.sharecation_app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "907454945637-85qlip23r151aspsct3lo5f86s1mrd11.apps.googleusercontent.com",
+          "client_id": "907454945637-8dqe1t8pu1qhtbn7dmhudt9acs7indqk.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "dev.wolfisberg.sharecation",
+            "package_name": "dev.wolfisberg.sharecation.sharecation_app",
             "certificate_hash": "75b66036995ff5094b261cebaed093a987722f5c"
           }
         },

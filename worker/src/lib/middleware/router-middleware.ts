@@ -1,52 +1,38 @@
-import {isNotNullOrUndefined, responseErrReason} from '../lib';
+import {BasicError_BasicErrorCode} from '../../contracts/errors/v1/errors';
+import {createBasicErrorResponse} from '../http/response';
+import {isNotNullOrUndefined} from '../lib';
 import {LoggerContext, RouteContext} from './context';
 
 type Method = 'GET' | 'POST';
 
-type ParamConfig<PARAM_NAME extends string> = {
-  paramName: PARAM_NAME;
+type ParamConfig = {
+  paramName: string;
 };
-
-type RemoveStringFromTuple<TUPLE extends Array<unknown>> = TUPLE extends [
-    infer ITEM,
-    ...(infer REST),
-  ]
-  ? ITEM extends string
-    ? RemoveStringFromTuple<REST>
-    : [ITEM, ...RemoveStringFromTuple<REST>]
-  : [];
-
-type ParamObject<ROUTE extends Array<string | ParamConfig<string>>> = RemoveStringFromTuple<ROUTE>[number] extends ParamConfig<infer PARAM_NAME>
-  ? { [key in PARAM_NAME]: string }
-  : never;
 
 type RouteFunction<REQUEST extends Request,
   ENV,
   CONTEXT,
-  PATH extends Array<ParamConfig<string> | string>,
-  RESPONSE extends Response> = (
+  RESPONSE> = (
   request: REQUEST,
   env: ENV,
-  context: CONTEXT & RouteContext<ParamObject<PATH>>,
+  context: CONTEXT & RouteContext,
 ) => Promise<RESPONSE>;
 
 interface RouteConfig<ENV,
   CONTEXT,
-  PATH extends Array<ParamConfig<string> | string>,
   ROUTE_FUNCTION> {
   method: Method;
-  path: PATH;
+  path: Array<ParamConfig | string>;
   fn: ROUTE_FUNCTION;
 }
 
 export function route<REQUEST extends Request,
   ENV,
-  CONTEXT,
-  PATH extends Array<ParamConfig<string> | string>, RESPONSE extends Response>(
+  CONTEXT, RESPONSE extends Response>(
   method: Method,
-  path: PATH,
-  fn: RouteFunction<REQUEST, ENV, CONTEXT, PATH, RESPONSE>,
-): RouteConfig<ENV, CONTEXT, PATH, RouteFunction<REQUEST, ENV, CONTEXT, PATH, RESPONSE>> {
+  path: Array<ParamConfig | string>,
+  fn: RouteFunction<REQUEST, ENV, CONTEXT, RESPONSE>,
+): RouteConfig<ENV, CONTEXT, RouteFunction<REQUEST, ENV, CONTEXT, RESPONSE>> {
   return {
     method,
     path,
@@ -54,20 +40,15 @@ export function route<REQUEST extends Request,
   };
 }
 
-export function routePath<E extends Array<ParamConfig<string> | string>>(
-  ...segments: [...E]
-): [...E] {
-  return segments;
-}
-
-export function pathParam<E extends string>(paramName: E): ParamConfig<E> {
+export function pathParam(paramName: string): ParamConfig {
   return {paramName};
 }
 
 function checkRouteMatchAndParseContext(
-  routeSegments: Array<ParamConfig<string> | string>,
+  routeSegments: Array<ParamConfig | string>,
   urlSegments: string[],
-): null | RouteContext<{}> {
+  path: string
+): null | RouteContext {
   if (routeSegments.length !== urlSegments.length) {
     return null;
   }
@@ -89,18 +70,32 @@ function checkRouteMatchAndParseContext(
   }
   return {
     route: {
+      path,
       params,
     },
   };
 }
 
+const CORS_HEADERS = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+  'Access-Control-Max-Age': '3600',
+};
+
 export function addRouter<REQUEST extends Request, ENV, CONTEXT extends LoggerContext, RESPONSE extends Response>(
   routes: RouteConfig<ENV,
     CONTEXT,
-    Array<ParamConfig<string> | string>,
-    RouteFunction<REQUEST, ENV, CONTEXT, Array<ParamConfig<string> | string>, RESPONSE>>[],
+    RouteFunction<REQUEST, ENV, CONTEXT, RESPONSE>>[],
 ) {
   return async (request: REQUEST, env: ENV, context: CONTEXT) => {
+    if (request.method === 'OPTIONS') {
+      return new Response(null, {
+        status: 200,
+        headers: CORS_HEADERS,
+      });
+    }
+
     let pathname = new URL(request.url).pathname;
     const urlSegments = pathname
       .split('/')
@@ -114,6 +109,7 @@ export function addRouter<REQUEST extends Request, ENV, CONTEXT extends LoggerCo
       let routeContext = checkRouteMatchAndParseContext(
         route.path,
         urlSegments,
+        pathname
       );
       if (isNotNullOrUndefined(routeContext)) {
         context.logger.info(
@@ -126,9 +122,11 @@ export function addRouter<REQUEST extends Request, ENV, CONTEXT extends LoggerCo
         );
       }
     }
-    context.logger.info(
-      `No route found for method=${request.method} pathname=${pathname}`,
-    );
-    return responseErrReason('NOT_FOUND', 404);
+    const notFoundErrorMessage = `No route found for method=${request.method} pathname=${pathname}`;
+    context.logger.info(notFoundErrorMessage);
+    return createBasicErrorResponse({
+      message: notFoundErrorMessage,
+      code: BasicError_BasicErrorCode.NOT_FOUND
+    }, context);
   };
 }

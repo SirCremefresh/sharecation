@@ -2,15 +2,35 @@ syntax = "proto3";
 
 package images.v1;
 
+import "errors/v1/errors.proto";
+
 message Image {
+  string image_id = 1;
+  string type = 2;
+}
+
+message Images {
+  repeated Image images = 1;
+  // If cursor is not null
+  // More Images can be loaded
+  optional string cursor = 2;
+}
+
+message GetImagesByGroupIdRequest {
   string group_id = 1;
-  string name = 2;
+  optional string cursor = 2;
 }
 
-message GetPetRequest {
-  string pet_id = 1;
+message GetImagesByGroupIdResponse {
+  oneof response {
+    Images ok = 1;
+    errors.v1.BasicError error = 2;
+  }
 }
 
-message GetPetResponse {
-  Image pet = 1;
+message CreateImageResponse {
+  oneof response {
+    Image ok = 1;
+    errors.v1.BasicError error = 2;
+  }
 }

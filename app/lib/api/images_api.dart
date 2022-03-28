@@ -1,11 +1,10 @@
 import 'dart:async';
+import 'dart:developer';
 
-import 'package:camera/camera.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
-import 'package:sharecation/service/jwt_string_getter.dart';
-
-import 'model/list_images_response.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:sharecation_app/api/contracts/images/v1/images.pb.dart';
+import 'package:sharecation_app/service/jwt_string_getter.dart';
 
 class ImagesApi {
   final JwtStringGetter _jwtStringGetter;
@@ -14,10 +13,10 @@ class ImagesApi {
 
   final Dio _dio = Dio(BaseOptions(
       baseUrl:
-          'https://development.sharecation-images.donato-wolfisberg.workers.dev'));
+      'https://development.sharecation-images.donato-wolfisberg.workers.dev'));
 
   Future<void> uploadImage(XFile file) async {
-    const _path = r'/v1/images/asdf';
+    const _path = r'/v1/images/create-image';
     final _options = Options(
       method: r'POST',
       headers: <String, dynamic>{
@@ -26,22 +25,21 @@ class ImagesApi {
     );
 
     var formData = FormData.fromMap({
+      'groupId': 'asdf',
       'file': await MultipartFile.fromFile(file.path, filename: file.name),
     });
 
     var response = await _dio.request(_path, data: formData, options: _options);
-
-    debugPrint(response.data.toString());
+    log("uploaded image " + file.name);
   }
 
-  Future<ListImagesResponse> listImages() async {
+  Future<List<Image>> listImages() async {
     const _path = r'/v1/images';
-    final _options = Options(
-      method: r'GET',
-      headers: <String, dynamic>{
-        r'Authorization': 'Bearer ' + await _jwtStringGetter(),
-      },
-    );
+    final _options =
+    Options(method: r'POST', responseType: ResponseType.bytes, headers: {
+      r'Authorization': 'Bearer ' + await _jwtStringGetter(),
+      'Accept': 'application/octet-stream'
+    });
 
     final _response = await _dio.request(
       _path,
@@ -49,14 +47,17 @@ class ImagesApi {
     );
 
     try {
-      return ListImagesResponse.fromJson(_response.data!);
+      var getImagesByGroupIdResponse =
+      GetImagesByGroupIdResponse.fromBuffer(_response.data!);
+      return getImagesByGroupIdResponse.ok.images;
     } catch (error, stackTrace) {
       throw DioError(
         requestOptions: _response.requestOptions,
         response: _response,
         type: DioErrorType.other,
         error: error,
-      )..stackTrace = stackTrace;
+      )
+        ..stackTrace = stackTrace;
     }
   }
 }

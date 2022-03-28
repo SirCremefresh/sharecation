@@ -1,3 +1,5 @@
+import {MessageType} from '@protobuf-ts/runtime';
+import {MessageFormat} from '../http/types';
 import {isNotNullOrUndefined} from '../lib';
 import {Logger} from '../logger';
 
@@ -34,8 +36,32 @@ export function isRequestIdContext<T extends {}>(
   return isNotNullOrUndefined(context) && context.hasOwnProperty('requestId');
 }
 
-export interface RouteContext<PARAMS extends {}> {
+export interface RouteContext {
   route: {
-    params: PARAMS;
+    path: string
+    params: { [key: string]: string };
   };
+}
+
+export function isRouteContext<T extends {}>(
+  context: T | undefined | null,
+): context is T & RouteContext {
+  return isNotNullOrUndefined(context) && context.hasOwnProperty('route');
+}
+
+
+export interface ProtoBufContext<TYPE extends {} | null> {
+  proto: {
+    body: TYPE,
+    requestType: MessageType<any>| null,
+    responseType: MessageType<any>,
+    responseFormat: MessageFormat,
+    requestFormat: MessageFormat
+  };
+}
+
+export function isProtoBufContext<T extends {}>(
+  context: T | undefined | null,
+): context is T & ProtoBufContext<{}> {
+  return isNotNullOrUndefined(context) && context.hasOwnProperty('proto');
 }

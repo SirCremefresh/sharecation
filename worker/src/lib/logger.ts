@@ -1,7 +1,4 @@
-import {
-  isAuthenticatedContext,
-  isRequestIdContext,
-} from './middleware/context';
+import {isAuthenticatedContext, isRequestIdContext, isRouteContext,} from './middleware/context';
 
 export interface LoggerConfig {
   LOKI_SECRET: string;
@@ -10,13 +7,14 @@ export interface LoggerConfig {
 
 export class Logger {
   timeNanoSeconds = Date.now() * 1000000;
-  messages: { time: number; message: string; level: 'info' | 'error' }[] = [];
+  messages: { time: number; message: string; level: 'info' | 'error' | 'fatal' }[] = [];
 
   constructor(
     private config: LoggerConfig,
     private context: ExecutionContext,
     private serviceName: string,
-  ) {}
+  ) {
+  }
 
   info(message: string) {
     this.messages.push({
@@ -39,6 +37,9 @@ export class Logger {
     const userIdSnipped = isAuthenticatedContext(this.context)
       ? 'userId=' + this.context.user.userId
       : '';
+    const pathSnipped = isRouteContext(this.context)
+      ? 'path=' + this.context.route.path
+      : '';
     const request = {
       streams: [
         {
@@ -48,7 +49,7 @@ export class Logger {
           },
           values: this.messages.map(messageEntry => [
             messageEntry.time.toString(),
-            `${serviceSnipped} ${requestIdSnipped} ${userIdSnipped} level=${messageEntry.level} ${messageEntry.message}`,
+            `${serviceSnipped} ${requestIdSnipped} ${userIdSnipped} ${pathSnipped} level=${messageEntry.level} ${messageEntry.message}`,
           ]),
         },
       ],
@@ -70,6 +71,15 @@ export class Logger {
       time: ++this.timeNanoSeconds,
       message,
       level: 'error',
+    });
+    console.error(`${this.serviceName}: ${message}`);
+  }
+
+  fatal(message: string) {
+    this.messages.push({
+      time: ++this.timeNanoSeconds,
+      message,
+      level: 'fatal',
     });
     console.error(`${this.serviceName}: ${message}`);
   }

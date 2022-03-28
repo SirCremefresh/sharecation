@@ -14,6 +14,7 @@ export interface DecodedJwt {
   payload: {
     exp: number;
     sub: string;
+    aud: string;
     rights: string[]
   };
   signature: string;
@@ -53,6 +54,7 @@ export function getKidFromDecodedJwt(jwt: DecodedJwt): string | null {
   if (isNullOrUndefined(jwt.header.kid)) {
     return null;
   }
+  // noinspection SuspiciousTypeOfGuard
   if (typeof jwt.header.kid !== 'string') {
     return null;
   }

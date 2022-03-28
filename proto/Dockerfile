@@ -2,8 +2,8 @@ FROM ubuntu:20.04
 
 ARG DART_VERSION="2.16.1"
 ARG NODE_VERSION="16"
-ARG BUF_VERSION="1.0.0"
-ARG PROTOBUF_TS_VERSION="2.2.2"
+ARG BUF_VERSION="1.2.1"
+ARG PROTOBUF_TS_VERSION="2.3.0"
 
 ENV DART_SDK /usr/lib/dart
 ENV PATH $DART_SDK/bin:/root/.pub-cache/bin:$PATH
@@ -37,4 +37,5 @@ RUN \
     && apt-get clean  \
     && rm -rf /var/lib/apt/lists/*
 
-
+WORKDIR /tmp
+CMD ["buf", "generate"]

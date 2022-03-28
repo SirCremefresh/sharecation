@@ -1,24 +1,26 @@
 import {getKidFromDecodedJwt, tryDecodeJwt,} from '../../lib/authentication/jwt';
-import {COMMON_KV} from '../../lib/common-kv';
 import {isNotNullOrUndefined, isNullOrUndefined} from '../../lib/lib';
 import {LoggerContext} from '../../lib/middleware/context';
+import {TypedKvNamespace} from '../../lib/typed-kv-namespace';
+import type {AUTHENTICATION_KV} from './authentication-kv';
 
 const GOOGLE_VERIFY_ALGORITHM = {
   name: 'RSASSA-PKCS1-v1_5',
   hash: 'SHA-256',
 };
 const LOADED_SIGNING_KEYS: Map<string, CryptoKey> = new Map();
+const GOOGLE_AUD = 'sharecation-production';
 
 async function getGoogleVerifyingKey(
   kid: string,
-  kv: KVNamespace,
-): Promise<null | CryptoKey> {
+  kv: TypedKvNamespace<AUTHENTICATION_KV>,
+): Promise<CryptoKey | null> {
   let key = LOADED_SIGNING_KEYS.get(kid);
   if (isNotNullOrUndefined(key)) {
     return key;
   }
-  const jwk = await kv.get<JsonWebKey>(
-    COMMON_KV.GOOGLE_VERIFYING_JWK(kid),
+  const jwk = await kv.namespace.get<JsonWebKey>(
+    kv.keys.GOOGLE_VERIFYING_JWK(kid),
     'json',
   );
   if (isNullOrUndefined(jwk)) {
@@ -37,7 +39,7 @@ async function getGoogleVerifyingKey(
 
 export async function verifyGoogleJwt(
   jwtString: string,
-  kv: KVNamespace,
+  kv: TypedKvNamespace<AUTHENTICATION_KV>,
   context: LoggerContext,
 ): Promise<string | null> {
   const jwt = tryDecodeJwt(jwtString, context);
@@ -47,6 +49,11 @@ export async function verifyGoogleJwt(
   }
   const kid = getKidFromDecodedJwt(jwt);
   if (isNullOrUndefined(kid)) {
+    return null;
+  }
+
+  if (jwt.payload?.aud !== GOOGLE_AUD) {
+    context.logger.error(`User tried to verify googleJwt with wrong aud googleAud=${GOOGLE_AUD} , jwt=${JSON.stringify(jwt)}`);
     return null;
   }
 

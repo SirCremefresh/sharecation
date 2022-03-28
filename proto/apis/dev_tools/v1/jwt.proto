@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package dev_tools.v1;
+
+import "errors/v1/errors.proto";
+
+message User {
+  string user_id = 1;
+  string jwt_string = 2;
+}
+
+message CreateUserRequest {
+  repeated string rights = 1;
+}
+
+message CreateUserResponse {
+  oneof response {
+    User ok = 1;
+    errors.v1.BasicError error = 2;
+  }
+}

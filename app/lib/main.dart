@@ -1,37 +1,14 @@
 import 'dart:async';
 
-import 'package:camera/camera.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterfire_ui/auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:sharecation/pages/camera_page.dart';
-import 'package:sharecation/service/api_service.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:sharecation_app/pages/camera_screen.dart';
+import 'package:sharecation_app/service/api_service.dart';
 
 import 'components/layout.dart';
-
-Future<void> uploadPicture(XFile file) async {
-  await api.images.uploadImage(file);
-}
-
-Future<UserCredential> signInWithGoogle() async {
-  // Trigger the authentication flow
-  final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
-  // Obtain the auth details from the request
-  final GoogleSignInAuthentication? googleAuth =
-      await googleUser?.authentication;
-
-  // Create a new credential
-  final credential = GoogleAuthProvider.credential(
-    accessToken: googleAuth?.accessToken,
-    idToken: googleAuth?.idToken,
-  );
-
-  // Once signed in, return the UserCredential
-  return await FirebaseAuth.instance.signInWithCredential(credential);
-}
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -47,7 +24,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     const providerConfigs = [
       GoogleProviderConfiguration(
-        clientId: '1:907454945637:android:05a93d13157dae8bcd698c',
+        clientId: '1:907454945637:android:03a2244e3dc3224acd698c',
       ),
     ];
 
@@ -57,9 +34,24 @@ class MyApp extends StatelessWidget {
       routes: {
         '/sign-in': (context) => SignInScreen(
               providerConfigs: providerConfigs,
+              showAuthActionSwitch: false,
               actions: [
-                AuthStateChangeAction<SignedIn>((context, _) {
-                  Navigator.of(context).pushReplacementNamed('/profile');
+                AuthStateChangeAction<SignedIn>((context, state) async {
+                  try {
+                    await authenticationService.getJwtString();
+                    Navigator.of(context).pushReplacementNamed('/profile');
+                  } catch (e) {
+                    Fluttertoast.showToast(
+                        msg: "Error during Sign in",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                        timeInSecForIosWeb: 5,
+                        backgroundColor: Colors.red,
+                        textColor: Colors.white,
+                        fontSize: 16.0);
+                    await FirebaseAuth.instance.signOut();
+                    return;
+                  }
                 }),
               ],
             ),
@@ -69,7 +61,8 @@ class MyApp extends StatelessWidget {
                 Navigator.of(context).pushReplacementNamed('/sign-in');
               }),
             ])),
-        '/camera': (context) => const Layout(CameraApp()),
+        '/camera': (context) => const CameraScreen(),
+        // '/camera': (context) => Layout(CameraScreen()),
       },
     );
   }

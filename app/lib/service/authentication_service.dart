@@ -1,17 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:sharecation/api/authentication_api.dart';
-import 'package:sharecation/api/model/create_jwt_request.dart';
-
-import '../api/model/generated_jwt.dart';
+import 'package:sharecation_app/api/authentication_api.dart';
+import 'package:sharecation_app/api/contracts/authentication/v1/authentication.pb.dart';
 
 class _CurrentAuthentication {
   final String jwtString;
   final DateTime expiresAt;
 
-  _CurrentAuthentication(GeneratedJwt generatedJwt)
-      : jwtString = generatedJwt.jwtString,
-        expiresAt = DateTime.fromMillisecondsSinceEpoch(
-            generatedJwt.payload.exp * 1000);
+  _CurrentAuthentication(Authenticated authenticated)
+      : jwtString = authenticated.jwtString,
+        expiresAt =
+            DateTime.fromMillisecondsSinceEpoch(authenticated.data.exp * 1000);
 }
 
 class AuthenticationService {
@@ -30,12 +28,13 @@ class AuthenticationService {
     if (user == null) {
       throw Exception('User is not logged in');
     }
-    var firebaseIdToken = await user.getIdToken();
+    var firebaseJwtString = await user.getIdToken();
 
     var generatedJwt = await _api.createJwt(
-        createJwtRequest: CreateJwtRequest(jwtString: firebaseIdToken));
+        createJwtRequest: CreateAuthenticationWithFirebaseRequest(
+            firebaseJwtString: firebaseJwtString));
 
-    var current = _CurrentAuthentication(generatedJwt);
+    var current = _CurrentAuthentication(generatedJwt.ok);
     _current = current;
     return current;
   }

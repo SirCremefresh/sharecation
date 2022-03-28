@@ -5,11 +5,24 @@
 // global method to access these.
 // import {exportImportTest, hello} from './main';
 
-declare const getMiniflareBindings: () => { [key: string]: KVNamespace };
+// declare const getMiniflareBindings: () => { [key: string]: KVNamespace };
 
-const { COMMON } = getMiniflareBindings();
+// const { COMMON } = getMiniflareBindings();
+
+import {
+  Authenticated,
+  CreateAuthenticationWithFirebaseResponse
+} from '../../contracts/authentication/v1/authentication';
+import {createProtoBufOkResponse} from '../../lib/middleware/protobuf-middleware';
 
 test('sign key', async () => {
+  const aaa = createProtoBufOkResponse<Authenticated>({
+    jwtString: 'sdf'
+  });
+  console.log(aaa);
+  const bbb = CreateAuthenticationWithFirebaseResponse.toJsonString(aaa);
+  console.log(bbb);
+
   // const res = await hello();
   // await exportImportTest();
   // console.log(res);

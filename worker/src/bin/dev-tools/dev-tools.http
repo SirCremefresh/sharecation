@@ -1,3 +1,12 @@
+### Ping
+POST development.sharecation-ping.donato-wolfisberg.workers.dev/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "pingId": "123"
+}
+
 ### Generate a testing JWT
 POST development.sharecation-dev-tools.donato-wolfisberg.workers.dev/v1/jwt
 Content-Type: application/json

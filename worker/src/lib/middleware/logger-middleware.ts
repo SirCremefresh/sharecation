@@ -27,7 +27,7 @@ export function addLoggerContext<ENV extends LoggerConfig,
     try {
       response = await fn(request, env, context);
     } finally {
-      context.logger.flush();
+      await context.logger.flush();
     }
     return response;
   };
@@ -52,7 +52,7 @@ export function addLoggerContextToSchedule<ENV extends LoggerConfig>(
     } catch (e) {
       context.logger.error('Error handling scheduled event: ' + e);
     } finally {
-      context.logger.flush();
+      await context.logger.flush();
     }
   };
 }

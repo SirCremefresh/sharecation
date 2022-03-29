@@ -1,7 +1,10 @@
 import {isNotNullOrUndefined} from '../../lib/lib';
+import {addLoggerContext} from '../../lib/middleware/logger-middleware';
+import {addRouter, pathParam, route} from '../../lib/middleware/router-middleware';
+import {onFetch} from '../../lib/starter/on-fetch';
 import {TypedKvNamespace} from '../../lib/typed-kv-namespace';
 import {AuthenticationEnvironmentVariables} from './authentication-environment-variables';
-import {AUTHENTICATION_KV} from './authentication-kv';
+import {AUTHENTICATION_KV, createAuthenticationKv} from './authentication-kv';
 
 // @ts-ignore
 const SERVICE_NAME = 'authentication-rights-storage';
@@ -10,69 +13,65 @@ export class RightsStorage {
   constructor(private state: DurableObjectState, env: AuthenticationEnvironmentVariables) {
   }
 
-  // fetch = onFetch<AuthenticationEnvironmentVariables>(
-  //   addLoggerContext(SERVICE_NAME,
-  //     addRouter([
-  //       route(
-  //         'GET',
-  //         ['v1', pathParam('userId'), 'rights'],
-  //         async (request, env, context) => {
-  //           context.logger.info('getting rights');
-  //           const userId = context.route.params.userId;
-  //           const authenticationKv = createAuthenticationKv(env.AUTHENTICATION);
-  //           context.logger.info('getting rights2');
-  //
-  //           const rights = await this.getRights(authenticationKv, userId);
-  //           context.logger.info('getting rights3 ' + JSON.stringify(rights));
-  //
-  //           return new Response(JSON.stringify(rights), {
-  //             headers: {
-  //               'content-type': 'application/json'
-  //             }
-  //           });
-  //         },
-  //       ),
-  //       route(
-  //         'POST',
-  //         ['v1', pathParam('userId'), 'rights'],
-  //         async (request, env, context) => {
-  //           const userId = context.route.params.userId;
-  //           const {right} = await request.json<{ right: string }>();
-  //           const authenticationKv = createAuthenticationKv(env.AUTHENTICATION);
-  //
-  //           await this.addRight(authenticationKv, userId, right);
-  //
-  //           return new Response(JSON.stringify({right}), {
-  //             headers: {
-  //               'content-type': 'application/json'
-  //             }
-  //           });
-  //         },
-  //       ),
-  //       route(
-  //         'DELETE',
-  //         ['v1', pathParam('userId'), 'rights', pathParam('right')],
-  //         async (request, env, context) => {
-  //           const userId = context.route.params.userId;
-  //           const right = context.route.params.right;
-  //           const authenticationKv = createAuthenticationKv(env.AUTHENTICATION);
-  //
-  //           await this.deleteRight(authenticationKv, userId, right);
-  //
-  //           return new Response(JSON.stringify({right}), {
-  //             headers: {
-  //               'content-type': 'application/json'
-  //             }
-  //           });
-  //         },
-  //       ),
-  //     ]),
-  //   ));
+  fetch = onFetch<AuthenticationEnvironmentVariables>(
+    addLoggerContext(SERVICE_NAME,
+      addRouter([
+        route(
+          'GET',
+          ['v1', pathParam('userId'), 'rights'],
+          async (request, env, context) => {
+            context.logger.info('getting rights');
+            return new Response(JSON.stringify(['a']));
+            // const userId = context.route.params.userId;
+            // const authenticationKv = createAuthenticationKv(env.AUTHENTICATION);
+            // context.logger.info('getting rights2');
+            //
+            // const rights = await this.getRights(authenticationKv, userId);
+            // context.logger.info('getting rights3 ' + JSON.stringify(rights));
+            //
+            // return new Response(JSON.stringify(rights), {
+            //   headers: {
+            //     'content-type': 'application/json'
+            //   }
+            // });
+          },
+        ),
+        route(
+          'POST',
+          ['v1', pathParam('userId'), 'rights'],
+          async (request, env, context) => {
+            const userId = context.route.params.userId;
+            const {right} = await request.json<{ right: string }>();
+            const authenticationKv = createAuthenticationKv(env.AUTHENTICATION);
 
-  fetch(r: Request) {
-    console.log('hello', r);
-    return new Response(JSON.stringify(['j']));
-  }
+            await this.addRight(authenticationKv, userId, right);
+
+            return new Response(JSON.stringify({right}), {
+              headers: {
+                'content-type': 'application/json'
+              }
+            });
+          },
+        ),
+        route(
+          'DELETE',
+          ['v1', pathParam('userId'), 'rights', pathParam('right')],
+          async (request, env, context) => {
+            const userId = context.route.params.userId;
+            const right = context.route.params.right;
+            const authenticationKv = createAuthenticationKv(env.AUTHENTICATION);
+
+            await this.deleteRight(authenticationKv, userId, right);
+
+            return new Response(JSON.stringify({right}), {
+              headers: {
+                'content-type': 'application/json'
+              }
+            });
+          },
+        ),
+      ]),
+    ));
 
   // @ts-ignore
   private async getRights(authenticationKv: TypedKvNamespace<AUTHENTICATION_KV>, userId: string): Promise<string[]> {

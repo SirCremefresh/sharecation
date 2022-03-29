@@ -1,5 +1,3 @@
-import {isAuthenticatedContext, isRequestIdContext, isRouteContext,} from './middleware/context';
-
 export interface LoggerConfig {
   LOKI_SECRET: string;
   ENVIRONMENT: string;
@@ -10,8 +8,8 @@ export class Logger {
   messages: { time: number; message: string; level: 'info' | 'error' | 'fatal' }[] = [];
 
   constructor(
-    private config: LoggerConfig,
-    private context: ExecutionContext,
+     config: LoggerConfig,
+     context: ExecutionContext,
     private serviceName: string,
   ) {
   }
@@ -25,45 +23,49 @@ export class Logger {
     console.log(`${this.serviceName}: ${message}`);
   }
 
-  flush() {
-    if (this.messages.length === 0) {
-      console.log('no messages to flush');
-      return;
-    }
-    const serviceSnipped = 'serviceName=' + this.serviceName;
-    const requestIdSnipped = isRequestIdContext(this.context)
-      ? 'requestId=' + this.context.requestId
-      : '';
-    const userIdSnipped = isAuthenticatedContext(this.context)
-      ? 'userId=' + this.context.user.userId
-      : '';
-    const pathSnipped = isRouteContext(this.context)
-      ? 'path=' + this.context.route.path
-      : '';
-    const request = {
-      streams: [
-        {
-          stream: {
-            service: this.serviceName,
-            environment: this.config.ENVIRONMENT,
-          },
-          values: this.messages.map(messageEntry => [
-            messageEntry.time.toString(),
-            `${serviceSnipped} ${requestIdSnipped} ${userIdSnipped} ${pathSnipped} level=${messageEntry.level} ${messageEntry.message}`,
-          ]),
-        },
-      ],
-    };
-    this.context.waitUntil(
-      fetch('https://logs-prod-eu-west-0.grafana.net/loki/api/v1/push', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Basic ${this.config.LOKI_SECRET}`,
-        },
-        body: JSON.stringify(request),
-      }),
-    );
+  async flush() {
+    // if (this.messages.length === 0) {
+    //   console.log('no messages to flush');
+    //   return;
+    // }
+    // const serviceSnipped = 'serviceName=' + this.serviceName;
+    // const requestIdSnipped = isRequestIdContext(this.context)
+    //   ? 'requestId=' + this.context.requestId
+    //   : '';
+    // const userIdSnipped = isAuthenticatedContext(this.context)
+    //   ? 'userId=' + this.context.user.userId
+    //   : '';
+    // const pathSnipped = isRouteContext(this.context)
+    //   ? 'path=' + this.context.route.path
+    //   : '';
+    // const request = {
+    //   streams: [
+    //     {
+    //       stream: {
+    //         service: this.serviceName,
+    //         environment: this.config.ENVIRONMENT,
+    //       },
+    //       values: this.messages.map(messageEntry => [
+    //         messageEntry.time.toString(),
+    //         `${serviceSnipped} ${requestIdSnipped} ${userIdSnipped} ${pathSnipped} level=${messageEntry.level} ${messageEntry.message}`,
+    //       ]),
+    //     },
+    //   ],
+    // };
+    // const saveLogsPromise = fetch('https://logs-prod-eu-west-0.grafana.net/loki/api/v1/push', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //     Authorization: `Basic ${this.config.LOKI_SECRET}`,
+    //   },
+    //   body: JSON.stringify(request),
+    // });
+    // if (isNotNullOrUndefined(this.context)) {
+    //   this.context.waitUntil(saveLogsPromise);
+    // } else {
+    //   await saveLogsPromise;
+    // }
+
   }
 
   error(message: string) {

@@ -483,16 +483,21 @@ class GetRightOfUserRequest extends $pb.GeneratedMessage {
 class GetRightOfUserResponse_Right extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GetRightOfUserResponse.Right', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'authentication.v1'), createEmptyInstance: create)
     ..aOB(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'hasRight')
+    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'right')
     ..hasRequiredFields = false
   ;
 
   GetRightOfUserResponse_Right._() : super();
   factory GetRightOfUserResponse_Right({
     $core.bool? hasRight,
+    $core.String? right_2,
   }) {
     final _result = create();
     if (hasRight != null) {
       _result.hasRight = hasRight;
+    }
+    if (right_2 != null) {
+      _result.right_2 = right_2;
     }
     return _result;
   }
@@ -525,6 +530,15 @@ class GetRightOfUserResponse_Right extends $pb.GeneratedMessage {
   $core.bool hasHasRight() => $_has(0);
   @$pb.TagNumber(1)
   void clearHasRight() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get right_2 => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set right_2($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasRight_2() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearRight_2() => clearField(2);
 }
 
 enum GetRightOfUserResponse_Response {
@@ -594,6 +608,174 @@ class GetRightOfUserResponse extends $pb.GeneratedMessage {
   void clearOk() => clearField(1);
   @$pb.TagNumber(1)
   GetRightOfUserResponse_Right ensureOk() => $_ensure(0);
+
+  @$pb.TagNumber(2)
+  $0.BasicError get error => $_getN(1);
+  @$pb.TagNumber(2)
+  set error($0.BasicError v) { setField(2, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasError() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearError() => clearField(2);
+  @$pb.TagNumber(2)
+  $0.BasicError ensureError() => $_ensure(1);
+}
+
+class GetRightsOfUserRequest extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GetRightsOfUserRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'authentication.v1'), createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'userId')
+    ..hasRequiredFields = false
+  ;
+
+  GetRightsOfUserRequest._() : super();
+  factory GetRightsOfUserRequest({
+    $core.String? userId,
+  }) {
+    final _result = create();
+    if (userId != null) {
+      _result.userId = userId;
+    }
+    return _result;
+  }
+  factory GetRightsOfUserRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetRightsOfUserRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetRightsOfUserRequest clone() => GetRightsOfUserRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetRightsOfUserRequest copyWith(void Function(GetRightsOfUserRequest) updates) => super.copyWith((message) => updates(message as GetRightsOfUserRequest)) as GetRightsOfUserRequest; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static GetRightsOfUserRequest create() => GetRightsOfUserRequest._();
+  GetRightsOfUserRequest createEmptyInstance() => create();
+  static $pb.PbList<GetRightsOfUserRequest> createRepeated() => $pb.PbList<GetRightsOfUserRequest>();
+  @$core.pragma('dart2js:noInline')
+  static GetRightsOfUserRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetRightsOfUserRequest>(create);
+  static GetRightsOfUserRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get userId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set userId($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasUserId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearUserId() => clearField(1);
+}
+
+class GetRightsOfUserResponse_Rights extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GetRightsOfUserResponse.Rights', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'authentication.v1'), createEmptyInstance: create)
+    ..pPS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'rights')
+    ..hasRequiredFields = false
+  ;
+
+  GetRightsOfUserResponse_Rights._() : super();
+  factory GetRightsOfUserResponse_Rights({
+    $core.Iterable<$core.String>? rights,
+  }) {
+    final _result = create();
+    if (rights != null) {
+      _result.rights.addAll(rights);
+    }
+    return _result;
+  }
+  factory GetRightsOfUserResponse_Rights.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetRightsOfUserResponse_Rights.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetRightsOfUserResponse_Rights clone() => GetRightsOfUserResponse_Rights()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetRightsOfUserResponse_Rights copyWith(void Function(GetRightsOfUserResponse_Rights) updates) => super.copyWith((message) => updates(message as GetRightsOfUserResponse_Rights)) as GetRightsOfUserResponse_Rights; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static GetRightsOfUserResponse_Rights create() => GetRightsOfUserResponse_Rights._();
+  GetRightsOfUserResponse_Rights createEmptyInstance() => create();
+  static $pb.PbList<GetRightsOfUserResponse_Rights> createRepeated() => $pb.PbList<GetRightsOfUserResponse_Rights>();
+  @$core.pragma('dart2js:noInline')
+  static GetRightsOfUserResponse_Rights getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetRightsOfUserResponse_Rights>(create);
+  static GetRightsOfUserResponse_Rights? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.List<$core.String> get rights => $_getList(0);
+}
+
+enum GetRightsOfUserResponse_Response {
+  ok, 
+  error, 
+  notSet
+}
+
+class GetRightsOfUserResponse extends $pb.GeneratedMessage {
+  static const $core.Map<$core.int, GetRightsOfUserResponse_Response> _GetRightsOfUserResponse_ResponseByTag = {
+    1 : GetRightsOfUserResponse_Response.ok,
+    2 : GetRightsOfUserResponse_Response.error,
+    0 : GetRightsOfUserResponse_Response.notSet
+  };
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GetRightsOfUserResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'authentication.v1'), createEmptyInstance: create)
+    ..oo(0, [1, 2])
+    ..aOM<GetRightsOfUserResponse_Rights>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'ok', subBuilder: GetRightsOfUserResponse_Rights.create)
+    ..aOM<$0.BasicError>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'error', subBuilder: $0.BasicError.create)
+    ..hasRequiredFields = false
+  ;
+
+  GetRightsOfUserResponse._() : super();
+  factory GetRightsOfUserResponse({
+    GetRightsOfUserResponse_Rights? ok,
+    $0.BasicError? error,
+  }) {
+    final _result = create();
+    if (ok != null) {
+      _result.ok = ok;
+    }
+    if (error != null) {
+      _result.error = error;
+    }
+    return _result;
+  }
+  factory GetRightsOfUserResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetRightsOfUserResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetRightsOfUserResponse clone() => GetRightsOfUserResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetRightsOfUserResponse copyWith(void Function(GetRightsOfUserResponse) updates) => super.copyWith((message) => updates(message as GetRightsOfUserResponse)) as GetRightsOfUserResponse; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static GetRightsOfUserResponse create() => GetRightsOfUserResponse._();
+  GetRightsOfUserResponse createEmptyInstance() => create();
+  static $pb.PbList<GetRightsOfUserResponse> createRepeated() => $pb.PbList<GetRightsOfUserResponse>();
+  @$core.pragma('dart2js:noInline')
+  static GetRightsOfUserResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetRightsOfUserResponse>(create);
+  static GetRightsOfUserResponse? _defaultInstance;
+
+  GetRightsOfUserResponse_Response whichResponse() => _GetRightsOfUserResponse_ResponseByTag[$_whichOneof(0)]!;
+  void clearResponse() => clearField($_whichOneof(0));
+
+  @$pb.TagNumber(1)
+  GetRightsOfUserResponse_Rights get ok => $_getN(0);
+  @$pb.TagNumber(1)
+  set ok(GetRightsOfUserResponse_Rights v) { setField(1, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasOk() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearOk() => clearField(1);
+  @$pb.TagNumber(1)
+  GetRightsOfUserResponse_Rights ensureOk() => $_ensure(0);
 
   @$pb.TagNumber(2)
   $0.BasicError get error => $_getN(1);

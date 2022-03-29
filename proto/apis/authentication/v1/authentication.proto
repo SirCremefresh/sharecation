@@ -51,9 +51,24 @@ message GetRightOfUserRequest {
 message GetRightOfUserResponse {
   message Right {
     bool has_right = 1;
+    string right = 2;
   }
   oneof response {
     Right ok = 1;
+    errors.v1.BasicError error = 2;
+  }
+}
+
+message GetRightsOfUserRequest {
+  string user_id = 1;
+}
+
+message GetRightsOfUserResponse {
+  message Rights {
+    repeated string rights = 1;
+  }
+  oneof response {
+    Rights ok = 1;
     errors.v1.BasicError error = 2;
   }
 }

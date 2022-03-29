@@ -8,12 +8,18 @@ Accept: application/json
 }
 
 ### Generate a testing JWT
-POST development.sharecation-dev-tools.donato-wolfisberg.workers.dev/v1/jwt
+POST sharecation-dev-tools-development.donato-wolfisberg.workers.dev/v1/create-user
 Content-Type: application/json
 Accept: application/json
 
+{
+  "rights": [
+    "admin:rights"
+  ]
+}
+
 > {%
-    client.global.set("jwtString", response.body.jwtString);
+    client.global.set("jwtString", response.body.ok.jwtString);
 %}
 
 ### Upload a image
@@ -35,7 +41,12 @@ Accept: application/json
 Authorization: Bearer {{jwtString}}
 
 
-### Get images
-GET sharecation-authentication-development.donato-wolfisberg.workers.dev/v1/get-public-keys
+### get-rights-of-user
+POST sharecation-authentication-development.donato-wolfisberg.workers.dev/v1/get-rights-of-user
+Content-Type: application/json
 Accept: application/json
+Authorization: Bearer {{jwtString}}
 
+{
+  "userId": "some-user-id"
+}

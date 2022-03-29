@@ -1,5 +1,6 @@
 import {BasicError_BasicErrorCode} from '../../contracts/errors/v1/errors';
 import {createBasicErrorResponse} from '../http/response';
+import {isLoggerContext} from '../middleware/context';
 
 export function onFetch<ENV extends {} = {}>(
   fn: (
@@ -12,7 +13,12 @@ export function onFetch<ENV extends {} = {}>(
     try {
       return await fn(request, env, context);
     } catch (e) {
-      console.error('Error handling request', e);
+      const text = 'Error handling request error=' + e;
+      if (isLoggerContext(context)) {
+        context.logger.error(text);
+      } else {
+        console.error(text);
+      }
       return createBasicErrorResponse({
         message: 'Error handling request',
         code: BasicError_BasicErrorCode.UNKNOWN

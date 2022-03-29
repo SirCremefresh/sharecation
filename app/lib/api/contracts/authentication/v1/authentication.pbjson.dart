@@ -120,8 +120,42 @@ const GetRightOfUserResponse_Right$json = const {
   '1': 'Right',
   '2': const [
     const {'1': 'has_right', '3': 1, '4': 1, '5': 8, '10': 'hasRight'},
+    const {'1': 'right', '3': 2, '4': 1, '5': 9, '10': 'right'},
   ],
 };
 
 /// Descriptor for `GetRightOfUserResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List getRightOfUserResponseDescriptor = $convert.base64Decode('ChZHZXRSaWdodE9mVXNlclJlc3BvbnNlEkEKAm9rGAEgASgLMi8uYXV0aGVudGljYXRpb24udjEuR2V0UmlnaHRPZlVzZXJSZXNwb25zZS5SaWdodEgAUgJvaxItCgVlcnJvchgCIAEoCzIVLmVycm9ycy52MS5CYXNpY0Vycm9ySABSBWVycm9yGiQKBVJpZ2h0EhsKCWhhc19yaWdodBgBIAEoCFIIaGFzUmlnaHRCCgoIcmVzcG9uc2U=');
+final $typed_data.Uint8List getRightOfUserResponseDescriptor = $convert.base64Decode('ChZHZXRSaWdodE9mVXNlclJlc3BvbnNlEkEKAm9rGAEgASgLMi8uYXV0aGVudGljYXRpb24udjEuR2V0UmlnaHRPZlVzZXJSZXNwb25zZS5SaWdodEgAUgJvaxItCgVlcnJvchgCIAEoCzIVLmVycm9ycy52MS5CYXNpY0Vycm9ySABSBWVycm9yGjoKBVJpZ2h0EhsKCWhhc19yaWdodBgBIAEoCFIIaGFzUmlnaHQSFAoFcmlnaHQYAiABKAlSBXJpZ2h0QgoKCHJlc3BvbnNl');
+@$core.Deprecated('Use getRightsOfUserRequestDescriptor instead')
+const GetRightsOfUserRequest$json = const {
+  '1': 'GetRightsOfUserRequest',
+  '2': const [
+    const {'1': 'user_id', '3': 1, '4': 1, '5': 9, '10': 'userId'},
+  ],
+};
+
+/// Descriptor for `GetRightsOfUserRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getRightsOfUserRequestDescriptor = $convert.base64Decode('ChZHZXRSaWdodHNPZlVzZXJSZXF1ZXN0EhcKB3VzZXJfaWQYASABKAlSBnVzZXJJZA==');
+@$core.Deprecated('Use getRightsOfUserResponseDescriptor instead')
+const GetRightsOfUserResponse$json = const {
+  '1': 'GetRightsOfUserResponse',
+  '2': const [
+    const {'1': 'ok', '3': 1, '4': 1, '5': 11, '6': '.authentication.v1.GetRightsOfUserResponse.Rights', '9': 0, '10': 'ok'},
+    const {'1': 'error', '3': 2, '4': 1, '5': 11, '6': '.errors.v1.BasicError', '9': 0, '10': 'error'},
+  ],
+  '3': const [GetRightsOfUserResponse_Rights$json],
+  '8': const [
+    const {'1': 'response'},
+  ],
+};
+
+@$core.Deprecated('Use getRightsOfUserResponseDescriptor instead')
+const GetRightsOfUserResponse_Rights$json = const {
+  '1': 'Rights',
+  '2': const [
+    const {'1': 'rights', '3': 1, '4': 3, '5': 9, '10': 'rights'},
+  ],
+};
+
+/// Descriptor for `GetRightsOfUserResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getRightsOfUserResponseDescriptor = $convert.base64Decode('ChdHZXRSaWdodHNPZlVzZXJSZXNwb25zZRJDCgJvaxgBIAEoCzIxLmF1dGhlbnRpY2F0aW9uLnYxLkdldFJpZ2h0c09mVXNlclJlc3BvbnNlLlJpZ2h0c0gAUgJvaxItCgVlcnJvchgCIAEoCzIVLmVycm9ycy52MS5CYXNpY0Vycm9ySABSBWVycm9yGiAKBlJpZ2h0cxIWCgZyaWdodHMYASADKAlSBnJpZ2h0c0IKCghyZXNwb25zZQ==');

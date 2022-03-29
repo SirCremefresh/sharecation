@@ -3,7 +3,7 @@ import {createBasicErrorResponse} from '../http/response';
 import {isNotNullOrUndefined} from '../lib';
 import {LoggerContext, RouteContext} from './context';
 
-type Method = 'GET' | 'POST';
+type Method = 'GET' | 'POST' | 'DELETE';
 
 type ParamConfig = {
   paramName: string;

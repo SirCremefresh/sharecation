@@ -1,24 +1,109 @@
+import {isNotNullOrUndefined} from '../../lib/lib';
+import {TypedKvNamespace} from '../../lib/typed-kv-namespace';
+import {AuthenticationEnvironmentVariables} from './authentication-environment-variables';
+import {AUTHENTICATION_KV} from './authentication-kv';
+
+// @ts-ignore
+const SERVICE_NAME = 'authentication-rights-storage';
+
 export class RightsStorage {
-  constructor(private state: DurableObjectState, env: {}) {
+  constructor(private state: DurableObjectState, env: AuthenticationEnvironmentVariables) {
   }
 
-  // Handle HTTP requests from clients.
-  async fetch(request: Request) {
-    // Apply requested action.
+  // fetch = onFetch<AuthenticationEnvironmentVariables>(
+  //   addLoggerContext(SERVICE_NAME,
+  //     addRouter([
+  //       route(
+  //         'GET',
+  //         ['v1', pathParam('userId'), 'rights'],
+  //         async (request, env, context) => {
+  //           context.logger.info('getting rights');
+  //           const userId = context.route.params.userId;
+  //           const authenticationKv = createAuthenticationKv(env.AUTHENTICATION);
+  //           context.logger.info('getting rights2');
+  //
+  //           const rights = await this.getRights(authenticationKv, userId);
+  //           context.logger.info('getting rights3 ' + JSON.stringify(rights));
+  //
+  //           return new Response(JSON.stringify(rights), {
+  //             headers: {
+  //               'content-type': 'application/json'
+  //             }
+  //           });
+  //         },
+  //       ),
+  //       route(
+  //         'POST',
+  //         ['v1', pathParam('userId'), 'rights'],
+  //         async (request, env, context) => {
+  //           const userId = context.route.params.userId;
+  //           const {right} = await request.json<{ right: string }>();
+  //           const authenticationKv = createAuthenticationKv(env.AUTHENTICATION);
+  //
+  //           await this.addRight(authenticationKv, userId, right);
+  //
+  //           return new Response(JSON.stringify({right}), {
+  //             headers: {
+  //               'content-type': 'application/json'
+  //             }
+  //           });
+  //         },
+  //       ),
+  //       route(
+  //         'DELETE',
+  //         ['v1', pathParam('userId'), 'rights', pathParam('right')],
+  //         async (request, env, context) => {
+  //           const userId = context.route.params.userId;
+  //           const right = context.route.params.right;
+  //           const authenticationKv = createAuthenticationKv(env.AUTHENTICATION);
+  //
+  //           await this.deleteRight(authenticationKv, userId, right);
+  //
+  //           return new Response(JSON.stringify({right}), {
+  //             headers: {
+  //               'content-type': 'application/json'
+  //             }
+  //           });
+  //         },
+  //       ),
+  //     ]),
+  //   ));
 
-    // Durable Object storage is automatically cached in-memory, so reading the
-    // same key every request is fast. (That said, you could also store the
-    // value in a class member if you prefer.)
-    let value = await this.state.storage.get<number>('value') ?? 0;
+  fetch(r: Request) {
+    console.log('hello', r);
+    return new Response(JSON.stringify(['j']));
+  }
 
-    ++value;
+  // @ts-ignore
+  private async getRights(authenticationKv: TypedKvNamespace<AUTHENTICATION_KV>, userId: string): Promise<string[]> {
+    const key = authenticationKv.keys.USER_RIGHTS(userId);
+    const storageResult = await this.state.storage.get<string[]>(key);
+    if (isNotNullOrUndefined(storageResult)) {
+      return storageResult;
+    }
+    const listResult = await authenticationKv.namespace.list<string>({
+      prefix: key,
+    });
+    const rights = listResult.keys.map(key => key.metadata) as string[];
+    await this.state.storage.put(key, rights);
+    return rights;
+  }
 
-    // You do not have to worry about a concurrent request having modified the
-    // value in storage because "input gates" will automatically protect against
-    // unwanted concurrency. So, read-modify-write is safe. For more details,
-    // refer to: https://blog.cloudflare.com/durable-objects-easy-fast-correct-choose-three/
-    await this.state.storage.put('value', value);
+  // @ts-ignore
+  private async addRight(authenticationKv: TypedKvNamespace<AUTHENTICATION_KV>, userId: string, right: string) {
+    const key = authenticationKv.keys.USER_RIGHT(userId, right);
+    await Promise.all([
+      this.state.storage.put(key, right),
+      authenticationKv.namespace.put(key, right, {metadata: right})
+    ]);
+  }
 
-    return new Response(`${value}`);
+  // @ts-ignore
+  private async deleteRight(authenticationKv: TypedKvNamespace<AUTHENTICATION_KV>, userId: string, right: string) {
+    const key = authenticationKv.keys.USER_RIGHT(userId, right);
+    await Promise.all([
+      this.state.storage.delete(key),
+      authenticationKv.namespace.delete(key)
+    ]);
   }
 }

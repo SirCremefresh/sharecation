@@ -49,11 +49,20 @@ export function isRouteContext<T extends {}>(
   return isNotNullOrUndefined(context) && context.hasOwnProperty('route');
 }
 
+export function isExecutionContext<T extends {}>(
+  context: T | undefined | null,
+): context is T & ExecutionContext {
+  // We need to use getPrototypeOf since is not on the object itself
+  // In future we should wrap execution context as a member of context
+  // Like the other contexts
+  return isNotNullOrUndefined(context) && Object.getPrototypeOf(context).hasOwnProperty('waitUntil');
+}
+
 
 export interface ProtoBufContext<TYPE extends {} | null> {
   proto: {
     body: TYPE,
-    requestType: MessageType<any>| null,
+    requestType: MessageType<any> | null,
     responseType: MessageType<any>,
     responseFormat: MessageFormat,
     requestFormat: MessageFormat

@@ -15,6 +15,7 @@ import {
 import {BasicError_BasicErrorCode} from '../../contracts/errors/v1/errors';
 import {isNullOrUndefined, NEVER_FN,} from '../../lib/lib';
 import {addAuthenticatedToContext, addAuthenticationGuard} from '../../lib/middleware/authenticated-middleware';
+import {isExecutionContext} from '../../lib/middleware/context';
 import {addLoggerContext,} from '../../lib/middleware/logger-middleware';
 import {
   createProtoBufBasicErrorResponse,
@@ -166,7 +167,8 @@ export default {
                 const proxy = getRightsStorageProxy(env);
                 try {
                   const rights = await getRightsOfUser(proxy, userId);
-                  context.logger.info('rights: ' + JSON.stringify(rights));
+                  context.logger.info('rights: ' + JSON.stringify(rights))
+                  context.logger.info('isExcecutionContext: ' + isExecutionContext(context));
 
                   return createProtoBufOkResponse<GetRightsOfUserResponse_Rights>({
                     rights: rights

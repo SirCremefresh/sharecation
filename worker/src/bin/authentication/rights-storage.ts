@@ -1,7 +1,7 @@
 import {isNotNullOrUndefined} from '../../lib/lib';
 import {addLoggerContext} from '../../lib/middleware/logger-middleware';
 import {addRouter, pathParam, route} from '../../lib/middleware/router-middleware';
-import {onFetch} from '../../lib/starter/on-fetch';
+import {onDurableObjectFetch} from '../../lib/starter/on-durable-object-fetch';
 import {TypedKvNamespace} from '../../lib/typed-kv-namespace';
 import {AuthenticationEnvironmentVariables} from './authentication-environment-variables';
 import {AUTHENTICATION_KV, createAuthenticationKv} from './authentication-kv';
@@ -10,30 +10,29 @@ import {AUTHENTICATION_KV, createAuthenticationKv} from './authentication-kv';
 const SERVICE_NAME = 'authentication-rights-storage';
 
 export class RightsStorage {
-  constructor(private state: DurableObjectState, env: AuthenticationEnvironmentVariables) {
+
+  constructor(private state: DurableObjectState, private readonly env: AuthenticationEnvironmentVariables) {
   }
 
-  fetch = onFetch<AuthenticationEnvironmentVariables>(
+  fetch = onDurableObjectFetch<AuthenticationEnvironmentVariables>(
+    () => this.env,
     addLoggerContext(SERVICE_NAME,
       addRouter([
         route(
           'GET',
           ['v1', pathParam('userId'), 'rights'],
           async (request, env, context) => {
-            context.logger.info('getting rights');
-            return new Response(JSON.stringify(['a']));
-            // const userId = context.route.params.userId;
-            // const authenticationKv = createAuthenticationKv(env.AUTHENTICATION);
-            // context.logger.info('getting rights2');
-            //
-            // const rights = await this.getRights(authenticationKv, userId);
-            // context.logger.info('getting rights3 ' + JSON.stringify(rights));
-            //
-            // return new Response(JSON.stringify(rights), {
-            //   headers: {
-            //     'content-type': 'application/json'
-            //   }
-            // });
+            const userId = context.route.params.userId;
+            context.logger.info(`getting rights for userId=${userId}`);
+            const authenticationKv = createAuthenticationKv(env.AUTHENTICATION);
+
+            const rights = await this.getRights(authenticationKv, userId);
+
+            return new Response(JSON.stringify(rights), {
+              headers: {
+                'content-type': 'application/json'
+              }
+            });
           },
         ),
         route(

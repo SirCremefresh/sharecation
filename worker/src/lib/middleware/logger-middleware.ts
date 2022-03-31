@@ -1,7 +1,7 @@
-import {Logger, LoggerConfig} from '../logger';
+import {logErrorWithException, Logger, LoggerConfig} from '../logger';
 import {LoggerContext} from './context';
 
-function addLoggerToContext<CONTEXT extends ExecutionContext>(
+function addLoggerToContext<CONTEXT extends {}>(
   serviceName: string,
   loggingConfig: LoggerConfig,
   context: CONTEXT,
@@ -12,7 +12,7 @@ function addLoggerToContext<CONTEXT extends ExecutionContext>(
 
 export function addLoggerContext<ENV extends LoggerConfig,
   REQUEST,
-  CONTEXT extends ExecutionContext,
+  CONTEXT extends {},
   RESPONSE>(
   serviceName: string,
   fn: (
@@ -50,7 +50,7 @@ export function addLoggerContextToSchedule<ENV extends LoggerConfig>(
     try {
       await fn(event, env, context);
     } catch (e) {
-      context.logger.error('Error handling scheduled event: ' + e);
+      logErrorWithException('Logger caught error handling request', e, context);
     } finally {
       await context.logger.flush();
     }

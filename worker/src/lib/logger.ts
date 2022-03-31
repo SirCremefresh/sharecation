@@ -1,3 +1,36 @@
+import {isNotNullOrUndefined} from './lib';
+import {isLoggerContext} from './middleware/context';
+
+export function logInfo(message: string, context: {}) {
+  if (isLoggerContext(context)) {
+    context.logger.info(message);
+  } else {
+    console.log(message);
+  }
+}
+
+function unknownErrorToString(error: any): string {
+  let errorMessage = ' error=';
+  if (isNotNullOrUndefined(error.message)) {
+    errorMessage += typeof error;
+    errorMessage += error.message;
+  } else {
+    errorMessage += error;
+  }
+  if (isNotNullOrUndefined(error.stack)) {
+    errorMessage += ', stack=' + error.stack;
+  }
+  return errorMessage;
+}
+
+export function logErrorWithException(message: string, error: any, context: {}) {
+  if (isLoggerContext(context)) {
+    context.logger.errorWithException(message, error);
+  } else {
+    console.log(message + unknownErrorToString(error));
+  }
+}
+
 export interface LoggerConfig {
   LOKI_SECRET: string;
   ENVIRONMENT: string;
@@ -8,8 +41,8 @@ export class Logger {
   messages: { time: number; message: string; level: 'info' | 'error' | 'fatal' }[] = [];
 
   constructor(
-     config: LoggerConfig,
-     context: ExecutionContext,
+    config: LoggerConfig,
+    context: {},
     private serviceName: string,
   ) {
   }
@@ -75,6 +108,10 @@ export class Logger {
       level: 'error',
     });
     console.error(`${this.serviceName}: ${message}`);
+  }
+
+  errorWithException(message: string, exception: any) {
+    this.error(message + unknownErrorToString(exception));
   }
 
   fatal(message: string) {

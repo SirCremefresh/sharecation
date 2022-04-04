@@ -48,5 +48,16 @@ Accept: application/json
 Authorization: Bearer {{jwtString}}
 
 {
-  "userId": "some-user-id"
+  "userId": "some-user-id-7"
+}
+
+### create-right-of-user
+POST sharecation-authentication-development.donato-wolfisberg.workers.dev/v1/create-right-of-user
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{jwtString}}
+
+{
+  "userId": "some-user-id-7",
+  "right": "rights:hello4"
 }

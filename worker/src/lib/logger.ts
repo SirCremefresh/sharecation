@@ -104,7 +104,6 @@ export class Logger {
     } else {
       await saveLogsPromise;
     }
-
   }
 
   error(message: string) {

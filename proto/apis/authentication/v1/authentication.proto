@@ -25,34 +25,50 @@ message CreateAuthenticationWithFirebaseResponse {
   }
 }
 
-message UpdateRightOfUserRequest {
-  enum MutationType {
-    MUTATION_TYPE_UNSPECIFIED = 0;
-    MUTATION_TYPE_ADD = 1;
-    MUTATION_TYPE_DELETE = 2;
-  }
-  string user_id = 1;
-  string right = 2;
-  MutationType mutation_type = 3;
-}
-
-message UpdateRightOfUserResponse {
-  oneof response {
-    string ok = 1;
-    errors.v1.BasicError error = 2;
-  }
-}
-
 message GetRightOfUserRequest {
   string user_id = 1;
   string right = 2;
 }
 
+message Right {
+  string user_id = 1;
+  string right = 2;
+}
+
+message Rights {
+  repeated string rights = 1;
+}
+
 message GetRightOfUserResponse {
-  message Right {
-    bool has_right = 1;
-    string right = 2;
+  message HasRight {
+    string right = 1;
+    string user_id = 2;
+    bool has_right = 3;
   }
+  oneof response {
+    HasRight ok = 1;
+    errors.v1.BasicError error = 2;
+  }
+}
+
+message CreateRightOfUserRequest {
+  string user_id = 1;
+  string right = 2;
+}
+
+message CreateRightOfUserResponse {
+  oneof response {
+    Right ok = 1;
+    errors.v1.BasicError error = 2;
+  }
+}
+
+message DeleteRightOfUserRequest {
+  string user_id = 1;
+  string right = 2;
+}
+
+message DeleteRightOfUserResponse {
   oneof response {
     Right ok = 1;
     errors.v1.BasicError error = 2;
@@ -64,9 +80,6 @@ message GetRightsOfUserRequest {
 }
 
 message GetRightsOfUserResponse {
-  message Rights {
-    repeated string rights = 1;
-  }
   oneof response {
     Rights ok = 1;
     errors.v1.BasicError error = 2;

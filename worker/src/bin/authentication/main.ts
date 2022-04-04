@@ -2,20 +2,23 @@ import {
   Authenticated,
   CreateAuthenticationWithFirebaseRequest,
   CreateAuthenticationWithFirebaseResponse,
+  CreateRightOfUserRequest,
+  CreateRightOfUserResponse,
+  DeleteRightOfUserRequest,
+  DeleteRightOfUserResponse,
   GetRightOfUserRequest,
   GetRightOfUserResponse,
-  GetRightOfUserResponse_Right,
+  GetRightOfUserResponse_HasRight,
   GetRightsOfUserRequest,
   GetRightsOfUserResponse,
-  GetRightsOfUserResponse_Rights,
-  UpdateRightOfUserRequest,
-  UpdateRightOfUserRequest_MutationType,
-  UpdateRightOfUserResponse,
+  Right,
+  Rights,
 } from '../../contracts/authentication/v1/authentication';
 import {BasicError_BasicErrorCode} from '../../contracts/errors/v1/errors';
-import {isNullOrUndefined, NEVER_FN,} from '../../lib/lib';
+import {isNullOrUndefined,} from '../../lib/lib';
+import {logInfo} from '../../lib/logger';
 import {addAuthenticatedToContext, addAuthenticationGuard} from '../../lib/middleware/authenticated-middleware';
-import {isExecutionContext} from '../../lib/middleware/context';
+import {AuthenticatedContext} from '../../lib/middleware/context';
 import {addLoggerContext,} from '../../lib/middleware/logger-middleware';
 import {
   createProtoBufBasicErrorResponse,
@@ -43,6 +46,15 @@ async function getRightsOfUser(proxy: DurableObjectStub, userId: string) {
     proxyUrl(['v1', userId, 'rights']), {
       method: 'GET'
     }).then(res => res.json<string[]>());
+}
+
+function canUserEditRight(right: string, context: AuthenticatedContext) {
+  const ADMIN_RIGHT = 'admin:' + right.split(':', 1)[0];
+  const canEdit = hasRight(ADMIN_RIGHT, context);
+  if (!canEdit) {
+    logInfo(`User tried to edit right without having permission. requiredRight=${ADMIN_RIGHT}, userId=${context.user.userId}, rights=${context.user.rights}`, context);
+  }
+  return canEdit;
 }
 
 // noinspection JSUnusedGlobalSymbols
@@ -93,38 +105,55 @@ export default {
         ),
         route(
           'POST',
-          ['v1', 'update-right-of-user'],
+          ['v1', 'create-right-of-user'],
           addAuthenticationGuard(
-            protoBuf(UpdateRightOfUserRequest, UpdateRightOfUserResponse,
+            protoBuf(CreateRightOfUserRequest, CreateRightOfUserResponse,
               async (request, env, context) => {
-                const {userId, right, mutationType} = context.proto.body;
-                const ADMIN_RIGHT = 'ADMIN:' + right.split(':', 1)[0];
-                if (!hasRight(ADMIN_RIGHT, context)) {
-                  return createProtoBufBasicErrorResponse(`right: ${ADMIN_RIGHT} is required`, BasicError_BasicErrorCode.UNAUTHENTICATED);
+                const {userId, right} = context.proto.body;
+                const userCanEditRight = canUserEditRight(right, context);
+                if (!userCanEditRight) {
+                  return createProtoBufBasicErrorResponse(`Not allowed to add right of user. userId=${userId}, right=${right}, s=${'ADMIN:' + right.split(':', 1)[0]}, asdf=${context.user.rights}`, BasicError_BasicErrorCode.UNAUTHENTICATED);
                 }
 
                 const proxy = getRightsStorageProxy(env);
-                if (mutationType === UpdateRightOfUserRequest_MutationType.UNSPECIFIED) {
-                  return createProtoBufBasicErrorResponse('MutationType could not be parsed', BasicError_BasicErrorCode.BAD_REQUEST);
-                } else if (mutationType === UpdateRightOfUserRequest_MutationType.ADD) {
-                  context.logger.info(`Adding right ${right}`);
-                  await proxy.fetch(proxyUrl(['v1', userId, 'rights']), {
-                    body: JSON.stringify({
-                      right
-                    }),
-                    method: 'POST'
-                  });
-                } else if (mutationType === UpdateRightOfUserRequest_MutationType.DELETE) {
-                  context.logger.info(`Deleting right ${right}`);
-                  await proxy.fetch(proxyUrl(['v1', userId, 'rights', right]), {
-                    method: 'DELETE'
-                  });
-                } else {
-                  NEVER_FN(mutationType);
+                context.logger.info(`Adding right to user. right=${right}`);
+                await proxy.fetch(proxyUrl(['v1', userId, 'rights']), {
+                  body: JSON.stringify({
+                    right
+                  }),
+                  method: 'POST'
+                });
+
+                return createProtoBufOkResponse<Right>({
+                  userId,
+                  right
+                });
+              },
+            )
+          )
+        ),
+        route(
+          'POST',
+          ['v1', 'delete-right-of-user'],
+          addAuthenticationGuard(
+            protoBuf(DeleteRightOfUserRequest, DeleteRightOfUserResponse,
+              async (request, env, context) => {
+                const {userId, right} = context.proto.body;
+                const userCanEditRight = canUserEditRight(right, context);
+                if (!userCanEditRight) {
+                  return createProtoBufBasicErrorResponse(`Not allowed to delete right of user. userId=${userId}, right=${right}`, BasicError_BasicErrorCode.UNAUTHENTICATED);
                 }
 
+                const proxy = getRightsStorageProxy(env);
+                context.logger.info(`Deleting right ${right}`);
+                await proxy.fetch(proxyUrl(['v1', userId, 'rights', right]), {
+                  method: 'DELETE'
+                });
 
-                return createProtoBufOkResponse<string>(userId);
+                return createProtoBufOkResponse<Right>({
+                  userId,
+                  right
+                });
               },
             )
           )
@@ -146,10 +175,12 @@ export default {
                     method: 'GET'
                   }).then(res => res.json<string[]>());
 
-                return createProtoBufOkResponse<GetRightOfUserResponse_Right>({
-                  hasRight: rights.includes(right),
-                  right
-                });
+                return createProtoBufOkResponse<GetRightOfUserResponse_HasRight>({
+                    hasRight: rights.includes(right),
+                    userId,
+                    right
+                  }
+                );
               },
             )
           )
@@ -161,24 +192,16 @@ export default {
             protoBuf(GetRightsOfUserRequest, GetRightsOfUserResponse,
               async (request, env, context) => {
                 if (!hasRight(RIGHTS.ADMIN_RIGHT, context)) {
-                  return createProtoBufBasicErrorResponse(`right: ${RIGHTS.ADMIN_RIGHT} is required to read right`, BasicError_BasicErrorCode.UNAUTHENTICATED);
+                  return createProtoBufBasicErrorResponse(`Right=${RIGHTS.ADMIN_RIGHT} is required to read right`, BasicError_BasicErrorCode.UNAUTHENTICATED);
                 }
                 const {userId} = context.proto.body;
                 const proxy = getRightsStorageProxy(env);
-                try {
-                  const rights = await getRightsOfUser(proxy, userId);
-                  context.logger.info('rights: ' + JSON.stringify(rights))
-                  context.logger.info('isExcecutionContext: ' + isExecutionContext(context));
+                const rights = await getRightsOfUser(proxy, userId);
 
-                  return createProtoBufOkResponse<GetRightsOfUserResponse_Rights>({
-                    rights: rights
-                  });
-                } catch (e) {
-                  context.logger.error('error on rewquest' + e);
-                }
 
-                return createProtoBufOkResponse<GetRightsOfUserResponse_Rights>({
-                  rights: ['none']
+                logInfo(`Got rights of user. rights=[${rights.join(', ')}]`, context);
+                return createProtoBufOkResponse<Rights>({
+                  rights: rights
                 });
               },
             )

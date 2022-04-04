@@ -6,7 +6,6 @@ import {TypedKvNamespace} from '../../lib/typed-kv-namespace';
 import {AuthenticationEnvironmentVariables} from './authentication-environment-variables';
 import {AUTHENTICATION_KV, createAuthenticationKv} from './authentication-kv';
 
-// @ts-ignore
 const SERVICE_NAME = 'authentication-rights-storage';
 
 export class RightsStorage {
@@ -72,7 +71,6 @@ export class RightsStorage {
       ]),
     ));
 
-  // @ts-ignore
   private async getRights(authenticationKv: TypedKvNamespace<AUTHENTICATION_KV>, userId: string): Promise<string[]> {
     const key = authenticationKv.keys.USER_RIGHTS(userId);
     const storageResult = await this.state.storage.get<string[]>(key);
@@ -87,16 +85,19 @@ export class RightsStorage {
     return rights;
   }
 
-  // @ts-ignore
   private async addRight(authenticationKv: TypedKvNamespace<AUTHENTICATION_KV>, userId: string, right: string) {
-    const key = authenticationKv.keys.USER_RIGHT(userId, right);
+    const rightsKey = authenticationKv.keys.USER_RIGHTS(userId);
+    const rightKey = authenticationKv.keys.USER_RIGHT(userId, right);
+    const rights: string[] = await this.getRights(authenticationKv, userId)
+    if (!rights.includes(right)) {
+      rights.push(right)
+    }
     await Promise.all([
-      this.state.storage.put(key, right),
-      authenticationKv.namespace.put(key, right, {metadata: right})
+      this.state.storage.put(rightsKey, rights),
+      authenticationKv.namespace.put(rightKey, right, {metadata: right})
     ]);
   }
 
-  // @ts-ignore
   private async deleteRight(authenticationKv: TypedKvNamespace<AUTHENTICATION_KV>, userId: string, right: string) {
     const key = authenticationKv.keys.USER_RIGHT(userId, right);
     await Promise.all([

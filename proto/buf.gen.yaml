@@ -3,7 +3,5 @@ plugins:
   - name: ts
     out: gen/proto/typescript
     path: /usr/lib/node_modules/@protobuf-ts/plugin/bin/protoc-gen-ts
-    opt:
-      - optimize_code_size
   - name: dart
     out: gen/proto/dart

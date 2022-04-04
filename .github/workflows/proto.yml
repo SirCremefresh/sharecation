@@ -11,7 +11,7 @@ on:
   
 
 env:
-  REGISTRY: https://index.docker.io/v2
+  REGISTRY: index.docker.io/v2
   IMAGE_NAME: donatowolfisberg/sharecation-proto-builder
 
 

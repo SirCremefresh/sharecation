@@ -11,13 +11,13 @@
 
 import {
   Authenticated,
-  CreateAuthenticationWithFirebaseResponse
+  CreateAuthenticationWithFirebaseResponse,
 } from '../../contracts/authentication/v1/authentication';
-import {createProtoBufOkResponse} from '../../lib/middleware/protobuf-middleware';
+import { createProtoBufOkResponse } from '../../lib/middleware/protobuf-middleware';
 
 test('sign key', async () => {
   const aaa = createProtoBufOkResponse<Authenticated>({
-    jwtString: 'sdf'
+    jwtString: 'sdf',
   });
   console.log(aaa);
   const bbb = CreateAuthenticationWithFirebaseResponse.toJsonString(aaa);

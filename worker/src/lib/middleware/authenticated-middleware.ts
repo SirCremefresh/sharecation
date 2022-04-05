@@ -1,10 +1,10 @@
-import {BasicError_BasicErrorCode} from '../../contracts/errors/v1/errors';
-import {DecodedJwt, isExpired, tryDecodeJwt} from '../authentication/jwt';
-import {verifyJwt} from '../authentication/sharecation-verify-keys';
-import {createCommonKv} from '../common-kv';
-import {createBasicErrorResponse} from '../http/response';
-import {isNullOrUndefined} from '../lib';
-import {AuthenticatedContext, LoggerContext} from './context';
+import { BasicError_BasicErrorCode } from '../../contracts/errors/v1/errors';
+import { DecodedJwt, isExpired, tryDecodeJwt } from '../authentication/jwt';
+import { verifyJwt } from '../authentication/sharecation-verify-keys';
+import { createCommonKv } from '../common-kv';
+import { createBasicErrorResponse } from '../http/response';
+import { isNullOrUndefined } from '../lib';
+import { AuthenticatedContext, LoggerContext } from './context';
 
 export function addAuthenticatedToContext<CONTEXT>(
   userId: string,
@@ -14,7 +14,7 @@ export function addAuthenticatedToContext<CONTEXT>(
   return Object.assign(context, {
     user: {
       userId,
-      rights
+      rights,
     },
   });
 }
@@ -34,16 +34,21 @@ export function decodeJwtFromAuthorizationHeader(
 }
 
 function createUnauthorizedErrorResponse(context: {}): Response {
-  return createBasicErrorResponse({
-    message: 'Authentication was unsuccessful',
-    code: BasicError_BasicErrorCode.UNAUTHENTICATED
-  }, context);
+  return createBasicErrorResponse(
+    {
+      message: 'Authentication was unsuccessful',
+      code: BasicError_BasicErrorCode.UNAUTHENTICATED,
+    },
+    context,
+  );
 }
 
-export function addAuthenticationGuard<REQUEST extends Request,
+export function addAuthenticationGuard<
+  REQUEST extends Request,
   ENV extends { COMMON: KVNamespace },
   CONTEXT extends LoggerContext,
-  RESPONSE extends Response>(
+  RESPONSE extends Response,
+>(
   fn: (
     request: REQUEST,
     env: ENV,
@@ -75,7 +80,11 @@ export function addAuthenticationGuard<REQUEST extends Request,
     return fn(
       request,
       env,
-      addAuthenticatedToContext(jwt.payload.sub, new Set(jwt.payload.rights), context),
+      addAuthenticatedToContext(
+        jwt.payload.sub,
+        new Set(jwt.payload.rights),
+        context,
+      ),
     );
   };
 }

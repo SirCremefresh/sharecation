@@ -4,7 +4,7 @@ export function addRequestId<
   REQUEST,
   ENV,
   CONTEXT extends ExecutionContext,
-  RESPONSE extends Response | null
+  RESPONSE extends Response | null,
 >(
   fn: (
     request: REQUEST,

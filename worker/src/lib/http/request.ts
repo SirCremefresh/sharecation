@@ -1,4 +1,4 @@
-import {Headers, MediaType, MessageFormat} from './types';
+import { Headers, MediaType, MessageFormat } from './types';
 
 export function getResponseFormat(request: Request): MessageFormat {
   const acceptHeader = request.headers.get(Headers.ACCEPT);

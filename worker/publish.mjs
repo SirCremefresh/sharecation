@@ -1,5 +1,5 @@
-import {spawn} from 'child_process';
-import {fileURLToPath} from 'url';
+import { spawn } from 'child_process';
+import { fileURLToPath } from 'url';
 import path from 'path';
 import fs from 'fs';
 
@@ -10,7 +10,7 @@ const args = {
   bins: 'all',
 };
 
-process.argv.slice(2).forEach(arg => {
+process.argv.slice(2).forEach((arg) => {
   let [key, value] = arg.split('=');
   key = key.replace(/^--/, '');
   if (!args.hasOwnProperty(key)) {
@@ -21,8 +21,8 @@ process.argv.slice(2).forEach(arg => {
 
 function getAllBinNames() {
   const BIN_DIR = path.join(dirname, 'src', 'bin');
-  const files = fs.readdirSync(BIN_DIR, {withFileTypes: true});
-  return files.filter(file => file.isDirectory()).map(file => file.name);
+  const files = fs.readdirSync(BIN_DIR, { withFileTypes: true });
+  return files.filter((file) => file.isDirectory()).map((file) => file.name);
 }
 
 function exec(command, args) {
@@ -31,7 +31,7 @@ function exec(command, args) {
     const child = spawn(command, args, {
       stdio: 'inherit',
     });
-    child.on('close', code => {
+    child.on('close', (code) => {
       if (code === 0) {
         resolve();
       } else {
@@ -44,8 +44,11 @@ function exec(command, args) {
 async function main() {
   await exec('npm', ['run', 'build']);
 
-  const binNames = (args.bins === 'all' ? getAllBinNames() : args.bins.split(','))
-    .filter(binName => args.environment === 'development' || binName !== 'dev-tools');
+  const binNames = (
+    args.bins === 'all' ? getAllBinNames() : args.bins.split(',')
+  ).filter(
+    (binName) => args.environment === 'development' || binName !== 'dev-tools',
+  );
 
   console.log(`deploying: ${binNames.join(', ')} to ${args.environment}`);
 
@@ -62,7 +65,7 @@ async function main() {
   }
 }
 
-main().catch(err => {
+main().catch((err) => {
   console.error(err);
   process.exit(1);
 });

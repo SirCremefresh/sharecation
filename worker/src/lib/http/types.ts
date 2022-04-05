@@ -1,16 +1,16 @@
 export const enum MediaType {
   APPLICATION_OCTET_STREAM = 'application/octet-stream',
-  APPLICATION_JSON = 'application/json'
+  APPLICATION_JSON = 'application/json',
 }
 
 export const enum Headers {
   CONTENT_TYPE = 'content-type',
-  ACCEPT = 'accept'
+  ACCEPT = 'accept',
 }
 
 export const enum MessageFormat {
   JSON = 'JSON',
-  PROTOBUF = 'PROTOBUF'
+  PROTOBUF = 'PROTOBUF',
 }
 
 export function messageFormatToMediaType(messageFormat: MessageFormat) {

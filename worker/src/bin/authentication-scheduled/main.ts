@@ -1,10 +1,15 @@
-import {generateJwt} from '../../lib/authentication/jwt';
-import {createCommonKv} from '../../lib/common-kv';
-import {addLoggerContextToSchedule,} from '../../lib/middleware/logger-middleware';
-import {createAuthenticationKv} from '../authentication/authentication-kv';
-import {accounts, privateKeyConfigs, publicKeyConfigs, serviceAccountConfigs} from './accounts';
-import {generateAndStoreNewSigningKeys,} from './generate-sharecation-keys';
-import {loadAndSaveGoogleVerifyingKeys} from './load-google-keys';
+import { generateJwt } from '../../lib/authentication/jwt';
+import { createCommonKv } from '../../lib/common-kv';
+import { addLoggerContextToSchedule } from '../../lib/middleware/logger-middleware';
+import { createAuthenticationKv } from '../authentication/authentication-kv';
+import {
+  accounts,
+  privateKeyConfigs,
+  publicKeyConfigs,
+  serviceAccountConfigs,
+} from './accounts';
+import { generateAndStoreNewSigningKeys } from './generate-sharecation-keys';
+import { loadAndSaveGoogleVerifyingKeys } from './load-google-keys';
 
 const SERVICE_NAME = 'authentication-scheduled';
 const TWO_DAYS_IN_SECONDS = 2 * 24 * 60 * 60;
@@ -17,7 +22,6 @@ interface Env {
   ACCOUNT_SECRET: string;
 }
 
-
 interface SetEnvironmentSecret {
   accountSecret: string;
   workerName: string;
@@ -27,24 +31,27 @@ interface SetEnvironmentSecret {
 }
 
 async function setEnvironmentSecret({
-                                      accountSecret,
-                                      workerName,
-                                      environment,
-                                      name,
-                                      value
-                                    }: SetEnvironmentSecret): Promise<void> {
-  await fetch(`https://api.cloudflare.com/client/v4/accounts/8abcdde3abdbcc6cac82cc66c24c2c03/workers/services/${workerName}/environments/${environment}/secrets`, {
-    body: JSON.stringify({
-      name,
-      text: value,
-      type: 'secret_text'
-    }),
-    headers: {
-      Authorization: 'Bearer ' + accountSecret,
-      'Content-Type': 'application/json'
+  accountSecret,
+  workerName,
+  environment,
+  name,
+  value,
+}: SetEnvironmentSecret): Promise<void> {
+  await fetch(
+    `https://api.cloudflare.com/client/v4/accounts/8abcdde3abdbcc6cac82cc66c24c2c03/workers/services/${workerName}/environments/${environment}/secrets`,
+    {
+      body: JSON.stringify({
+        name,
+        text: value,
+        type: 'secret_text',
+      }),
+      headers: {
+        Authorization: 'Bearer ' + accountSecret,
+        'Content-Type': 'application/json',
+      },
+      method: 'PUT',
     },
-    method: 'PUT'
-  });
+  );
 }
 
 // noinspection JSUnusedGlobalSymbols
@@ -56,37 +63,47 @@ export default {
       const authenticationKv = createAuthenticationKv(env.AUTHENTICATION);
       const commonKv = createCommonKv(env.COMMON);
 
-      const {
-        privateKey, kid, privateJwkString, publicJwkString
-      } = await generateAndStoreNewSigningKeys(authenticationKv, commonKv, context);
+      const { privateKey, kid, privateJwkString, publicJwkString } =
+        await generateAndStoreNewSigningKeys(
+          authenticationKv,
+          commonKv,
+          context,
+        );
       await loadAndSaveGoogleVerifyingKeys(authenticationKv, context);
 
-
       await Promise.all([
-        ...privateKeyConfigs(accounts).map(account =>
+        ...privateKeyConfigs(accounts).map((account) =>
           setEnvironmentSecret({
             accountSecret: env.ACCOUNT_SECRET,
             workerName: account.workerName,
             environment: env.ENVIRONMENT,
             name: account.envVariable,
-            value: privateJwkString
-          })),
-        ...publicKeyConfigs(accounts).map(account =>
+            value: privateJwkString,
+          }),
+        ),
+        ...publicKeyConfigs(accounts).map((account) =>
           setEnvironmentSecret({
             accountSecret: env.ACCOUNT_SECRET,
             workerName: account.workerName,
             environment: env.ENVIRONMENT,
             name: account.envVariable,
-            value: publicJwkString
-          })),
-        ...serviceAccountConfigs(accounts).map(async account => {
-          const {jwtString} = await generateJwt(account.workerName, account.rights, privateKey, kid, TWO_DAYS_IN_SECONDS);
+            value: publicJwkString,
+          }),
+        ),
+        ...serviceAccountConfigs(accounts).map(async (account) => {
+          const { jwtString } = await generateJwt(
+            account.workerName,
+            account.rights,
+            privateKey,
+            kid,
+            TWO_DAYS_IN_SECONDS,
+          );
           await setEnvironmentSecret({
             accountSecret: env.ACCOUNT_SECRET,
             workerName: account.workerName,
             environment: env.ENVIRONMENT,
             name: account.envVariable,
-            value: jwtString
+            value: jwtString,
           });
         }),
       ]);

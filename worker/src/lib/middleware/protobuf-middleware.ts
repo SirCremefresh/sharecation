@@ -1,43 +1,56 @@
-import {MessageType} from '@protobuf-ts/runtime';
-import {BasicError, BasicError_BasicErrorCode} from '../../contracts/errors/v1/errors';
-import {getRequestFormat, getResponseFormat} from '../http/request';
-import {createBasicErrorResponse, createProtoBufResponse} from '../http/response';
-import {MessageFormat} from '../http/types';
-import {isNotNullOrUndefined} from '../lib';
-import {LoggerContext, ProtoBufContext} from './context';
+import { MessageType } from '@protobuf-ts/runtime';
+import {
+  BasicError,
+  BasicError_BasicErrorCode,
+} from '../../contracts/errors/v1/errors';
+import { getRequestFormat, getResponseFormat } from '../http/request';
+import {
+  createBasicErrorResponse,
+  createProtoBufResponse,
+} from '../http/response';
+import { MessageFormat } from '../http/types';
+import { isNotNullOrUndefined } from '../lib';
+import { LoggerContext, ProtoBufContext } from './context';
 
 export function createProtoBufOkResponse<TYPE>(data: TYPE): {
   response: {
-    oneofKind: 'ok',
-    ok: TYPE
-  }
+    oneofKind: 'ok';
+    ok: TYPE;
+  };
 } {
   return {
     response: {
       oneofKind: 'ok',
-      ok: data
-    }
+      ok: data,
+    },
   };
 }
 
-export function createProtoBufBasicErrorResponse(message: string, code: BasicError_BasicErrorCode): {
+export function createProtoBufBasicErrorResponse(
+  message: string,
+  code: BasicError_BasicErrorCode,
+): {
   response: {
-    oneofKind: 'error',
-    error: BasicError
-  }
+    oneofKind: 'error';
+    error: BasicError;
+  };
 } {
   return {
     response: {
       oneofKind: 'error',
       error: {
         message,
-        code
-      }
-    }
+        code,
+      },
+    },
   };
 }
 
-async function extractedRequestBody<REQUEST_BODY extends {}>(requestFormat: MessageFormat, request: Request, requestType: MessageType<REQUEST_BODY>) {
+async function extractedRequestBody<REQUEST_BODY extends {}>(
+  requestFormat: MessageFormat,
+  request: Request,
+  requestType: MessageType<REQUEST_BODY>,
+) {
   let requestBody;
   if (requestFormat === MessageFormat.PROTOBUF) {
     const buffer = await request.arrayBuffer();
@@ -52,12 +65,14 @@ async function extractedRequestBody<REQUEST_BODY extends {}>(requestFormat: Mess
   return requestBody;
 }
 
-export function protoBuf<REQUEST extends Request,
+export function protoBuf<
+  REQUEST extends Request,
   ENV extends {},
   CONTEXT extends LoggerContext,
   RESPONSE extends Response,
   REQUEST_BODY extends {},
-  RESPONSE_BODY extends {}>(
+  RESPONSE_BODY extends {},
+>(
   requestType: MessageType<REQUEST_BODY> | null,
   responseType: MessageType<RESPONSE_BODY>,
   fn: (
@@ -66,25 +81,33 @@ export function protoBuf<REQUEST extends Request,
     context: CONTEXT & ProtoBufContext<REQUEST_BODY>,
   ) => Promise<RESPONSE_BODY>,
 ): (request: REQUEST, env: ENV, context: CONTEXT) => Promise<Response> {
-  return async (request: REQUEST, env: ENV, context: CONTEXT): Promise<Response> => {
+  return async (
+    request: REQUEST,
+    env: ENV,
+    context: CONTEXT,
+  ): Promise<Response> => {
     let requestBody = null;
     let responseFormat = getResponseFormat(request);
     let requestFormat = getRequestFormat(request);
     try {
       if (isNotNullOrUndefined(requestType)) {
-        requestBody = await extractedRequestBody<REQUEST_BODY>(requestFormat, request, requestType);
+        requestBody = await extractedRequestBody<REQUEST_BODY>(
+          requestFormat,
+          request,
+          requestType,
+        );
       }
     } catch (e) {
       context.logger.error(`could not parse request body. error=${e}`);
       const basicError: BasicError = {
         message: 'Could not parse requestBody',
-        code: BasicError_BasicErrorCode.BAD_REQUEST
+        code: BasicError_BasicErrorCode.BAD_REQUEST,
       };
       return createProtoBufResponse(basicError, {
         proto: {
           responseFormat,
-          responseType
-        }
+          responseType,
+        },
       });
     }
 
@@ -94,19 +117,24 @@ export function protoBuf<REQUEST extends Request,
         responseType,
         requestType,
         responseFormat,
-        requestFormat
+        requestFormat,
       },
     };
-    const newContext = Object.assign(context, protobufContext) as CONTEXT & ProtoBufContext<REQUEST_BODY>;
+    const newContext = Object.assign(context, protobufContext) as CONTEXT &
+      ProtoBufContext<REQUEST_BODY>;
 
     try {
       const response = await fn(request, env, newContext);
       return createProtoBufResponse(response, newContext);
     } catch (e) {
-      context.logger.fatal(`An unknown error occurred while handling the request. requestBody=${JSON.stringify(requestBody)} error=${e}`);
+      context.logger.fatal(
+        `An unknown error occurred while handling the request. requestBody=${JSON.stringify(
+          requestBody,
+        )} error=${e}`,
+      );
       const basicError: BasicError = {
         message: 'An unknown error occurred',
-        code: BasicError_BasicErrorCode.UNKNOWN
+        code: BasicError_BasicErrorCode.UNKNOWN,
       };
       return createBasicErrorResponse(basicError, newContext);
     }

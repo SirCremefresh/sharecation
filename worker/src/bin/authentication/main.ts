@@ -14,26 +14,29 @@ import {
   Right,
   Rights,
 } from '../../contracts/authentication/v1/authentication';
-import {BasicError_BasicErrorCode} from '../../contracts/errors/v1/errors';
-import {isNullOrUndefined,} from '../../lib/lib';
-import {logInfo} from '../../lib/logger';
-import {addAuthenticatedToContext, addAuthenticationGuard} from '../../lib/middleware/authenticated-middleware';
-import {AuthenticatedContext} from '../../lib/middleware/context';
-import {addLoggerContext,} from '../../lib/middleware/logger-middleware';
+import { BasicError_BasicErrorCode } from '../../contracts/errors/v1/errors';
+import { isNullOrUndefined } from '../../lib/lib';
+import { logInfo } from '../../lib/logger';
+import {
+  addAuthenticatedToContext,
+  addAuthenticationGuard,
+} from '../../lib/middleware/authenticated-middleware';
+import { AuthenticatedContext } from '../../lib/middleware/context';
+import { addLoggerContext } from '../../lib/middleware/logger-middleware';
 import {
   createProtoBufBasicErrorResponse,
   createProtoBufOkResponse,
-  protoBuf
+  protoBuf,
 } from '../../lib/middleware/protobuf-middleware';
-import {addRouter, route} from '../../lib/middleware/router-middleware';
-import {hasRight, RIGHTS} from '../../lib/rights';
-import {onFetch} from '../../lib/starter/on-fetch';
-import {AuthenticationEnvironmentVariables} from './authentication-environment-variables';
-import {createAuthenticationKv} from './authentication-kv';
-import {verifyGoogleJwt} from './google-keys';
-import {generateSharecationJwt,} from './sharecation-keys';
+import { addRouter, route } from '../../lib/middleware/router-middleware';
+import { hasRight, RIGHTS } from '../../lib/rights';
+import { onFetch } from '../../lib/starter/on-fetch';
+import { AuthenticationEnvironmentVariables } from './authentication-environment-variables';
+import { createAuthenticationKv } from './authentication-kv';
+import { verifyGoogleJwt } from './google-keys';
+import { generateSharecationJwt } from './sharecation-keys';
 // Make durable object visible
-export {RightsStorage} from './rights-storage';
+export { RightsStorage } from './rights-storage';
 
 const SERVICE_NAME = 'authentication';
 
@@ -42,17 +45,21 @@ function getRightsStorageProxy(env: AuthenticationEnvironmentVariables) {
 }
 
 async function getRightsOfUser(proxy: DurableObjectStub, userId: string) {
-  return await proxy.fetch(
-    proxyUrl(['v1', userId, 'rights']), {
-      method: 'GET'
-    }).then(res => res.json<string[]>());
+  return await proxy
+    .fetch(proxyUrl(['v1', userId, 'rights']), {
+      method: 'GET',
+    })
+    .then((res) => res.json<string[]>());
 }
 
 function canUserEditRight(right: string, context: AuthenticatedContext) {
   const ADMIN_RIGHT = 'admin:' + right.split(':', 1)[0];
   const canEdit = hasRight(ADMIN_RIGHT, context);
   if (!canEdit) {
-    logInfo(`User tried to edit right without having permission. requiredRight=${ADMIN_RIGHT}, userId=${context.user.userId}, rights=${context.user.rights}`, context);
+    logInfo(
+      `User tried to edit right without having permission. requiredRight=${ADMIN_RIGHT}, userId=${context.user.userId}, rights=${context.user.rights}`,
+      context,
+    );
   }
   return canEdit;
 }
@@ -60,7 +67,8 @@ function canUserEditRight(right: string, context: AuthenticatedContext) {
 // noinspection JSUnusedGlobalSymbols
 export default {
   fetch: onFetch<AuthenticationEnvironmentVariables>(
-    addLoggerContext(SERVICE_NAME,
+    addLoggerContext(
+      SERVICE_NAME,
       addRouter([
         route(
           'GET',
@@ -68,148 +76,194 @@ export default {
           async (request, env, context) => {
             try {
               const proxy = getRightsStorageProxy(env);
-              const res = await proxy.fetch(request).then(res => res.text());
+              const res = await proxy.fetch(request).then((res) => res.text());
               return new Response(res);
             } catch (e) {
               return new Response('err' + e);
             }
-          }
+          },
         ),
         route(
           'POST',
           ['v1', 'create-authentication-with-firebase'],
-          protoBuf(CreateAuthenticationWithFirebaseRequest, CreateAuthenticationWithFirebaseResponse,
+          protoBuf(
+            CreateAuthenticationWithFirebaseRequest,
+            CreateAuthenticationWithFirebaseResponse,
             async (request, env, context) => {
               const jwtString = context.proto.body.firebaseJwtString;
-              const authenticationKv = createAuthenticationKv(env.AUTHENTICATION);
-              const userId = await verifyGoogleJwt(jwtString, authenticationKv, context);
+              const authenticationKv = createAuthenticationKv(
+                env.AUTHENTICATION,
+              );
+              const userId = await verifyGoogleJwt(
+                jwtString,
+                authenticationKv,
+                context,
+              );
               if (isNullOrUndefined(userId)) {
                 context.logger.error('JWT is not valid or expired');
-                return createProtoBufBasicErrorResponse('INVALID_JWT', BasicError_BasicErrorCode.BAD_REQUEST);
+                return createProtoBufBasicErrorResponse(
+                  'INVALID_JWT',
+                  BasicError_BasicErrorCode.BAD_REQUEST,
+                );
               }
               const proxy = getRightsStorageProxy(env);
               const rights = await getRightsOfUser(proxy, userId);
-              context = addAuthenticatedToContext(userId, new Set(rights), context);
+              context = addAuthenticatedToContext(
+                userId,
+                new Set(rights),
+                context,
+              );
 
               context.logger.info(`generating jwt for userId=${userId}`);
-              const generated = await generateSharecationJwt(userId, rights, authenticationKv, context);
+              const generated = await generateSharecationJwt(
+                userId,
+                rights,
+                authenticationKv,
+                context,
+              );
               return createProtoBufOkResponse<Authenticated>({
                 jwtString: generated.jwtString,
                 data: {
                   sub: generated.payload.sub,
                   exp: generated.payload.exp,
-                }
+                },
               });
             },
-          )
+          ),
         ),
         route(
           'POST',
           ['v1', 'create-right-of-user'],
           addAuthenticationGuard(
-            protoBuf(CreateRightOfUserRequest, CreateRightOfUserResponse,
+            protoBuf(
+              CreateRightOfUserRequest,
+              CreateRightOfUserResponse,
               async (request, env, context) => {
-                const {userId, right} = context.proto.body;
+                const { userId, right } = context.proto.body;
                 const userCanEditRight = canUserEditRight(right, context);
                 if (!userCanEditRight) {
-                  return createProtoBufBasicErrorResponse(`Not allowed to add right of user. userId=${userId}, right=${right}, s=${'ADMIN:' + right.split(':', 1)[0]}, asdf=${context.user.rights}`, BasicError_BasicErrorCode.UNAUTHENTICATED);
+                  return createProtoBufBasicErrorResponse(
+                    `Not allowed to add right of user. userId=${userId}, right=${right}, s=${
+                      'ADMIN:' + right.split(':', 1)[0]
+                    }, asdf=${context.user.rights}`,
+                    BasicError_BasicErrorCode.UNAUTHENTICATED,
+                  );
                 }
 
                 const proxy = getRightsStorageProxy(env);
                 context.logger.info(`Adding right to user. right=${right}`);
                 await proxy.fetch(proxyUrl(['v1', userId, 'rights']), {
                   body: JSON.stringify({
-                    right
+                    right,
                   }),
-                  method: 'POST'
+                  method: 'POST',
                 });
 
                 return createProtoBufOkResponse<Right>({
                   userId,
-                  right
+                  right,
                 });
               },
-            )
-          )
+            ),
+          ),
         ),
         route(
           'POST',
           ['v1', 'delete-right-of-user'],
           addAuthenticationGuard(
-            protoBuf(DeleteRightOfUserRequest, DeleteRightOfUserResponse,
+            protoBuf(
+              DeleteRightOfUserRequest,
+              DeleteRightOfUserResponse,
               async (request, env, context) => {
-                const {userId, right} = context.proto.body;
+                const { userId, right } = context.proto.body;
                 const userCanEditRight = canUserEditRight(right, context);
                 if (!userCanEditRight) {
-                  return createProtoBufBasicErrorResponse(`Not allowed to delete right of user. userId=${userId}, right=${right}`, BasicError_BasicErrorCode.UNAUTHENTICATED);
+                  return createProtoBufBasicErrorResponse(
+                    `Not allowed to delete right of user. userId=${userId}, right=${right}`,
+                    BasicError_BasicErrorCode.UNAUTHENTICATED,
+                  );
                 }
 
                 const proxy = getRightsStorageProxy(env);
                 context.logger.info(`Deleting right ${right}`);
                 await proxy.fetch(proxyUrl(['v1', userId, 'rights', right]), {
-                  method: 'DELETE'
+                  method: 'DELETE',
                 });
 
                 return createProtoBufOkResponse<Right>({
                   userId,
-                  right
+                  right,
                 });
               },
-            )
-          )
+            ),
+          ),
         ),
         route(
           'POST',
           ['v1', 'get-right-of-user'],
           addAuthenticationGuard(
-            protoBuf(GetRightOfUserRequest, GetRightOfUserResponse,
+            protoBuf(
+              GetRightOfUserRequest,
+              GetRightOfUserResponse,
               async (request, env, context) => {
                 if (!hasRight(RIGHTS.ADMIN_RIGHT, context)) {
-                  return createProtoBufBasicErrorResponse(`right: ${RIGHTS.ADMIN_RIGHT} is required to read right`, BasicError_BasicErrorCode.UNAUTHENTICATED);
+                  return createProtoBufBasicErrorResponse(
+                    `right: ${RIGHTS.ADMIN_RIGHT} is required to read right`,
+                    BasicError_BasicErrorCode.UNAUTHENTICATED,
+                  );
                 }
-                const {userId, right} = context.proto.body;
+                const { userId, right } = context.proto.body;
                 const proxy = getRightsStorageProxy(env);
 
-                const rights = await proxy.fetch(
-                  proxyUrl(['v1', userId, 'rights']), {
-                    method: 'GET'
-                  }).then(res => res.json<string[]>());
+                const rights = await proxy
+                  .fetch(proxyUrl(['v1', userId, 'rights']), {
+                    method: 'GET',
+                  })
+                  .then((res) => res.json<string[]>());
 
-                return createProtoBufOkResponse<GetRightOfUserResponse_HasRight>({
+                return createProtoBufOkResponse<GetRightOfUserResponse_HasRight>(
+                  {
                     hasRight: rights.includes(right),
                     userId,
-                    right
-                  }
+                    right,
+                  },
                 );
               },
-            )
-          )
+            ),
+          ),
         ),
         route(
           'POST',
           ['v1', 'get-rights-of-user'],
           addAuthenticationGuard(
-            protoBuf(GetRightsOfUserRequest, GetRightsOfUserResponse,
+            protoBuf(
+              GetRightsOfUserRequest,
+              GetRightsOfUserResponse,
               async (request, env, context) => {
                 if (!hasRight(RIGHTS.ADMIN_RIGHT, context)) {
-                  return createProtoBufBasicErrorResponse(`Right=${RIGHTS.ADMIN_RIGHT} is required to read right`, BasicError_BasicErrorCode.UNAUTHENTICATED);
+                  return createProtoBufBasicErrorResponse(
+                    `Right=${RIGHTS.ADMIN_RIGHT} is required to read right`,
+                    BasicError_BasicErrorCode.UNAUTHENTICATED,
+                  );
                 }
-                const {userId} = context.proto.body;
+                const { userId } = context.proto.body;
                 const proxy = getRightsStorageProxy(env);
                 const rights = await getRightsOfUser(proxy, userId);
 
-
-                logInfo(`Got rights of user. rights=[${rights.join(', ')}]`, context);
+                logInfo(
+                  `Got rights of user. rights=[${rights.join(', ')}]`,
+                  context,
+                );
                 return createProtoBufOkResponse<Rights>({
-                  rights: rights
+                  rights: rights,
                 });
               },
-            )
-          )
+            ),
+          ),
         ),
       ]),
     ),
-  )
+  ),
 };
 
 function proxyUrl(segments: string[]) {

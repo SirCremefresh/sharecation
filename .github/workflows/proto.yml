@@ -2,6 +2,9 @@ name: Proto
 
 on:
   push:
+    paths:
+      - ./.github/**
+      - proto/docker/**
   workflow_call:
 
 env:
@@ -36,8 +39,6 @@ jobs:
           username: donatowolfisberg
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # Extract metadata (tags, labels) for Docker
-      # https://github.com/docker/metadata-action
       - name: Extract Docker metadata
         id: meta
         uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
@@ -47,8 +48,6 @@ jobs:
       - name: tags
         run: echo ${{ steps.meta.outputs.tags }}
 
-      # Build and push Docker image with Buildx (don't push on PR)
-      # https://github.com/docker/build-push-action
       - name: Build and push Docker image
         id: build-and-push
         uses: docker/build-push-action@f7a2a67b4c1059633be6daa491784d8ac6a7ed6d

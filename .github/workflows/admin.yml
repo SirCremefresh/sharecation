@@ -2,6 +2,9 @@ name: Admin
 
 on:
   push:
+    paths:
+      - ./.github/**
+      - admin/**
   workflow_call:
 
 

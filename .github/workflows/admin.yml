@@ -1,4 +1,4 @@
-name: Admin
+name: Admin GUI
 
 on:
   push:

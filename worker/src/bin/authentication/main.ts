@@ -2,16 +2,16 @@ import {
   Authenticated,
   CreateAuthenticationWithFirebaseRequest,
   CreateAuthenticationWithFirebaseResponse,
-  CreateRightOfUserRequest,
-  CreateRightOfUserResponse,
-  DeleteRightOfUserRequest,
-  DeleteRightOfUserResponse,
-  GetRightOfUserRequest,
-  GetRightOfUserResponse,
-  GetRightOfUserResponse_HasRight,
-  GetRightsOfUserRequest,
-  GetRightsOfUserResponse,
-  Right,
+  CreateRightBindingRequest,
+  CreateRightBindingResponse,
+  DeleteRightBindingRequest,
+  DeleteRightBindingResponse,
+  GetHasRightBindingRequest,
+  GetHasRightBindingResponse,
+  GetHasRightBindingResponse_HasRightBinding,
+  GetRightBindingsRequest,
+  GetRightBindingsResponse,
+  RightBinding,
   Rights,
 } from '../../contracts/authentication/v1/authentication';
 import { BasicError_BasicErrorCode } from '../../contracts/errors/v1/errors';
@@ -136,8 +136,8 @@ export default {
           ['v1', 'create-right-of-user'],
           addAuthenticationGuard(
             protoBuf(
-              CreateRightOfUserRequest,
-              CreateRightOfUserResponse,
+              CreateRightBindingRequest,
+              CreateRightBindingResponse,
               async (request, env, context) => {
                 const { userId, right } = context.proto.body;
                 const userCanEditRight = canUserEditRight(right, context);
@@ -159,7 +159,7 @@ export default {
                   method: 'POST',
                 });
 
-                return createProtoBufOkResponse<Right>({
+                return createProtoBufOkResponse<RightBinding>({
                   userId,
                   right,
                 });
@@ -172,8 +172,8 @@ export default {
           ['v1', 'delete-right-of-user'],
           addAuthenticationGuard(
             protoBuf(
-              DeleteRightOfUserRequest,
-              DeleteRightOfUserResponse,
+              DeleteRightBindingRequest,
+              DeleteRightBindingResponse,
               async (request, env, context) => {
                 const { userId, right } = context.proto.body;
                 const userCanEditRight = canUserEditRight(right, context);
@@ -190,7 +190,7 @@ export default {
                   method: 'DELETE',
                 });
 
-                return createProtoBufOkResponse<Right>({
+                return createProtoBufOkResponse<RightBinding>({
                   userId,
                   right,
                 });
@@ -203,8 +203,8 @@ export default {
           ['v1', 'get-right-of-user'],
           addAuthenticationGuard(
             protoBuf(
-              GetRightOfUserRequest,
-              GetRightOfUserResponse,
+              GetHasRightBindingRequest,
+              GetHasRightBindingResponse,
               async (request, env, context) => {
                 if (!hasRight(RIGHTS.ADMIN_RIGHT, context)) {
                   return createProtoBufBasicErrorResponse(
@@ -221,11 +221,9 @@ export default {
                   })
                   .then((res) => res.json<string[]>());
 
-                return createProtoBufOkResponse<GetRightOfUserResponse_HasRight>(
+                return createProtoBufOkResponse<GetHasRightBindingResponse_HasRightBinding>(
                   {
-                    hasRight: rights.includes(right),
-                    userId,
-                    right,
+                    hasRightBinding: rights.includes(right),
                   },
                 );
               },
@@ -237,8 +235,8 @@ export default {
           ['v1', 'get-rights-of-user'],
           addAuthenticationGuard(
             protoBuf(
-              GetRightsOfUserRequest,
-              GetRightsOfUserResponse,
+              GetRightBindingsRequest,
+              GetRightBindingsResponse,
               async (request, env, context) => {
                 if (!hasRight(RIGHTS.ADMIN_RIGHT, context)) {
                   return createProtoBufBasicErrorResponse(

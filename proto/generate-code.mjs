@@ -62,7 +62,7 @@ console.log('Cleaning Generator directory')
 await fs.rm(GEN_PROTO_DIR, {recursive: true, force: true})
 
 console.log('Generating code')
-await exec('docker', ['run', '-t', '--rm', '-v', `${WORKING_DIR}:/tmp/`, 'proto-generator']);
+await exec('docker', ['run', '-t', '--rm', '-v', `${WORKING_DIR}:/tmp/`, 'donatowolfisberg/sharecation-proto-builder:master']);
 
 console.log('Normalizing dirent names')
 const renamedCount = await changeDashToMinusInDirents(GEN_PROTO_DIR);

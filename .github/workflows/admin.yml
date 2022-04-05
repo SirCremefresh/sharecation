@@ -14,6 +14,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16.x
+          cache-dependency-path: admin/package-lock.json
           cache: 'npm'
       - run: cd admin && npm ci
       - run: cd admin && npm run build

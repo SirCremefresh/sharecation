@@ -6,7 +6,7 @@ const TWO_WEEKS_IN_SECONDS = 14 * 24 * 60 * 60;
 
 export async function loadAndSaveGoogleVerifyingKeys(
   authenticationKv: TypedKvNamespace<AUTHENTICATION_KV>,
-  context: ExecutionContext & LoggerContext): Promise<void> {
+  context: LoggerContext): Promise<void> {
   const EXPIRATION = {expirationTtl: TWO_WEEKS_IN_SECONDS};
   const KEYS_URL =
     'https://www.googleapis.com/service_accounts/v1/metadata/JWK/securetoken@system.gserviceaccount.com';

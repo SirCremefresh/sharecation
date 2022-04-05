@@ -1,5 +1,6 @@
 name = "sharecation-images"
 compatibility_date = "2022-01-17"
+legacy_env = true
 
 [vars]
 ENVIRONMENT = ""

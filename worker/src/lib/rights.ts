@@ -3,6 +3,7 @@ import {AuthenticatedContext} from './middleware/context';
 export const RIGHTS = {
   GROUP: (groupId: string) => `groups:${groupId}`,
   ADMIN_GROUP: 'admin:groups',
+  ADMIN_RIGHT: 'admin:rights',
 };
 
 export function hasRight(right: string, context: AuthenticatedContext): boolean {

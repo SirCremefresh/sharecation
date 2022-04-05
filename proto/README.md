@@ -9,13 +9,13 @@ buf mod update
 
 ```bash
 # multi platform
-docker buildx build --platform linux/amd64,linux/arm64 -t proto-generator .
+docker buildx build --platform linux/amd64,linux/arm64 -t donatowolfisberg/sharecation-proto-builder:latest . --push
 ```
 
-### Build
+### Build and Push
 
 ```bash
-docker buildx build -t proto-generator .
+docker buildx build -t donatowolfisberg/sharecation-proto-builder:latest . --push
 ```
 
 ### Generate code

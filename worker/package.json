@@ -25,6 +25,7 @@
     "@cloudflare/workers-types": "^3.3.1",
     "@miniflare/kv": "^2.2.0",
     "@types/jest": "^27.4.1",
+    "esbuild": "^0.14.31",
     "jest": "^27.4.7",
     "jest-config": "^27.4.7",
     "jest-environment-miniflare": "^2.2.0",

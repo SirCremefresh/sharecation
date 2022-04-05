@@ -13,3 +13,4 @@ node_modules/
 src/**/*.js
 .swc
 workers-test.http
+danger-clean-cloudflare.mjs

@@ -1,4 +1,41 @@
-import {isAuthenticatedContext, isRequestIdContext, isRouteContext,} from './middleware/context';
+import {isNotNullOrUndefined} from './lib';
+import {
+  isAuthenticatedContext,
+  isExecutionContext,
+  isLoggerContext,
+  isRequestIdContext,
+  isRouteContext
+} from './middleware/context';
+
+export function logInfo(message: string, context: {}) {
+  if (isLoggerContext(context)) {
+    context.logger.info(message);
+  } else {
+    console.log(message);
+  }
+}
+
+function unknownErrorToString(error: any): string {
+  let errorMessage = ' error=';
+  if (isNotNullOrUndefined(error.message)) {
+    errorMessage += typeof error;
+    errorMessage += error.message;
+  } else {
+    errorMessage += error;
+  }
+  if (isNotNullOrUndefined(error.stack)) {
+    errorMessage += ', stack=' + error.stack;
+  }
+  return errorMessage;
+}
+
+export function logErrorWithException(message: string, error: any, context: {}) {
+  if (isLoggerContext(context)) {
+    context.logger.errorWithException(message, error);
+  } else {
+    console.log(message + unknownErrorToString(error));
+  }
+}
 
 export interface LoggerConfig {
   LOKI_SECRET: string;
@@ -11,7 +48,7 @@ export class Logger {
 
   constructor(
     private config: LoggerConfig,
-    private context: ExecutionContext,
+    private context: {},
     private serviceName: string,
   ) {
   }
@@ -25,7 +62,7 @@ export class Logger {
     console.log(`${this.serviceName}: ${message}`);
   }
 
-  flush() {
+  async flush() {
     if (this.messages.length === 0) {
       console.log('no messages to flush');
       return;
@@ -54,16 +91,19 @@ export class Logger {
         },
       ],
     };
-    this.context.waitUntil(
-      fetch('https://logs-prod-eu-west-0.grafana.net/loki/api/v1/push', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Basic ${this.config.LOKI_SECRET}`,
-        },
-        body: JSON.stringify(request),
-      }),
-    );
+    const saveLogsPromise = fetch('https://logs-prod-eu-west-0.grafana.net/loki/api/v1/push', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Basic ${this.config.LOKI_SECRET}`,
+      },
+      body: JSON.stringify(request),
+    });
+    if (isExecutionContext(this.context)) {
+      this.context.waitUntil(saveLogsPromise);
+    } else {
+      await saveLogsPromise;
+    }
   }
 
   error(message: string) {
@@ -73,6 +113,10 @@ export class Logger {
       level: 'error',
     });
     console.error(`${this.serviceName}: ${message}`);
+  }
+
+  errorWithException(message: string, exception: any) {
+    this.error(message + unknownErrorToString(exception));
   }
 
   fatal(message: string) {

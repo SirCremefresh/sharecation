@@ -21,3 +21,4 @@ jobs:
           cache: 'npm'
       - run: cd worker && npm ci
       - run: cd worker && npm run build
+      - run: cd worker && npm run test

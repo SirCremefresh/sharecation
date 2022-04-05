@@ -3,7 +3,7 @@ name: Admin
 on:
   push:
     paths:
-      - ./.github/**
+      - .github/**
       - admin/**
   workflow_call:
 

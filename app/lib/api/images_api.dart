@@ -13,7 +13,7 @@ class ImagesApi {
 
   final Dio _dio = Dio(BaseOptions(
       baseUrl:
-      'https://development.sharecation-images.donato-wolfisberg.workers.dev'));
+          'https://development.sharecation-images.donato-wolfisberg.workers.dev'));
 
   Future<void> uploadImage(XFile file) async {
     const _path = r'/v1/images/create-image';
@@ -29,14 +29,14 @@ class ImagesApi {
       'file': await MultipartFile.fromFile(file.path, filename: file.name),
     });
 
-    var response = await _dio.request(_path, data: formData, options: _options);
+    await _dio.request(_path, data: formData, options: _options);
     log("uploaded image " + file.name);
   }
 
   Future<List<Image>> listImages() async {
     const _path = r'/v1/images';
     final _options =
-    Options(method: r'POST', responseType: ResponseType.bytes, headers: {
+        Options(method: r'POST', responseType: ResponseType.bytes, headers: {
       r'Authorization': 'Bearer ' + await _jwtStringGetter(),
       'Accept': 'application/octet-stream'
     });
@@ -48,7 +48,7 @@ class ImagesApi {
 
     try {
       var getImagesByGroupIdResponse =
-      GetImagesByGroupIdResponse.fromBuffer(_response.data!);
+          GetImagesByGroupIdResponse.fromBuffer(_response.data!);
       return getImagesByGroupIdResponse.ok.images;
     } catch (error, stackTrace) {
       throw DioError(
@@ -56,8 +56,7 @@ class ImagesApi {
         response: _response,
         type: DioErrorType.other,
         error: error,
-      )
-        ..stackTrace = stackTrace;
+      )..stackTrace = stackTrace;
     }
   }
 }

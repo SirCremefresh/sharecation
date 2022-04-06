@@ -15,6 +15,7 @@
     "publish:developement:images": "node publish.mjs --environment=development --bins=images",
     "publish:developement:groups": "node publish.mjs --environment=development --bins=groups",
     "publish:developement:authentication": "node publish.mjs --environment=development --bins=authentication",
+    "publish:developement:authentication-scheduled": "node publish.mjs --environment=development --bins=authentication-scheduled",
     "publish:developement:dev-tools": "node publish.mjs --environment=development --bins=dev-tools",
     "publish:production": "node publish.mjs --environment=production"
   },

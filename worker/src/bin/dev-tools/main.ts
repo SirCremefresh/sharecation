@@ -17,6 +17,7 @@ import { generateSharecationJwt } from '../authentication/sharecation-keys';
 type EnvironmentVariables = {
   LOKI_SECRET: string;
   ENVIRONMENT: string;
+  PUBLIC_KEYS: string;
   COMMON: KVNamespace;
   AUTHENTICATION: KVNamespace;
 };

@@ -1,9 +1,9 @@
 import { generateJwt } from '../../lib/authentication/jwt';
-import { createCommonKv } from '../../lib/common-kv';
 import { addLoggerContextToSchedule } from '../../lib/middleware/logger-middleware';
 import { createAuthenticationKv } from '../authentication/authentication-kv';
 import {
-  accounts,
+  getAccounts,
+  lokiKeyConfigs,
   privateKeyConfigs,
   publicKeyConfigs,
   serviceAccountConfigs,
@@ -37,8 +37,10 @@ async function setEnvironmentSecret({
   name,
   value,
 }: SetEnvironmentSecret): Promise<void> {
+  // when switching to service mode the url needs to be changed to
+  // `https://api.cloudflare.com/client/v4/accounts/8abcdde3abdbcc6cac82cc66c24c2c03/workers/services/${workerName}/environments/${environment}/secrets`
   await fetch(
-    `https://api.cloudflare.com/client/v4/accounts/8abcdde3abdbcc6cac82cc66c24c2c03/workers/services/${workerName}/environments/${environment}/secrets`,
+    `https://api.cloudflare.com/client/v4/accounts/8abcdde3abdbcc6cac82cc66c24c2c03/workers/services/${workerName}-${environment}/environments/production/secrets`,
     {
       body: JSON.stringify({
         name,
@@ -61,15 +63,12 @@ export default {
     async (event, env, context) => {
       context.logger.info('Starting Authentication CronJob');
       const authenticationKv = createAuthenticationKv(env.AUTHENTICATION);
-      const commonKv = createCommonKv(env.COMMON);
 
-      const { privateKey, kid, privateJwkString, publicJwkString } =
-        await generateAndStoreNewSigningKeys(
-          authenticationKv,
-          commonKv,
-          context,
-        );
+      const { privateKey, kid, privateJwkString, currentPublicKeys } =
+        await generateAndStoreNewSigningKeys(authenticationKv, context);
       await loadAndSaveGoogleVerifyingKeys(authenticationKv, context);
+
+      const accounts = getAccounts(env.ENVIRONMENT);
 
       await Promise.all([
         ...privateKeyConfigs(accounts).map((account) =>
@@ -87,7 +86,16 @@ export default {
             workerName: account.workerName,
             environment: env.ENVIRONMENT,
             name: account.envVariable,
-            value: publicJwkString,
+            value: JSON.stringify(currentPublicKeys),
+          }),
+        ),
+        ...lokiKeyConfigs(accounts).map((config) =>
+          setEnvironmentSecret({
+            accountSecret: env.ACCOUNT_SECRET,
+            workerName: config.workerName,
+            environment: env.ENVIRONMENT,
+            name: 'LOKI_SECRET',
+            value: env.LOKI_SECRET,
           }),
         ),
         ...serviceAccountConfigs(accounts).map(async (account) => {

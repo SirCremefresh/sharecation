@@ -1,14 +1,12 @@
-import { COMMON_KV } from '../common-kv';
 import { isNotNullOrUndefined, isNullOrUndefined } from '../lib';
 import { LoggerContext } from '../middleware/context';
-import { TypedKvNamespace } from '../typed-kv-namespace';
 import { DecodedJwt, getKidFromDecodedJwt } from './jwt';
 
 const VERIFYING_KEYS = new Map<string, CryptoKey>();
 
 async function getVerifyingKey(
   kid: string,
-  kv: TypedKvNamespace<COMMON_KV>,
+  publicVerifyingJwksString: string,
   context: LoggerContext,
 ): Promise<CryptoKey | null> {
   let key = VERIFYING_KEYS.get(kid);
@@ -16,10 +14,11 @@ async function getVerifyingKey(
     context.logger.info(`Found verifying key for kid ${kid} in cache`);
     return key;
   }
-  const jwk = await kv.namespace.get<JsonWebKey>(
-    kv.keys.PUBLIC_JWK(kid),
-    'json',
-  );
+  const publicVerifyingJwks = JSON.parse(
+    publicVerifyingJwksString,
+  ) as (JsonWebKey & { kid: string })[];
+  const jwk = publicVerifyingJwks.find((jwk) => jwk.kid === kid);
+
   if (isNullOrUndefined(jwk)) {
     return null;
   }
@@ -40,7 +39,7 @@ async function getVerifyingKey(
 
 export async function verifyJwt(
   jwt: DecodedJwt,
-  kv: TypedKvNamespace<COMMON_KV>,
+  publicVerifyingJwks: string,
   context: LoggerContext,
 ): Promise<boolean> {
   const kid = getKidFromDecodedJwt(jwt);
@@ -49,9 +48,10 @@ export async function verifyJwt(
     return false;
   }
 
-  const key = await getVerifyingKey(kid, kv, context);
+  const key = await getVerifyingKey(kid, publicVerifyingJwks, context);
   if (isNullOrUndefined(key)) {
-    throw new Error(`Could not find verifying key for kid: ${kid}`);
+    context.logger.error(`Could not find verifying key for kid: ${kid}`);
+    return false;
   }
 
   const data = new TextEncoder().encode(

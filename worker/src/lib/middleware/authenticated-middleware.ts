@@ -1,7 +1,6 @@
 import { BasicError_BasicErrorCode } from '../../contracts/errors/v1/errors';
 import { DecodedJwt, isExpired, tryDecodeJwt } from '../authentication/jwt';
 import { verifyJwt } from '../authentication/sharecation-verify-keys';
-import { createCommonKv } from '../common-kv';
 import { createBasicErrorResponse } from '../http/response';
 import { isNullOrUndefined } from '../lib';
 import { AuthenticatedContext, LoggerContext } from './context';
@@ -45,7 +44,7 @@ function createUnauthorizedErrorResponse(context: {}): Response {
 
 export function addAuthenticationGuard<
   REQUEST extends Request,
-  ENV extends { COMMON: KVNamespace },
+  ENV extends { PUBLIC_KEYS: string },
   CONTEXT extends LoggerContext,
   RESPONSE extends Response,
 >(
@@ -62,7 +61,7 @@ export function addAuthenticationGuard<
       return createUnauthorizedErrorResponse(context);
     }
 
-    const valid = await verifyJwt(jwt, createCommonKv(env.COMMON), context);
+    const valid = await verifyJwt(jwt, env.PUBLIC_KEYS, context);
     if (!valid) {
       context.logger.error(
         `Jwt is not valid. payload: ${JSON.stringify(jwt.payload)}`,

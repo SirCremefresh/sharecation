@@ -2,7 +2,7 @@ import {generateJwt} from '../../lib/authentication/jwt';
 import {createCommonKv} from '../../lib/common-kv';
 import {addLoggerContextToSchedule} from '../../lib/middleware/logger-middleware';
 import {createAuthenticationKv} from '../authentication/authentication-kv';
-import {accounts, lokiKeyConfigs, privateKeyConfigs, publicKeyConfigs, serviceAccountConfigs,} from './accounts';
+import {getAccounts, lokiKeyConfigs, privateKeyConfigs, publicKeyConfigs, serviceAccountConfigs,} from './accounts';
 import {generateAndStoreNewSigningKeys} from './generate-sharecation-keys';
 import {loadAndSaveGoogleVerifyingKeys} from './load-google-keys';
 
@@ -67,6 +67,8 @@ export default {
           context,
         );
       await loadAndSaveGoogleVerifyingKeys(authenticationKv, context);
+
+      const accounts = getAccounts(env.ENVIRONMENT);
 
       await Promise.all([
         ...privateKeyConfigs(accounts).map((account) =>

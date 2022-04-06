@@ -1,7 +1,9 @@
+import {isNullOrUndefined} from '../../lib/lib';
 import {RIGHTS} from '../../lib/rights';
 
 interface ServiceAccountConfig {
   type: 'service-account';
+  onlyEnvironment?: 'production' | 'development';
   workerName: string;
   envVariable: string;
   rights: string[];
@@ -9,18 +11,21 @@ interface ServiceAccountConfig {
 
 interface PublicKeyConfig {
   type: 'public-key';
+  onlyEnvironment?: 'production' | 'development';
   workerName: string;
   envVariable: string;
 }
 
 interface PrivateKeyConfig {
   type: 'private-key';
+  onlyEnvironment?: 'production' | 'development';
   workerName: string;
   envVariable: string;
 }
 
 interface LokiKeyConfig {
   type: 'loki-key';
+  onlyEnvironment?: 'production' | 'development';
   workerName: string;
 }
 
@@ -56,7 +61,16 @@ export function serviceAccountConfigs(
 
 type AccountConfig = ServiceAccountConfig | PublicKeyConfig | PrivateKeyConfig | LokiKeyConfig;
 
-export const accounts: AccountConfig[] = [
+export function getAccounts(environment: string) {
+  return accounts.filter(account => isNullOrUndefined(account.onlyEnvironment) || account.onlyEnvironment === environment);
+}
+
+const accounts: AccountConfig[] = [
+  ...defaultService({workerName: 'sharecation-authentication'}),
+  ...defaultService({workerName: 'sharecation-dev-tools', onlyEnvironment: 'development'}),
+  ...defaultService({workerName: 'sharecation-groups'}),
+  ...defaultService({workerName: 'sharecation-images'}),
+  ...defaultService({workerName: 'sharecation-ping'}),
   {
     type: 'service-account',
     workerName: 'sharecation-groups',
@@ -64,17 +78,27 @@ export const accounts: AccountConfig[] = [
     rights: [RIGHTS.ADMIN_GROUP],
   },
   {
-    type: 'public-key',
-    workerName: 'sharecation-groups',
-    envVariable: 'PUBLIC_KEY',
-  },
-  {
-    type: 'loki-key',
-    workerName: 'sharecation-groups'
-  },
-  {
     type: 'private-key',
     workerName: 'sharecation-authentication',
     envVariable: 'PRIVATE_KEY',
   },
 ];
+
+function defaultService({
+                          workerName,
+                          onlyEnvironment
+                        }: { workerName: string, onlyEnvironment?: 'production' | 'development' }): AccountConfig[] {
+  return [
+    {
+      type: 'public-key',
+      onlyEnvironment,
+      workerName,
+      envVariable: 'PUBLIC_KEY',
+    },
+    {
+      type: 'loki-key',
+      onlyEnvironment,
+      workerName,
+    },
+  ];
+}

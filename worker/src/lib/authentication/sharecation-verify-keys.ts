@@ -14,12 +14,10 @@ async function getVerifyingKey(
     context.logger.info(`Found verifying key for kid ${kid} in cache`);
     return key;
   }
-  console.log(publicVerifyingJwksString);
   const publicVerifyingJwks = JSON.parse(
     publicVerifyingJwksString,
   ) as (JsonWebKey & { kid: string })[];
   const jwk = publicVerifyingJwks.find((jwk) => jwk.kid === kid);
-  console.log('jwk', jwk);
 
   if (isNullOrUndefined(jwk)) {
     return null;

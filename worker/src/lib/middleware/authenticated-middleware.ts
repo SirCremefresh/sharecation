@@ -1,9 +1,9 @@
-import {BasicError_BasicErrorCode} from '../../contracts/errors/v1/errors';
-import {DecodedJwt, isExpired, tryDecodeJwt} from '../authentication/jwt';
-import {verifyJwt} from '../authentication/sharecation-verify-keys';
-import {createBasicErrorResponse} from '../http/response';
-import {isNullOrUndefined} from '../lib';
-import {AuthenticatedContext, LoggerContext} from './context';
+import { BasicError_BasicErrorCode } from '../../contracts/errors/v1/errors';
+import { DecodedJwt, isExpired, tryDecodeJwt } from '../authentication/jwt';
+import { verifyJwt } from '../authentication/sharecation-verify-keys';
+import { createBasicErrorResponse } from '../http/response';
+import { isNullOrUndefined } from '../lib';
+import { AuthenticatedContext, LoggerContext } from './context';
 
 export function addAuthenticatedToContext<CONTEXT>(
   userId: string,
@@ -42,11 +42,12 @@ function createUnauthorizedErrorResponse(context: {}): Response {
   );
 }
 
-export function addAuthenticationGuard<REQUEST extends Request,
+export function addAuthenticationGuard<
+  REQUEST extends Request,
   ENV extends { PUBLIC_KEYS: string },
   CONTEXT extends LoggerContext,
   RESPONSE extends Response,
-  >(
+>(
   fn: (
     request: REQUEST,
     env: ENV,

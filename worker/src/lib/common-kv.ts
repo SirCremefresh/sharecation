@@ -1,4 +1,4 @@
-import {TypedKvNamespace} from './typed-kv-namespace';
+import { TypedKvNamespace } from './typed-kv-namespace';
 
 const COMMON_KV = {};
 

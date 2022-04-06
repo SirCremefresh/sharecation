@@ -1,5 +1,5 @@
-import {isNullOrUndefined} from '../../lib/lib';
-import {RIGHTS} from '../../lib/rights';
+import { isNullOrUndefined } from '../../lib/lib';
+import { RIGHTS } from '../../lib/rights';
 
 interface ServiceAccountConfig {
   type: 'service-account';
@@ -43,9 +43,7 @@ export function publicKeyConfigs(accounts: AccountConfig[]): PublicKeyConfig[] {
   ) as PublicKeyConfig[];
 }
 
-export function lokiKeyConfigs(
-  accounts: AccountConfig[],
-): LokiKeyConfig[] {
+export function lokiKeyConfigs(accounts: AccountConfig[]): LokiKeyConfig[] {
   return accounts.filter(
     (account) => account.type === 'loki-key',
   ) as LokiKeyConfig[];
@@ -59,18 +57,29 @@ export function serviceAccountConfigs(
   ) as ServiceAccountConfig[];
 }
 
-type AccountConfig = ServiceAccountConfig | PublicKeyConfig | PrivateKeyConfig | LokiKeyConfig;
+type AccountConfig =
+  | ServiceAccountConfig
+  | PublicKeyConfig
+  | PrivateKeyConfig
+  | LokiKeyConfig;
 
 export function getAccounts(environment: string) {
-  return accounts.filter(account => isNullOrUndefined(account.onlyEnvironment) || account.onlyEnvironment === environment);
+  return accounts.filter(
+    (account) =>
+      isNullOrUndefined(account.onlyEnvironment) ||
+      account.onlyEnvironment === environment,
+  );
 }
 
 const accounts: AccountConfig[] = [
-  ...defaultService({workerName: 'sharecation-authentication'}),
-  ...defaultService({workerName: 'sharecation-dev-tools', onlyEnvironment: 'development'}),
-  ...defaultService({workerName: 'sharecation-groups'}),
-  ...defaultService({workerName: 'sharecation-images'}),
-  ...defaultService({workerName: 'sharecation-ping'}),
+  ...defaultService({ workerName: 'sharecation-authentication' }),
+  ...defaultService({
+    workerName: 'sharecation-dev-tools',
+    onlyEnvironment: 'development',
+  }),
+  ...defaultService({ workerName: 'sharecation-groups' }),
+  ...defaultService({ workerName: 'sharecation-images' }),
+  ...defaultService({ workerName: 'sharecation-ping' }),
   {
     type: 'service-account',
     workerName: 'sharecation-groups',
@@ -85,9 +94,12 @@ const accounts: AccountConfig[] = [
 ];
 
 function defaultService({
-                          workerName,
-                          onlyEnvironment
-                        }: { workerName: string, onlyEnvironment?: 'production' | 'development' }): AccountConfig[] {
+  workerName,
+  onlyEnvironment,
+}: {
+  workerName: string;
+  onlyEnvironment?: 'production' | 'development';
+}): AccountConfig[] {
   return [
     {
       type: 'public-key',

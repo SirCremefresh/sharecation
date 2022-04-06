@@ -1,6 +1,6 @@
-import {isNotNullOrUndefined, isNullOrUndefined} from '../lib';
-import {LoggerContext} from '../middleware/context';
-import {DecodedJwt, getKidFromDecodedJwt} from './jwt';
+import { isNotNullOrUndefined, isNullOrUndefined } from '../lib';
+import { LoggerContext } from '../middleware/context';
+import { DecodedJwt, getKidFromDecodedJwt } from './jwt';
 
 const VERIFYING_KEYS = new Map<string, CryptoKey>();
 
@@ -15,8 +15,10 @@ async function getVerifyingKey(
     return key;
   }
   console.log(publicVerifyingJwksString);
-  const publicVerifyingJwks = JSON.parse(publicVerifyingJwksString) as (JsonWebKey & { kid: string })[];
-  const jwk = publicVerifyingJwks.find(jwk => jwk.kid === kid);
+  const publicVerifyingJwks = JSON.parse(
+    publicVerifyingJwksString,
+  ) as (JsonWebKey & { kid: string })[];
+  const jwk = publicVerifyingJwks.find((jwk) => jwk.kid === kid);
   console.log('jwk', jwk);
 
   if (isNullOrUndefined(jwk)) {
@@ -27,7 +29,7 @@ async function getVerifyingKey(
     jwk,
     {
       name: 'RSA-PSS',
-      hash: {name: 'SHA-256'},
+      hash: { name: 'SHA-256' },
     },
     true,
     ['verify'],

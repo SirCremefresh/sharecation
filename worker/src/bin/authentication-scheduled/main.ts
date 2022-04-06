@@ -1,9 +1,15 @@
-import {generateJwt} from '../../lib/authentication/jwt';
-import {addLoggerContextToSchedule} from '../../lib/middleware/logger-middleware';
-import {createAuthenticationKv} from '../authentication/authentication-kv';
-import {getAccounts, lokiKeyConfigs, privateKeyConfigs, publicKeyConfigs, serviceAccountConfigs,} from './accounts';
-import {generateAndStoreNewSigningKeys} from './generate-sharecation-keys';
-import {loadAndSaveGoogleVerifyingKeys} from './load-google-keys';
+import { generateJwt } from '../../lib/authentication/jwt';
+import { addLoggerContextToSchedule } from '../../lib/middleware/logger-middleware';
+import { createAuthenticationKv } from '../authentication/authentication-kv';
+import {
+  getAccounts,
+  lokiKeyConfigs,
+  privateKeyConfigs,
+  publicKeyConfigs,
+  serviceAccountConfigs,
+} from './accounts';
+import { generateAndStoreNewSigningKeys } from './generate-sharecation-keys';
+import { loadAndSaveGoogleVerifyingKeys } from './load-google-keys';
 
 const SERVICE_NAME = 'authentication-scheduled';
 const TWO_DAYS_IN_SECONDS = 2 * 24 * 60 * 60;
@@ -25,12 +31,12 @@ interface SetEnvironmentSecret {
 }
 
 async function setEnvironmentSecret({
-                                      accountSecret,
-                                      workerName,
-                                      environment,
-                                      name,
-                                      value,
-                                    }: SetEnvironmentSecret): Promise<void> {
+  accountSecret,
+  workerName,
+  environment,
+  name,
+  value,
+}: SetEnvironmentSecret): Promise<void> {
   // when switching to service mode the url needs to be changed to
   // `https://api.cloudflare.com/client/v4/accounts/8abcdde3abdbcc6cac82cc66c24c2c03/workers/services/${workerName}/environments/${environment}/secrets`
   await fetch(
@@ -58,11 +64,8 @@ export default {
       context.logger.info('Starting Authentication CronJob');
       const authenticationKv = createAuthenticationKv(env.AUTHENTICATION);
 
-      const {privateKey, kid, privateJwkString, currentPublicKeys} =
-        await generateAndStoreNewSigningKeys(
-          authenticationKv,
-          context,
-        );
+      const { privateKey, kid, privateJwkString, currentPublicKeys } =
+        await generateAndStoreNewSigningKeys(authenticationKv, context);
       await loadAndSaveGoogleVerifyingKeys(authenticationKv, context);
 
       const accounts = getAccounts(env.ENVIRONMENT);
@@ -86,7 +89,7 @@ export default {
             value: JSON.stringify(currentPublicKeys),
           }),
         ),
-        ...lokiKeyConfigs(accounts).map(config =>
+        ...lokiKeyConfigs(accounts).map((config) =>
           setEnvironmentSecret({
             accountSecret: env.ACCOUNT_SECRET,
             workerName: config.workerName,
@@ -96,7 +99,7 @@ export default {
           }),
         ),
         ...serviceAccountConfigs(accounts).map(async (account) => {
-          const {jwtString} = await generateJwt(
+          const { jwtString } = await generateJwt(
             account.workerName,
             account.rights,
             privateKey,

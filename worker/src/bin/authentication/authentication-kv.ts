@@ -1,4 +1,4 @@
-import {TypedKvNamespace} from '../../lib/typed-kv-namespace';
+import { TypedKvNamespace } from '../../lib/typed-kv-namespace';
 
 const AUTHENTICATION_KV = {
   USERS_RIGHTS: 'USERS_RIGHTS:',

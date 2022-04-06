@@ -1,12 +1,12 @@
-import {LoggerContext} from '../../lib/middleware/context';
-import {TypedKvNamespace} from '../../lib/typed-kv-namespace';
-import {AUTHENTICATION_KV} from '../authentication/authentication-kv';
+import { LoggerContext } from '../../lib/middleware/context';
+import { TypedKvNamespace } from '../../lib/typed-kv-namespace';
+import { AUTHENTICATION_KV } from '../authentication/authentication-kv';
 
 const KEY_ALGORITHM = {
   name: 'RSA-PSS',
   modulusLength: 1024,
   publicExponent: new Uint8Array([0x01, 0x00, 0x01]),
-  hash: {name: 'SHA-256'},
+  hash: { name: 'SHA-256' },
 };
 const JWK_FORMAT = 'jwk';
 
@@ -24,19 +24,19 @@ export async function generateAndStoreNewSigningKeys(
       KEY_ALGORITHM,
     )}`,
   );
-  const {publicKey, privateKey} = (await crypto.subtle.generateKey(
+  const { publicKey, privateKey } = (await crypto.subtle.generateKey(
     KEY_ALGORITHM,
     true,
     ['sign', 'verify'],
   )) as CryptoKeyPair;
   context.logger.info('Generated new signing and verifying keys');
 
-  const {publicJkw: publicJkwWithoutKid, privateJkw: privateJkwWithoutKid} =
+  const { publicJkw: publicJkwWithoutKid, privateJkw: privateJkwWithoutKid } =
     await exportPublicAndPrivateInJwk(publicKey, privateKey);
   context.logger.info('Converted new signing and verifying keys to JWKs');
   const kid = crypto.randomUUID();
-  const privateJkw = {...privateJkwWithoutKid, kid};
-  const publicJkw = {...publicJkwWithoutKid, kid};
+  const privateJkw = { ...privateJkwWithoutKid, kid };
+  const publicJkw = { ...publicJkwWithoutKid, kid };
 
   context.logger.info(
     `Storing new signing and verifying keys with kid: ${privateJkw.kid}`,
@@ -45,10 +45,16 @@ export async function generateAndStoreNewSigningKeys(
   const privateJwkKey = authenticationKv.keys.PRIVATE_JWK(privateJkw.kid);
   const publicJwkString = JSON.stringify(publicJkw);
   const privateJwkString = JSON.stringify(privateJkw);
-  const currentPrivateKey = await authenticationKv.namespace.get(authenticationKv.keys.NEXT_PRIVATE_JWK) ?? privateJwkString;
+  const currentPrivateKey =
+    (await authenticationKv.namespace.get(
+      authenticationKv.keys.NEXT_PRIVATE_JWK,
+    )) ?? privateJwkString;
   const currentPublicKeys = [
-    ...(await authenticationKv.namespace.get<JsonWebKey[]>(authenticationKv.keys.CURRENT_PUBLIC_JWKS, 'json') ?? []),
-    publicJkw
+    ...((await authenticationKv.namespace.get<JsonWebKey[]>(
+      authenticationKv.keys.CURRENT_PUBLIC_JWKS,
+      'json',
+    )) ?? []),
+    publicJkw,
   ].slice(-3);
   await Promise.all([
     authenticationKv.namespace.put(publicJwkKey, publicJwkString),
@@ -63,15 +69,22 @@ export async function generateAndStoreNewSigningKeys(
     ),
     authenticationKv.namespace.put(
       authenticationKv.keys.CURRENT_PUBLIC_JWKS,
-      JSON.stringify(currentPublicKeys)
-    )
+      JSON.stringify(currentPublicKeys),
+    ),
   ]);
 
   context.logger.info(
-    `Stored new signing and verifying keys to KV keys ${publicJwkKey} and ${privateJwkKey}, currentPublicKeys=${JSON.stringify(currentPublicKeys)}`,
+    `Stored new signing and verifying keys to KV keys ${publicJwkKey} and ${privateJwkKey}, currentPublicKeys=${JSON.stringify(
+      currentPublicKeys,
+    )}`,
   );
 
-  return {privateKey, kid: privateJkw.kid, currentPublicKeys, privateJwkString: currentPrivateKey};
+  return {
+    privateKey,
+    kid: privateJkw.kid,
+    currentPublicKeys,
+    privateJwkString: currentPrivateKey,
+  };
 }
 
 async function exportPublicAndPrivateInJwk(
@@ -83,5 +96,5 @@ async function exportPublicAndPrivateInJwk(
     crypto.subtle.exportKey(FORMAT, publicKey),
     crypto.subtle.exportKey(FORMAT, privateKey),
   ])) as [JsonWebKey, JsonWebKey];
-  return {publicJkw, privateJkw};
+  return { publicJkw, privateJkw };
 }

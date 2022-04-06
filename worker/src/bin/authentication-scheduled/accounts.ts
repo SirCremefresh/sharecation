@@ -1,4 +1,4 @@
-import { RIGHTS } from '../../lib/rights';
+import {RIGHTS} from '../../lib/rights';
 
 interface ServiceAccountConfig {
   type: 'service-account';
@@ -19,6 +19,11 @@ interface PrivateKeyConfig {
   envVariable: string;
 }
 
+interface LokiKeyConfig {
+  type: 'loki-key';
+  workerName: string;
+}
+
 export function privateKeyConfigs(
   accounts: AccountConfig[],
 ): PrivateKeyConfig[] {
@@ -33,6 +38,14 @@ export function publicKeyConfigs(accounts: AccountConfig[]): PublicKeyConfig[] {
   ) as PublicKeyConfig[];
 }
 
+export function lokiKeyConfigs(
+  accounts: AccountConfig[],
+): LokiKeyConfig[] {
+  return accounts.filter(
+    (account) => account.type === 'loki-key',
+  ) as LokiKeyConfig[];
+}
+
 export function serviceAccountConfigs(
   accounts: AccountConfig[],
 ): ServiceAccountConfig[] {
@@ -41,7 +54,7 @@ export function serviceAccountConfigs(
   ) as ServiceAccountConfig[];
 }
 
-type AccountConfig = ServiceAccountConfig | PublicKeyConfig | PrivateKeyConfig;
+type AccountConfig = ServiceAccountConfig | PublicKeyConfig | PrivateKeyConfig | LokiKeyConfig;
 
 export const accounts: AccountConfig[] = [
   {
@@ -54,6 +67,10 @@ export const accounts: AccountConfig[] = [
     type: 'public-key',
     workerName: 'sharecation-groups',
     envVariable: 'PUBLIC_KEY',
+  },
+  {
+    type: 'loki-key',
+    workerName: 'sharecation-groups'
   },
   {
     type: 'private-key',

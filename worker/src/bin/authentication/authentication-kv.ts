@@ -1,4 +1,4 @@
-import { TypedKvNamespace } from '../../lib/typed-kv-namespace';
+import {TypedKvNamespace} from '../../lib/typed-kv-namespace';
 
 const AUTHENTICATION_KV = {
   USERS_RIGHTS: 'USERS_RIGHTS:',
@@ -11,7 +11,11 @@ const AUTHENTICATION_KV = {
     `${AUTHENTICATION_KV.GOOGLE_VERIFYING_JWKS}${kid}`,
   PRIVATE_JWKS: 'PRIVATE_JWKS:',
   PRIVATE_JWK: (kid: string) => `${AUTHENTICATION_KV.PRIVATE_JWKS}${kid}`,
+  PUBLIC_JWKS: 'PUBLIC_JWKS:',
+  PUBLIC_JWK: (kid: string) => `${AUTHENTICATION_KV.PUBLIC_JWKS}${kid}`,
+  CURRENT_PUBLIC_JWKS: 'CURRENT_PUBLIC_JWKS',
   CURRENT_PRIVATE_JWK: 'CURRENT_PRIVATE_JWK',
+  NEXT_PRIVATE_JWK: 'NEXT_PRIVATE_JWK',
 };
 
 export const createAuthenticationKv = (kv: KVNamespace) =>

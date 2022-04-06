@@ -24,6 +24,7 @@ interface EnvironmentVariables {
   LOKI_SECRET: string;
   ENVIRONMENT: string;
   SHARECATION_IMAGES_ACCOUNT_TOKEN: string;
+  PUBLIC_KEYS: string;
   COMMON: KVNamespace;
   IMAGES: KVNamespace;
 }

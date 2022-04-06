@@ -1,5 +1,4 @@
 import {generateJwt} from '../../lib/authentication/jwt';
-import {createCommonKv} from '../../lib/common-kv';
 import {addLoggerContextToSchedule} from '../../lib/middleware/logger-middleware';
 import {createAuthenticationKv} from '../authentication/authentication-kv';
 import {getAccounts, lokiKeyConfigs, privateKeyConfigs, publicKeyConfigs, serviceAccountConfigs,} from './accounts';
@@ -58,12 +57,10 @@ export default {
     async (event, env, context) => {
       context.logger.info('Starting Authentication CronJob');
       const authenticationKv = createAuthenticationKv(env.AUTHENTICATION);
-      const commonKv = createCommonKv(env.COMMON);
 
-      const {privateKey, kid, privateJwkString, publicJwkString} =
+      const {privateKey, kid, privateJwkString, currentPublicKeys} =
         await generateAndStoreNewSigningKeys(
           authenticationKv,
-          commonKv,
           context,
         );
       await loadAndSaveGoogleVerifyingKeys(authenticationKv, context);
@@ -86,7 +83,7 @@ export default {
             workerName: account.workerName,
             environment: env.ENVIRONMENT,
             name: account.envVariable,
-            value: publicJwkString,
+            value: JSON.stringify(currentPublicKeys),
           }),
         ),
         ...lokiKeyConfigs(accounts).map(config =>

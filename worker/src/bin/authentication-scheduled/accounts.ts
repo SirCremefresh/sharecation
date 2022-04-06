@@ -93,7 +93,7 @@ function defaultService({
       type: 'public-key',
       onlyEnvironment,
       workerName,
-      envVariable: 'PUBLIC_KEY',
+      envVariable: 'PUBLIC_KEYS',
     },
     {
       type: 'loki-key',

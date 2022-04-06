@@ -16,6 +16,7 @@ export default {
   fetch: onFetch<{
     LOKI_SECRET: string;
     ENVIRONMENT: string;
+    PUBLIC_KEYS: string;
     COMMON: KVNamespace;
   }>(
     addLoggerContext(

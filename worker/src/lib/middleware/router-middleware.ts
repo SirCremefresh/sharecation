@@ -1,7 +1,7 @@
-import {BasicError_BasicErrorCode} from '../../contracts/errors/v1/errors';
-import {createBasicErrorResponse} from '../http/response';
-import {isNotNullOrUndefined} from '../lib';
-import {LoggerContext, RouteContext} from './context';
+import { BasicError_BasicErrorCode } from '../../contracts/errors/v1/errors';
+import { createBasicErrorResponse } from '../http/response';
+import { isNotNullOrUndefined } from '../lib';
+import { LoggerContext, RouteContext } from './context';
 
 type Method = 'GET' | 'POST' | 'DELETE';
 
@@ -9,26 +9,24 @@ type ParamConfig = {
   paramName: string;
 };
 
-type RouteFunction<REQUEST extends Request,
-  ENV,
-  CONTEXT,
-  RESPONSE> = (
+type RouteFunction<REQUEST extends Request, ENV, CONTEXT, RESPONSE> = (
   request: REQUEST,
   env: ENV,
   context: CONTEXT & RouteContext,
 ) => Promise<RESPONSE>;
 
-interface RouteConfig<ENV,
-  CONTEXT,
-  ROUTE_FUNCTION> {
+interface RouteConfig<ENV, CONTEXT, ROUTE_FUNCTION> {
   method: Method;
   path: Array<ParamConfig | string>;
   fn: ROUTE_FUNCTION;
 }
 
-export function route<REQUEST extends Request,
+export function route<
+  REQUEST extends Request,
   ENV,
-  CONTEXT, RESPONSE extends Response>(
+  CONTEXT,
+  RESPONSE extends Response,
+>(
   method: Method,
   path: Array<ParamConfig | string>,
   fn: RouteFunction<REQUEST, ENV, CONTEXT, RESPONSE>,
@@ -41,13 +39,13 @@ export function route<REQUEST extends Request,
 }
 
 export function pathParam(paramName: string): ParamConfig {
-  return {paramName};
+  return { paramName };
 }
 
 function checkRouteMatchAndParseContext(
   routeSegments: Array<ParamConfig | string>,
   urlSegments: string[],
-  path: string
+  path: string,
 ): null | RouteContext {
   if (routeSegments.length !== urlSegments.length) {
     return null;
@@ -65,7 +63,7 @@ function checkRouteMatchAndParseContext(
         return null;
       }
     } else {
-      Object.assign(params, {[routeSegment.paramName]: urlSegment});
+      Object.assign(params, { [routeSegment.paramName]: urlSegment });
     }
   }
   return {
@@ -83,10 +81,17 @@ const CORS_HEADERS = {
   'Access-Control-Max-Age': '3600',
 };
 
-export function addRouter<REQUEST extends Request, ENV, CONTEXT extends LoggerContext, RESPONSE extends Response>(
-  routes: RouteConfig<ENV,
+export function addRouter<
+  REQUEST extends Request,
+  ENV,
+  CONTEXT extends LoggerContext,
+  RESPONSE extends Response,
+>(
+  routes: RouteConfig<
+    ENV,
     CONTEXT,
-    RouteFunction<REQUEST, ENV, CONTEXT, RESPONSE>>[],
+    RouteFunction<REQUEST, ENV, CONTEXT, RESPONSE>
+  >[],
 ) {
   return async (request: REQUEST, env: ENV, context: CONTEXT) => {
     if (request.method === 'OPTIONS') {
@@ -99,8 +104,8 @@ export function addRouter<REQUEST extends Request, ENV, CONTEXT extends LoggerCo
     let pathname = new URL(request.url).pathname;
     const urlSegments = pathname
       .split('/')
-      .map(s => s.trim())
-      .filter(s => s.length > 0);
+      .map((s) => s.trim())
+      .filter((s) => s.length > 0);
     for (let routeIndex = 0; routeIndex < routes.length; routeIndex++) {
       const route = routes[routeIndex];
       if (route.method !== request.method) {
@@ -109,7 +114,7 @@ export function addRouter<REQUEST extends Request, ENV, CONTEXT extends LoggerCo
       let routeContext = checkRouteMatchAndParseContext(
         route.path,
         urlSegments,
-        pathname
+        pathname,
       );
       if (isNotNullOrUndefined(routeContext)) {
         context.logger.info(
@@ -124,9 +129,12 @@ export function addRouter<REQUEST extends Request, ENV, CONTEXT extends LoggerCo
     }
     const notFoundErrorMessage = `No route found for method=${request.method} pathname=${pathname}`;
     context.logger.info(notFoundErrorMessage);
-    return createBasicErrorResponse({
-      message: notFoundErrorMessage,
-      code: BasicError_BasicErrorCode.NOT_FOUND
-    }, context);
+    return createBasicErrorResponse(
+      {
+        message: notFoundErrorMessage,
+        code: BasicError_BasicErrorCode.NOT_FOUND,
+      },
+      context,
+    );
   };
 }

@@ -1,8 +1,11 @@
 FROM ubuntu:20.04
 
 ARG DART_VERSION="2.16.1"
+# renovate: datasource=github-tags depName=nodejs/node versioning=node
 ARG NODE_VERSION="16"
+# renovate: datasource=github-tags depName=bufbuild/buf
 ARG BUF_VERSION="1.2.1"
+# renovate: datasource=npm depName=@protobuf-ts/plugin
 ARG PROTOBUF_TS_VERSION="2.3.0"
 
 ENV DART_SDK /usr/lib/dart

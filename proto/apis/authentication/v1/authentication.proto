@@ -25,12 +25,22 @@ message CreateAuthenticationWithFirebaseResponse {
   }
 }
 
-message GetRightOfUserRequest {
+message GetHasRightBindingRequest {
   string user_id = 1;
   string right = 2;
 }
 
-message Right {
+message GetHasRightBindingResponse {
+  message HasRightBinding {
+    bool has_right_binding = 1;
+  }
+  oneof response {
+    HasRightBinding ok = 1;
+    errors.v1.BasicError error = 2;
+  }
+}
+
+message RightBinding {
   string user_id = 1;
   string right = 2;
 }
@@ -39,47 +49,35 @@ message Rights {
   repeated string rights = 1;
 }
 
-message GetRightOfUserResponse {
-  message HasRight {
-    string right = 1;
-    string user_id = 2;
-    bool has_right = 3;
-  }
-  oneof response {
-    HasRight ok = 1;
-    errors.v1.BasicError error = 2;
-  }
-}
-
-message CreateRightOfUserRequest {
+message CreateRightBindingRequest {
   string user_id = 1;
   string right = 2;
 }
 
-message CreateRightOfUserResponse {
+message CreateRightBindingResponse {
   oneof response {
-    Right ok = 1;
+    RightBinding ok = 1;
     errors.v1.BasicError error = 2;
   }
 }
 
-message DeleteRightOfUserRequest {
+message DeleteRightBindingRequest {
   string user_id = 1;
   string right = 2;
 }
 
-message DeleteRightOfUserResponse {
+message DeleteRightBindingResponse {
   oneof response {
-    Right ok = 1;
+    RightBinding ok = 1;
     errors.v1.BasicError error = 2;
   }
 }
 
-message GetRightsOfUserRequest {
+message GetRightBindingsRequest {
   string user_id = 1;
 }
 
-message GetRightsOfUserResponse {
+message GetRightBindingsResponse {
   oneof response {
     Rights ok = 1;
     errors.v1.BasicError error = 2;

@@ -1,10 +1,10 @@
-import {isNotNullOrUndefined} from './lib';
+import { isNotNullOrUndefined } from './lib';
 import {
   isAuthenticatedContext,
   isExecutionContext,
   isLoggerContext,
   isRequestIdContext,
-  isRouteContext
+  isRouteContext,
 } from './middleware/context';
 
 export function logInfo(message: string, context: {}) {
@@ -29,7 +29,11 @@ function unknownErrorToString(error: any): string {
   return errorMessage;
 }
 
-export function logErrorWithException(message: string, error: any, context: {}) {
+export function logErrorWithException(
+  message: string,
+  error: any,
+  context: {},
+) {
   if (isLoggerContext(context)) {
     context.logger.errorWithException(message, error);
   } else {
@@ -44,14 +48,17 @@ export interface LoggerConfig {
 
 export class Logger {
   timeNanoSeconds = Date.now() * 1000000;
-  messages: { time: number; message: string; level: 'info' | 'error' | 'fatal' }[] = [];
+  messages: {
+    time: number;
+    message: string;
+    level: 'info' | 'error' | 'fatal';
+  }[] = [];
 
   constructor(
     private config: LoggerConfig,
     private context: {},
     private serviceName: string,
-  ) {
-  }
+  ) {}
 
   info(message: string) {
     this.messages.push({
@@ -84,21 +91,24 @@ export class Logger {
             service: this.serviceName,
             environment: this.config.ENVIRONMENT,
           },
-          values: this.messages.map(messageEntry => [
+          values: this.messages.map((messageEntry) => [
             messageEntry.time.toString(),
             `${serviceSnipped} ${requestIdSnipped} ${userIdSnipped} ${pathSnipped} level=${messageEntry.level} ${messageEntry.message}`,
           ]),
         },
       ],
     };
-    const saveLogsPromise = fetch('https://logs-prod-eu-west-0.grafana.net/loki/api/v1/push', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Basic ${this.config.LOKI_SECRET}`,
+    const saveLogsPromise = fetch(
+      'https://logs-prod-eu-west-0.grafana.net/loki/api/v1/push',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Basic ${this.config.LOKI_SECRET}`,
+        },
+        body: JSON.stringify(request),
       },
-      body: JSON.stringify(request),
-    });
+    );
     if (isExecutionContext(this.context)) {
       this.context.waitUntil(saveLogsPromise);
     } else {

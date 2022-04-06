@@ -1,8 +1,11 @@
-import {getKidFromDecodedJwt, tryDecodeJwt,} from '../../lib/authentication/jwt';
-import {isNotNullOrUndefined, isNullOrUndefined} from '../../lib/lib';
-import {LoggerContext} from '../../lib/middleware/context';
-import {TypedKvNamespace} from '../../lib/typed-kv-namespace';
-import type {AUTHENTICATION_KV} from './authentication-kv';
+import {
+  getKidFromDecodedJwt,
+  tryDecodeJwt,
+} from '../../lib/authentication/jwt';
+import { isNotNullOrUndefined, isNullOrUndefined } from '../../lib/lib';
+import { LoggerContext } from '../../lib/middleware/context';
+import { TypedKvNamespace } from '../../lib/typed-kv-namespace';
+import type { AUTHENTICATION_KV } from './authentication-kv';
 
 const GOOGLE_VERIFY_ALGORITHM = {
   name: 'RSASSA-PKCS1-v1_5',
@@ -53,7 +56,11 @@ export async function verifyGoogleJwt(
   }
 
   if (jwt.payload?.aud !== GOOGLE_AUD) {
-    context.logger.error(`User tried to verify googleJwt with wrong aud googleAud=${GOOGLE_AUD} , jwt=${JSON.stringify(jwt)}`);
+    context.logger.error(
+      `User tried to verify googleJwt with wrong aud googleAud=${GOOGLE_AUD} , jwt=${JSON.stringify(
+        jwt,
+      )}`,
+    );
     return null;
   }
 
@@ -66,7 +73,7 @@ export async function verifyGoogleJwt(
     [jwt.raw.header, jwt.raw.payload].join('.'),
   );
   const signature = new Uint8Array(
-    Array.from(jwt.signature).map(c => c.charCodeAt(0)),
+    Array.from(jwt.signature).map((c) => c.charCodeAt(0)),
   );
 
   const valid = crypto.subtle.verify(

@@ -1,9 +1,8 @@
-import {COMMON_KV} from '../common-kv';
-import {isNotNullOrUndefined, isNullOrUndefined} from '../lib';
-import {LoggerContext} from '../middleware/context';
-import {TypedKvNamespace} from '../typed-kv-namespace';
-import {DecodedJwt, getKidFromDecodedJwt} from './jwt';
-
+import { COMMON_KV } from '../common-kv';
+import { isNotNullOrUndefined, isNullOrUndefined } from '../lib';
+import { LoggerContext } from '../middleware/context';
+import { TypedKvNamespace } from '../typed-kv-namespace';
+import { DecodedJwt, getKidFromDecodedJwt } from './jwt';
 
 const VERIFYING_KEYS = new Map<string, CryptoKey>();
 
@@ -17,7 +16,10 @@ async function getVerifyingKey(
     context.logger.info(`Found verifying key for kid ${kid} in cache`);
     return key;
   }
-  const jwk = await kv.namespace.get<JsonWebKey>(kv.keys.PUBLIC_JWK(kid), 'json');
+  const jwk = await kv.namespace.get<JsonWebKey>(
+    kv.keys.PUBLIC_JWK(kid),
+    'json',
+  );
   if (isNullOrUndefined(jwk)) {
     return null;
   }
@@ -26,7 +28,7 @@ async function getVerifyingKey(
     jwk,
     {
       name: 'RSA-PSS',
-      hash: {name: 'SHA-256'},
+      hash: { name: 'SHA-256' },
     },
     true,
     ['verify'],
@@ -56,7 +58,7 @@ export async function verifyJwt(
     [jwt.raw.header, jwt.raw.payload].join('.'),
   );
   const signature = new Uint8Array(
-    Array.from(jwt.signature).map(c => c.charCodeAt(0)),
+    Array.from(jwt.signature).map((c) => c.charCodeAt(0)),
   );
 
   return crypto.subtle.verify(

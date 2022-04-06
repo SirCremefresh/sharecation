@@ -1,12 +1,12 @@
-import {MessageType} from '@protobuf-ts/runtime';
-import {MessageFormat} from '../http/types';
-import {isNotNullOrUndefined} from '../lib';
-import {Logger} from '../logger';
+import { MessageType } from '@protobuf-ts/runtime';
+import { MessageFormat } from '../http/types';
+import { isNotNullOrUndefined } from '../lib';
+import { Logger } from '../logger';
 
 export interface AuthenticatedContext {
   user: {
     userId: string;
-    rights: Set<string>
+    rights: Set<string>;
   };
 }
 
@@ -38,7 +38,7 @@ export function isRequestIdContext<T extends {}>(
 
 export interface RouteContext {
   route: {
-    path: string
+    path: string;
     params: { [key: string]: string };
   };
 }
@@ -55,17 +55,19 @@ export function isExecutionContext<T extends {}>(
   // We need to use getPrototypeOf since is not on the object itself
   // In future we should wrap execution context as a member of context
   // Like the other contexts
-  return isNotNullOrUndefined(context) && Object.getPrototypeOf(context).hasOwnProperty('waitUntil');
+  return (
+    isNotNullOrUndefined(context) &&
+    Object.getPrototypeOf(context).hasOwnProperty('waitUntil')
+  );
 }
-
 
 export interface ProtoBufContext<TYPE extends {} | null> {
   proto: {
-    body: TYPE,
-    requestType: MessageType<any> | null,
-    responseType: MessageType<any>,
-    responseFormat: MessageFormat,
-    requestFormat: MessageFormat
+    body: TYPE;
+    requestType: MessageType<any> | null;
+    responseType: MessageType<any>;
+    responseFormat: MessageFormat;
+    requestFormat: MessageFormat;
   };
 }
 

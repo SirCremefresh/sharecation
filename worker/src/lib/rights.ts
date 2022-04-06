@@ -1,4 +1,4 @@
-import {AuthenticatedContext} from './middleware/context';
+import { AuthenticatedContext } from './middleware/context';
 
 export const RIGHTS = {
   GROUP: (groupId: string) => `groups:${groupId}`,
@@ -6,7 +6,10 @@ export const RIGHTS = {
   ADMIN_RIGHT: 'admin:rights',
 };
 
-export function hasRight(right: string, context: AuthenticatedContext): boolean {
+export function hasRight(
+  right: string,
+  context: AuthenticatedContext,
+): boolean {
   return context.user.rights.has(right);
 }
 

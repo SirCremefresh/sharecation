@@ -1,0 +1,24 @@
+name: Worker
+
+on:
+  push:
+    paths:
+      - .github/**
+      - worker/**
+  workflow_call:
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+          cache-dependency-path: worker/package-lock.json
+          cache: 'npm'
+      - run: cd worker && npm ci
+      - run: cd worker && npm run build
+      - run: cd worker && npm run test

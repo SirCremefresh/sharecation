@@ -1,14 +1,14 @@
-import {generateJwt} from '../../lib/authentication/jwt';
-import {isNotNullOrUndefined, isNullOrUndefined} from '../../lib/lib';
-import {LoggerContext} from '../../lib/middleware/context';
-import {TypedKvNamespace} from '../../lib/typed-kv-namespace';
-import type {AUTHENTICATION_KV} from './authentication-kv';
+import { generateJwt } from '../../lib/authentication/jwt';
+import { isNotNullOrUndefined, isNullOrUndefined } from '../../lib/lib';
+import { LoggerContext } from '../../lib/middleware/context';
+import { TypedKvNamespace } from '../../lib/typed-kv-namespace';
+import type { AUTHENTICATION_KV } from './authentication-kv';
 
 const KEY_ALGORITHM = {
   name: 'RSA-PSS',
   modulusLength: 1024,
   publicExponent: new Uint8Array([0x01, 0x00, 0x01]),
-  hash: {name: 'SHA-256'},
+  hash: { name: 'SHA-256' },
 };
 const JWK_FORMAT = 'jwk';
 const EIGHT_HOURS_IN_SECONDS = 8 * 60 * 60;
@@ -23,10 +23,20 @@ export async function generateSharecationJwt(
   userId: string,
   rights: string[],
   authenticationKv: TypedKvNamespace<AUTHENTICATION_KV>,
-  context: LoggerContext): Promise<{ jwtString: string; payload: { sub: string; exp: number; rights: string[] } }> {
+  context: LoggerContext,
+): Promise<{
+  jwtString: string;
+  payload: { sub: string; exp: number; rights: string[] };
+}> {
   const privateKey = await getPrivateKey(authenticationKv, context);
   const exp = Math.floor(Date.now() / 1000) + EIGHT_HOURS_IN_SECONDS;
-  return await generateJwt(userId, rights, privateKey.cryptoKey, privateKey.kid, exp);
+  return await generateJwt(
+    userId,
+    rights,
+    privateKey.cryptoKey,
+    privateKey.kid,
+    exp,
+  );
 }
 
 async function getPrivateKey(
@@ -43,10 +53,9 @@ async function getPrivateKey(
     }
   }
   context.logger.info('Getting private key from KV');
-  const privateJwk = await authenticationKv.namespace.get<JsonWebKey & { kid: string }>(
-    authenticationKv.keys.CURRENT_PRIVATE_JWK,
-    'json',
-  );
+  const privateJwk = await authenticationKv.namespace.get<
+    JsonWebKey & { kid: string }
+  >(authenticationKv.keys.CURRENT_PRIVATE_JWK, 'json');
   if (isNullOrUndefined(privateJwk)) {
     throw new Error(
       `No private key found in KV with key: ${authenticationKv.keys.CURRENT_PRIVATE_JWK}.`,

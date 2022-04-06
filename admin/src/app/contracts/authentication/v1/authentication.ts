@@ -71,9 +71,9 @@ export interface CreateAuthenticationWithFirebaseResponse {
     };
 }
 /**
- * @generated from protobuf message authentication.v1.GetRightOfUserRequest
+ * @generated from protobuf message authentication.v1.GetHasRightBindingRequest
  */
-export interface GetRightOfUserRequest {
+export interface GetHasRightBindingRequest {
     /**
      * @generated from protobuf field: string user_id = 1;
      */
@@ -84,9 +84,41 @@ export interface GetRightOfUserRequest {
     right: string;
 }
 /**
- * @generated from protobuf message authentication.v1.Right
+ * @generated from protobuf message authentication.v1.GetHasRightBindingResponse
  */
-export interface Right {
+export interface GetHasRightBindingResponse {
+    /**
+     * @generated from protobuf oneof: response
+     */
+    response: {
+        oneofKind: "ok";
+        /**
+         * @generated from protobuf field: authentication.v1.GetHasRightBindingResponse.HasRightBinding ok = 1;
+         */
+        ok: GetHasRightBindingResponse_HasRightBinding;
+    } | {
+        oneofKind: "error";
+        /**
+         * @generated from protobuf field: errors.v1.BasicError error = 2;
+         */
+        error: BasicError;
+    } | {
+        oneofKind: undefined;
+    };
+}
+/**
+ * @generated from protobuf message authentication.v1.GetHasRightBindingResponse.HasRightBinding
+ */
+export interface GetHasRightBindingResponse_HasRightBinding {
+    /**
+     * @generated from protobuf field: bool has_right_binding = 1;
+     */
+    hasRightBinding: boolean;
+}
+/**
+ * @generated from protobuf message authentication.v1.RightBinding
+ */
+export interface RightBinding {
     /**
      * @generated from protobuf field: string user_id = 1;
      */
@@ -106,49 +138,9 @@ export interface Rights {
     rights: string[];
 }
 /**
- * @generated from protobuf message authentication.v1.GetRightOfUserResponse
+ * @generated from protobuf message authentication.v1.CreateRightBindingRequest
  */
-export interface GetRightOfUserResponse {
-    /**
-     * @generated from protobuf oneof: response
-     */
-    response: {
-        oneofKind: "ok";
-        /**
-         * @generated from protobuf field: authentication.v1.GetRightOfUserResponse.HasRight ok = 1;
-         */
-        ok: GetRightOfUserResponse_HasRight;
-    } | {
-        oneofKind: "error";
-        /**
-         * @generated from protobuf field: errors.v1.BasicError error = 2;
-         */
-        error: BasicError;
-    } | {
-        oneofKind: undefined;
-    };
-}
-/**
- * @generated from protobuf message authentication.v1.GetRightOfUserResponse.HasRight
- */
-export interface GetRightOfUserResponse_HasRight {
-    /**
-     * @generated from protobuf field: string right = 1;
-     */
-    right: string;
-    /**
-     * @generated from protobuf field: string user_id = 2;
-     */
-    userId: string;
-    /**
-     * @generated from protobuf field: bool has_right = 3;
-     */
-    hasRight: boolean;
-}
-/**
- * @generated from protobuf message authentication.v1.CreateRightOfUserRequest
- */
-export interface CreateRightOfUserRequest {
+export interface CreateRightBindingRequest {
     /**
      * @generated from protobuf field: string user_id = 1;
      */
@@ -159,18 +151,18 @@ export interface CreateRightOfUserRequest {
     right: string;
 }
 /**
- * @generated from protobuf message authentication.v1.CreateRightOfUserResponse
+ * @generated from protobuf message authentication.v1.CreateRightBindingResponse
  */
-export interface CreateRightOfUserResponse {
+export interface CreateRightBindingResponse {
     /**
      * @generated from protobuf oneof: response
      */
     response: {
         oneofKind: "ok";
         /**
-         * @generated from protobuf field: authentication.v1.Right ok = 1;
+         * @generated from protobuf field: authentication.v1.RightBinding ok = 1;
          */
-        ok: Right;
+        ok: RightBinding;
     } | {
         oneofKind: "error";
         /**
@@ -182,9 +174,9 @@ export interface CreateRightOfUserResponse {
     };
 }
 /**
- * @generated from protobuf message authentication.v1.DeleteRightOfUserRequest
+ * @generated from protobuf message authentication.v1.DeleteRightBindingRequest
  */
-export interface DeleteRightOfUserRequest {
+export interface DeleteRightBindingRequest {
     /**
      * @generated from protobuf field: string user_id = 1;
      */
@@ -195,18 +187,18 @@ export interface DeleteRightOfUserRequest {
     right: string;
 }
 /**
- * @generated from protobuf message authentication.v1.DeleteRightOfUserResponse
+ * @generated from protobuf message authentication.v1.DeleteRightBindingResponse
  */
-export interface DeleteRightOfUserResponse {
+export interface DeleteRightBindingResponse {
     /**
      * @generated from protobuf oneof: response
      */
     response: {
         oneofKind: "ok";
         /**
-         * @generated from protobuf field: authentication.v1.Right ok = 1;
+         * @generated from protobuf field: authentication.v1.RightBinding ok = 1;
          */
-        ok: Right;
+        ok: RightBinding;
     } | {
         oneofKind: "error";
         /**
@@ -218,18 +210,18 @@ export interface DeleteRightOfUserResponse {
     };
 }
 /**
- * @generated from protobuf message authentication.v1.GetRightsOfUserRequest
+ * @generated from protobuf message authentication.v1.GetRightBindingsRequest
  */
-export interface GetRightsOfUserRequest {
+export interface GetRightBindingsRequest {
     /**
      * @generated from protobuf field: string user_id = 1;
      */
     userId: string;
 }
 /**
- * @generated from protobuf message authentication.v1.GetRightsOfUserResponse
+ * @generated from protobuf message authentication.v1.GetRightBindingsResponse
  */
-export interface GetRightsOfUserResponse {
+export interface GetRightBindingsResponse {
     /**
      * @generated from protobuf oneof: response
      */
@@ -465,21 +457,21 @@ class CreateAuthenticationWithFirebaseResponse$Type extends MessageType<CreateAu
  */
 export const CreateAuthenticationWithFirebaseResponse = new CreateAuthenticationWithFirebaseResponse$Type();
 // @generated message type with reflection information, may provide speed optimized methods
-class GetRightOfUserRequest$Type extends MessageType<GetRightOfUserRequest> {
+class GetHasRightBindingRequest$Type extends MessageType<GetHasRightBindingRequest> {
     constructor() {
-        super("authentication.v1.GetRightOfUserRequest", [
+        super("authentication.v1.GetHasRightBindingRequest", [
             { no: 1, name: "user_id", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
             { no: 2, name: "right", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
         ]);
     }
-    create(value?: PartialMessage<GetRightOfUserRequest>): GetRightOfUserRequest {
+    create(value?: PartialMessage<GetHasRightBindingRequest>): GetHasRightBindingRequest {
         const message = { userId: "", right: "" };
         globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
         if (value !== undefined)
-            reflectionMergePartial<GetRightOfUserRequest>(this, message, value);
+            reflectionMergePartial<GetHasRightBindingRequest>(this, message, value);
         return message;
     }
-    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: GetRightOfUserRequest): GetRightOfUserRequest {
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: GetHasRightBindingRequest): GetHasRightBindingRequest {
         let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
@@ -501,7 +493,7 @@ class GetRightOfUserRequest$Type extends MessageType<GetRightOfUserRequest> {
         }
         return message;
     }
-    internalBinaryWrite(message: GetRightOfUserRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+    internalBinaryWrite(message: GetHasRightBindingRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* string user_id = 1; */
         if (message.userId !== "")
             writer.tag(1, WireType.LengthDelimited).string(message.userId);
@@ -515,25 +507,132 @@ class GetRightOfUserRequest$Type extends MessageType<GetRightOfUserRequest> {
     }
 }
 /**
- * @generated MessageType for protobuf message authentication.v1.GetRightOfUserRequest
+ * @generated MessageType for protobuf message authentication.v1.GetHasRightBindingRequest
  */
-export const GetRightOfUserRequest = new GetRightOfUserRequest$Type();
+export const GetHasRightBindingRequest = new GetHasRightBindingRequest$Type();
 // @generated message type with reflection information, may provide speed optimized methods
-class Right$Type extends MessageType<Right> {
+class GetHasRightBindingResponse$Type extends MessageType<GetHasRightBindingResponse> {
     constructor() {
-        super("authentication.v1.Right", [
+        super("authentication.v1.GetHasRightBindingResponse", [
+            { no: 1, name: "ok", kind: "message", oneof: "response", T: () => GetHasRightBindingResponse_HasRightBinding },
+            { no: 2, name: "error", kind: "message", oneof: "response", T: () => BasicError }
+        ]);
+    }
+    create(value?: PartialMessage<GetHasRightBindingResponse>): GetHasRightBindingResponse {
+        const message = { response: { oneofKind: undefined } };
+        globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
+        if (value !== undefined)
+            reflectionMergePartial<GetHasRightBindingResponse>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: GetHasRightBindingResponse): GetHasRightBindingResponse {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* authentication.v1.GetHasRightBindingResponse.HasRightBinding ok */ 1:
+                    message.response = {
+                        oneofKind: "ok",
+                        ok: GetHasRightBindingResponse_HasRightBinding.internalBinaryRead(reader, reader.uint32(), options, (message.response as any).ok)
+                    };
+                    break;
+                case /* errors.v1.BasicError error */ 2:
+                    message.response = {
+                        oneofKind: "error",
+                        error: BasicError.internalBinaryRead(reader, reader.uint32(), options, (message.response as any).error)
+                    };
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: GetHasRightBindingResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* authentication.v1.GetHasRightBindingResponse.HasRightBinding ok = 1; */
+        if (message.response.oneofKind === "ok")
+            GetHasRightBindingResponse_HasRightBinding.internalBinaryWrite(message.response.ok, writer.tag(1, WireType.LengthDelimited).fork(), options).join();
+        /* errors.v1.BasicError error = 2; */
+        if (message.response.oneofKind === "error")
+            BasicError.internalBinaryWrite(message.response.error, writer.tag(2, WireType.LengthDelimited).fork(), options).join();
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message authentication.v1.GetHasRightBindingResponse
+ */
+export const GetHasRightBindingResponse = new GetHasRightBindingResponse$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class GetHasRightBindingResponse_HasRightBinding$Type extends MessageType<GetHasRightBindingResponse_HasRightBinding> {
+    constructor() {
+        super("authentication.v1.GetHasRightBindingResponse.HasRightBinding", [
+            { no: 1, name: "has_right_binding", kind: "scalar", T: 8 /*ScalarType.BOOL*/ }
+        ]);
+    }
+    create(value?: PartialMessage<GetHasRightBindingResponse_HasRightBinding>): GetHasRightBindingResponse_HasRightBinding {
+        const message = { hasRightBinding: false };
+        globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
+        if (value !== undefined)
+            reflectionMergePartial<GetHasRightBindingResponse_HasRightBinding>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: GetHasRightBindingResponse_HasRightBinding): GetHasRightBindingResponse_HasRightBinding {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* bool has_right_binding */ 1:
+                    message.hasRightBinding = reader.bool();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: GetHasRightBindingResponse_HasRightBinding, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* bool has_right_binding = 1; */
+        if (message.hasRightBinding !== false)
+            writer.tag(1, WireType.Varint).bool(message.hasRightBinding);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message authentication.v1.GetHasRightBindingResponse.HasRightBinding
+ */
+export const GetHasRightBindingResponse_HasRightBinding = new GetHasRightBindingResponse_HasRightBinding$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class RightBinding$Type extends MessageType<RightBinding> {
+    constructor() {
+        super("authentication.v1.RightBinding", [
             { no: 1, name: "user_id", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
             { no: 2, name: "right", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
         ]);
     }
-    create(value?: PartialMessage<Right>): Right {
+    create(value?: PartialMessage<RightBinding>): RightBinding {
         const message = { userId: "", right: "" };
         globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
         if (value !== undefined)
-            reflectionMergePartial<Right>(this, message, value);
+            reflectionMergePartial<RightBinding>(this, message, value);
         return message;
     }
-    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: Right): Right {
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: RightBinding): RightBinding {
         let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
@@ -555,7 +654,7 @@ class Right$Type extends MessageType<Right> {
         }
         return message;
     }
-    internalBinaryWrite(message: Right, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+    internalBinaryWrite(message: RightBinding, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* string user_id = 1; */
         if (message.userId !== "")
             writer.tag(1, WireType.LengthDelimited).string(message.userId);
@@ -569,9 +668,9 @@ class Right$Type extends MessageType<Right> {
     }
 }
 /**
- * @generated MessageType for protobuf message authentication.v1.Right
+ * @generated MessageType for protobuf message authentication.v1.RightBinding
  */
-export const Right = new Right$Type();
+export const RightBinding = new RightBinding$Type();
 // @generated message type with reflection information, may provide speed optimized methods
 class Rights$Type extends MessageType<Rights> {
     constructor() {
@@ -620,142 +719,21 @@ class Rights$Type extends MessageType<Rights> {
  */
 export const Rights = new Rights$Type();
 // @generated message type with reflection information, may provide speed optimized methods
-class GetRightOfUserResponse$Type extends MessageType<GetRightOfUserResponse> {
+class CreateRightBindingRequest$Type extends MessageType<CreateRightBindingRequest> {
     constructor() {
-        super("authentication.v1.GetRightOfUserResponse", [
-            { no: 1, name: "ok", kind: "message", oneof: "response", T: () => GetRightOfUserResponse_HasRight },
-            { no: 2, name: "error", kind: "message", oneof: "response", T: () => BasicError }
-        ]);
-    }
-    create(value?: PartialMessage<GetRightOfUserResponse>): GetRightOfUserResponse {
-        const message = { response: { oneofKind: undefined } };
-        globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
-        if (value !== undefined)
-            reflectionMergePartial<GetRightOfUserResponse>(this, message, value);
-        return message;
-    }
-    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: GetRightOfUserResponse): GetRightOfUserResponse {
-        let message = target ?? this.create(), end = reader.pos + length;
-        while (reader.pos < end) {
-            let [fieldNo, wireType] = reader.tag();
-            switch (fieldNo) {
-                case /* authentication.v1.GetRightOfUserResponse.HasRight ok */ 1:
-                    message.response = {
-                        oneofKind: "ok",
-                        ok: GetRightOfUserResponse_HasRight.internalBinaryRead(reader, reader.uint32(), options, (message.response as any).ok)
-                    };
-                    break;
-                case /* errors.v1.BasicError error */ 2:
-                    message.response = {
-                        oneofKind: "error",
-                        error: BasicError.internalBinaryRead(reader, reader.uint32(), options, (message.response as any).error)
-                    };
-                    break;
-                default:
-                    let u = options.readUnknownField;
-                    if (u === "throw")
-                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
-                    let d = reader.skip(wireType);
-                    if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
-            }
-        }
-        return message;
-    }
-    internalBinaryWrite(message: GetRightOfUserResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
-        /* authentication.v1.GetRightOfUserResponse.HasRight ok = 1; */
-        if (message.response.oneofKind === "ok")
-            GetRightOfUserResponse_HasRight.internalBinaryWrite(message.response.ok, writer.tag(1, WireType.LengthDelimited).fork(), options).join();
-        /* errors.v1.BasicError error = 2; */
-        if (message.response.oneofKind === "error")
-            BasicError.internalBinaryWrite(message.response.error, writer.tag(2, WireType.LengthDelimited).fork(), options).join();
-        let u = options.writeUnknownFields;
-        if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
-        return writer;
-    }
-}
-/**
- * @generated MessageType for protobuf message authentication.v1.GetRightOfUserResponse
- */
-export const GetRightOfUserResponse = new GetRightOfUserResponse$Type();
-// @generated message type with reflection information, may provide speed optimized methods
-class GetRightOfUserResponse_HasRight$Type extends MessageType<GetRightOfUserResponse_HasRight> {
-    constructor() {
-        super("authentication.v1.GetRightOfUserResponse.HasRight", [
-            { no: 1, name: "right", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 2, name: "user_id", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 3, name: "has_right", kind: "scalar", T: 8 /*ScalarType.BOOL*/ }
-        ]);
-    }
-    create(value?: PartialMessage<GetRightOfUserResponse_HasRight>): GetRightOfUserResponse_HasRight {
-        const message = { right: "", userId: "", hasRight: false };
-        globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
-        if (value !== undefined)
-            reflectionMergePartial<GetRightOfUserResponse_HasRight>(this, message, value);
-        return message;
-    }
-    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: GetRightOfUserResponse_HasRight): GetRightOfUserResponse_HasRight {
-        let message = target ?? this.create(), end = reader.pos + length;
-        while (reader.pos < end) {
-            let [fieldNo, wireType] = reader.tag();
-            switch (fieldNo) {
-                case /* string right */ 1:
-                    message.right = reader.string();
-                    break;
-                case /* string user_id */ 2:
-                    message.userId = reader.string();
-                    break;
-                case /* bool has_right */ 3:
-                    message.hasRight = reader.bool();
-                    break;
-                default:
-                    let u = options.readUnknownField;
-                    if (u === "throw")
-                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
-                    let d = reader.skip(wireType);
-                    if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
-            }
-        }
-        return message;
-    }
-    internalBinaryWrite(message: GetRightOfUserResponse_HasRight, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
-        /* string right = 1; */
-        if (message.right !== "")
-            writer.tag(1, WireType.LengthDelimited).string(message.right);
-        /* string user_id = 2; */
-        if (message.userId !== "")
-            writer.tag(2, WireType.LengthDelimited).string(message.userId);
-        /* bool has_right = 3; */
-        if (message.hasRight !== false)
-            writer.tag(3, WireType.Varint).bool(message.hasRight);
-        let u = options.writeUnknownFields;
-        if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
-        return writer;
-    }
-}
-/**
- * @generated MessageType for protobuf message authentication.v1.GetRightOfUserResponse.HasRight
- */
-export const GetRightOfUserResponse_HasRight = new GetRightOfUserResponse_HasRight$Type();
-// @generated message type with reflection information, may provide speed optimized methods
-class CreateRightOfUserRequest$Type extends MessageType<CreateRightOfUserRequest> {
-    constructor() {
-        super("authentication.v1.CreateRightOfUserRequest", [
+        super("authentication.v1.CreateRightBindingRequest", [
             { no: 1, name: "user_id", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
             { no: 2, name: "right", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
         ]);
     }
-    create(value?: PartialMessage<CreateRightOfUserRequest>): CreateRightOfUserRequest {
+    create(value?: PartialMessage<CreateRightBindingRequest>): CreateRightBindingRequest {
         const message = { userId: "", right: "" };
         globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
         if (value !== undefined)
-            reflectionMergePartial<CreateRightOfUserRequest>(this, message, value);
+            reflectionMergePartial<CreateRightBindingRequest>(this, message, value);
         return message;
     }
-    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: CreateRightOfUserRequest): CreateRightOfUserRequest {
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: CreateRightBindingRequest): CreateRightBindingRequest {
         let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
@@ -777,7 +755,7 @@ class CreateRightOfUserRequest$Type extends MessageType<CreateRightOfUserRequest
         }
         return message;
     }
-    internalBinaryWrite(message: CreateRightOfUserRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+    internalBinaryWrite(message: CreateRightBindingRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* string user_id = 1; */
         if (message.userId !== "")
             writer.tag(1, WireType.LengthDelimited).string(message.userId);
@@ -791,33 +769,33 @@ class CreateRightOfUserRequest$Type extends MessageType<CreateRightOfUserRequest
     }
 }
 /**
- * @generated MessageType for protobuf message authentication.v1.CreateRightOfUserRequest
+ * @generated MessageType for protobuf message authentication.v1.CreateRightBindingRequest
  */
-export const CreateRightOfUserRequest = new CreateRightOfUserRequest$Type();
+export const CreateRightBindingRequest = new CreateRightBindingRequest$Type();
 // @generated message type with reflection information, may provide speed optimized methods
-class CreateRightOfUserResponse$Type extends MessageType<CreateRightOfUserResponse> {
+class CreateRightBindingResponse$Type extends MessageType<CreateRightBindingResponse> {
     constructor() {
-        super("authentication.v1.CreateRightOfUserResponse", [
-            { no: 1, name: "ok", kind: "message", oneof: "response", T: () => Right },
+        super("authentication.v1.CreateRightBindingResponse", [
+            { no: 1, name: "ok", kind: "message", oneof: "response", T: () => RightBinding },
             { no: 2, name: "error", kind: "message", oneof: "response", T: () => BasicError }
         ]);
     }
-    create(value?: PartialMessage<CreateRightOfUserResponse>): CreateRightOfUserResponse {
+    create(value?: PartialMessage<CreateRightBindingResponse>): CreateRightBindingResponse {
         const message = { response: { oneofKind: undefined } };
         globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
         if (value !== undefined)
-            reflectionMergePartial<CreateRightOfUserResponse>(this, message, value);
+            reflectionMergePartial<CreateRightBindingResponse>(this, message, value);
         return message;
     }
-    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: CreateRightOfUserResponse): CreateRightOfUserResponse {
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: CreateRightBindingResponse): CreateRightBindingResponse {
         let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
-                case /* authentication.v1.Right ok */ 1:
+                case /* authentication.v1.RightBinding ok */ 1:
                     message.response = {
                         oneofKind: "ok",
-                        ok: Right.internalBinaryRead(reader, reader.uint32(), options, (message.response as any).ok)
+                        ok: RightBinding.internalBinaryRead(reader, reader.uint32(), options, (message.response as any).ok)
                     };
                     break;
                 case /* errors.v1.BasicError error */ 2:
@@ -837,10 +815,10 @@ class CreateRightOfUserResponse$Type extends MessageType<CreateRightOfUserRespon
         }
         return message;
     }
-    internalBinaryWrite(message: CreateRightOfUserResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
-        /* authentication.v1.Right ok = 1; */
+    internalBinaryWrite(message: CreateRightBindingResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* authentication.v1.RightBinding ok = 1; */
         if (message.response.oneofKind === "ok")
-            Right.internalBinaryWrite(message.response.ok, writer.tag(1, WireType.LengthDelimited).fork(), options).join();
+            RightBinding.internalBinaryWrite(message.response.ok, writer.tag(1, WireType.LengthDelimited).fork(), options).join();
         /* errors.v1.BasicError error = 2; */
         if (message.response.oneofKind === "error")
             BasicError.internalBinaryWrite(message.response.error, writer.tag(2, WireType.LengthDelimited).fork(), options).join();
@@ -851,25 +829,25 @@ class CreateRightOfUserResponse$Type extends MessageType<CreateRightOfUserRespon
     }
 }
 /**
- * @generated MessageType for protobuf message authentication.v1.CreateRightOfUserResponse
+ * @generated MessageType for protobuf message authentication.v1.CreateRightBindingResponse
  */
-export const CreateRightOfUserResponse = new CreateRightOfUserResponse$Type();
+export const CreateRightBindingResponse = new CreateRightBindingResponse$Type();
 // @generated message type with reflection information, may provide speed optimized methods
-class DeleteRightOfUserRequest$Type extends MessageType<DeleteRightOfUserRequest> {
+class DeleteRightBindingRequest$Type extends MessageType<DeleteRightBindingRequest> {
     constructor() {
-        super("authentication.v1.DeleteRightOfUserRequest", [
+        super("authentication.v1.DeleteRightBindingRequest", [
             { no: 1, name: "user_id", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
             { no: 2, name: "right", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
         ]);
     }
-    create(value?: PartialMessage<DeleteRightOfUserRequest>): DeleteRightOfUserRequest {
+    create(value?: PartialMessage<DeleteRightBindingRequest>): DeleteRightBindingRequest {
         const message = { userId: "", right: "" };
         globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
         if (value !== undefined)
-            reflectionMergePartial<DeleteRightOfUserRequest>(this, message, value);
+            reflectionMergePartial<DeleteRightBindingRequest>(this, message, value);
         return message;
     }
-    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: DeleteRightOfUserRequest): DeleteRightOfUserRequest {
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: DeleteRightBindingRequest): DeleteRightBindingRequest {
         let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
@@ -891,7 +869,7 @@ class DeleteRightOfUserRequest$Type extends MessageType<DeleteRightOfUserRequest
         }
         return message;
     }
-    internalBinaryWrite(message: DeleteRightOfUserRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+    internalBinaryWrite(message: DeleteRightBindingRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* string user_id = 1; */
         if (message.userId !== "")
             writer.tag(1, WireType.LengthDelimited).string(message.userId);
@@ -905,33 +883,33 @@ class DeleteRightOfUserRequest$Type extends MessageType<DeleteRightOfUserRequest
     }
 }
 /**
- * @generated MessageType for protobuf message authentication.v1.DeleteRightOfUserRequest
+ * @generated MessageType for protobuf message authentication.v1.DeleteRightBindingRequest
  */
-export const DeleteRightOfUserRequest = new DeleteRightOfUserRequest$Type();
+export const DeleteRightBindingRequest = new DeleteRightBindingRequest$Type();
 // @generated message type with reflection information, may provide speed optimized methods
-class DeleteRightOfUserResponse$Type extends MessageType<DeleteRightOfUserResponse> {
+class DeleteRightBindingResponse$Type extends MessageType<DeleteRightBindingResponse> {
     constructor() {
-        super("authentication.v1.DeleteRightOfUserResponse", [
-            { no: 1, name: "ok", kind: "message", oneof: "response", T: () => Right },
+        super("authentication.v1.DeleteRightBindingResponse", [
+            { no: 1, name: "ok", kind: "message", oneof: "response", T: () => RightBinding },
             { no: 2, name: "error", kind: "message", oneof: "response", T: () => BasicError }
         ]);
     }
-    create(value?: PartialMessage<DeleteRightOfUserResponse>): DeleteRightOfUserResponse {
+    create(value?: PartialMessage<DeleteRightBindingResponse>): DeleteRightBindingResponse {
         const message = { response: { oneofKind: undefined } };
         globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
         if (value !== undefined)
-            reflectionMergePartial<DeleteRightOfUserResponse>(this, message, value);
+            reflectionMergePartial<DeleteRightBindingResponse>(this, message, value);
         return message;
     }
-    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: DeleteRightOfUserResponse): DeleteRightOfUserResponse {
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: DeleteRightBindingResponse): DeleteRightBindingResponse {
         let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
-                case /* authentication.v1.Right ok */ 1:
+                case /* authentication.v1.RightBinding ok */ 1:
                     message.response = {
                         oneofKind: "ok",
-                        ok: Right.internalBinaryRead(reader, reader.uint32(), options, (message.response as any).ok)
+                        ok: RightBinding.internalBinaryRead(reader, reader.uint32(), options, (message.response as any).ok)
                     };
                     break;
                 case /* errors.v1.BasicError error */ 2:
@@ -951,10 +929,10 @@ class DeleteRightOfUserResponse$Type extends MessageType<DeleteRightOfUserRespon
         }
         return message;
     }
-    internalBinaryWrite(message: DeleteRightOfUserResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
-        /* authentication.v1.Right ok = 1; */
+    internalBinaryWrite(message: DeleteRightBindingResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* authentication.v1.RightBinding ok = 1; */
         if (message.response.oneofKind === "ok")
-            Right.internalBinaryWrite(message.response.ok, writer.tag(1, WireType.LengthDelimited).fork(), options).join();
+            RightBinding.internalBinaryWrite(message.response.ok, writer.tag(1, WireType.LengthDelimited).fork(), options).join();
         /* errors.v1.BasicError error = 2; */
         if (message.response.oneofKind === "error")
             BasicError.internalBinaryWrite(message.response.error, writer.tag(2, WireType.LengthDelimited).fork(), options).join();
@@ -965,24 +943,24 @@ class DeleteRightOfUserResponse$Type extends MessageType<DeleteRightOfUserRespon
     }
 }
 /**
- * @generated MessageType for protobuf message authentication.v1.DeleteRightOfUserResponse
+ * @generated MessageType for protobuf message authentication.v1.DeleteRightBindingResponse
  */
-export const DeleteRightOfUserResponse = new DeleteRightOfUserResponse$Type();
+export const DeleteRightBindingResponse = new DeleteRightBindingResponse$Type();
 // @generated message type with reflection information, may provide speed optimized methods
-class GetRightsOfUserRequest$Type extends MessageType<GetRightsOfUserRequest> {
+class GetRightBindingsRequest$Type extends MessageType<GetRightBindingsRequest> {
     constructor() {
-        super("authentication.v1.GetRightsOfUserRequest", [
+        super("authentication.v1.GetRightBindingsRequest", [
             { no: 1, name: "user_id", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
         ]);
     }
-    create(value?: PartialMessage<GetRightsOfUserRequest>): GetRightsOfUserRequest {
+    create(value?: PartialMessage<GetRightBindingsRequest>): GetRightBindingsRequest {
         const message = { userId: "" };
         globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
         if (value !== undefined)
-            reflectionMergePartial<GetRightsOfUserRequest>(this, message, value);
+            reflectionMergePartial<GetRightBindingsRequest>(this, message, value);
         return message;
     }
-    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: GetRightsOfUserRequest): GetRightsOfUserRequest {
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: GetRightBindingsRequest): GetRightBindingsRequest {
         let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
@@ -1001,7 +979,7 @@ class GetRightsOfUserRequest$Type extends MessageType<GetRightsOfUserRequest> {
         }
         return message;
     }
-    internalBinaryWrite(message: GetRightsOfUserRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+    internalBinaryWrite(message: GetRightBindingsRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* string user_id = 1; */
         if (message.userId !== "")
             writer.tag(1, WireType.LengthDelimited).string(message.userId);
@@ -1012,25 +990,25 @@ class GetRightsOfUserRequest$Type extends MessageType<GetRightsOfUserRequest> {
     }
 }
 /**
- * @generated MessageType for protobuf message authentication.v1.GetRightsOfUserRequest
+ * @generated MessageType for protobuf message authentication.v1.GetRightBindingsRequest
  */
-export const GetRightsOfUserRequest = new GetRightsOfUserRequest$Type();
+export const GetRightBindingsRequest = new GetRightBindingsRequest$Type();
 // @generated message type with reflection information, may provide speed optimized methods
-class GetRightsOfUserResponse$Type extends MessageType<GetRightsOfUserResponse> {
+class GetRightBindingsResponse$Type extends MessageType<GetRightBindingsResponse> {
     constructor() {
-        super("authentication.v1.GetRightsOfUserResponse", [
+        super("authentication.v1.GetRightBindingsResponse", [
             { no: 1, name: "ok", kind: "message", oneof: "response", T: () => Rights },
             { no: 2, name: "error", kind: "message", oneof: "response", T: () => BasicError }
         ]);
     }
-    create(value?: PartialMessage<GetRightsOfUserResponse>): GetRightsOfUserResponse {
+    create(value?: PartialMessage<GetRightBindingsResponse>): GetRightBindingsResponse {
         const message = { response: { oneofKind: undefined } };
         globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
         if (value !== undefined)
-            reflectionMergePartial<GetRightsOfUserResponse>(this, message, value);
+            reflectionMergePartial<GetRightBindingsResponse>(this, message, value);
         return message;
     }
-    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: GetRightsOfUserResponse): GetRightsOfUserResponse {
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: GetRightBindingsResponse): GetRightBindingsResponse {
         let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
@@ -1058,7 +1036,7 @@ class GetRightsOfUserResponse$Type extends MessageType<GetRightsOfUserResponse> 
         }
         return message;
     }
-    internalBinaryWrite(message: GetRightsOfUserResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+    internalBinaryWrite(message: GetRightBindingsResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* authentication.v1.Rights ok = 1; */
         if (message.response.oneofKind === "ok")
             Rights.internalBinaryWrite(message.response.ok, writer.tag(1, WireType.LengthDelimited).fork(), options).join();
@@ -1072,6 +1050,6 @@ class GetRightsOfUserResponse$Type extends MessageType<GetRightsOfUserResponse> 
     }
 }
 /**
- * @generated MessageType for protobuf message authentication.v1.GetRightsOfUserResponse
+ * @generated MessageType for protobuf message authentication.v1.GetRightBindingsResponse
  */
-export const GetRightsOfUserResponse = new GetRightsOfUserResponse$Type();
+export const GetRightBindingsResponse = new GetRightBindingsResponse$Type();

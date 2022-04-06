@@ -1,6 +1,6 @@
-import {isNullOrUndefined} from '../lib';
-import {LoggerContext} from '../middleware/context';
-import {decode, encode} from './base64';
+import { isNullOrUndefined } from '../lib';
+import { LoggerContext } from '../middleware/context';
+import { decode, encode } from './base64';
 
 export const SIGN_VERIFY_ALGORITHM = {
   name: 'RSA-PSS',
@@ -15,7 +15,7 @@ export interface DecodedJwt {
     exp: number;
     sub: string;
     aud: string;
-    rights: string[]
+    rights: string[];
   };
   signature: string;
   raw: { header: string; payload: string; signature: string };
@@ -31,7 +31,7 @@ export function decodeJwt(token: string): DecodedJwt {
     header: header,
     payload: payload,
     signature: signature,
-    raw: {header: parts[0], payload: parts[1], signature: parts[2]},
+    raw: { header: parts[0], payload: parts[1], signature: parts[2] },
   };
 }
 
@@ -65,11 +65,17 @@ export function isExpired(jwt: DecodedJwt): boolean {
   return jwt.payload.exp < Date.now() / 1000;
 }
 
-export async function generateJwt(sub: string, rights: string[], cryptoKey: CryptoKey, kid: string, exp: number) {
+export async function generateJwt(
+  sub: string,
+  rights: string[],
+  cryptoKey: CryptoKey,
+  kid: string,
+  exp: number,
+) {
   const payload = {
     sub: sub,
     exp: exp,
-    rights
+    rights,
   };
   const header = generateJwtHeader(kid);
   const partial =
@@ -81,14 +87,17 @@ export async function generateJwt(sub: string, rights: string[], cryptoKey: Cryp
     encodedPartial,
   );
   return {
-    jwtString: partial + '.' + encode(String.fromCharCode(...new Uint8Array(signature))),
+    jwtString:
+      partial + '.' + encode(String.fromCharCode(...new Uint8Array(signature))),
     payload,
   };
 }
 
-function generateJwtHeader(
-  kid: string,
-): { kid: string; typ: string; alg: string } {
+function generateJwtHeader(kid: string): {
+  kid: string;
+  typ: string;
+  alg: string;
+} {
   return {
     typ: 'JWT',
     alg: 'PS256',

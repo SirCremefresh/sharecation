@@ -1,5 +1,7 @@
 import {HttpClient} from '@angular/common/http';
 import {Component, Input, OnInit} from '@angular/core';
+import {normalizeFieldInfo} from '@protobuf-ts/runtime';
+import {GetRightsOfUserResponse, Rights} from '../../../contracts/authentication/v1/authentication';
 import {ApiTestConfig} from '../api-test-config.model';
 
 @Component({
@@ -15,6 +17,18 @@ export class ApiTestComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log(this.config.requestType);
+    console.log(this.config.responseType);
+    console.log(GetRightsOfUserResponse);
+    console.log(Rights);
+    if (this.config.requestType) {
+      for (let field of this.config.requestType.fields) {
+        console.log(normalizeFieldInfo(field));
+        if (field.kind === 'scalar') {
+          console.log(field.T);
+        }
+      }
+    }
   }
 
   execute() {

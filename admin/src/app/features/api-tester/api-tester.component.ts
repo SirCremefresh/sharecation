@@ -10,14 +10,14 @@ import {ApiTestConfig} from './api-test-config.model';
 })
 export class ApiTesterComponent {
   readonly configs: ApiTestConfig[] = [
-    {
-      title: 'Get Public JWKs',
-      service: 'authentication',
-      description: 'Get currently active public JWKs.',
-      path: '/v1/get-public-jwks',
-      requestType: null,
-      responseType: GetPublicJwksResponse
-    },
+    // {
+    //   title: 'Get Public JWKs',
+    //   service: 'authentication',
+    //   description: 'Get currently active public JWKs.',
+    //   path: '/v1/get-public-jwks',
+    //   requestType: null,
+    //   responseType: GetPublicJwksResponse
+    // },
     {
       title: 'Create Testing User',
       service: 'dev-tools',

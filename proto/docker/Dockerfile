@@ -4,7 +4,7 @@ ARG DART_VERSION="2.16.1"
 # renovate: datasource=github-tags depName=nodejs/node versioning=node
 ARG NODE_VERSION="16"
 # renovate: datasource=github-tags depName=bufbuild/buf
-ARG BUF_VERSION="1.2.1"
+ARG BUF_VERSION="v1.3.1"
 # renovate: datasource=npm depName=@protobuf-ts/plugin
 ARG PROTOBUF_TS_VERSION="2.3.0"
 

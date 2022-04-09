@@ -9,34 +9,31 @@ import {
   GetHasRightBindingRequest,
   GetHasRightBindingResponse,
   GetHasRightBindingResponse_HasRightBinding,
-  GetRightBindingsRequest,
-  GetRightBindingsResponse,
+  GetRightsOfUserRequest,
+  GetRightsOfUserResponse,
   RightBinding,
   Rights,
 } from '../../contracts/authentication/v1/authentication';
-import { BasicError_BasicErrorCode } from '../../contracts/errors/v1/errors';
-import { isNullOrUndefined } from '../../lib/lib';
-import { logInfo } from '../../lib/logger';
-import {
-  addAuthenticatedToContext,
-  addAuthenticationGuard,
-} from '../../lib/middleware/authenticated-middleware';
-import { AuthenticatedContext } from '../../lib/middleware/context';
-import { addLoggerContext } from '../../lib/middleware/logger-middleware';
+import {BasicError_BasicErrorCode} from '../../contracts/errors/v1/errors';
+import {isNullOrUndefined} from '../../lib/lib';
+import {logInfo} from '../../lib/logger';
+import {addAuthenticatedToContext, addAuthenticationGuard,} from '../../lib/middleware/authenticated-middleware';
+import {AuthenticatedContext} from '../../lib/middleware/context';
+import {addLoggerContext} from '../../lib/middleware/logger-middleware';
 import {
   createProtoBufBasicErrorResponse,
   createProtoBufOkResponse,
   protoBuf,
 } from '../../lib/middleware/protobuf-middleware';
-import { addRouter, route } from '../../lib/middleware/router-middleware';
-import { hasRight, RIGHTS } from '../../lib/rights';
-import { onFetch } from '../../lib/starter/on-fetch';
-import { AuthenticationEnvironmentVariables } from './authentication-environment-variables';
-import { createAuthenticationKv } from './authentication-kv';
-import { verifyGoogleJwt } from './google-keys';
-import { generateSharecationJwt } from './sharecation-keys';
+import {addRouter, route} from '../../lib/middleware/router-middleware';
+import {hasRight, RIGHTS} from '../../lib/rights';
+import {onFetch} from '../../lib/starter/on-fetch';
+import {AuthenticationEnvironmentVariables} from './authentication-environment-variables';
+import {createAuthenticationKv} from './authentication-kv';
+import {verifyGoogleJwt} from './google-keys';
+import {generateSharecationJwt} from './sharecation-keys';
 // Make durable object visible
-export { RightsStorage } from './rights-storage';
+export {RightsStorage} from './rights-storage';
 
 const SERVICE_NAME = 'authentication';
 
@@ -139,7 +136,7 @@ export default {
               CreateRightBindingRequest,
               CreateRightBindingResponse,
               async (request, env, context) => {
-                const { userId, right } = context.proto.body;
+                const {userId, right} = context.proto.body;
                 const userCanEditRight = canUserEditRight(right, context);
                 if (!userCanEditRight) {
                   return createProtoBufBasicErrorResponse(
@@ -175,7 +172,7 @@ export default {
               DeleteRightBindingRequest,
               DeleteRightBindingResponse,
               async (request, env, context) => {
-                const { userId, right } = context.proto.body;
+                const {userId, right} = context.proto.body;
                 const userCanEditRight = canUserEditRight(right, context);
                 if (!userCanEditRight) {
                   return createProtoBufBasicErrorResponse(
@@ -212,7 +209,7 @@ export default {
                     BasicError_BasicErrorCode.UNAUTHENTICATED,
                   );
                 }
-                const { userId, right } = context.proto.body;
+                const {userId, right} = context.proto.body;
                 const proxy = getRightsStorageProxy(env);
 
                 const rights = await proxy
@@ -235,8 +232,8 @@ export default {
           ['v1', 'get-rights-of-user'],
           addAuthenticationGuard(
             protoBuf(
-              GetRightBindingsRequest,
-              GetRightBindingsResponse,
+              GetRightsOfUserRequest,
+              GetRightsOfUserResponse,
               async (request, env, context) => {
                 if (!hasRight(RIGHTS.ADMIN_RIGHT, context)) {
                   return createProtoBufBasicErrorResponse(
@@ -244,7 +241,7 @@ export default {
                     BasicError_BasicErrorCode.UNAUTHENTICATED,
                   );
                 }
-                const { userId } = context.proto.body;
+                const {userId} = context.proto.body;
                 const proxy = getRightsStorageProxy(env);
                 const rights = await getRightsOfUser(proxy, userId);
 

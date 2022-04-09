@@ -1,0 +1,17 @@
+<mat-expansion-panel>
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      {{config.title}}
+    </mat-panel-title>
+    <mat-panel-description>
+      service: {{config.service}}, path: {{config.path}}
+    </mat-panel-description>
+  </mat-expansion-panel-header>
+  {{config.description}} <br>
+  response:
+  <br>
+  <pre style="overflow-y: scroll;">{{response}}</pre>
+  <mat-action-row>
+    <button mat-button color="primary" (click)="execute()">Execute</button>
+  </mat-action-row>
+</mat-expansion-panel>

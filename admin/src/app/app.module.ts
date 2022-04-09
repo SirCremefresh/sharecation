@@ -8,11 +8,13 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {ApiTesterComponent} from './features/api-tester/api-tester.component';
+import { ApiTestComponent } from './features/api-tester/api-test/api-test.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ApiTesterComponent,
+    ApiTestComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,22 @@
+<h1 style="text-align: center;">Api Tester</h1>
+<div style="width: 80%; margin: auto">
+  <mat-accordion multi>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Get Public JWKs
+        </mat-panel-title>
+        <mat-panel-description>
+          authentication-service /v1/get-public-jwks
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      response:
+      <br>
+      <pre style="overflow-y: scroll;">{{response}}</pre>
+      <mat-action-row>
+        <button mat-button color="primary" (click)="execute()">Execute</button>
+      </mat-action-row>
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>

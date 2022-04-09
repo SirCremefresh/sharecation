@@ -1,5 +1,5 @@
-import { logErrorWithException, Logger, LoggerConfig } from '../logger';
-import { LoggerContext } from './context';
+import {logErrorWithException, Logger, LoggerConfig} from '../logger';
+import {LoggerContext} from './context';
 
 function addLoggerToContext<CONTEXT extends {}>(
   serviceName: string,
@@ -7,15 +7,14 @@ function addLoggerToContext<CONTEXT extends {}>(
   context: CONTEXT,
 ): CONTEXT & LoggerContext {
   const logger = new Logger(loggingConfig, context, serviceName);
-  return Object.assign(context, { logger });
+  return Object.assign(context, {logger});
 }
 
-export function addLoggerContext<
-  ENV extends LoggerConfig,
+export function addLoggerContext<ENV extends LoggerConfig,
   REQUEST,
   CONTEXT extends {},
   RESPONSE,
->(
+  >(
   serviceName: string,
   fn: (
     request: REQUEST,
@@ -28,6 +27,9 @@ export function addLoggerContext<
     let response;
     try {
       response = await fn(request, env, context);
+    } catch (e) {
+      logErrorWithException('Logger caught error handling request', e, context);
+      throw e;
     } finally {
       await context.logger.flush();
     }

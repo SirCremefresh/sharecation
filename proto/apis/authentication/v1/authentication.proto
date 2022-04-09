@@ -73,11 +73,11 @@ message DeleteRightBindingResponse {
   }
 }
 
-message GetRightBindingsRequest {
+message GetRightsOfUserRequest {
   string user_id = 1;
 }
 
-message GetRightBindingsResponse {
+message GetRightsOfUserResponse {
   oneof response {
     Rights ok = 1;
     errors.v1.BasicError error = 2;

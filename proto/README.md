@@ -28,11 +28,11 @@ node generate-code.mjs
 ### lint
 
 ```bash
-docker run -t --rm -v $(pwd):/tmp/ proto-generator buf lint
+docker run -t --rm -v $(pwd):/tmp/ donatowolfisberg/sharecation-proto-builder:master buf lint
 ```
 
 ### format
 
 ```bash
-docker run -t --rm -v $(pwd):/tmp/ proto-generator buf format --write
+docker run -t --rm -v $(pwd):/tmp/ donatowolfisberg/sharecation-proto-builder:master buf format --write
 ```

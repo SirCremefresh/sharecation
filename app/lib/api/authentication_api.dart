@@ -2,11 +2,12 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:sharecation_app/api/contracts/authentication/v1/authentication.pb.dart';
+import 'package:sharecation_app/env.dart';
 
 class AuthenticationApi {
   final Dio _dio = Dio(BaseOptions(
       baseUrl:
-          'https://development.sharecation-authentication.donato-wolfisberg.workers.dev'));
+          'https://sharecation-authentication-$environment.donato-wolfisberg.workers.dev'));
 
   Future<CreateAuthenticationWithFirebaseResponse> createJwt({
     required CreateAuthenticationWithFirebaseRequest createJwtRequest,

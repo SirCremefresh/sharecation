@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sharecation_app/api/contracts/images/v1/images.pb.dart';
+import 'package:sharecation_app/env.dart';
 import 'package:sharecation_app/service/jwt_string_getter.dart';
 
 class ImagesApi {
@@ -13,7 +14,7 @@ class ImagesApi {
 
   final Dio _dio = Dio(BaseOptions(
       baseUrl:
-          'https://development.sharecation-images.donato-wolfisberg.workers.dev'));
+          'https://sharecation-images-$environment.donato-wolfisberg.workers.dev'));
 
   Future<void> uploadImage(XFile file) async {
     const _path = r'/v1/images/create-image';

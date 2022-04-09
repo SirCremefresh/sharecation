@@ -14,6 +14,7 @@ import {
   RightBinding,
   Rights,
 } from '../../contracts/authentication/v1/authentication';
+import {GetPublicJwksResponse, PublicJwks} from '../../contracts/authentication/v1/public_jwk';
 import {BasicError_BasicErrorCode} from '../../contracts/errors/v1/errors';
 import {isNullOrUndefined} from '../../lib/lib';
 import {logInfo} from '../../lib/logger';
@@ -68,17 +69,20 @@ export default {
       SERVICE_NAME,
       addRouter([
         route(
-          'GET',
-          ['v1', 'get-public-keys'],
-          async (request, env, context) => {
-            try {
-              const proxy = getRightsStorageProxy(env);
-              const res = await proxy.fetch(request).then((res) => res.text());
-              return new Response(res);
-            } catch (e) {
-              return new Response('err' + e);
-            }
-          },
+          'POST',
+          ['v1', 'get-public-jwks'],
+          protoBuf(
+            null,
+            GetPublicJwksResponse,
+            async (request, env, _) => {
+              const publicKeys = JSON.parse(env.PUBLIC_KEYS) as Array<JsonWebKey & { kid: string }>;
+              return createProtoBufOkResponse<PublicJwks>({
+                jwks: publicKeys.map(publicJwk => ({
+                  jwk: JSON.stringify(publicJwk),
+                  kid: publicJwk.kid
+                }))
+              });
+            }),
         ),
         route(
           'POST',

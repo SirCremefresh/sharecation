@@ -1,0 +1,5 @@
+### get public jwks
+POST sharecation-authentication-development.donato-wolfisberg.workers.dev/v1/get-public-jwks
+Content-Type: application/json
+Accept: application/json
+

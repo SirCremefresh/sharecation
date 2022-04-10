@@ -1,5 +1,5 @@
 import {Component, forwardRef, Input, OnInit} from '@angular/core';
-import {ControlValueAccessor, FormArray, FormControl, FormGroup, NG_VALUE_ACCESSOR} from '@angular/forms';
+import {ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {DynamicFormConfig, DynamicFormConfigGroup} from '../dynamic-form-config.model';
 
 @Component({
@@ -32,16 +32,7 @@ export class DynamicFormGroupComponent implements OnInit, ControlValueAccessor {
 
   ngOnInit() {
     for (let child of this._config.children) {
-      if (child.repeated) {
-        console.log('array');
-        this.formGroup.addControl(child.name, new FormArray([
-          new FormControl(), new FormControl()
-        ]));
-      } else {
-        console.log('notArray');
-
-        this.formGroup.addControl(child.name, new FormControl());
-      }
+      this.formGroup.addControl(child.name, new FormControl());
     }
   }
 

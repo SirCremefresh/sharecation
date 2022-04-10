@@ -13,6 +13,7 @@ import {ApiTestComponent} from './features/api-tester/api-test/api-test.componen
 import {ApiTesterComponent} from './features/api-tester/api-tester.component';
 import {DynamicFormControlComponent} from './shared/dynamic-form/control/dynamic-form-control.component';
 import { DynamicFormGroupComponent } from './shared/dynamic-form/group/dynamic-form-group.component';
+import { DynamicFormRepeatedComponent } from './shared/dynamic-form/repeated/dynamic-form-repeated.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { DynamicFormGroupComponent } from './shared/dynamic-form/group/dynamic-f
     ApiTestComponent,
     DynamicFormControlComponent,
     DynamicFormGroupComponent,
+    DynamicFormRepeatedComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,14 @@
+<ng-container
+  [formGroup]="formGroup"
+>
+  <div
+    *ngFor="let control of formArray.controls; index as index"
+    [formArrayName]="'array'"
+  >
+    <app-dynamic-form-control
+      [formControlName]="index"
+      [config]="config"
+    ></app-dynamic-form-control>
+  </div>
+  <button (click)="add()">add</button>
+</ng-container>

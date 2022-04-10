@@ -1,0 +1,16 @@
+<div
+  [formGroup]="formGroup"
+>
+  <ng-container *ngFor="let child of _config.children">
+    <app-dynamic-form-control
+      *ngIf="child.formType === 'field' && child.repeated === false"
+      [formControlName]="child.name"
+      [config]="child"
+    ></app-dynamic-form-control>
+    <app-dynamic-form-group
+      *ngIf="child.formType === 'group'"
+      [formControlName]="child.name"
+      [config]="child"
+    ></app-dynamic-form-group>
+  </ng-container>
+</div>

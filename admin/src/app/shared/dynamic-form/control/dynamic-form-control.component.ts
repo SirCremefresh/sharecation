@@ -1,4 +1,4 @@
-import {Component, forwardRef, Input, OnInit} from '@angular/core';
+import {Component, forwardRef, Input} from '@angular/core';
 import {ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {DynamicFormConfig} from '../dynamic-form-config.model';
 
@@ -14,15 +14,9 @@ import {DynamicFormConfig} from '../dynamic-form-config.model';
     }
   ]
 })
-export class DynamicFormControlComponent implements OnInit, ControlValueAccessor {
+export class DynamicFormControlComponent implements ControlValueAccessor {
   @Input() config!: DynamicFormConfig;
   public formControl: FormControl = new FormControl();
-
-  constructor() {
-  }
-
-  ngOnInit() {
-  }
 
   public onTouched: () => void = () => {
   };

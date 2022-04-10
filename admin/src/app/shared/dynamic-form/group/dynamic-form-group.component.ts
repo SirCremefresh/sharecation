@@ -17,9 +17,6 @@ import {DynamicFormConfig, DynamicFormConfigGroup} from '../dynamic-form-config.
 export class DynamicFormGroupComponent implements OnInit, ControlValueAccessor {
   public formGroup: FormGroup = new FormGroup({});
 
-  constructor() {
-  }
-
   _config!: DynamicFormConfigGroup;
 
   @Input()

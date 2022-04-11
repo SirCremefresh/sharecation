@@ -17,7 +17,9 @@ import {DynamicFormConfig} from '../dynamic-form-config.model';
 })
 export class DynamicFormRepeatedComponent implements ControlValueAccessor {
   @Input() config!: DynamicFormConfig;
-  public formArray = new FormArray([]);
+  public formArray = new FormArray([
+    new FormControl()
+  ]);
   formGroup = new FormGroup({
     array: this.formArray
   });

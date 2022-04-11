@@ -12,10 +12,10 @@
   <br>
   <form *ngIf="dynamicFormConfig" [formGroup]="form" (ngSubmit)="suuu($event)">
     <app-dynamic-form-group [config]="dynamicFormConfig" [formControlName]="'request'"></app-dynamic-form-group>
-    <button type="submit"> submit</button>
+    <button mat-raised-button type="submit"> submit</button>
   </form>
   <pre style="overflow-y: scroll;">{{response}}</pre>
   <mat-action-row>
-    <button mat-button color="primary" (click)="execute()">Execute</button>
+    <button mat-raised-button color="primary" (click)="execute()">Execute</button>
   </mat-action-row>
 </mat-expansion-panel>

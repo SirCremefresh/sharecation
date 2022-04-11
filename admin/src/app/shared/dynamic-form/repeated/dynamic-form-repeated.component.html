@@ -1,14 +1,21 @@
-<ng-container
+<fieldset
   [formGroup]="formGroup"
 >
-  <div
+  <legend>Multiple {{config.name}}</legend>
+  <ng-container
     *ngFor="let control of formArray.controls; index as index"
     [formArrayName]="'array'"
   >
     <app-dynamic-form-control
+      *ngIf="config.formType === 'field'"
       [formControlName]="index"
       [config]="config"
     ></app-dynamic-form-control>
-  </div>
-  <button (click)="add()">add</button>
-</ng-container>
+    <app-dynamic-form-group
+      *ngIf="config.formType === 'group'"
+      [formControlName]="index"
+      [config]="config"
+    ></app-dynamic-form-group>
+  </ng-container>
+  <button mat-raised-button color="primary" (click)="add()">add entry</button>
+</fieldset>

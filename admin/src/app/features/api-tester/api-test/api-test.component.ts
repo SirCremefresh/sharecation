@@ -35,23 +35,25 @@ export class ApiTestComponent implements OnInit {
   }
 
   execute() {
+    let body = null;
+    if (this.config.requestType !== null) {
+      body = this.form.value.request;
+    }
     this.http.post(
       `https://sharecation-${this.config.service}-development.donato-wolfisberg.workers.dev${this.config.path}`,
-      null,
+      body,
       {
         headers: {
-          'Content-Type': 'application/octet-stream',
-          'Accept': 'application/octet-stream'
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+          // 'Content-Type': 'application/octet-stream',
+          // 'Accept': 'application/octet-stream'
         },
-        responseType: 'arraybuffer'
+        responseType: 'json'
+        // responseType: 'arraybuffer'
       }).pipe().subscribe((res) => {
-      const ress = this.config.responseType.fromBinary(new Uint8Array(res));
-      this.response = JSON.stringify(ress, null, 4);
-    }, (err) => {
-      console.log(err);
-      const ress = this.config.responseType.fromBinary(new Uint8Array(err));
-      this.response = JSON.stringify(ress, null, 4);
-      console.log('error', err);
+      // const ress = this.config.responseType.fromBinary(new Uint8Array(res));
+      this.response = JSON.stringify(res, null, 4);
     });
   }
 

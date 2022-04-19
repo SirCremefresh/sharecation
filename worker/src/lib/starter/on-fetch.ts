@@ -1,25 +1,22 @@
-import { BasicError_BasicErrorCode } from '../../contracts/errors/v1/errors';
-import { createBasicErrorResponse } from '../http/response';
-import { isLoggerContext } from '../middleware/context';
+import {BasicError_BasicErrorCode} from '../../contracts/errors/v1/errors';
+import {createBasicErrorResponse} from '../http/response';
+import {logErrorWithException} from '../logger';
+import {RequestIdContext} from '../middleware/context';
+import {addRequestId} from '../middleware/request-id-middleware';
 
 export function onFetch<ENV extends {} = {}>(
   fn: (
     request: Request,
     env: ENV,
-    context: ExecutionContext,
+    context: ExecutionContext & RequestIdContext,
   ) => Promise<Response>,
 ) {
+  const packedFn = addRequestId(fn);
   return async (request: Request, env: ENV, context: ExecutionContext) => {
     try {
-      return await fn(request, env, context ?? ({} as ExecutionContext));
+      return await packedFn(request, env, context);
     } catch (e) {
-      const text =
-        'Error handling request error=' + e + 'stack=' + (e as Error)?.stack;
-      if (isLoggerContext(context)) {
-        context.logger.error(text);
-      } else {
-        console.error(text);
-      }
+      logErrorWithException('Error handling request', e, context);
       return createBasicErrorResponse(
         {
           message: 'Error handling request',

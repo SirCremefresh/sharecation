@@ -1,17 +1,20 @@
-import { BasicError_BasicErrorCode } from '../../contracts/errors/v1/errors';
-import { createBasicErrorResponse } from '../http/response';
-import { logErrorWithException } from '../logger';
+import {BasicError_BasicErrorCode} from '../../contracts/errors/v1/errors';
+import {createBasicErrorResponse} from '../http/response';
+import {logErrorWithException} from '../logger';
+import {RequestIdContext} from '../middleware/context';
+import {addRequestId} from '../middleware/request-id-middleware';
 
 export function onDurableObjectFetch<ENV extends {} = {}>(
   envGetter: () => ENV,
-  fn: (request: Request, env: ENV, context: {}) => Promise<Response>,
+  fn: (request: Request, env: ENV, context: RequestIdContext) => Promise<Response>,
 ) {
+  const packedFn = addRequestId(fn);
   return async (request: Request) => {
     // env needs to be fetched every request because it is still null on initializing function
     const env = envGetter();
     const context = {};
     try {
-      return await fn(request, env, context);
+      return await packedFn(request, env, context);
     } catch (e) {
       logErrorWithException(
         'Durable Object Error handling request',

@@ -1,4 +1,4 @@
-import { BasicError_BasicErrorCode } from '../../contracts/errors/v1/errors';
+import {BasicError_BasicErrorCode} from '../../contracts/errors/v1/errors';
 import {
   CreateImageResponse,
   GetImagesByGroupIdRequest,
@@ -6,19 +6,18 @@ import {
   Image,
   Images,
 } from '../../contracts/images/v1/images';
-import { isNotNullOrUndefined } from '../../lib/lib';
-import { addAuthenticationGuard } from '../../lib/middleware/authenticated-middleware';
-import { LoggerContext } from '../../lib/middleware/context';
-import { addLoggerContext } from '../../lib/middleware/logger-middleware';
+import {isNotNullOrUndefined} from '../../lib/lib';
+import {addAuthenticationGuard} from '../../lib/middleware/authenticated-middleware';
+import {LoggerContext} from '../../lib/middleware/context';
+import {addLoggerContext} from '../../lib/middleware/logger-middleware';
 import {
   createProtoBufBasicErrorResponse,
   createProtoBufOkResponse,
   protoBuf,
 } from '../../lib/middleware/protobuf-middleware';
-import { addRequestId } from '../../lib/middleware/request-id-middleware';
-import { addRouter, route } from '../../lib/middleware/router-middleware';
-import { getRights } from '../../lib/rights';
-import { IMAGES_KV } from './images-kv';
+import {addRouter, route} from '../../lib/middleware/router-middleware';
+import {getRights} from '../../lib/rights';
+import {IMAGES_KV} from './images-kv';
 
 interface EnvironmentVariables {
   LOKI_SECRET: string;
@@ -76,120 +75,118 @@ async function uploadFile(
 export default {
   fetch: addLoggerContext<EnvironmentVariables, Request, FetchEvent, Response>(
     'images',
-    addRequestId(
-      addAuthenticationGuard(
-        addRouter([
-          route(
-            'POST',
-            ['v1', 'images', 'get-images-by-group-id'],
-            protoBuf(
-              GetImagesByGroupIdRequest,
-              GetImagesByGroupIdResponse,
-              async (request, env, context) => {
-                const results = await env.IMAGES.list<{ imageId: string }>({
-                  prefix: IMAGES_KV.IMAGES_USER(context.user.userId),
-                  cursor: context.proto.body.cursor,
-                });
-                const imageUrls = [];
-                for (const key of results.keys) {
-                  const metadata = key.metadata;
-                  if (!isImageMetadata(metadata)) {
-                    context.logger.error(
-                      `Invalid metadata for image ${key.name}`,
-                    );
-                    return createProtoBufBasicErrorResponse(
-                      'Could not fetch images',
-                      BasicError_BasicErrorCode.INTERNAL,
-                    );
-                  }
-                  imageUrls.push(
-                    `https://imagedelivery.net/lBSTOnVnm_g3jeLWNwAYiA/${metadata.imageId}/preview`,
-                  );
-                }
-
-                return createProtoBufOkResponse<Images>({
-                  images: imageUrls.map((url) => ({
-                    imageId: url,
-                    type: '',
-                  })),
-                  cursor: results.cursor,
-                });
-              },
-            ),
-          ),
-          route(
-            'POST',
-            ['v1', 'images', 'create-image'],
-            protoBuf(
-              null,
-              CreateImageResponse,
-              async (request, env, context) => {
-                const formData = await request.formData();
-                const groupId = formData.get('groupId');
-                if (typeof groupId !== 'string') {
+    addAuthenticationGuard(
+      addRouter([
+        route(
+          'POST',
+          ['v1', 'images', 'get-images-by-group-id'],
+          protoBuf(
+            GetImagesByGroupIdRequest,
+            GetImagesByGroupIdResponse,
+            async (request, env, context) => {
+              const results = await env.IMAGES.list<{ imageId: string }>({
+                prefix: IMAGES_KV.IMAGES_USER(context.user.userId),
+                cursor: context.proto.body.cursor,
+              });
+              const imageUrls = [];
+              for (const key of results.keys) {
+                const metadata = key.metadata;
+                if (!isImageMetadata(metadata)) {
                   context.logger.error(
-                    `User tried to upload photo to group without rights. groupId=${groupId}, rights=${getRights(
-                      context,
-                    )}`,
+                    `Invalid metadata for image ${key.name}`,
                   );
                   return createProtoBufBasicErrorResponse(
-                    'No groupId provided',
-                    BasicError_BasicErrorCode.BAD_REQUEST,
-                  );
-                }
-                // if (!hasRight(RIGHTS.GROUP(groupId), context)) {
-                //   context.logger.error(`User tried to upload photo to group without rights. groupId=${groupId}, rights=${getRights(context)}`);
-                //   return createProtoBufBasicErrorResponse('UNAUTHENTICATED', BasicError_BasicErrorCode.UNAUTHENTICATED);
-                // }
-                const file = formData.get('file');
-
-                if (!(file instanceof File)) {
-                  return createProtoBufBasicErrorResponse(
-                    'Could not get image from request',
-                    BasicError_BasicErrorCode.BAD_REQUEST,
-                  );
-                }
-
-                const res = await uploadFile(
-                  file,
-                  env.SHARECATION_IMAGES_ACCOUNT_TOKEN,
-                  context,
-                );
-
-                if (!res.success) {
-                  context.logger.error(
-                    `Error uploading image with response: ${JSON.stringify(
-                      res,
-                    )}`,
-                  );
-                  return createProtoBufBasicErrorResponse(
-                    'Failed to upload image',
+                    'Could not fetch images',
                     BasicError_BasicErrorCode.INTERNAL,
                   );
                 }
-
-                const imageKey = IMAGES_KV.IMAGE(
-                  context.user.userId,
-                  new Date().toISOString(),
-                  res.result.id,
+                imageUrls.push(
+                  `https://imagedelivery.net/lBSTOnVnm_g3jeLWNwAYiA/${metadata.imageId}/preview`,
                 );
-                env.IMAGES.put(
-                  imageKey,
-                  JSON.stringify({ imageId: res.result.id }),
-                  {
-                    metadata: { imageId: res.result.id },
-                  },
-                );
+              }
 
-                return createProtoBufOkResponse<Image>({
-                  imageId: res.result.id,
-                  type: file.type,
-                });
-              },
-            ),
+              return createProtoBufOkResponse<Images>({
+                images: imageUrls.map((url) => ({
+                  imageId: url,
+                  type: '',
+                })),
+                cursor: results.cursor,
+              });
+            },
           ),
-        ]),
-      ),
+        ),
+        route(
+          'POST',
+          ['v1', 'images', 'create-image'],
+          protoBuf(
+            null,
+            CreateImageResponse,
+            async (request, env, context) => {
+              const formData = await request.formData();
+              const groupId = formData.get('groupId');
+              if (typeof groupId !== 'string') {
+                context.logger.error(
+                  `User tried to upload photo to group without rights. groupId=${groupId}, rights=${getRights(
+                    context,
+                  )}`,
+                );
+                return createProtoBufBasicErrorResponse(
+                  'No groupId provided',
+                  BasicError_BasicErrorCode.BAD_REQUEST,
+                );
+              }
+              // if (!hasRight(RIGHTS.GROUP(groupId), context)) {
+              //   context.logger.error(`User tried to upload photo to group without rights. groupId=${groupId}, rights=${getRights(context)}`);
+              //   return createProtoBufBasicErrorResponse('UNAUTHENTICATED', BasicError_BasicErrorCode.UNAUTHENTICATED);
+              // }
+              const file = formData.get('file');
+
+              if (!(file instanceof File)) {
+                return createProtoBufBasicErrorResponse(
+                  'Could not get image from request',
+                  BasicError_BasicErrorCode.BAD_REQUEST,
+                );
+              }
+
+              const res = await uploadFile(
+                file,
+                env.SHARECATION_IMAGES_ACCOUNT_TOKEN,
+                context,
+              );
+
+              if (!res.success) {
+                context.logger.error(
+                  `Error uploading image with response: ${JSON.stringify(
+                    res,
+                  )}`,
+                );
+                return createProtoBufBasicErrorResponse(
+                  'Failed to upload image',
+                  BasicError_BasicErrorCode.INTERNAL,
+                );
+              }
+
+              const imageKey = IMAGES_KV.IMAGE(
+                context.user.userId,
+                new Date().toISOString(),
+                res.result.id,
+              );
+              env.IMAGES.put(
+                imageKey,
+                JSON.stringify({imageId: res.result.id}),
+                {
+                  metadata: {imageId: res.result.id},
+                },
+              );
+
+              return createProtoBufOkResponse<Image>({
+                imageId: res.result.id,
+                type: file.type,
+              });
+            },
+          ),
+        ),
+      ]),
     ),
   ),
 };

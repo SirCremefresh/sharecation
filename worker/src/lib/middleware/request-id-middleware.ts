@@ -1,19 +1,25 @@
-import { RequestIdContext } from './context';
+import {RequestIdContext} from './context';
 
-export function addRequestId<
-  REQUEST,
+const requestIdHeader = 'X-Request-ID';
+
+// This middleware is default on the following starters
+// on-fetch
+// on-durable-object-fetch
+export function addRequestId<REQUEST extends Request,
   ENV,
-  CONTEXT extends ExecutionContext,
-  RESPONSE extends Response | null,
->(
+  CONTEXT,
+  RESPONSE extends Response,
+  >(
   fn: (
     request: REQUEST,
     env: ENV,
     context: CONTEXT & RequestIdContext,
   ) => Promise<RESPONSE>,
 ) {
-  return (request: REQUEST, env: ENV, cfContext: CONTEXT) => {
-    const requestId = crypto.randomUUID();
-    return fn(request, env, Object.assign(cfContext, { requestId }));
+  return async (request: REQUEST, env: ENV, cfContext: CONTEXT) => {
+    const requestId = request.headers.get(requestIdHeader) ?? crypto.randomUUID();
+    const response = await fn(request, env, Object.assign(cfContext, {requestId}));
+    response.headers.set(requestIdHeader, requestId);
+    return response;
   };
 }

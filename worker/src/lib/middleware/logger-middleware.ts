@@ -1,12 +1,25 @@
-import {logErrorWithException, Logger, LoggerConfig} from '../logger';
+import {Logger} from 'workers-loki-logger';
+import {logErrorWithException} from '../logger';
 import {LoggerContext} from './context';
+
+export interface LoggerConfig {
+  LOKI_SECRET: string;
+  ENVIRONMENT: string;
+}
 
 function addLoggerToContext<CONTEXT extends {}>(
   serviceName: string,
   loggingConfig: LoggerConfig,
   context: CONTEXT,
 ): CONTEXT & LoggerContext {
-  const logger = new Logger(loggingConfig, context, serviceName);
+  const logger = new Logger({
+    lokiSecret: loggingConfig.LOKI_SECRET,
+    cloudflareContext: context,
+    stream: {
+      service: serviceName,
+      environment: loggingConfig.ENVIRONMENT,
+    }
+  });
   return Object.assign(context, {logger});
 }
 

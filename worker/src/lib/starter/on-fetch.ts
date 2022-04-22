@@ -1,6 +1,6 @@
 import {BasicError_BasicErrorCode} from '../../contracts/errors/v1/errors';
 import {createBasicErrorResponse} from '../http/response';
-import {logErrorWithException} from '../logger';
+import {logError} from '../logger';
 import {RequestIdContext} from '../middleware/context';
 import {addRequestId} from '../middleware/request-id-middleware';
 
@@ -16,7 +16,7 @@ export function onFetch<ENV extends {} = {}>(
     try {
       return await packedFn(request, env, context);
     } catch (e) {
-      logErrorWithException('Error handling request', e, context);
+      logError('Error handling request', e, context);
       return createBasicErrorResponse(
         {
           message: 'Error handling request',

@@ -30,7 +30,11 @@ export interface User {
  */
 export interface CreateUserRequest {
     /**
-     * @generated from protobuf field: repeated string rights = 1;
+     * @generated from protobuf field: optional string user_id = 1;
+     */
+    userId?: string;
+    /**
+     * @generated from protobuf field: repeated string rights = 2;
      */
     rights: string[];
 }
@@ -115,7 +119,8 @@ export const User = new User$Type();
 class CreateUserRequest$Type extends MessageType<CreateUserRequest> {
     constructor() {
         super("dev_tools.v1.CreateUserRequest", [
-            { no: 1, name: "rights", kind: "scalar", repeat: 2 /*RepeatType.UNPACKED*/, T: 9 /*ScalarType.STRING*/ }
+            { no: 1, name: "user_id", kind: "scalar", opt: true, T: 9 /*ScalarType.STRING*/ },
+            { no: 2, name: "rights", kind: "scalar", repeat: 2 /*RepeatType.UNPACKED*/, T: 9 /*ScalarType.STRING*/ }
         ]);
     }
     create(value?: PartialMessage<CreateUserRequest>): CreateUserRequest {
@@ -130,7 +135,10 @@ class CreateUserRequest$Type extends MessageType<CreateUserRequest> {
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
-                case /* repeated string rights */ 1:
+                case /* optional string user_id */ 1:
+                    message.userId = reader.string();
+                    break;
+                case /* repeated string rights */ 2:
                     message.rights.push(reader.string());
                     break;
                 default:
@@ -145,9 +153,12 @@ class CreateUserRequest$Type extends MessageType<CreateUserRequest> {
         return message;
     }
     internalBinaryWrite(message: CreateUserRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
-        /* repeated string rights = 1; */
+        /* optional string user_id = 1; */
+        if (message.userId !== undefined)
+            writer.tag(1, WireType.LengthDelimited).string(message.userId);
+        /* repeated string rights = 2; */
         for (let i = 0; i < message.rights.length; i++)
-            writer.tag(1, WireType.LengthDelimited).string(message.rights[i]);
+            writer.tag(2, WireType.LengthDelimited).string(message.rights[i]);
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);

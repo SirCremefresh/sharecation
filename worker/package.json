@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "description": "A template for kick starting a Cloudflare Workers project",
   "main": "index.mjs",
+  "types": "module",
   "scripts": {
     "build": "tsc --noEmit",
     "build:emit": "tsc",
@@ -36,6 +37,7 @@
     "wrangler": "0.0.26"
   },
   "dependencies": {
-    "@protobuf-ts/runtime": "2.4.0"
+    "@protobuf-ts/runtime": "2.4.0",
+    "workers-loki-logger": "^0.1.6"
   }
 }

@@ -7,13 +7,13 @@ import { AuthenticatedContext, LoggerContext } from './context';
 
 export function addAuthenticatedToContext<CONTEXT>(
   userId: string,
-  rights: Set<string>,
+  roles: Set<string>,
   context: CONTEXT,
 ): CONTEXT & AuthenticatedContext {
   return Object.assign(context, {
     user: {
       userId,
-      rights,
+      roles,
     },
   });
 }
@@ -81,7 +81,7 @@ export function addAuthenticationGuard<
       env,
       addAuthenticatedToContext(
         jwt.payload.sub,
-        new Set(jwt.payload.rights),
+        new Set(jwt.payload.roles),
         context,
       ),
     );

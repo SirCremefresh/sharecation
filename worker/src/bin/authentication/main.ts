@@ -2,17 +2,14 @@ import {
   Authenticated,
   CreateAuthenticationWithFirebaseRequest,
   CreateAuthenticationWithFirebaseResponse,
-  CreateRightBindingRequest,
-  CreateRightBindingResponse,
-  DeleteRightBindingRequest,
-  DeleteRightBindingResponse,
-  GetHasRightBindingRequest,
-  GetHasRightBindingResponse,
-  GetHasRightBindingResponse_HasRightBinding,
-  GetRightsOfUserRequest,
-  GetRightsOfUserResponse,
-  RightBinding,
-  Rights,
+  CreateRoleBindingRequest,
+  CreateRoleBindingResponse,
+  DeleteRoleBindingRequest,
+  DeleteRoleBindingResponse,
+  GetRolesOfUserRequest,
+  GetRolesOfUserResponse,
+  RoleBinding,
+  Roles,
 } from '../../contracts/authentication/v1/authentication';
 import {GetPublicJwksResponse, PublicJwks} from '../../contracts/authentication/v1/public_jwk';
 import {BasicError_BasicErrorCode} from '../../contracts/errors/v1/errors';
@@ -27,39 +24,39 @@ import {
   protoBuf,
 } from '../../lib/middleware/protobuf-middleware';
 import {addRouter, route} from '../../lib/middleware/router-middleware';
-import {hasRight, RIGHTS} from '../../lib/rights';
+import {hasRole, ROLES} from '../../lib/roles';
 import {onFetch} from '../../lib/starter/on-fetch';
 import {AuthenticationEnvironmentVariables} from './authentication-environment-variables';
 import {createAuthenticationKv} from './authentication-kv';
 import {verifyGoogleJwt} from './google-keys';
 import {generateSharecationJwt} from './sharecation-keys';
 // Make durable object visible
-export {RightsStorage} from './rights-storage';
+export {RolesStorage} from './roles-storage';
 
 const SERVICE_NAME = 'authentication';
 
-function getRightsStorageProxy(env: AuthenticationEnvironmentVariables) {
-  return env.RIGHTS_STORAGE.get(env.RIGHTS_STORAGE.idFromName('0'));
+function getRolesStorageProxy(env: AuthenticationEnvironmentVariables) {
+  return env.ROLES_STORAGE.get(env.ROLES_STORAGE.idFromName('0'));
 }
 
-async function getRightsOfUser(proxy: DurableObjectStub, userId: string) {
+async function getRolesOfUser(proxy: DurableObjectStub, userId: string) {
   return await proxy
-    .fetch(proxyUrl(['v1', userId, 'rights']), {
+    .fetch(proxyUrl(['v1', userId, 'roles']), {
       method: 'GET',
     })
     .then((res) => res.json<string[]>());
 }
 
-function canUserEditRight(right: string, context: AuthenticatedContext) {
-  const ADMIN_RIGHT = 'admin:' + right.split(':', 1)[0];
-  const canEdit = hasRight(ADMIN_RIGHT, context);
+function canUserEditRole(role: string, context: AuthenticatedContext): { canEdit: boolean; requiredRole: string } {
+  const ADMIN_ROLE = 'admin:' + role.split(':', 1)[0];
+  const canEdit = hasRole(ADMIN_ROLE, context);
   if (!canEdit) {
     logInfo(
-      `User tried to edit right without having permission. requiredRight=${ADMIN_RIGHT}, userId=${context.user.userId}, rights=${context.user.rights}`,
+      `User tried to edit role without having permission. requiredRole=${ADMIN_ROLE}, userId=${context.user.userId}, roles=${context.user.roles}`,
       context,
     );
   }
-  return canEdit;
+  return {canEdit, requiredRole: ADMIN_ROLE};
 }
 
 // noinspection JSUnusedGlobalSymbols
@@ -107,18 +104,18 @@ export default {
                   BasicError_BasicErrorCode.BAD_REQUEST,
                 );
               }
-              const proxy = getRightsStorageProxy(env);
-              const rights = await getRightsOfUser(proxy, userId);
+              const proxy = getRolesStorageProxy(env);
+              const roles = await getRolesOfUser(proxy, userId);
               context = addAuthenticatedToContext(
                 userId,
-                new Set(rights),
+                new Set(roles),
                 context,
               );
 
               context.logger.info(`generating jwt for userId=${userId}`);
               const generated = await generateSharecationJwt(
                 userId,
-                rights,
+                roles,
                 authenticationKv,
                 context,
               );
@@ -134,35 +131,33 @@ export default {
         ),
         route(
           'POST',
-          ['v1', 'create-right-of-user'],
+          ['v1', 'create-role-of-user'],
           addAuthenticationGuard(
             protoBuf(
-              CreateRightBindingRequest,
-              CreateRightBindingResponse,
+              CreateRoleBindingRequest,
+              CreateRoleBindingResponse,
               async (request, env, context) => {
-                const {userId, right} = context.proto.body;
-                const userCanEditRight = canUserEditRight(right, context);
-                if (!userCanEditRight) {
+                const {userId, role} = context.proto.body;
+                const {canEdit, requiredRole} = canUserEditRole(role, context);
+                if (!canEdit) {
                   return createProtoBufBasicErrorResponse(
-                    `Not allowed to add right of user. userId=${userId}, right=${right}, s=${
-                      'ADMIN:' + right.split(':', 1)[0]
-                    }, asdf=${context.user.rights}`,
+                    `Not allowed to add role of user. userId=${userId}, role=${role}, requiredRole=${requiredRole}`,
                     BasicError_BasicErrorCode.UNAUTHENTICATED,
                   );
                 }
 
-                const proxy = getRightsStorageProxy(env);
-                context.logger.info(`Adding right to user. right=${right}`);
-                await proxy.fetch(proxyUrl(['v1', userId, 'rights']), {
+                const proxy = getRolesStorageProxy(env);
+                context.logger.info(`Adding role to user. role=${role}`);
+                await proxy.fetch(proxyUrl(['v1', userId, 'roles']), {
                   body: JSON.stringify({
-                    right,
+                    role,
                   }),
                   method: 'POST',
                 });
 
-                return createProtoBufOkResponse<RightBinding>({
+                return createProtoBufOkResponse<RoleBinding>({
                   userId,
-                  right,
+                  role,
                 });
               },
             ),
@@ -170,30 +165,30 @@ export default {
         ),
         route(
           'POST',
-          ['v1', 'delete-right-of-user'],
+          ['v1', 'delete-role-of-user'],
           addAuthenticationGuard(
             protoBuf(
-              DeleteRightBindingRequest,
-              DeleteRightBindingResponse,
+              DeleteRoleBindingRequest,
+              DeleteRoleBindingResponse,
               async (request, env, context) => {
-                const {userId, right} = context.proto.body;
-                const userCanEditRight = canUserEditRight(right, context);
-                if (!userCanEditRight) {
+                const {userId, role} = context.proto.body;
+                const {canEdit, requiredRole} = canUserEditRole(role, context);
+                if (!canEdit) {
                   return createProtoBufBasicErrorResponse(
-                    `Not allowed to delete right of user. userId=${userId}, right=${right}`,
+                    `Not allowed to delete role of user. userId=${userId}, role=${role}, requiredRole=${requiredRole}`,
                     BasicError_BasicErrorCode.UNAUTHENTICATED,
                   );
                 }
 
-                const proxy = getRightsStorageProxy(env);
-                context.logger.info(`Deleting right ${right}`);
-                await proxy.fetch(proxyUrl(['v1', userId, 'rights', right]), {
+                const proxy = getRolesStorageProxy(env);
+                context.logger.info(`Deleting role ${role}`);
+                await proxy.fetch(proxyUrl(['v1', userId, 'roles', role]), {
                   method: 'DELETE',
                 });
 
-                return createProtoBufOkResponse<RightBinding>({
+                return createProtoBufOkResponse<RoleBinding>({
                   userId,
-                  right,
+                  role,
                 });
               },
             ),
@@ -201,60 +196,28 @@ export default {
         ),
         route(
           'POST',
-          ['v1', 'get-right-of-user'],
+          ['v1', 'get-roles-of-user'],
           addAuthenticationGuard(
             protoBuf(
-              GetHasRightBindingRequest,
-              GetHasRightBindingResponse,
+              GetRolesOfUserRequest,
+              GetRolesOfUserResponse,
               async (request, env, context) => {
-                if (!hasRight(RIGHTS.ADMIN_RIGHT, context)) {
+                if (!hasRole(ROLES.ADMIN_ROLE, context)) {
                   return createProtoBufBasicErrorResponse(
-                    `right: ${RIGHTS.ADMIN_RIGHT} is required to read right`,
-                    BasicError_BasicErrorCode.UNAUTHENTICATED,
-                  );
-                }
-                const {userId, right} = context.proto.body;
-                const proxy = getRightsStorageProxy(env);
-
-                const rights = await proxy
-                  .fetch(proxyUrl(['v1', userId, 'rights']), {
-                    method: 'GET',
-                  })
-                  .then((res) => res.json<string[]>());
-
-                return createProtoBufOkResponse<GetHasRightBindingResponse_HasRightBinding>(
-                  {
-                    hasRightBinding: rights.includes(right),
-                  },
-                );
-              },
-            ),
-          ),
-        ),
-        route(
-          'POST',
-          ['v1', 'get-rights-of-user'],
-          addAuthenticationGuard(
-            protoBuf(
-              GetRightsOfUserRequest,
-              GetRightsOfUserResponse,
-              async (request, env, context) => {
-                if (!hasRight(RIGHTS.ADMIN_RIGHT, context)) {
-                  return createProtoBufBasicErrorResponse(
-                    `Right=${RIGHTS.ADMIN_RIGHT} is required to read right`,
+                    `Role=${ROLES.ADMIN_ROLE} is required to read role`,
                     BasicError_BasicErrorCode.UNAUTHENTICATED,
                   );
                 }
                 const {userId} = context.proto.body;
-                const proxy = getRightsStorageProxy(env);
-                const rights = await getRightsOfUser(proxy, userId);
+                const proxy = getRolesStorageProxy(env);
+                const roles = await getRolesOfUser(proxy, userId);
 
                 logInfo(
-                  `Got rights of user. rights=[${rights.join(', ')}]`,
+                  `Got roles of user. roles=[${roles.join(', ')}]`,
                   context,
                 );
-                return createProtoBufOkResponse<Rights>({
-                  rights: rights,
+                return createProtoBufOkResponse<Roles>({
+                  roles: roles,
                 });
               },
             ),

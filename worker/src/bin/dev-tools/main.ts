@@ -36,7 +36,7 @@ export default {
                 const userId = context.proto.body.userId ?? crypto.randomUUID();
                 const jwtData = await generateSharecationJwt(
                   userId,
-                  context.proto.body.rights,
+                  context.proto.body.roles,
                   authenticationKv,
                   context,
                 );

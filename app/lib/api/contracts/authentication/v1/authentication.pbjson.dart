@@ -54,77 +54,43 @@ const CreateAuthenticationWithFirebaseResponse$json = const {
 
 /// Descriptor for `CreateAuthenticationWithFirebaseResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List createAuthenticationWithFirebaseResponseDescriptor = $convert.base64Decode('CihDcmVhdGVBdXRoZW50aWNhdGlvbldpdGhGaXJlYmFzZVJlc3BvbnNlEjIKAm9rGAEgASgLMiAuYXV0aGVudGljYXRpb24udjEuQXV0aGVudGljYXRlZEgAUgJvaxItCgVlcnJvchgCIAEoCzIVLmVycm9ycy52MS5CYXNpY0Vycm9ySABSBWVycm9yQgoKCHJlc3BvbnNl');
-@$core.Deprecated('Use getHasRightBindingRequestDescriptor instead')
-const GetHasRightBindingRequest$json = const {
-  '1': 'GetHasRightBindingRequest',
+@$core.Deprecated('Use roleBindingDescriptor instead')
+const RoleBinding$json = const {
+  '1': 'RoleBinding',
   '2': const [
     const {'1': 'user_id', '3': 1, '4': 1, '5': 9, '10': 'userId'},
-    const {'1': 'right', '3': 2, '4': 1, '5': 9, '10': 'right'},
+    const {'1': 'role', '3': 2, '4': 1, '5': 9, '10': 'role'},
   ],
 };
 
-/// Descriptor for `GetHasRightBindingRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List getHasRightBindingRequestDescriptor = $convert.base64Decode('ChlHZXRIYXNSaWdodEJpbmRpbmdSZXF1ZXN0EhcKB3VzZXJfaWQYASABKAlSBnVzZXJJZBIUCgVyaWdodBgCIAEoCVIFcmlnaHQ=');
-@$core.Deprecated('Use getHasRightBindingResponseDescriptor instead')
-const GetHasRightBindingResponse$json = const {
-  '1': 'GetHasRightBindingResponse',
+/// Descriptor for `RoleBinding`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List roleBindingDescriptor = $convert.base64Decode('CgtSb2xlQmluZGluZxIXCgd1c2VyX2lkGAEgASgJUgZ1c2VySWQSEgoEcm9sZRgCIAEoCVIEcm9sZQ==');
+@$core.Deprecated('Use rolesDescriptor instead')
+const Roles$json = const {
+  '1': 'Roles',
   '2': const [
-    const {'1': 'ok', '3': 1, '4': 1, '5': 11, '6': '.authentication.v1.GetHasRightBindingResponse.HasRightBinding', '9': 0, '10': 'ok'},
-    const {'1': 'error', '3': 2, '4': 1, '5': 11, '6': '.errors.v1.BasicError', '9': 0, '10': 'error'},
-  ],
-  '3': const [GetHasRightBindingResponse_HasRightBinding$json],
-  '8': const [
-    const {'1': 'response'},
+    const {'1': 'roles', '3': 1, '4': 3, '5': 9, '10': 'roles'},
   ],
 };
 
-@$core.Deprecated('Use getHasRightBindingResponseDescriptor instead')
-const GetHasRightBindingResponse_HasRightBinding$json = const {
-  '1': 'HasRightBinding',
-  '2': const [
-    const {'1': 'has_right_binding', '3': 1, '4': 1, '5': 8, '10': 'hasRightBinding'},
-  ],
-};
-
-/// Descriptor for `GetHasRightBindingResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List getHasRightBindingResponseDescriptor = $convert.base64Decode('ChpHZXRIYXNSaWdodEJpbmRpbmdSZXNwb25zZRJPCgJvaxgBIAEoCzI9LmF1dGhlbnRpY2F0aW9uLnYxLkdldEhhc1JpZ2h0QmluZGluZ1Jlc3BvbnNlLkhhc1JpZ2h0QmluZGluZ0gAUgJvaxItCgVlcnJvchgCIAEoCzIVLmVycm9ycy52MS5CYXNpY0Vycm9ySABSBWVycm9yGj0KD0hhc1JpZ2h0QmluZGluZxIqChFoYXNfcmlnaHRfYmluZGluZxgBIAEoCFIPaGFzUmlnaHRCaW5kaW5nQgoKCHJlc3BvbnNl');
-@$core.Deprecated('Use rightBindingDescriptor instead')
-const RightBinding$json = const {
-  '1': 'RightBinding',
+/// Descriptor for `Roles`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List rolesDescriptor = $convert.base64Decode('CgVSb2xlcxIUCgVyb2xlcxgBIAMoCVIFcm9sZXM=');
+@$core.Deprecated('Use createRoleBindingRequestDescriptor instead')
+const CreateRoleBindingRequest$json = const {
+  '1': 'CreateRoleBindingRequest',
   '2': const [
     const {'1': 'user_id', '3': 1, '4': 1, '5': 9, '10': 'userId'},
-    const {'1': 'right', '3': 2, '4': 1, '5': 9, '10': 'right'},
+    const {'1': 'role', '3': 2, '4': 1, '5': 9, '10': 'role'},
   ],
 };
 
-/// Descriptor for `RightBinding`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List rightBindingDescriptor = $convert.base64Decode('CgxSaWdodEJpbmRpbmcSFwoHdXNlcl9pZBgBIAEoCVIGdXNlcklkEhQKBXJpZ2h0GAIgASgJUgVyaWdodA==');
-@$core.Deprecated('Use rightsDescriptor instead')
-const Rights$json = const {
-  '1': 'Rights',
+/// Descriptor for `CreateRoleBindingRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List createRoleBindingRequestDescriptor = $convert.base64Decode('ChhDcmVhdGVSb2xlQmluZGluZ1JlcXVlc3QSFwoHdXNlcl9pZBgBIAEoCVIGdXNlcklkEhIKBHJvbGUYAiABKAlSBHJvbGU=');
+@$core.Deprecated('Use createRoleBindingResponseDescriptor instead')
+const CreateRoleBindingResponse$json = const {
+  '1': 'CreateRoleBindingResponse',
   '2': const [
-    const {'1': 'rights', '3': 1, '4': 3, '5': 9, '10': 'rights'},
-  ],
-};
-
-/// Descriptor for `Rights`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List rightsDescriptor = $convert.base64Decode('CgZSaWdodHMSFgoGcmlnaHRzGAEgAygJUgZyaWdodHM=');
-@$core.Deprecated('Use createRightBindingRequestDescriptor instead')
-const CreateRightBindingRequest$json = const {
-  '1': 'CreateRightBindingRequest',
-  '2': const [
-    const {'1': 'user_id', '3': 1, '4': 1, '5': 9, '10': 'userId'},
-    const {'1': 'right', '3': 2, '4': 1, '5': 9, '10': 'right'},
-  ],
-};
-
-/// Descriptor for `CreateRightBindingRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List createRightBindingRequestDescriptor = $convert.base64Decode('ChlDcmVhdGVSaWdodEJpbmRpbmdSZXF1ZXN0EhcKB3VzZXJfaWQYASABKAlSBnVzZXJJZBIUCgVyaWdodBgCIAEoCVIFcmlnaHQ=');
-@$core.Deprecated('Use createRightBindingResponseDescriptor instead')
-const CreateRightBindingResponse$json = const {
-  '1': 'CreateRightBindingResponse',
-  '2': const [
-    const {'1': 'ok', '3': 1, '4': 1, '5': 11, '6': '.authentication.v1.RightBinding', '9': 0, '10': 'ok'},
+    const {'1': 'ok', '3': 1, '4': 1, '5': 11, '6': '.authentication.v1.RoleBinding', '9': 0, '10': 'ok'},
     const {'1': 'error', '3': 2, '4': 1, '5': 11, '6': '.errors.v1.BasicError', '9': 0, '10': 'error'},
   ],
   '8': const [
@@ -132,24 +98,24 @@ const CreateRightBindingResponse$json = const {
   ],
 };
 
-/// Descriptor for `CreateRightBindingResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List createRightBindingResponseDescriptor = $convert.base64Decode('ChpDcmVhdGVSaWdodEJpbmRpbmdSZXNwb25zZRIxCgJvaxgBIAEoCzIfLmF1dGhlbnRpY2F0aW9uLnYxLlJpZ2h0QmluZGluZ0gAUgJvaxItCgVlcnJvchgCIAEoCzIVLmVycm9ycy52MS5CYXNpY0Vycm9ySABSBWVycm9yQgoKCHJlc3BvbnNl');
-@$core.Deprecated('Use deleteRightBindingRequestDescriptor instead')
-const DeleteRightBindingRequest$json = const {
-  '1': 'DeleteRightBindingRequest',
+/// Descriptor for `CreateRoleBindingResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List createRoleBindingResponseDescriptor = $convert.base64Decode('ChlDcmVhdGVSb2xlQmluZGluZ1Jlc3BvbnNlEjAKAm9rGAEgASgLMh4uYXV0aGVudGljYXRpb24udjEuUm9sZUJpbmRpbmdIAFICb2sSLQoFZXJyb3IYAiABKAsyFS5lcnJvcnMudjEuQmFzaWNFcnJvckgAUgVlcnJvckIKCghyZXNwb25zZQ==');
+@$core.Deprecated('Use deleteRoleBindingRequestDescriptor instead')
+const DeleteRoleBindingRequest$json = const {
+  '1': 'DeleteRoleBindingRequest',
   '2': const [
     const {'1': 'user_id', '3': 1, '4': 1, '5': 9, '10': 'userId'},
-    const {'1': 'right', '3': 2, '4': 1, '5': 9, '10': 'right'},
+    const {'1': 'role', '3': 2, '4': 1, '5': 9, '10': 'role'},
   ],
 };
 
-/// Descriptor for `DeleteRightBindingRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List deleteRightBindingRequestDescriptor = $convert.base64Decode('ChlEZWxldGVSaWdodEJpbmRpbmdSZXF1ZXN0EhcKB3VzZXJfaWQYASABKAlSBnVzZXJJZBIUCgVyaWdodBgCIAEoCVIFcmlnaHQ=');
-@$core.Deprecated('Use deleteRightBindingResponseDescriptor instead')
-const DeleteRightBindingResponse$json = const {
-  '1': 'DeleteRightBindingResponse',
+/// Descriptor for `DeleteRoleBindingRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List deleteRoleBindingRequestDescriptor = $convert.base64Decode('ChhEZWxldGVSb2xlQmluZGluZ1JlcXVlc3QSFwoHdXNlcl9pZBgBIAEoCVIGdXNlcklkEhIKBHJvbGUYAiABKAlSBHJvbGU=');
+@$core.Deprecated('Use deleteRoleBindingResponseDescriptor instead')
+const DeleteRoleBindingResponse$json = const {
+  '1': 'DeleteRoleBindingResponse',
   '2': const [
-    const {'1': 'ok', '3': 1, '4': 1, '5': 11, '6': '.authentication.v1.RightBinding', '9': 0, '10': 'ok'},
+    const {'1': 'ok', '3': 1, '4': 1, '5': 11, '6': '.authentication.v1.RoleBinding', '9': 0, '10': 'ok'},
     const {'1': 'error', '3': 2, '4': 1, '5': 11, '6': '.errors.v1.BasicError', '9': 0, '10': 'error'},
   ],
   '8': const [
@@ -157,23 +123,23 @@ const DeleteRightBindingResponse$json = const {
   ],
 };
 
-/// Descriptor for `DeleteRightBindingResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List deleteRightBindingResponseDescriptor = $convert.base64Decode('ChpEZWxldGVSaWdodEJpbmRpbmdSZXNwb25zZRIxCgJvaxgBIAEoCzIfLmF1dGhlbnRpY2F0aW9uLnYxLlJpZ2h0QmluZGluZ0gAUgJvaxItCgVlcnJvchgCIAEoCzIVLmVycm9ycy52MS5CYXNpY0Vycm9ySABSBWVycm9yQgoKCHJlc3BvbnNl');
-@$core.Deprecated('Use getRightsOfUserRequestDescriptor instead')
-const GetRightsOfUserRequest$json = const {
-  '1': 'GetRightsOfUserRequest',
+/// Descriptor for `DeleteRoleBindingResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List deleteRoleBindingResponseDescriptor = $convert.base64Decode('ChlEZWxldGVSb2xlQmluZGluZ1Jlc3BvbnNlEjAKAm9rGAEgASgLMh4uYXV0aGVudGljYXRpb24udjEuUm9sZUJpbmRpbmdIAFICb2sSLQoFZXJyb3IYAiABKAsyFS5lcnJvcnMudjEuQmFzaWNFcnJvckgAUgVlcnJvckIKCghyZXNwb25zZQ==');
+@$core.Deprecated('Use getRolesOfUserRequestDescriptor instead')
+const GetRolesOfUserRequest$json = const {
+  '1': 'GetRolesOfUserRequest',
   '2': const [
     const {'1': 'user_id', '3': 1, '4': 1, '5': 9, '10': 'userId'},
   ],
 };
 
-/// Descriptor for `GetRightsOfUserRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List getRightsOfUserRequestDescriptor = $convert.base64Decode('ChZHZXRSaWdodHNPZlVzZXJSZXF1ZXN0EhcKB3VzZXJfaWQYASABKAlSBnVzZXJJZA==');
-@$core.Deprecated('Use getRightsOfUserResponseDescriptor instead')
-const GetRightsOfUserResponse$json = const {
-  '1': 'GetRightsOfUserResponse',
+/// Descriptor for `GetRolesOfUserRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getRolesOfUserRequestDescriptor = $convert.base64Decode('ChVHZXRSb2xlc09mVXNlclJlcXVlc3QSFwoHdXNlcl9pZBgBIAEoCVIGdXNlcklk');
+@$core.Deprecated('Use getRolesOfUserResponseDescriptor instead')
+const GetRolesOfUserResponse$json = const {
+  '1': 'GetRolesOfUserResponse',
   '2': const [
-    const {'1': 'ok', '3': 1, '4': 1, '5': 11, '6': '.authentication.v1.Rights', '9': 0, '10': 'ok'},
+    const {'1': 'ok', '3': 1, '4': 1, '5': 11, '6': '.authentication.v1.Roles', '9': 0, '10': 'ok'},
     const {'1': 'error', '3': 2, '4': 1, '5': 11, '6': '.errors.v1.BasicError', '9': 0, '10': 'error'},
   ],
   '8': const [
@@ -181,5 +147,5 @@ const GetRightsOfUserResponse$json = const {
   ],
 };
 
-/// Descriptor for `GetRightsOfUserResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List getRightsOfUserResponseDescriptor = $convert.base64Decode('ChdHZXRSaWdodHNPZlVzZXJSZXNwb25zZRIrCgJvaxgBIAEoCzIZLmF1dGhlbnRpY2F0aW9uLnYxLlJpZ2h0c0gAUgJvaxItCgVlcnJvchgCIAEoCzIVLmVycm9ycy52MS5CYXNpY0Vycm9ySABSBWVycm9yQgoKCHJlc3BvbnNl');
+/// Descriptor for `GetRolesOfUserResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getRolesOfUserResponseDescriptor = $convert.base64Decode('ChZHZXRSb2xlc09mVXNlclJlc3BvbnNlEioKAm9rGAEgASgLMhguYXV0aGVudGljYXRpb24udjEuUm9sZXNIAFICb2sSLQoFZXJyb3IYAiABKAsyFS5lcnJvcnMudjEuQmFzaWNFcnJvckgAUgVlcnJvckIKCghyZXNwb25zZQ==');

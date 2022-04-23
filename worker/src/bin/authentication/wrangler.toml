@@ -9,6 +9,9 @@ ENVIRONMENT = ""
 [[migrations]]
 tag = "v1"
 new_classes = ["RightsStorage"]
+[[migrations]]
+tag = "v2"
+renamed_classes = [{from = "RightsStorage", to = "RolesStorage" }]
 
 [env.development]
 vars = { ENVIRONMENT = "development" }
@@ -17,7 +20,7 @@ kv_namespaces = [
     { binding = "AUTHENTICATION", id = "d63b4f16d315411aa89199e0b6a5a288", preview_id = "d63b4f16d315411aa89199e0b6a5a288" }
 ]
 durable_objects.bindings = [
-    { name = "RIGHTS_STORAGE", class_name = "RightsStorage" }
+    { name = "ROLES_STORAGE", class_name = "RolesStorage" }
 ]
 
 [env.production]
@@ -27,5 +30,5 @@ kv_namespaces = [
     { binding = "AUTHENTICATION", id = "a7fb628fa0504ddebf9d44d1370b1dd6" }
 ]
 durable_objects.bindings = [
-    { name = "RIGHTS_STORAGE", class_name = "RightsStorage" }
+    { name = "ROLES_STORAGE", class_name = "RolesStorage" }
 ]

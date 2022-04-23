@@ -13,8 +13,8 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "rights": [
-    "admin:rights"
+  "roles": [
+    "admin:roles"
   ]
 }
 
@@ -41,8 +41,8 @@ Accept: application/json
 Authorization: Bearer {{jwtString}}
 
 
-### get-rights-of-user
-POST sharecation-authentication-development.donato-wolfisberg.workers.dev/v1/get-rights-of-user
+### get-roles-of-user
+POST sharecation-authentication-development.donato-wolfisberg.workers.dev/v1/get-roles-of-user
 Content-Type: application/json
 Accept: application/json
 Authorization: Bearer {{jwtString}}
@@ -51,13 +51,13 @@ Authorization: Bearer {{jwtString}}
   "userId": "some-user-id-7"
 }
 
-### create-right-of-user
-POST sharecation-authentication-development.donato-wolfisberg.workers.dev/v1/create-right-of-user
+### create-role-of-user
+POST sharecation-authentication-development.donato-wolfisberg.workers.dev/v1/create-role-of-user
 Content-Type: application/json
 Accept: application/json
 Authorization: Bearer {{jwtString}}
 
 {
   "userId": "some-user-id-7",
-  "right": "rights:hello4"
+  "role": "roles:hello4"
 }

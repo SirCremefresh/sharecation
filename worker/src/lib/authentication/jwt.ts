@@ -15,7 +15,7 @@ export interface DecodedJwt {
     exp: number;
     sub: string;
     aud: string;
-    rights: string[];
+    roles: string[];
   };
   signature: string;
   raw: { header: string; payload: string; signature: string };
@@ -67,7 +67,7 @@ export function isExpired(jwt: DecodedJwt): boolean {
 
 export async function generateJwt(
   sub: string,
-  rights: string[],
+  roles: string[],
   cryptoKey: CryptoKey,
   kid: string,
   exp: number,
@@ -75,7 +75,7 @@ export async function generateJwt(
   const payload = {
     sub: sub,
     exp: exp,
-    rights,
+    roles,
   };
   const header = generateJwtHeader(kid);
   const partial =

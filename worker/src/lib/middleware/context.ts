@@ -6,7 +6,7 @@ import { isNotNullOrUndefined } from '../lib';
 export interface AuthenticatedContext {
   user: {
     userId: string;
-    rights: Set<string>;
+    roles: Set<string>;
   };
 }
 

@@ -262,47 +262,47 @@ class CreateAuthenticationWithFirebaseResponse extends $pb.GeneratedMessage {
   $0.BasicError ensureError() => $_ensure(1);
 }
 
-class GetHasRightBindingRequest extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GetHasRightBindingRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'authentication.v1'), createEmptyInstance: create)
+class RoleBinding extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'RoleBinding', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'authentication.v1'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'userId')
-    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'right')
+    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'role')
     ..hasRequiredFields = false
   ;
 
-  GetHasRightBindingRequest._() : super();
-  factory GetHasRightBindingRequest({
+  RoleBinding._() : super();
+  factory RoleBinding({
     $core.String? userId,
-    $core.String? right,
+    $core.String? role,
   }) {
     final _result = create();
     if (userId != null) {
       _result.userId = userId;
     }
-    if (right != null) {
-      _result.right = right;
+    if (role != null) {
+      _result.role = role;
     }
     return _result;
   }
-  factory GetHasRightBindingRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetHasRightBindingRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  factory RoleBinding.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory RoleBinding.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  GetHasRightBindingRequest clone() => GetHasRightBindingRequest()..mergeFromMessage(this);
+  RoleBinding clone() => RoleBinding()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  GetHasRightBindingRequest copyWith(void Function(GetHasRightBindingRequest) updates) => super.copyWith((message) => updates(message as GetHasRightBindingRequest)) as GetHasRightBindingRequest; // ignore: deprecated_member_use
+  RoleBinding copyWith(void Function(RoleBinding) updates) => super.copyWith((message) => updates(message as RoleBinding)) as RoleBinding; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
-  static GetHasRightBindingRequest create() => GetHasRightBindingRequest._();
-  GetHasRightBindingRequest createEmptyInstance() => create();
-  static $pb.PbList<GetHasRightBindingRequest> createRepeated() => $pb.PbList<GetHasRightBindingRequest>();
+  static RoleBinding create() => RoleBinding._();
+  RoleBinding createEmptyInstance() => create();
+  static $pb.PbList<RoleBinding> createRepeated() => $pb.PbList<RoleBinding>();
   @$core.pragma('dart2js:noInline')
-  static GetHasRightBindingRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetHasRightBindingRequest>(create);
-  static GetHasRightBindingRequest? _defaultInstance;
+  static RoleBinding getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<RoleBinding>(create);
+  static RoleBinding? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get userId => $_getSZ(0);
@@ -314,84 +314,139 @@ class GetHasRightBindingRequest extends $pb.GeneratedMessage {
   void clearUserId() => clearField(1);
 
   @$pb.TagNumber(2)
-  $core.String get right => $_getSZ(1);
+  $core.String get role => $_getSZ(1);
   @$pb.TagNumber(2)
-  set right($core.String v) { $_setString(1, v); }
+  set role($core.String v) { $_setString(1, v); }
   @$pb.TagNumber(2)
-  $core.bool hasRight() => $_has(1);
+  $core.bool hasRole() => $_has(1);
   @$pb.TagNumber(2)
-  void clearRight() => clearField(2);
+  void clearRole() => clearField(2);
 }
 
-class GetHasRightBindingResponse_HasRightBinding extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GetHasRightBindingResponse.HasRightBinding', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'authentication.v1'), createEmptyInstance: create)
-    ..aOB(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'hasRightBinding')
+class Roles extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Roles', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'authentication.v1'), createEmptyInstance: create)
+    ..pPS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'roles')
     ..hasRequiredFields = false
   ;
 
-  GetHasRightBindingResponse_HasRightBinding._() : super();
-  factory GetHasRightBindingResponse_HasRightBinding({
-    $core.bool? hasRightBinding,
+  Roles._() : super();
+  factory Roles({
+    $core.Iterable<$core.String>? roles,
   }) {
     final _result = create();
-    if (hasRightBinding != null) {
-      _result.hasRightBinding = hasRightBinding;
+    if (roles != null) {
+      _result.roles.addAll(roles);
     }
     return _result;
   }
-  factory GetHasRightBindingResponse_HasRightBinding.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetHasRightBindingResponse_HasRightBinding.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  factory Roles.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory Roles.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  GetHasRightBindingResponse_HasRightBinding clone() => GetHasRightBindingResponse_HasRightBinding()..mergeFromMessage(this);
+  Roles clone() => Roles()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  GetHasRightBindingResponse_HasRightBinding copyWith(void Function(GetHasRightBindingResponse_HasRightBinding) updates) => super.copyWith((message) => updates(message as GetHasRightBindingResponse_HasRightBinding)) as GetHasRightBindingResponse_HasRightBinding; // ignore: deprecated_member_use
+  Roles copyWith(void Function(Roles) updates) => super.copyWith((message) => updates(message as Roles)) as Roles; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
-  static GetHasRightBindingResponse_HasRightBinding create() => GetHasRightBindingResponse_HasRightBinding._();
-  GetHasRightBindingResponse_HasRightBinding createEmptyInstance() => create();
-  static $pb.PbList<GetHasRightBindingResponse_HasRightBinding> createRepeated() => $pb.PbList<GetHasRightBindingResponse_HasRightBinding>();
+  static Roles create() => Roles._();
+  Roles createEmptyInstance() => create();
+  static $pb.PbList<Roles> createRepeated() => $pb.PbList<Roles>();
   @$core.pragma('dart2js:noInline')
-  static GetHasRightBindingResponse_HasRightBinding getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetHasRightBindingResponse_HasRightBinding>(create);
-  static GetHasRightBindingResponse_HasRightBinding? _defaultInstance;
+  static Roles getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Roles>(create);
+  static Roles? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.bool get hasRightBinding => $_getBF(0);
-  @$pb.TagNumber(1)
-  set hasRightBinding($core.bool v) { $_setBool(0, v); }
-  @$pb.TagNumber(1)
-  $core.bool hasHasRightBinding() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearHasRightBinding() => clearField(1);
+  $core.List<$core.String> get roles => $_getList(0);
 }
 
-enum GetHasRightBindingResponse_Response {
+class CreateRoleBindingRequest extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'CreateRoleBindingRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'authentication.v1'), createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'userId')
+    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'role')
+    ..hasRequiredFields = false
+  ;
+
+  CreateRoleBindingRequest._() : super();
+  factory CreateRoleBindingRequest({
+    $core.String? userId,
+    $core.String? role,
+  }) {
+    final _result = create();
+    if (userId != null) {
+      _result.userId = userId;
+    }
+    if (role != null) {
+      _result.role = role;
+    }
+    return _result;
+  }
+  factory CreateRoleBindingRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory CreateRoleBindingRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  CreateRoleBindingRequest clone() => CreateRoleBindingRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  CreateRoleBindingRequest copyWith(void Function(CreateRoleBindingRequest) updates) => super.copyWith((message) => updates(message as CreateRoleBindingRequest)) as CreateRoleBindingRequest; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static CreateRoleBindingRequest create() => CreateRoleBindingRequest._();
+  CreateRoleBindingRequest createEmptyInstance() => create();
+  static $pb.PbList<CreateRoleBindingRequest> createRepeated() => $pb.PbList<CreateRoleBindingRequest>();
+  @$core.pragma('dart2js:noInline')
+  static CreateRoleBindingRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<CreateRoleBindingRequest>(create);
+  static CreateRoleBindingRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get userId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set userId($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasUserId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearUserId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get role => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set role($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasRole() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearRole() => clearField(2);
+}
+
+enum CreateRoleBindingResponse_Response {
   ok, 
   error, 
   notSet
 }
 
-class GetHasRightBindingResponse extends $pb.GeneratedMessage {
-  static const $core.Map<$core.int, GetHasRightBindingResponse_Response> _GetHasRightBindingResponse_ResponseByTag = {
-    1 : GetHasRightBindingResponse_Response.ok,
-    2 : GetHasRightBindingResponse_Response.error,
-    0 : GetHasRightBindingResponse_Response.notSet
+class CreateRoleBindingResponse extends $pb.GeneratedMessage {
+  static const $core.Map<$core.int, CreateRoleBindingResponse_Response> _CreateRoleBindingResponse_ResponseByTag = {
+    1 : CreateRoleBindingResponse_Response.ok,
+    2 : CreateRoleBindingResponse_Response.error,
+    0 : CreateRoleBindingResponse_Response.notSet
   };
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GetHasRightBindingResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'authentication.v1'), createEmptyInstance: create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'CreateRoleBindingResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'authentication.v1'), createEmptyInstance: create)
     ..oo(0, [1, 2])
-    ..aOM<GetHasRightBindingResponse_HasRightBinding>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'ok', subBuilder: GetHasRightBindingResponse_HasRightBinding.create)
+    ..aOM<RoleBinding>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'ok', subBuilder: RoleBinding.create)
     ..aOM<$0.BasicError>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'error', subBuilder: $0.BasicError.create)
     ..hasRequiredFields = false
   ;
 
-  GetHasRightBindingResponse._() : super();
-  factory GetHasRightBindingResponse({
-    GetHasRightBindingResponse_HasRightBinding? ok,
+  CreateRoleBindingResponse._() : super();
+  factory CreateRoleBindingResponse({
+    RoleBinding? ok,
     $0.BasicError? error,
   }) {
     final _result = create();
@@ -403,40 +458,40 @@ class GetHasRightBindingResponse extends $pb.GeneratedMessage {
     }
     return _result;
   }
-  factory GetHasRightBindingResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetHasRightBindingResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  factory CreateRoleBindingResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory CreateRoleBindingResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  GetHasRightBindingResponse clone() => GetHasRightBindingResponse()..mergeFromMessage(this);
+  CreateRoleBindingResponse clone() => CreateRoleBindingResponse()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  GetHasRightBindingResponse copyWith(void Function(GetHasRightBindingResponse) updates) => super.copyWith((message) => updates(message as GetHasRightBindingResponse)) as GetHasRightBindingResponse; // ignore: deprecated_member_use
+  CreateRoleBindingResponse copyWith(void Function(CreateRoleBindingResponse) updates) => super.copyWith((message) => updates(message as CreateRoleBindingResponse)) as CreateRoleBindingResponse; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
-  static GetHasRightBindingResponse create() => GetHasRightBindingResponse._();
-  GetHasRightBindingResponse createEmptyInstance() => create();
-  static $pb.PbList<GetHasRightBindingResponse> createRepeated() => $pb.PbList<GetHasRightBindingResponse>();
+  static CreateRoleBindingResponse create() => CreateRoleBindingResponse._();
+  CreateRoleBindingResponse createEmptyInstance() => create();
+  static $pb.PbList<CreateRoleBindingResponse> createRepeated() => $pb.PbList<CreateRoleBindingResponse>();
   @$core.pragma('dart2js:noInline')
-  static GetHasRightBindingResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetHasRightBindingResponse>(create);
-  static GetHasRightBindingResponse? _defaultInstance;
+  static CreateRoleBindingResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<CreateRoleBindingResponse>(create);
+  static CreateRoleBindingResponse? _defaultInstance;
 
-  GetHasRightBindingResponse_Response whichResponse() => _GetHasRightBindingResponse_ResponseByTag[$_whichOneof(0)]!;
+  CreateRoleBindingResponse_Response whichResponse() => _CreateRoleBindingResponse_ResponseByTag[$_whichOneof(0)]!;
   void clearResponse() => clearField($_whichOneof(0));
 
   @$pb.TagNumber(1)
-  GetHasRightBindingResponse_HasRightBinding get ok => $_getN(0);
+  RoleBinding get ok => $_getN(0);
   @$pb.TagNumber(1)
-  set ok(GetHasRightBindingResponse_HasRightBinding v) { setField(1, v); }
+  set ok(RoleBinding v) { setField(1, v); }
   @$pb.TagNumber(1)
   $core.bool hasOk() => $_has(0);
   @$pb.TagNumber(1)
   void clearOk() => clearField(1);
   @$pb.TagNumber(1)
-  GetHasRightBindingResponse_HasRightBinding ensureOk() => $_ensure(0);
+  RoleBinding ensureOk() => $_ensure(0);
 
   @$pb.TagNumber(2)
   $0.BasicError get error => $_getN(1);
@@ -450,47 +505,47 @@ class GetHasRightBindingResponse extends $pb.GeneratedMessage {
   $0.BasicError ensureError() => $_ensure(1);
 }
 
-class RightBinding extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'RightBinding', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'authentication.v1'), createEmptyInstance: create)
+class DeleteRoleBindingRequest extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'DeleteRoleBindingRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'authentication.v1'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'userId')
-    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'right')
+    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'role')
     ..hasRequiredFields = false
   ;
 
-  RightBinding._() : super();
-  factory RightBinding({
+  DeleteRoleBindingRequest._() : super();
+  factory DeleteRoleBindingRequest({
     $core.String? userId,
-    $core.String? right,
+    $core.String? role,
   }) {
     final _result = create();
     if (userId != null) {
       _result.userId = userId;
     }
-    if (right != null) {
-      _result.right = right;
+    if (role != null) {
+      _result.role = role;
     }
     return _result;
   }
-  factory RightBinding.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory RightBinding.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  factory DeleteRoleBindingRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory DeleteRoleBindingRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  RightBinding clone() => RightBinding()..mergeFromMessage(this);
+  DeleteRoleBindingRequest clone() => DeleteRoleBindingRequest()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  RightBinding copyWith(void Function(RightBinding) updates) => super.copyWith((message) => updates(message as RightBinding)) as RightBinding; // ignore: deprecated_member_use
+  DeleteRoleBindingRequest copyWith(void Function(DeleteRoleBindingRequest) updates) => super.copyWith((message) => updates(message as DeleteRoleBindingRequest)) as DeleteRoleBindingRequest; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
-  static RightBinding create() => RightBinding._();
-  RightBinding createEmptyInstance() => create();
-  static $pb.PbList<RightBinding> createRepeated() => $pb.PbList<RightBinding>();
+  static DeleteRoleBindingRequest create() => DeleteRoleBindingRequest._();
+  DeleteRoleBindingRequest createEmptyInstance() => create();
+  static $pb.PbList<DeleteRoleBindingRequest> createRepeated() => $pb.PbList<DeleteRoleBindingRequest>();
   @$core.pragma('dart2js:noInline')
-  static RightBinding getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<RightBinding>(create);
-  static RightBinding? _defaultInstance;
+  static DeleteRoleBindingRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<DeleteRoleBindingRequest>(create);
+  static DeleteRoleBindingRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get userId => $_getSZ(0);
@@ -502,139 +557,37 @@ class RightBinding extends $pb.GeneratedMessage {
   void clearUserId() => clearField(1);
 
   @$pb.TagNumber(2)
-  $core.String get right => $_getSZ(1);
+  $core.String get role => $_getSZ(1);
   @$pb.TagNumber(2)
-  set right($core.String v) { $_setString(1, v); }
+  set role($core.String v) { $_setString(1, v); }
   @$pb.TagNumber(2)
-  $core.bool hasRight() => $_has(1);
+  $core.bool hasRole() => $_has(1);
   @$pb.TagNumber(2)
-  void clearRight() => clearField(2);
+  void clearRole() => clearField(2);
 }
 
-class Rights extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Rights', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'authentication.v1'), createEmptyInstance: create)
-    ..pPS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'rights')
-    ..hasRequiredFields = false
-  ;
-
-  Rights._() : super();
-  factory Rights({
-    $core.Iterable<$core.String>? rights,
-  }) {
-    final _result = create();
-    if (rights != null) {
-      _result.rights.addAll(rights);
-    }
-    return _result;
-  }
-  factory Rights.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory Rights.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  Rights clone() => Rights()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  Rights copyWith(void Function(Rights) updates) => super.copyWith((message) => updates(message as Rights)) as Rights; // ignore: deprecated_member_use
-  $pb.BuilderInfo get info_ => _i;
-  @$core.pragma('dart2js:noInline')
-  static Rights create() => Rights._();
-  Rights createEmptyInstance() => create();
-  static $pb.PbList<Rights> createRepeated() => $pb.PbList<Rights>();
-  @$core.pragma('dart2js:noInline')
-  static Rights getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Rights>(create);
-  static Rights? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $core.List<$core.String> get rights => $_getList(0);
-}
-
-class CreateRightBindingRequest extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'CreateRightBindingRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'authentication.v1'), createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'userId')
-    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'right')
-    ..hasRequiredFields = false
-  ;
-
-  CreateRightBindingRequest._() : super();
-  factory CreateRightBindingRequest({
-    $core.String? userId,
-    $core.String? right,
-  }) {
-    final _result = create();
-    if (userId != null) {
-      _result.userId = userId;
-    }
-    if (right != null) {
-      _result.right = right;
-    }
-    return _result;
-  }
-  factory CreateRightBindingRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory CreateRightBindingRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  CreateRightBindingRequest clone() => CreateRightBindingRequest()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  CreateRightBindingRequest copyWith(void Function(CreateRightBindingRequest) updates) => super.copyWith((message) => updates(message as CreateRightBindingRequest)) as CreateRightBindingRequest; // ignore: deprecated_member_use
-  $pb.BuilderInfo get info_ => _i;
-  @$core.pragma('dart2js:noInline')
-  static CreateRightBindingRequest create() => CreateRightBindingRequest._();
-  CreateRightBindingRequest createEmptyInstance() => create();
-  static $pb.PbList<CreateRightBindingRequest> createRepeated() => $pb.PbList<CreateRightBindingRequest>();
-  @$core.pragma('dart2js:noInline')
-  static CreateRightBindingRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<CreateRightBindingRequest>(create);
-  static CreateRightBindingRequest? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $core.String get userId => $_getSZ(0);
-  @$pb.TagNumber(1)
-  set userId($core.String v) { $_setString(0, v); }
-  @$pb.TagNumber(1)
-  $core.bool hasUserId() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearUserId() => clearField(1);
-
-  @$pb.TagNumber(2)
-  $core.String get right => $_getSZ(1);
-  @$pb.TagNumber(2)
-  set right($core.String v) { $_setString(1, v); }
-  @$pb.TagNumber(2)
-  $core.bool hasRight() => $_has(1);
-  @$pb.TagNumber(2)
-  void clearRight() => clearField(2);
-}
-
-enum CreateRightBindingResponse_Response {
+enum DeleteRoleBindingResponse_Response {
   ok, 
   error, 
   notSet
 }
 
-class CreateRightBindingResponse extends $pb.GeneratedMessage {
-  static const $core.Map<$core.int, CreateRightBindingResponse_Response> _CreateRightBindingResponse_ResponseByTag = {
-    1 : CreateRightBindingResponse_Response.ok,
-    2 : CreateRightBindingResponse_Response.error,
-    0 : CreateRightBindingResponse_Response.notSet
+class DeleteRoleBindingResponse extends $pb.GeneratedMessage {
+  static const $core.Map<$core.int, DeleteRoleBindingResponse_Response> _DeleteRoleBindingResponse_ResponseByTag = {
+    1 : DeleteRoleBindingResponse_Response.ok,
+    2 : DeleteRoleBindingResponse_Response.error,
+    0 : DeleteRoleBindingResponse_Response.notSet
   };
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'CreateRightBindingResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'authentication.v1'), createEmptyInstance: create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'DeleteRoleBindingResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'authentication.v1'), createEmptyInstance: create)
     ..oo(0, [1, 2])
-    ..aOM<RightBinding>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'ok', subBuilder: RightBinding.create)
+    ..aOM<RoleBinding>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'ok', subBuilder: RoleBinding.create)
     ..aOM<$0.BasicError>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'error', subBuilder: $0.BasicError.create)
     ..hasRequiredFields = false
   ;
 
-  CreateRightBindingResponse._() : super();
-  factory CreateRightBindingResponse({
-    RightBinding? ok,
+  DeleteRoleBindingResponse._() : super();
+  factory DeleteRoleBindingResponse({
+    RoleBinding? ok,
     $0.BasicError? error,
   }) {
     final _result = create();
@@ -646,40 +599,40 @@ class CreateRightBindingResponse extends $pb.GeneratedMessage {
     }
     return _result;
   }
-  factory CreateRightBindingResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory CreateRightBindingResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  factory DeleteRoleBindingResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory DeleteRoleBindingResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  CreateRightBindingResponse clone() => CreateRightBindingResponse()..mergeFromMessage(this);
+  DeleteRoleBindingResponse clone() => DeleteRoleBindingResponse()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  CreateRightBindingResponse copyWith(void Function(CreateRightBindingResponse) updates) => super.copyWith((message) => updates(message as CreateRightBindingResponse)) as CreateRightBindingResponse; // ignore: deprecated_member_use
+  DeleteRoleBindingResponse copyWith(void Function(DeleteRoleBindingResponse) updates) => super.copyWith((message) => updates(message as DeleteRoleBindingResponse)) as DeleteRoleBindingResponse; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
-  static CreateRightBindingResponse create() => CreateRightBindingResponse._();
-  CreateRightBindingResponse createEmptyInstance() => create();
-  static $pb.PbList<CreateRightBindingResponse> createRepeated() => $pb.PbList<CreateRightBindingResponse>();
+  static DeleteRoleBindingResponse create() => DeleteRoleBindingResponse._();
+  DeleteRoleBindingResponse createEmptyInstance() => create();
+  static $pb.PbList<DeleteRoleBindingResponse> createRepeated() => $pb.PbList<DeleteRoleBindingResponse>();
   @$core.pragma('dart2js:noInline')
-  static CreateRightBindingResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<CreateRightBindingResponse>(create);
-  static CreateRightBindingResponse? _defaultInstance;
+  static DeleteRoleBindingResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<DeleteRoleBindingResponse>(create);
+  static DeleteRoleBindingResponse? _defaultInstance;
 
-  CreateRightBindingResponse_Response whichResponse() => _CreateRightBindingResponse_ResponseByTag[$_whichOneof(0)]!;
+  DeleteRoleBindingResponse_Response whichResponse() => _DeleteRoleBindingResponse_ResponseByTag[$_whichOneof(0)]!;
   void clearResponse() => clearField($_whichOneof(0));
 
   @$pb.TagNumber(1)
-  RightBinding get ok => $_getN(0);
+  RoleBinding get ok => $_getN(0);
   @$pb.TagNumber(1)
-  set ok(RightBinding v) { setField(1, v); }
+  set ok(RoleBinding v) { setField(1, v); }
   @$pb.TagNumber(1)
   $core.bool hasOk() => $_has(0);
   @$pb.TagNumber(1)
   void clearOk() => clearField(1);
   @$pb.TagNumber(1)
-  RightBinding ensureOk() => $_ensure(0);
+  RoleBinding ensureOk() => $_ensure(0);
 
   @$pb.TagNumber(2)
   $0.BasicError get error => $_getN(1);
@@ -693,155 +646,14 @@ class CreateRightBindingResponse extends $pb.GeneratedMessage {
   $0.BasicError ensureError() => $_ensure(1);
 }
 
-class DeleteRightBindingRequest extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'DeleteRightBindingRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'authentication.v1'), createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'userId')
-    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'right')
-    ..hasRequiredFields = false
-  ;
-
-  DeleteRightBindingRequest._() : super();
-  factory DeleteRightBindingRequest({
-    $core.String? userId,
-    $core.String? right,
-  }) {
-    final _result = create();
-    if (userId != null) {
-      _result.userId = userId;
-    }
-    if (right != null) {
-      _result.right = right;
-    }
-    return _result;
-  }
-  factory DeleteRightBindingRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory DeleteRightBindingRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  DeleteRightBindingRequest clone() => DeleteRightBindingRequest()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  DeleteRightBindingRequest copyWith(void Function(DeleteRightBindingRequest) updates) => super.copyWith((message) => updates(message as DeleteRightBindingRequest)) as DeleteRightBindingRequest; // ignore: deprecated_member_use
-  $pb.BuilderInfo get info_ => _i;
-  @$core.pragma('dart2js:noInline')
-  static DeleteRightBindingRequest create() => DeleteRightBindingRequest._();
-  DeleteRightBindingRequest createEmptyInstance() => create();
-  static $pb.PbList<DeleteRightBindingRequest> createRepeated() => $pb.PbList<DeleteRightBindingRequest>();
-  @$core.pragma('dart2js:noInline')
-  static DeleteRightBindingRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<DeleteRightBindingRequest>(create);
-  static DeleteRightBindingRequest? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $core.String get userId => $_getSZ(0);
-  @$pb.TagNumber(1)
-  set userId($core.String v) { $_setString(0, v); }
-  @$pb.TagNumber(1)
-  $core.bool hasUserId() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearUserId() => clearField(1);
-
-  @$pb.TagNumber(2)
-  $core.String get right => $_getSZ(1);
-  @$pb.TagNumber(2)
-  set right($core.String v) { $_setString(1, v); }
-  @$pb.TagNumber(2)
-  $core.bool hasRight() => $_has(1);
-  @$pb.TagNumber(2)
-  void clearRight() => clearField(2);
-}
-
-enum DeleteRightBindingResponse_Response {
-  ok, 
-  error, 
-  notSet
-}
-
-class DeleteRightBindingResponse extends $pb.GeneratedMessage {
-  static const $core.Map<$core.int, DeleteRightBindingResponse_Response> _DeleteRightBindingResponse_ResponseByTag = {
-    1 : DeleteRightBindingResponse_Response.ok,
-    2 : DeleteRightBindingResponse_Response.error,
-    0 : DeleteRightBindingResponse_Response.notSet
-  };
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'DeleteRightBindingResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'authentication.v1'), createEmptyInstance: create)
-    ..oo(0, [1, 2])
-    ..aOM<RightBinding>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'ok', subBuilder: RightBinding.create)
-    ..aOM<$0.BasicError>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'error', subBuilder: $0.BasicError.create)
-    ..hasRequiredFields = false
-  ;
-
-  DeleteRightBindingResponse._() : super();
-  factory DeleteRightBindingResponse({
-    RightBinding? ok,
-    $0.BasicError? error,
-  }) {
-    final _result = create();
-    if (ok != null) {
-      _result.ok = ok;
-    }
-    if (error != null) {
-      _result.error = error;
-    }
-    return _result;
-  }
-  factory DeleteRightBindingResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory DeleteRightBindingResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  DeleteRightBindingResponse clone() => DeleteRightBindingResponse()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  DeleteRightBindingResponse copyWith(void Function(DeleteRightBindingResponse) updates) => super.copyWith((message) => updates(message as DeleteRightBindingResponse)) as DeleteRightBindingResponse; // ignore: deprecated_member_use
-  $pb.BuilderInfo get info_ => _i;
-  @$core.pragma('dart2js:noInline')
-  static DeleteRightBindingResponse create() => DeleteRightBindingResponse._();
-  DeleteRightBindingResponse createEmptyInstance() => create();
-  static $pb.PbList<DeleteRightBindingResponse> createRepeated() => $pb.PbList<DeleteRightBindingResponse>();
-  @$core.pragma('dart2js:noInline')
-  static DeleteRightBindingResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<DeleteRightBindingResponse>(create);
-  static DeleteRightBindingResponse? _defaultInstance;
-
-  DeleteRightBindingResponse_Response whichResponse() => _DeleteRightBindingResponse_ResponseByTag[$_whichOneof(0)]!;
-  void clearResponse() => clearField($_whichOneof(0));
-
-  @$pb.TagNumber(1)
-  RightBinding get ok => $_getN(0);
-  @$pb.TagNumber(1)
-  set ok(RightBinding v) { setField(1, v); }
-  @$pb.TagNumber(1)
-  $core.bool hasOk() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearOk() => clearField(1);
-  @$pb.TagNumber(1)
-  RightBinding ensureOk() => $_ensure(0);
-
-  @$pb.TagNumber(2)
-  $0.BasicError get error => $_getN(1);
-  @$pb.TagNumber(2)
-  set error($0.BasicError v) { setField(2, v); }
-  @$pb.TagNumber(2)
-  $core.bool hasError() => $_has(1);
-  @$pb.TagNumber(2)
-  void clearError() => clearField(2);
-  @$pb.TagNumber(2)
-  $0.BasicError ensureError() => $_ensure(1);
-}
-
-class GetRightsOfUserRequest extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GetRightsOfUserRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'authentication.v1'), createEmptyInstance: create)
+class GetRolesOfUserRequest extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GetRolesOfUserRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'authentication.v1'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'userId')
     ..hasRequiredFields = false
   ;
 
-  GetRightsOfUserRequest._() : super();
-  factory GetRightsOfUserRequest({
+  GetRolesOfUserRequest._() : super();
+  factory GetRolesOfUserRequest({
     $core.String? userId,
   }) {
     final _result = create();
@@ -850,26 +662,26 @@ class GetRightsOfUserRequest extends $pb.GeneratedMessage {
     }
     return _result;
   }
-  factory GetRightsOfUserRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetRightsOfUserRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  factory GetRolesOfUserRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetRolesOfUserRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  GetRightsOfUserRequest clone() => GetRightsOfUserRequest()..mergeFromMessage(this);
+  GetRolesOfUserRequest clone() => GetRolesOfUserRequest()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  GetRightsOfUserRequest copyWith(void Function(GetRightsOfUserRequest) updates) => super.copyWith((message) => updates(message as GetRightsOfUserRequest)) as GetRightsOfUserRequest; // ignore: deprecated_member_use
+  GetRolesOfUserRequest copyWith(void Function(GetRolesOfUserRequest) updates) => super.copyWith((message) => updates(message as GetRolesOfUserRequest)) as GetRolesOfUserRequest; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
-  static GetRightsOfUserRequest create() => GetRightsOfUserRequest._();
-  GetRightsOfUserRequest createEmptyInstance() => create();
-  static $pb.PbList<GetRightsOfUserRequest> createRepeated() => $pb.PbList<GetRightsOfUserRequest>();
+  static GetRolesOfUserRequest create() => GetRolesOfUserRequest._();
+  GetRolesOfUserRequest createEmptyInstance() => create();
+  static $pb.PbList<GetRolesOfUserRequest> createRepeated() => $pb.PbList<GetRolesOfUserRequest>();
   @$core.pragma('dart2js:noInline')
-  static GetRightsOfUserRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetRightsOfUserRequest>(create);
-  static GetRightsOfUserRequest? _defaultInstance;
+  static GetRolesOfUserRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetRolesOfUserRequest>(create);
+  static GetRolesOfUserRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get userId => $_getSZ(0);
@@ -881,28 +693,28 @@ class GetRightsOfUserRequest extends $pb.GeneratedMessage {
   void clearUserId() => clearField(1);
 }
 
-enum GetRightsOfUserResponse_Response {
+enum GetRolesOfUserResponse_Response {
   ok, 
   error, 
   notSet
 }
 
-class GetRightsOfUserResponse extends $pb.GeneratedMessage {
-  static const $core.Map<$core.int, GetRightsOfUserResponse_Response> _GetRightsOfUserResponse_ResponseByTag = {
-    1 : GetRightsOfUserResponse_Response.ok,
-    2 : GetRightsOfUserResponse_Response.error,
-    0 : GetRightsOfUserResponse_Response.notSet
+class GetRolesOfUserResponse extends $pb.GeneratedMessage {
+  static const $core.Map<$core.int, GetRolesOfUserResponse_Response> _GetRolesOfUserResponse_ResponseByTag = {
+    1 : GetRolesOfUserResponse_Response.ok,
+    2 : GetRolesOfUserResponse_Response.error,
+    0 : GetRolesOfUserResponse_Response.notSet
   };
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GetRightsOfUserResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'authentication.v1'), createEmptyInstance: create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GetRolesOfUserResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'authentication.v1'), createEmptyInstance: create)
     ..oo(0, [1, 2])
-    ..aOM<Rights>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'ok', subBuilder: Rights.create)
+    ..aOM<Roles>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'ok', subBuilder: Roles.create)
     ..aOM<$0.BasicError>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'error', subBuilder: $0.BasicError.create)
     ..hasRequiredFields = false
   ;
 
-  GetRightsOfUserResponse._() : super();
-  factory GetRightsOfUserResponse({
-    Rights? ok,
+  GetRolesOfUserResponse._() : super();
+  factory GetRolesOfUserResponse({
+    Roles? ok,
     $0.BasicError? error,
   }) {
     final _result = create();
@@ -914,40 +726,40 @@ class GetRightsOfUserResponse extends $pb.GeneratedMessage {
     }
     return _result;
   }
-  factory GetRightsOfUserResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetRightsOfUserResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  factory GetRolesOfUserResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetRolesOfUserResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  GetRightsOfUserResponse clone() => GetRightsOfUserResponse()..mergeFromMessage(this);
+  GetRolesOfUserResponse clone() => GetRolesOfUserResponse()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  GetRightsOfUserResponse copyWith(void Function(GetRightsOfUserResponse) updates) => super.copyWith((message) => updates(message as GetRightsOfUserResponse)) as GetRightsOfUserResponse; // ignore: deprecated_member_use
+  GetRolesOfUserResponse copyWith(void Function(GetRolesOfUserResponse) updates) => super.copyWith((message) => updates(message as GetRolesOfUserResponse)) as GetRolesOfUserResponse; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
-  static GetRightsOfUserResponse create() => GetRightsOfUserResponse._();
-  GetRightsOfUserResponse createEmptyInstance() => create();
-  static $pb.PbList<GetRightsOfUserResponse> createRepeated() => $pb.PbList<GetRightsOfUserResponse>();
+  static GetRolesOfUserResponse create() => GetRolesOfUserResponse._();
+  GetRolesOfUserResponse createEmptyInstance() => create();
+  static $pb.PbList<GetRolesOfUserResponse> createRepeated() => $pb.PbList<GetRolesOfUserResponse>();
   @$core.pragma('dart2js:noInline')
-  static GetRightsOfUserResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetRightsOfUserResponse>(create);
-  static GetRightsOfUserResponse? _defaultInstance;
+  static GetRolesOfUserResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetRolesOfUserResponse>(create);
+  static GetRolesOfUserResponse? _defaultInstance;
 
-  GetRightsOfUserResponse_Response whichResponse() => _GetRightsOfUserResponse_ResponseByTag[$_whichOneof(0)]!;
+  GetRolesOfUserResponse_Response whichResponse() => _GetRolesOfUserResponse_ResponseByTag[$_whichOneof(0)]!;
   void clearResponse() => clearField($_whichOneof(0));
 
   @$pb.TagNumber(1)
-  Rights get ok => $_getN(0);
+  Roles get ok => $_getN(0);
   @$pb.TagNumber(1)
-  set ok(Rights v) { setField(1, v); }
+  set ok(Roles v) { setField(1, v); }
   @$pb.TagNumber(1)
   $core.bool hasOk() => $_has(0);
   @$pb.TagNumber(1)
   void clearOk() => clearField(1);
   @$pb.TagNumber(1)
-  Rights ensureOk() => $_ensure(0);
+  Roles ensureOk() => $_ensure(0);
 
   @$pb.TagNumber(2)
   $0.BasicError get error => $_getN(1);

@@ -25,61 +25,46 @@ message CreateAuthenticationWithFirebaseResponse {
   }
 }
 
-message GetHasRightBindingRequest {
+message RoleBinding {
   string user_id = 1;
-  string right = 2;
+  string role = 2;
 }
 
-message GetHasRightBindingResponse {
-  message HasRightBinding {
-    bool has_right_binding = 1;
-  }
+message Roles {
+  repeated string roles = 1;
+}
+
+message CreateRoleBindingRequest {
+  string user_id = 1;
+  string role = 2;
+}
+
+message CreateRoleBindingResponse {
   oneof response {
-    HasRightBinding ok = 1;
+    RoleBinding ok = 1;
     errors.v1.BasicError error = 2;
   }
 }
 
-message RightBinding {
+message DeleteRoleBindingRequest {
   string user_id = 1;
-  string right = 2;
+  string role = 2;
 }
 
-message Rights {
-  repeated string rights = 1;
-}
-
-message CreateRightBindingRequest {
-  string user_id = 1;
-  string right = 2;
-}
-
-message CreateRightBindingResponse {
+message DeleteRoleBindingResponse {
   oneof response {
-    RightBinding ok = 1;
+    RoleBinding ok = 1;
     errors.v1.BasicError error = 2;
   }
 }
 
-message DeleteRightBindingRequest {
-  string user_id = 1;
-  string right = 2;
-}
-
-message DeleteRightBindingResponse {
-  oneof response {
-    RightBinding ok = 1;
-    errors.v1.BasicError error = 2;
-  }
-}
-
-message GetRightsOfUserRequest {
+message GetRolesOfUserRequest {
   string user_id = 1;
 }
 
-message GetRightsOfUserResponse {
+message GetRolesOfUserResponse {
   oneof response {
-    Rights ok = 1;
+    Roles ok = 1;
     errors.v1.BasicError error = 2;
   }
 }

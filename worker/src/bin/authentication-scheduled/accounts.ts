@@ -1,12 +1,12 @@
 import { isNullOrUndefined } from '../../lib/lib';
-import { RIGHTS } from '../../lib/rights';
+import { ROLES } from '../../lib/roles';
 
 interface ServiceAccountConfig {
   type: 'service-account';
   onlyEnvironment?: 'production' | 'development';
   workerName: string;
   envVariable: string;
-  rights: string[];
+  roles: string[];
 }
 
 interface PublicKeyConfig {
@@ -84,7 +84,7 @@ const accounts: AccountConfig[] = [
     type: 'service-account',
     workerName: 'sharecation-groups',
     envVariable: 'SERVICE_ACCOUNT_KEY',
-    rights: [RIGHTS.ADMIN_GROUP],
+    roles: [ROLES.ADMIN_GROUP],
   },
   {
     type: 'private-key',

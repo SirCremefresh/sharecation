@@ -10,9 +10,9 @@ import { TypedKvNamespace } from '../../lib/typed-kv-namespace';
 import { AuthenticationEnvironmentVariables } from './authentication-environment-variables';
 import { AUTHENTICATION_KV, createAuthenticationKv } from './authentication-kv';
 
-const SERVICE_NAME = 'authentication-rights-storage';
+const SERVICE_NAME = 'authentication-roles-storage';
 
-export class RightsStorage {
+export class RolesStorage {
   constructor(
     private state: DurableObjectState,
     private readonly env: AuthenticationEnvironmentVariables,
@@ -25,15 +25,15 @@ export class RightsStorage {
       addRouter([
         route(
           'GET',
-          ['v1', pathParam('userId'), 'rights'],
+          ['v1', pathParam('userId'), 'roles'],
           async (request, env, context) => {
             const userId = context.route.params.userId;
-            context.logger.info(`getting rights for userId=${userId}`);
+            context.logger.info(`getting roles for userId=${userId}`);
             const authenticationKv = createAuthenticationKv(env.AUTHENTICATION);
 
-            const rights = await this.getRights(authenticationKv, userId);
+            const roles = await this.getRoles(authenticationKv, userId);
 
-            return new Response(JSON.stringify(rights), {
+            return new Response(JSON.stringify(roles), {
               headers: {
                 'content-type': 'application/json',
               },
@@ -42,15 +42,15 @@ export class RightsStorage {
         ),
         route(
           'POST',
-          ['v1', pathParam('userId'), 'rights'],
+          ['v1', pathParam('userId'), 'roles'],
           async (request, env, context) => {
             const userId = context.route.params.userId;
-            const { right } = await request.json<{ right: string }>();
+            const { role } = await request.json<{ role: string }>();
             const authenticationKv = createAuthenticationKv(env.AUTHENTICATION);
 
-            await this.addRight(authenticationKv, userId, right);
+            await this.addRole(authenticationKv, userId, role);
 
-            return new Response(JSON.stringify({ right }), {
+            return new Response(JSON.stringify({ role }), {
               headers: {
                 'content-type': 'application/json',
               },
@@ -59,15 +59,15 @@ export class RightsStorage {
         ),
         route(
           'DELETE',
-          ['v1', pathParam('userId'), 'rights', pathParam('right')],
+          ['v1', pathParam('userId'), 'roles', pathParam('role')],
           async (request, env, context) => {
             const userId = context.route.params.userId;
-            const right = context.route.params.right;
+            const role = context.route.params.role;
             const authenticationKv = createAuthenticationKv(env.AUTHENTICATION);
 
-            await this.deleteRight(authenticationKv, userId, right);
+            await this.deleteRole(authenticationKv, userId, role);
 
-            return new Response(JSON.stringify({ right }), {
+            return new Response(JSON.stringify({ role }), {
               headers: {
                 'content-type': 'application/json',
               },
@@ -78,11 +78,11 @@ export class RightsStorage {
     ),
   );
 
-  private async getRights(
+  private async getRoles(
     authenticationKv: TypedKvNamespace<AUTHENTICATION_KV>,
     userId: string,
   ): Promise<string[]> {
-    const key = authenticationKv.keys.USER_RIGHTS(userId);
+    const key = authenticationKv.keys.USER_ROLES(userId);
     const storageResult = await this.state.storage.get<string[]>(key);
     if (isNotNullOrUndefined(storageResult)) {
       return storageResult;
@@ -90,34 +90,34 @@ export class RightsStorage {
     const listResult = await authenticationKv.namespace.list<string>({
       prefix: key,
     });
-    const rights = listResult.keys.map((key) => key.metadata) as string[];
-    await this.state.storage.put(key, rights);
-    return rights;
+    const roles = listResult.keys.map((key) => key.metadata) as string[];
+    await this.state.storage.put(key, roles);
+    return roles;
   }
 
-  private async addRight(
+  private async addRole(
     authenticationKv: TypedKvNamespace<AUTHENTICATION_KV>,
     userId: string,
-    right: string,
+    role: string,
   ) {
-    const rightsKey = authenticationKv.keys.USER_RIGHTS(userId);
-    const rightKey = authenticationKv.keys.USER_RIGHT(userId, right);
-    const rights: string[] = await this.getRights(authenticationKv, userId);
-    if (!rights.includes(right)) {
-      rights.push(right);
+    const rolesKey = authenticationKv.keys.USER_ROLES(userId);
+    const roleKey = authenticationKv.keys.USER_ROLE(userId, role);
+    const roles: string[] = await this.getRoles(authenticationKv, userId);
+    if (!roles.includes(role)) {
+      roles.push(role);
     }
     await Promise.all([
-      this.state.storage.put(rightsKey, rights),
-      authenticationKv.namespace.put(rightKey, right, { metadata: right }),
+      this.state.storage.put(rolesKey, roles),
+      authenticationKv.namespace.put(roleKey, role, { metadata: role }),
     ]);
   }
 
-  private async deleteRight(
+  private async deleteRole(
     authenticationKv: TypedKvNamespace<AUTHENTICATION_KV>,
     userId: string,
-    right: string,
+    role: string,
   ) {
-    const key = authenticationKv.keys.USER_RIGHT(userId, right);
+    const key = authenticationKv.keys.USER_ROLE(userId, role);
     await Promise.all([
       this.state.storage.delete(key),
       authenticationKv.namespace.delete(key),

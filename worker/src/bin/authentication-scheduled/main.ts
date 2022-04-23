@@ -101,7 +101,7 @@ export default {
         ...serviceAccountConfigs(accounts).map(async (account) => {
           const { jwtString } = await generateJwt(
             account.workerName,
-            account.rights,
+            account.roles,
             privateKey,
             kid,
             TWO_DAYS_IN_SECONDS,

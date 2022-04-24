@@ -12,7 +12,6 @@
   <br>
   <form *ngIf="dynamicFormConfig" [formGroup]="form">
     <app-dynamic-form-group [config]="dynamicFormConfig" [formControlName]="'request'"></app-dynamic-form-group>
-    <button mat-raised-button type="submit"> submit</button>
   </form>
   <pre style="overflow-y: scroll;">{{response}}</pre>
   <mat-action-row>

@@ -1,4 +1,4 @@
-<mat-expansion-panel [expanded]="true">
+<mat-expansion-panel>
   <mat-expansion-panel-header>
     <mat-panel-title>
       {{config.title}}
@@ -10,14 +10,14 @@
   {{config.description}} <br>
   response:
   <br>
-  <form *ngIf="dynamicFormConfig" [formGroup]="form" (ngSubmit)="suuu($event)">
+  <form *ngIf="dynamicFormConfig" [formGroup]="form">
     <app-dynamic-form-group [config]="dynamicFormConfig" [formControlName]="'request'"></app-dynamic-form-group>
     <button mat-raised-button type="submit"> submit</button>
   </form>
   <pre style="overflow-y: scroll;">{{response}}</pre>
   <mat-action-row>
-    <button mat-raised-button color="primary" (click)="execute()">Execute User</button>
-    <button mat-raised-button color="primary" (click)="execute()">Execute Admin</button>
+    <button mat-raised-button color="primary" (click)="executeWithUserConfig('user')">Execute User</button>
+    <button mat-raised-button color="primary" (click)="executeWithUserConfig('admin')">Execute Admin</button>
     <button mat-raised-button color="primary" (click)="execute()">Execute Unauthenticated</button>
   </mat-action-row>
 </mat-expansion-panel>

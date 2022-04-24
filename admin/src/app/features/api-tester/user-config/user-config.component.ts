@@ -4,6 +4,7 @@ import {FormControl} from '@angular/forms';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {MatChipInputEvent} from '@angular/material/chips';
 import {map, Observable, startWith} from 'rxjs';
+import {UserConfigService} from '../user-config.service';
 
 @Component({
   selector: 'app-user-config',
@@ -24,7 +25,7 @@ export class UserConfigComponent implements OnInit {
 
   @ViewChild('roleInput') roleInput!: ElementRef<HTMLInputElement>;
 
-  constructor() {
+  constructor(private readonly userConfigService: UserConfigService) {
     this.filteredRoles = this.rolesControl.valueChanges.pipe(
       startWith(null),
       map((newRole: string | null) => {
@@ -36,18 +37,13 @@ export class UserConfigComponent implements OnInit {
         }
       }),
     );
-    this.userIdControl.valueChanges.subscribe(
-      (newUserId: string) => {
-        localStorage.setItem('user-config:' + this.configName + ':user-id', newUserId);
-      }
-    );
   }
 
   ngOnInit(): void {
-    const userId = localStorage.getItem('user-config:' + this.configName + ':user-id')
-      ?? crypto.randomUUID();
+    const {userId, roles} = this.userConfigService.getUserConfig(this.configName);
     this.userIdControl.setValue(userId);
-    this.roles = JSON.parse(localStorage.getItem('user-config:' + this.configName + ':roles') ?? '[]');
+    this.roles = roles;
+    this.userIdControl.valueChanges.subscribe(() => this.updateConfig());
   }
 
   add(event: MatChipInputEvent): void {
@@ -57,7 +53,7 @@ export class UserConfigComponent implements OnInit {
     }
     event.chipInput!.clear();
     this.rolesControl.setValue(null);
-    this.saveRoles();
+    this.updateConfig();
   }
 
   remove(role: string): void {
@@ -65,7 +61,7 @@ export class UserConfigComponent implements OnInit {
 
     if (index >= 0) {
       this.roles.splice(index, 1);
-      this.saveRoles();
+      this.updateConfig();
     }
   }
 
@@ -73,14 +69,17 @@ export class UserConfigComponent implements OnInit {
     this.roles.push(event.option.viewValue);
     this.roleInput.nativeElement.value = '';
     this.rolesControl.setValue(null);
-    this.saveRoles();
-  }
-
-  saveRoles(): void {
-    localStorage.setItem('user-config:' + this.configName + ':roles', JSON.stringify(this.roles));
+    this.updateConfig();
   }
 
   newUserId() {
     this.userIdControl.setValue(crypto.randomUUID());
+  }
+
+  private updateConfig() {
+    this.userConfigService.setConfig(this.configName, {
+      userId: this.userIdControl.value,
+      roles: this.roles
+    });
   }
 }

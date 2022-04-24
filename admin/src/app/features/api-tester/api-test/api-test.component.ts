@@ -4,6 +4,7 @@ import {FormControl, FormGroup} from '@angular/forms';
 import {FieldInfo, RepeatType, ScalarType} from '@protobuf-ts/runtime';
 import {DynamicFormConfig} from '../../../shared/dynamic-form/dynamic-form-config.model';
 import {ApiTestConfig} from '../api-test-config.model';
+import {UserConfigService} from '../user-config.service';
 
 @Component({
   selector: 'app-api-test',
@@ -20,7 +21,7 @@ export class ApiTestComponent implements OnInit {
     request: new FormControl()
   });
 
-  constructor(private readonly http: HttpClient) {
+  constructor(private readonly http: HttpClient, private readonly userConfigService: UserConfigService) {
   }
 
   ngOnInit(): void {
@@ -34,7 +35,12 @@ export class ApiTestComponent implements OnInit {
     }
   }
 
-  execute() {
+  async executeWithUserConfig(userConfig: string) {
+    const token = await this.userConfigService.getToken(userConfig);
+    this.execute(token);
+  }
+
+  execute(jwtString?: string) {
     let body = null;
     if (this.config.requestType !== null) {
       body = this.form.value.request;
@@ -45,21 +51,13 @@ export class ApiTestComponent implements OnInit {
       {
         headers: {
           'Content-Type': 'application/json',
-          'Accept': 'application/json'
-          // 'Content-Type': 'application/octet-stream',
-          // 'Accept': 'application/octet-stream'
+          'Accept': 'application/json',
+          ...(jwtString ? {'Authorization': `Bearer ${jwtString}`} : {})
         },
         responseType: 'json'
-        // responseType: 'arraybuffer'
       }).pipe().subscribe((res) => {
-      // const ress = this.config.responseType.fromBinary(new Uint8Array(res));
       this.response = JSON.stringify(res, null, 4);
     });
-  }
-
-  suuu($event: any) {
-    console.log($event);
-    console.log(this.form.value);
   }
 
   private scalarTypeToFormControlType(scalarType: ScalarType): 'string' | 'number' | 'boolean' {
@@ -100,7 +98,6 @@ export class ApiTestComponent implements OnInit {
         ...baseField
       };
     }
-
     throw new Error(`Could not map fild of kind: ${field.kind}`);
   }
 }

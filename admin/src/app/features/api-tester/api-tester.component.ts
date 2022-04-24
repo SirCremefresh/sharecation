@@ -1,5 +1,10 @@
 import {Component} from '@angular/core';
-import {CreateRoleBindingRequest, CreateRoleBindingResponse} from '../../contracts/authentication/v1/authentication';
+import {
+  CreateRoleBindingRequest,
+  CreateRoleBindingResponse,
+  GetRolesOfUserRequest,
+  GetRolesOfUserResponse
+} from '../../contracts/authentication/v1/authentication';
 import {GetPublicJwksResponse} from '../../contracts/authentication/v1/public_jwk';
 import {CreateUserRequest, CreateUserResponse} from '../../contracts/dev-tools/v1/jwt';
 import {ApiTestConfig} from './api-test-config.model';
@@ -28,10 +33,18 @@ export class ApiTesterComponent {
       responseType: CreateUserResponse
     },
     {
+      title: 'Get Roles of user',
+      service: 'authentication',
+      description: 'Get roles of specific user user.',
+      path: '/v1/get-roles-of-user',
+      requestType: GetRolesOfUserRequest,
+      responseType: GetRolesOfUserResponse
+    },
+    {
       title: 'Create Role Binding',
-      service: 'dev-tools',
+      service: 'authentication',
       description: 'Create A testing User, This only works in development',
-      path: '/v1/create-user',
+      path: '/v1/create-role-of-user',
       requestType: CreateRoleBindingRequest,
       responseType: CreateRoleBindingResponse
     },

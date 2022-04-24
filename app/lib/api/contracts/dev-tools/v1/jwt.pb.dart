@@ -75,21 +75,21 @@ class User extends $pb.GeneratedMessage {
 class CreateUserRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'CreateUserRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'dev_tools.v1'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'userId')
-    ..pPS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'rights')
+    ..pPS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'roles')
     ..hasRequiredFields = false
   ;
 
   CreateUserRequest._() : super();
   factory CreateUserRequest({
     $core.String? userId,
-    $core.Iterable<$core.String>? rights,
+    $core.Iterable<$core.String>? roles,
   }) {
     final _result = create();
     if (userId != null) {
       _result.userId = userId;
     }
-    if (rights != null) {
-      _result.rights.addAll(rights);
+    if (roles != null) {
+      _result.roles.addAll(roles);
     }
     return _result;
   }
@@ -124,7 +124,7 @@ class CreateUserRequest extends $pb.GeneratedMessage {
   void clearUserId() => clearField(1);
 
   @$pb.TagNumber(2)
-  $core.List<$core.String> get rights => $_getList(1);
+  $core.List<$core.String> get roles => $_getList(1);
 }
 
 enum CreateUserResponse_Response {

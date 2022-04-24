@@ -127,8 +127,7 @@ export default {
                 const {userId, role} = context.proto.body;
                 if (!hasRole(ROLES.ADMIN_ROLES_WRITE, context)) {
                   context.logger.warn(
-                    `User tried to create role without having permission. requiredRole=${ROLES.ADMIN_ROLES_WRITE}, userId=${context.user.userId}, roles=${context.user.roles}`,
-                    context,
+                    `User tried to create role without having permission. requiredRole=${ROLES.ADMIN_ROLES_WRITE}, userId=${context.user.userId}, roles=${context.user.roles}`
                   );
                   return createProtoBufBasicErrorResponse(
                     `Not allowed to add role to user. userId=${userId}, role=${role}, requiredRole=${ROLES.ADMIN_ROLES_WRITE}`,

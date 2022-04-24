@@ -1,5 +1,5 @@
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
-import {Component, ElementRef, ViewChild} from '@angular/core';
+import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {MatChipInputEvent} from '@angular/material/chips';
@@ -10,56 +10,77 @@ import {map, Observable, startWith} from 'rxjs';
   templateUrl: './user-config.component.html',
   styleUrls: ['./user-config.component.scss']
 })
-export class UserConfigComponent {
+export class UserConfigComponent implements OnInit {
+  @Input() configName: string = '';
+  @Input() configDisplayName: string = '';
   separatorKeysCodes: number[] = [ENTER, COMMA];
-  groupsCtrl = new FormControl();
-  filteredGroups: Observable<string[]>;
-  groups: string[] = ['USER'];
+  rolesControl = new FormControl();
+  userIdControl = new FormControl();
+  filteredRoles: Observable<string[]>;
+  roles: string[] = [];
 
-  GROUPS_WITHOUT_PLACEHOLDERS = ['admin', 'user'];
-  GROUPS_WITH_PLACEHOLDERS = ['groups:{}'];
+  ROLES_WITHOUT_PLACEHOLDERS = ['admin:roles:read', 'admin:roles:write', 'admin:roles:delete'];
+  ROLES_WITH_PLACEHOLDERS = ['roles:{}:member'];
 
-  @ViewChild('groupInput') groupInput!: ElementRef<HTMLInputElement>;
+  @ViewChild('roleInput') roleInput!: ElementRef<HTMLInputElement>;
 
   constructor() {
-    this.filteredGroups = this.groupsCtrl.valueChanges.pipe(
+    this.filteredRoles = this.rolesControl.valueChanges.pipe(
       startWith(null),
-      map((newGroup: string | null) => {
-        if (newGroup) {
-          const newGroupUppercase = newGroup.toUpperCase();
-          return [newGroupUppercase, ...this.GROUPS_WITH_PLACEHOLDERS.map(group => group.replace('{}', newGroupUppercase)), ...this.GROUPS_WITHOUT_PLACEHOLDERS];
+      map((newRole: string | null) => {
+        if (newRole) {
+          const newRoleUppercase = newRole.toLocaleLowerCase();
+          return [newRoleUppercase, ...this.ROLES_WITH_PLACEHOLDERS.map(role => role.replace('{}', newRoleUppercase)), ...this.ROLES_WITHOUT_PLACEHOLDERS];
         } else {
-          return this.GROUPS_WITHOUT_PLACEHOLDERS.slice();
+          return this.ROLES_WITHOUT_PLACEHOLDERS.slice();
         }
       }),
     );
+    this.userIdControl.valueChanges.subscribe(
+      (newUserId: string) => {
+        localStorage.setItem('user-config:' + this.configName + ':user-id', newUserId);
+      }
+    );
+  }
+
+  ngOnInit(): void {
+    const userId = localStorage.getItem('user-config:' + this.configName + ':user-id')
+      ?? crypto.randomUUID();
+    this.userIdControl.setValue(userId);
+    this.roles = JSON.parse(localStorage.getItem('user-config:' + this.configName + ':roles') ?? '[]');
   }
 
   add(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();
-
-    // Add our fruit
     if (value) {
-      this.groups.push(value);
+      this.roles.push(value);
     }
-
-    // Clear the input value
     event.chipInput!.clear();
-
-    this.groupsCtrl.setValue(null);
+    this.rolesControl.setValue(null);
+    this.saveRoles();
   }
 
-  remove(fruit: string): void {
-    const index = this.groups.indexOf(fruit);
+  remove(role: string): void {
+    const index = this.roles.indexOf(role);
 
     if (index >= 0) {
-      this.groups.splice(index, 1);
+      this.roles.splice(index, 1);
+      this.saveRoles();
     }
   }
 
   selected(event: MatAutocompleteSelectedEvent): void {
-    this.groups.push(event.option.viewValue);
-    this.groupInput.nativeElement.value = '';
-    this.groupsCtrl.setValue(null);
+    this.roles.push(event.option.viewValue);
+    this.roleInput.nativeElement.value = '';
+    this.rolesControl.setValue(null);
+    this.saveRoles();
+  }
+
+  saveRoles(): void {
+    localStorage.setItem('user-config:' + this.configName + ':roles', JSON.stringify(this.roles));
+  }
+
+  newUserId() {
+    this.userIdControl.setValue(crypto.randomUUID());
   }
 }

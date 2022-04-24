@@ -16,7 +16,6 @@ import {BasicError_BasicErrorCode} from '../../contracts/errors/v1/errors';
 import {isNullOrUndefined} from '../../lib/lib';
 import {logInfo} from '../../lib/logger';
 import {addAuthenticatedToContext, addAuthenticationGuard,} from '../../lib/middleware/authenticated-middleware';
-import {AuthenticatedContext} from '../../lib/middleware/context';
 import {addLoggerContext} from '../../lib/middleware/logger-middleware';
 import {
   createProtoBufBasicErrorResponse,
@@ -45,18 +44,6 @@ async function getRolesOfUser(proxy: DurableObjectStub, userId: string) {
       method: 'GET',
     })
     .then((res) => res.json<string[]>());
-}
-
-function canUserEditRole(role: string, context: AuthenticatedContext): { canEdit: boolean; requiredRole: string } {
-  const ADMIN_ROLE = 'admin:' + role.split(':', 1)[0];
-  const canEdit = hasRole(ADMIN_ROLE, context);
-  if (!canEdit) {
-    logInfo(
-      `User tried to edit role without having permission. requiredRole=${ADMIN_ROLE}, userId=${context.user.userId}, roles=${context.user.roles}`,
-      context,
-    );
-  }
-  return {canEdit, requiredRole: ADMIN_ROLE};
 }
 
 // noinspection JSUnusedGlobalSymbols
@@ -138,10 +125,13 @@ export default {
               CreateRoleBindingResponse,
               async (request, env, context) => {
                 const {userId, role} = context.proto.body;
-                const {canEdit, requiredRole} = canUserEditRole(role, context);
-                if (!canEdit) {
+                if (!hasRole(ROLES.ADMIN_ROLES_WRITE, context)) {
+                  context.logger.warn(
+                    `User tried to create role without having permission. requiredRole=${ROLES.ADMIN_ROLES_WRITE}, userId=${context.user.userId}, roles=${context.user.roles}`,
+                    context,
+                  );
                   return createProtoBufBasicErrorResponse(
-                    `Not allowed to add role of user. userId=${userId}, role=${role}, requiredRole=${requiredRole}`,
+                    `Not allowed to add role to user. userId=${userId}, role=${role}, requiredRole=${ROLES.ADMIN_ROLES_WRITE}`,
                     BasicError_BasicErrorCode.UNAUTHENTICATED,
                   );
                 }
@@ -172,10 +162,13 @@ export default {
               DeleteRoleBindingResponse,
               async (request, env, context) => {
                 const {userId, role} = context.proto.body;
-                const {canEdit, requiredRole} = canUserEditRole(role, context);
-                if (!canEdit) {
+                if (!hasRole(ROLES.ADMIN_ROLES_READ, context)) {
+                  context.logger.warn(
+                    `User tried to delete role without having permission. requiredRole=${ROLES.ADMIN_ROLES_WRITE}, userId=${context.user.userId}, roles=${context.user.roles}`,
+                    context,
+                  );
                   return createProtoBufBasicErrorResponse(
-                    `Not allowed to delete role of user. userId=${userId}, role=${role}, requiredRole=${requiredRole}`,
+                    `Not allowed to delete role of user. userId=${userId}, role=${role}, requiredRole=${ROLES.ADMIN_ROLES_READ}`,
                     BasicError_BasicErrorCode.UNAUTHENTICATED,
                   );
                 }
@@ -202,9 +195,9 @@ export default {
               GetRolesOfUserRequest,
               GetRolesOfUserResponse,
               async (request, env, context) => {
-                if (!hasRole(ROLES.ADMIN_ROLE, context)) {
+                if (!hasRole(ROLES.ADMIN_ROLES_READ, context)) {
                   return createProtoBufBasicErrorResponse(
-                    `Role=${ROLES.ADMIN_ROLE} is required to read role`,
+                    `role=${ROLES.ADMIN_ROLES_READ} is required to read roles of other users`,
                     BasicError_BasicErrorCode.UNAUTHENTICATED,
                   );
                 }

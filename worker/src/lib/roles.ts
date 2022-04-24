@@ -1,9 +1,10 @@
-import { AuthenticatedContext } from './middleware/context';
+import {AuthenticatedContext} from './middleware/context';
 
 export const ROLES = {
-  GROUP: (groupId: string) => `groups:${groupId}`,
-  ADMIN_GROUP: 'admin:groups',
-  ADMIN_ROLE: 'admin:roles',
+  GROUP_MEMBER: (groupId: string) => `groups:${groupId}:member`,
+  ADMIN_ROLES_READ: 'admin:roles:read',
+  ADMIN_ROLES_WRITE: 'admin:roles:write',
+  ADMIN_ROLES_DELETE: 'admin:roles:delete',
 };
 
 export function hasRole(

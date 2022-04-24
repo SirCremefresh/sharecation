@@ -1,6 +1,7 @@
 <h1 style="text-align: center;">Api Tester</h1>
 <div style="width: 80%; margin: auto">
-  <app-user-config></app-user-config>
+  <app-user-config [configName]="'user'" [configDisplayName]="'User'"></app-user-config>
+  <app-user-config [configName]="'admin'" [configDisplayName]="'Admin'"></app-user-config>
   <mat-accordion multi>
     <app-api-test *ngFor="let config of configs" [config]="config"></app-api-test>
   </mat-accordion>

@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 
 ARG DART_VERSION="2.16.1"
 # renovate: datasource=github-tags depName=nodejs/node versioning=node

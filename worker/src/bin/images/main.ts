@@ -124,6 +124,10 @@ export default {
             async (request, env, context) => {
               const formData = await request.formData();
               const groupId = formData.get('groupId');
+
+              context.logger.info(
+                `Uploading image to groupId=${groupId}`,
+              );
               if (typeof groupId !== 'string') {
                 context.logger.error(
                   `User tried to upload photo to group without roles. groupId=${groupId}, roles=${getRoles(
@@ -139,8 +143,8 @@ export default {
               //   context.logger.error(`User tried to upload photo to group without roles. groupId=${groupId}, roles=${getRoles(context)}`);
               //   return createProtoBufBasicErrorResponse('UNAUTHENTICATED', BasicError_BasicErrorCode.UNAUTHENTICATED);
               // }
-              const file = formData.get('file');
 
+              const file = formData.get('file');
               if (!(file instanceof File)) {
                 return createProtoBufBasicErrorResponse(
                   'Could not get image from request',
@@ -156,7 +160,7 @@ export default {
 
               if (!res.success) {
                 context.logger.error(
-                  `Error uploading image with response: ${JSON.stringify(
+                  `Error uploading image with response=${JSON.stringify(
                     res,
                   )}`,
                 );
@@ -165,6 +169,8 @@ export default {
                   BasicError_BasicErrorCode.INTERNAL,
                 );
               }
+
+              context.logger.info('Image uploaded successfully');
 
               const imageKey = IMAGES_KV.IMAGE(
                 context.user.userId,

@@ -23,10 +23,16 @@ Accept: application/json
 %}
 
 ### Upload a image
-POST development.sharecation-images.donato-wolfisberg.workers.dev/v1/images/asdf
+POST sharecation-images-development.donato-wolfisberg.workers.dev/v1/images/create-image
 Content-Type: multipart/form-data; boundary=boundary
 Accept: application/json
 Authorization: Bearer {{jwtString}}
+
+--boundary
+Content-Disposition: form-data; name="groupId"
+Content-Type: text/plain
+
+some-group-id
 
 --boundary
 Content-Disposition: form-data; name="file"; filename="file.png"

@@ -16,7 +16,7 @@ import {
   protoBuf,
 } from '../../lib/middleware/protobuf-middleware';
 import {addRouter, route} from '../../lib/middleware/router-middleware';
-import {getRoles} from '../../lib/roles';
+import {getRoles, hasRole, ROLES} from '../../lib/roles';
 import {IMAGES_KV} from './images-kv';
 
 interface EnvironmentVariables {
@@ -139,10 +139,11 @@ export default {
                   BasicError_BasicErrorCode.BAD_REQUEST,
                 );
               }
-              // if (!hasRole(ROLES.GROUP(groupId), context)) {
-              //   context.logger.error(`User tried to upload photo to group without roles. groupId=${groupId}, roles=${getRoles(context)}`);
-              //   return createProtoBufBasicErrorResponse('UNAUTHENTICATED', BasicError_BasicErrorCode.UNAUTHENTICATED);
-              // }
+              const role = ROLES.GROUP_MEMBER(groupId);
+              if (!hasRole(role, context)) {
+                context.logger.error(`User tried to upload photo to group without requiredRole=${role}. groupId=${groupId}, roles=${getRoles(context)}`);
+                return createProtoBufBasicErrorResponse('UNAUTHENTICATED', BasicError_BasicErrorCode.UNAUTHENTICATED);
+              }
 
               const file = formData.get('file');
               if (!(file instanceof File)) {

@@ -1,6 +1,6 @@
 import {Logger} from 'workers-loki-logger';
 import {logError} from '../logger';
-import {LoggerContext} from './context';
+import {isAuthenticatedContext, isRequestIdContext, isRouteContext, LoggerContext} from './context';
 
 export interface LoggerConfig {
   LOKI_SECRET: string;
@@ -44,6 +44,16 @@ export function addLoggerContext<ENV extends LoggerConfig,
       logError('Logger caught error handling request', e, context);
       throw e;
     } finally {
+      context.logger.mdcSet('serviceName', serviceName);
+      if (isRequestIdContext(context)) {
+        context.logger.mdcSet('requestId', context.requestId);
+      }
+      if (isAuthenticatedContext(context)) {
+        context.logger.mdcSet('userId', context.user.userId);
+      }
+      if (isRouteContext(context)) {
+        context.logger.mdcSet('path', context.route.path);
+      }
       await context.logger.flush();
     }
     return response;
@@ -69,6 +79,16 @@ export function addLoggerContextToSchedule<ENV extends LoggerConfig>(
     } catch (e) {
       logError('Logger caught error handling request', e, context);
     } finally {
+      context.logger.mdcSet('serviceName', serviceName);
+      if (isRequestIdContext(context)) {
+        context.logger.mdcSet('requestId', context.requestId);
+      }
+      if (isAuthenticatedContext(context)) {
+        context.logger.mdcSet('userId', context.user.userId);
+      }
+      if (isRouteContext(context)) {
+        context.logger.mdcSet('path', context.route.path);
+      }
       await context.logger.flush();
     }
   };

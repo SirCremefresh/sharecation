@@ -3,7 +3,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:sharecation_app/service/api_service.dart';
 
 class CameraScreen extends StatelessWidget {
-  CameraScreen({
+  const CameraScreen({
     Key? key,
   }) : super(key: key);
 

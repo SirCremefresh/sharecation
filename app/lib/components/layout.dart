@@ -40,7 +40,7 @@ class Layout extends StatelessWidget {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.camera),
+        child: const Icon(Icons.camera),
         onPressed: () async {
           final ImagePicker _picker = ImagePicker();
           final XFile? photo =

@@ -12,7 +12,6 @@ class AuthenticationApi {
   Future<CreateAuthenticationWithFirebaseResponse> createJwt({
     required CreateAuthenticationWithFirebaseRequest createJwtRequest,
   }) async {
-    print("creating jwt");
     const _path = r'/v1/create-authentication-with-firebase';
     final _options = Options(
         method: r'POST',

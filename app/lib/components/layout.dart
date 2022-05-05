@@ -45,9 +45,7 @@ class Layout extends StatelessWidget {
           final ImagePicker _picker = ImagePicker();
           final XFile? photo =
               await _picker.pickImage(source: ImageSource.camera);
-          print("picked photo");
           if (photo != null) {
-            print("photo is not null");
             await api.images.uploadImage(photo);
           }
         },

@@ -36,8 +36,6 @@ class ImagesApi {
     try {
       var getImagesByGroupIdResponse =
           CreateImageResponse.fromBuffer(_response.data!);
-      print("uploaded image response" +
-          getImagesByGroupIdResponse.toDebugString());
       return getImagesByGroupIdResponse.ok;
     } catch (error, stackTrace) {
       throw DioError(

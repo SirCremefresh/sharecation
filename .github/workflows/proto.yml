@@ -34,14 +34,14 @@ jobs:
 
       - name: Log into registry
         if: github.event_name != 'pull_request'
-        uses: docker/login-action@d398f07826957cd0a18ea1b059cf1207835e60bc
+        uses: docker/login-action@2
         with:
           username: donatowolfisberg
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Extract Docker metadata
         id: meta
-        uses: docker/metadata-action@8d56fe93cf3fd680736a906389438c1ed74d75f7
+        uses: docker/metadata-action@4
         with:
           images: ${{ env.IMAGE_NAME }}
 
@@ -50,7 +50,7 @@ jobs:
 
       - name: Build and push Docker image
         id: build-and-push
-        uses: docker/build-push-action@c5e6528d5ddefc82f682165021e05edf58044bce
+        uses: docker/build-push-action@3
         with:
           context: ./proto/docker/
           push: ${{ github.event_name != 'pull_request' }}

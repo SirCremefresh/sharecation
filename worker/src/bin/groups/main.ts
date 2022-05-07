@@ -6,13 +6,15 @@ import {createProtoBufOkResponse, protoBuf,} from '../../lib/middleware/protobuf
 import {addRouter, route} from '../../lib/middleware/router-middleware';
 import {ROLES} from '../../lib/roles';
 import {onFetch} from '../../lib/starter/on-fetch';
+import {TypedKvNamespace} from '../../lib/typed-kv-namespace';
+import {GROUPS_KV} from './groups-kv';
 
 type Environement = {
   LOKI_SECRET: string;
   ENVIRONMENT: string;
   PUBLIC_KEYS: string;
   SERVICE_ACCOUNT_KEY: string;
-  COMMON: KVNamespace;
+  GROUPS: KVNamespace;
 };
 
 // noinspection JSUnusedGlobalSymbols
@@ -29,6 +31,8 @@ export default {
               CreateGroupRequest,
               CreateGroupResponse,
               async (request, env, context) => {
+                const newGroupId = crypto.randomUUID();
+
                 try {
                   const res = await fetch('https://sharecation-authentication-development.dowo.ch/v1/create-role-binding', {
                     method: 'POST',
@@ -39,7 +43,7 @@ export default {
                     },
                     body: CreateRoleBindingRequest.toJsonString({
                       userId: context.user.userId,
-                      role: ROLES.GROUP_MEMBER(crypto.randomUUID())
+                      role: ROLES.GROUP_MEMBER(newGroupId)
                     })
                   });
                   context.logger.info('res statuw' + res.status);
@@ -48,9 +52,16 @@ export default {
                   context.logger.error('Failed to create role binding', e);
                 }
 
+                const groupsKv = new TypedKvNamespace(GROUPS_KV, env.GROUPS);
+                await groupsKv.namespace.put(groupsKv.keys.GROUP(newGroupId), JSON.stringify({
+                  createdAt: new Date().toISOString(),
+                  groupId: newGroupId,
+                  name: context.proto.body.name,
+                }));
+
                 return createProtoBufOkResponse<Group>({
-                  groupId: '',
-                  name: '',
+                  groupId: newGroupId,
+                  name: context.proto.body.name,
                 });
               },
             ),

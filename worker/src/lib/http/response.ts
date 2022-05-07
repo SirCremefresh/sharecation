@@ -1,13 +1,13 @@
-import { MessageType } from '@protobuf-ts/runtime';
-import { BasicError } from '../../contracts/errors/v1/errors';
-import { isNullOrUndefined } from '../lib';
-import { isProtoBufContext } from '../middleware/context';
-import { MessageFormat, messageFormatToMediaType } from './types';
+import {MessageType} from '@protobuf-ts/runtime';
+import {BasicError} from '../../contracts/errors/v1/errors';
+import {isNullOrUndefined} from '../lib';
+import {isProtoBufContext} from '../middleware/context';
+import {MessageFormat, messageFormatToMediaType} from './types';
 
 export function createProtoBufResponse(
   body: {},
   context: {
-    proto: { responseFormat: MessageFormat; responseType: MessageType<any> };
+    proto: { responseFormat: MessageFormat; responseType: MessageType<{}> };
   },
 ): Response {
   const protoContext = context.proto;
@@ -19,21 +19,19 @@ export function createProtoBufResponse(
 }
 
 export function createBasicErrorResponse(basicError: BasicError, context: {}) {
-  const wrappedBody = { error: basicError };
   if (
     isProtoBufContext(context) &&
     _responseContainsBasicError(context.proto.responseType)
   ) {
-    return createProtoBufResponse(wrappedBody, context);
+    return createProtoBufResponse({error: basicError}, context);
   }
   return _createRawResponse(
-    JSON.stringify(wrappedBody),
+    JSON.stringify({error: BasicError.toJson(basicError)}),
     MessageFormat.JSON,
-    500,
   );
 }
 
-function _responseContainsBasicError(responseType: MessageType<any>): boolean {
+function _responseContainsBasicError(responseType: MessageType<{}>): boolean {
   const errorType = responseType.fields.find((field) => field.name === 'error');
   if (isNullOrUndefined(errorType) || errorType.kind !== 'message') {
     return false;
@@ -44,10 +42,9 @@ function _responseContainsBasicError(responseType: MessageType<any>): boolean {
 function _createRawResponse(
   body: string | Uint8Array,
   contentType: MessageFormat,
-  status: number = 200,
 ) {
   return new Response(body, {
-    status,
+    status: 200,
     headers: {
       'Content-Type': messageFormatToMediaType(contentType),
       'Access-Control-Allow-Origin': '*',

@@ -9,7 +9,6 @@ import {
 import {isNotNullOrUndefined} from '../../lib/lib';
 import {addAuthenticationGuard} from '../../lib/middleware/authenticated-middleware';
 import {LoggerContext} from '../../lib/middleware/context';
-import {addLoggerContext} from '../../lib/middleware/logger-middleware';
 import {
   createProtoBufBasicErrorResponse,
   createProtoBufOkResponse,
@@ -17,6 +16,7 @@ import {
 } from '../../lib/middleware/protobuf-middleware';
 import {addRouter, route} from '../../lib/middleware/router-middleware';
 import {getRoles, hasRole, ROLES} from '../../lib/roles';
+import {onFetch} from '../../lib/starter/on-fetch';
 import {IMAGES_KV} from './images-kv';
 
 interface EnvironmentVariables {
@@ -73,7 +73,7 @@ async function uploadFile(
 
 // noinspection JSUnusedGlobalSymbols
 export default {
-  fetch: addLoggerContext<EnvironmentVariables, Request, FetchEvent, Response>(
+  fetch: onFetch<EnvironmentVariables>(
     'images',
     addAuthenticationGuard(
       addRouter([

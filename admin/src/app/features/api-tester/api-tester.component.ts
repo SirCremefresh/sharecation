@@ -7,6 +7,7 @@ import {
 } from '../../contracts/authentication/v1/authentication';
 import {GetPublicJwksResponse} from '../../contracts/authentication/v1/public_jwk';
 import {CreateUserRequest, CreateUserResponse} from '../../contracts/dev-tools/v1/jwt';
+import {CreateGroupRequest, CreateGroupResponse} from '../../contracts/groups/v1/groups';
 import {ApiTestConfig} from './api-test-config.model';
 
 @Component({
@@ -47,6 +48,14 @@ export class ApiTesterComponent {
       path: '/v1/create-role-of-user',
       requestType: CreateRoleBindingRequest,
       responseType: CreateRoleBindingResponse
+    },
+    {
+      title: 'Create Group',
+      service: 'groups',
+      description: 'Create A testing User, This only works in development',
+      path: '/v1/create-group',
+      requestType: CreateGroupRequest,
+      responseType: CreateGroupResponse
     },
   ];
 }

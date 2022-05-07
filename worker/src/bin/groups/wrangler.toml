@@ -7,6 +7,12 @@ ENVIRONMENT = ""
 
 [env.development]
 vars = { ENVIRONMENT = "development" }
+kv_namespaces = [
+    { binding = "GROUPS", id = "7458047a2bf34bd6b684bd0ce5eed9db", preview_id = "7458047a2bf34bd6b684bd0ce5eed9db" }
+]
 
 [env.production]
 vars = { ENVIRONMENT = "production" }
+kv_namespaces = [
+    { binding = "GROUPS", id = "cca24f6693904d348e97e7fc4af1566a" }
+]

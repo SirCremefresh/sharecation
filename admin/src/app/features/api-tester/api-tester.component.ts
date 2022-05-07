@@ -45,7 +45,7 @@ export class ApiTesterComponent {
       title: 'Create Role Binding',
       service: 'authentication',
       description: 'Create A testing User, This only works in development',
-      path: '/v1/create-role-of-user',
+      path: '/v1/create-role-binding',
       requestType: CreateRoleBindingRequest,
       responseType: CreateRoleBindingResponse
     },

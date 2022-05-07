@@ -57,8 +57,8 @@ Authorization: Bearer {{jwtString}}
   "userId": "some-user-id-7"
 }
 
-### create-role-of-user
-POST sharecation-authentication-development.donato-wolfisberg.workers.dev/v1/create-role-of-user
+### create-role-binding
+POST sharecation-authentication-development.donato-wolfisberg.workers.dev/v1/create-role-binding
 Content-Type: application/json
 Accept: application/json
 Authorization: Bearer {{jwtString}}

@@ -118,7 +118,7 @@ export default {
         ),
         route(
           'POST',
-          ['v1', 'create-role-of-user'],
+          ['v1', 'create-role-binding'],
           addAuthenticationGuard(
             protoBuf(
               CreateRoleBindingRequest,

@@ -30,8 +30,7 @@ export default {
               CreateGroupResponse,
               async (request, env, context) => {
                 try {
-                  context.logger.info('Authorization: ' + `Bearer ${env.SERVICE_ACCOUNT_KEY}`)
-                  const res = await fetch('https://sharecation-authentication-development.dowo.ch/v1/create-role-of-user', {
+                  const res = await fetch('https://sharecation-authentication-development.dowo.ch/v1/create-role-binding', {
                     method: 'POST',
                     headers: {
                       'Content-Type': 'application/json',

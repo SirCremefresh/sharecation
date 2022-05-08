@@ -9,21 +9,30 @@
 
 // const { COMMON } = getMiniflareBindings();
 
-import {
-  Authenticated,
-  CreateAuthenticationWithFirebaseResponse,
-} from '../../contracts/authentication/v1/authentication';
-import { createProtoBufOkResponse } from '../../lib/middleware/protobuf-middleware';
+import {CreateAuthenticationWithFirebaseResponse} from '../../contracts/authentication/v1/authentication';
+import {BasicError_BasicErrorCode} from '../../contracts/errors/v1/errors';
+import {createProtoBufBasicErrorResponse} from '../../lib/middleware/protobuf-middleware';
 
 test('sign key', async () => {
-  const aaa = createProtoBufOkResponse<Authenticated>({
-    jwtString: 'sdf',
-  });
+  // const aaa = createProtoBufOkResponse<Authenticated>({
+  //   jwtString: 'sdf',
+  // });
+  // console.log(aaa);
+  // const bbb = CreateAuthenticationWithFirebaseResponse.toJsonString(aaa);
+  // console.log(bbb);
+  // const ccc = CreateAuthenticationWithFirebaseResponse.fromJsonString(bbb);
+  // console.log(ccc);
+
+
+  const aaa = createProtoBufBasicErrorResponse('sdf', BasicError_BasicErrorCode.INTERNAL);
   console.log(aaa);
   const bbb = CreateAuthenticationWithFirebaseResponse.toJsonString(aaa);
   console.log(bbb);
+  const ccc = CreateAuthenticationWithFirebaseResponse.fromJsonString(bbb);
+  console.log(ccc);
 
   // const res = await hello();
+
   // await exportImportTest();
   // console.log(res);
   // expect(res).toBeTruthy();

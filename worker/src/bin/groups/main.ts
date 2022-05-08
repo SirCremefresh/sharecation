@@ -1,7 +1,13 @@
-import {CreateRoleBindingRequest} from '../../contracts/authentication/v1/authentication';
+import {CreateRoleBindingRequest, CreateRoleBindingResponse} from '../../contracts/authentication/v1/authentication';
+import {BasicError_BasicErrorCode} from '../../contracts/errors/v1/errors';
 import {CreateGroupRequest, CreateGroupResponse, Group,} from '../../contracts/groups/v1/groups';
+import {callApi} from '../../lib/api';
 import {addAuthenticationGuard} from '../../lib/middleware/authenticated-middleware';
-import {createProtoBufOkResponse, protoBuf,} from '../../lib/middleware/protobuf-middleware';
+import {
+  createProtoBufBasicErrorResponse,
+  createProtoBufOkResponse,
+  protoBuf,
+} from '../../lib/middleware/protobuf-middleware';
 import {addRouter, route} from '../../lib/middleware/router-middleware';
 import {ROLES} from '../../lib/roles';
 import {onFetch} from '../../lib/starter/on-fetch';
@@ -16,19 +22,20 @@ type Environment = {
   GROUPS: KVNamespace;
 };
 
-async function addGroupRoleBinding(env: Environment, userId: string, newGroupId: string) {
-  return await fetch('https://sharecation-authentication-development.dowo.ch/v1/create-role-binding', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': `Bearer ${env.SERVICE_ACCOUNT_KEY}`,
-    },
-    body: CreateRoleBindingRequest.toJsonString({
+function addGroupRoleBinding(serviceAccount: string, userId: string, newGroupId: string, context: {}) {
+  return callApi(
+    CreateRoleBindingRequest,
+    CreateRoleBindingResponse,
+    {
       userId,
       role: ROLES.GROUP_MEMBER(newGroupId)
-    })
-  });
+    },
+    serviceAccount,
+    'authentication',
+    'development',
+    '/v1/create-role-binding',
+    context
+  );
 }
 
 // noinspection JSUnusedGlobalSymbols
@@ -45,13 +52,12 @@ export default {
             CreateGroupResponse,
             async (request, env, context) => {
               const newGroupId = crypto.randomUUID();
+              const userId = context.user.userId;
 
-              try {
-                const res = await addGroupRoleBinding(env, context.user.userId, newGroupId);
-                context.logger.info('res statuw' + res.status);
-                context.logger.info('res body' + await res.text());
-              } catch (e) {
-                context.logger.error('Failed to create role binding', e);
+              const response = await addGroupRoleBinding(env.SERVICE_ACCOUNT_KEY, userId, newGroupId, context);
+              if (response.oneofKind !== 'ok') {
+                context.logger.error(`Failed to create group role binding for groupId=${newGroupId} and userId=${userId}`);
+                return createProtoBufBasicErrorResponse('Failed to create group role binding', BasicError_BasicErrorCode.INTERNAL);
               }
 
               const groupsKv = new TypedKvNamespace(GROUPS_KV, env.GROUPS);

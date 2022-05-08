@@ -1,7 +1,7 @@
 import {MessageType} from '@protobuf-ts/runtime';
 import {BasicError} from '../../contracts/errors/v1/errors';
-import {isNullOrUndefined} from '../lib';
 import {isProtoBufContext} from '../middleware/context';
+import {responseContainsBasicError} from '../protobuf-util';
 import {MessageFormat, messageFormatToMediaType} from './types';
 
 export function createProtoBufResponse(
@@ -21,7 +21,7 @@ export function createProtoBufResponse(
 export function createBasicErrorResponse(basicError: BasicError, context: {}) {
   if (
     isProtoBufContext(context) &&
-    _responseContainsBasicError(context.proto.responseType)
+    responseContainsBasicError(context.proto.responseType)
   ) {
     return createProtoBufResponse({error: basicError}, context);
   }
@@ -29,14 +29,6 @@ export function createBasicErrorResponse(basicError: BasicError, context: {}) {
     JSON.stringify({error: BasicError.toJson(basicError)}),
     MessageFormat.JSON,
   );
-}
-
-function _responseContainsBasicError(responseType: MessageType<{}>): boolean {
-  const errorType = responseType.fields.find((field) => field.name === 'error');
-  if (isNullOrUndefined(errorType) || errorType.kind !== 'message') {
-    return false;
-  }
-  return errorType.T() === BasicError;
 }
 
 function _createRawResponse(

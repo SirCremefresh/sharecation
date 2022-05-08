@@ -17,9 +17,9 @@ export function logError(
   param1: any | {},
   param2?: {},
 ) {
-  const {error, context} = isNullOrUndefined(param2)
-    ? {error: param1, context: param2}
-    : {error: undefined, context: param1};
+  const {error, context} = isNullOrUndefined(param2) ?
+    {error: undefined, context: param1} :
+    {error: param1, context: param2};
   if (isLoggerContext(context)) {
     context.logger.error(message, error);
   } else {

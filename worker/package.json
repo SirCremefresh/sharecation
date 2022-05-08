@@ -10,7 +10,7 @@
     "build:emit": "tsc",
     "clean": "node clean.mjs",
     "format": "prettier --write '**/*.{ts,mjs,css,json,md}'",
-    "test": "NODE_OPTIONS=--experimental-vm-modules npx jest",
+    "test": "jest",
     "publish:developement": "node publish.mjs --environment=development",
     "publish:developement:ping": "node publish.mjs --environment=development --bins=ping",
     "publish:developement:images": "node publish.mjs --environment=development --bins=images",

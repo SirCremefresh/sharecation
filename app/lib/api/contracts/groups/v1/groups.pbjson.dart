@@ -43,3 +43,27 @@ const CreateGroupResponse$json = const {
 
 /// Descriptor for `CreateGroupResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List createGroupResponseDescriptor = $convert.base64Decode('ChNDcmVhdGVHcm91cFJlc3BvbnNlEiIKAm9rGAEgASgLMhAuZ3JvdXBzLnYxLkdyb3VwSABSAm9rEi0KBWVycm9yGAIgASgLMhUuZXJyb3JzLnYxLkJhc2ljRXJyb3JIAFIFZXJyb3JCCgoIcmVzcG9uc2U=');
+@$core.Deprecated('Use groupsDescriptor instead')
+const Groups$json = const {
+  '1': 'Groups',
+  '2': const [
+    const {'1': 'groups', '3': 1, '4': 3, '5': 11, '6': '.groups.v1.Group', '10': 'groups'},
+  ],
+};
+
+/// Descriptor for `Groups`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List groupsDescriptor = $convert.base64Decode('CgZHcm91cHMSKAoGZ3JvdXBzGAEgAygLMhAuZ3JvdXBzLnYxLkdyb3VwUgZncm91cHM=');
+@$core.Deprecated('Use getGroupsResponseDescriptor instead')
+const GetGroupsResponse$json = const {
+  '1': 'GetGroupsResponse',
+  '2': const [
+    const {'1': 'ok', '3': 1, '4': 1, '5': 11, '6': '.groups.v1.Groups', '9': 0, '10': 'ok'},
+    const {'1': 'error', '3': 2, '4': 1, '5': 11, '6': '.errors.v1.BasicError', '9': 0, '10': 'error'},
+  ],
+  '8': const [
+    const {'1': 'response'},
+  ],
+};
+
+/// Descriptor for `GetGroupsResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getGroupsResponseDescriptor = $convert.base64Decode('ChFHZXRHcm91cHNSZXNwb25zZRIjCgJvaxgBIAEoCzIRLmdyb3Vwcy52MS5Hcm91cHNIAFICb2sSLQoFZXJyb3IYAiABKAsyFS5lcnJvcnMudjEuQmFzaWNFcnJvckgAUgVlcnJvckIKCghyZXNwb25zZQ==');

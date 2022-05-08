@@ -1,7 +1,8 @@
 import {AuthenticatedContext} from './middleware/context';
 
 export const ROLES = {
-  GROUP_MEMBER: (groupId: string) => `groups:${groupId}:member`,
+  GROUP_MEMBER: (groupId: string) => `${ROLES.GROUPS}${groupId}:member`,
+  GROUPS: `groups:`,
   ADMIN_ROLES_READ: 'admin:roles:read',
   ADMIN_ROLES_WRITE: 'admin:roles:write',
   ADMIN_ROLES_DELETE: 'admin:roles:delete',

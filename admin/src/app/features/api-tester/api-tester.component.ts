@@ -7,7 +7,7 @@ import {
 } from '../../contracts/authentication/v1/authentication';
 import {GetPublicJwksResponse} from '../../contracts/authentication/v1/public_jwk';
 import {CreateUserRequest, CreateUserResponse} from '../../contracts/dev-tools/v1/jwt';
-import {CreateGroupRequest, CreateGroupResponse} from '../../contracts/groups/v1/groups';
+import {CreateGroupRequest, CreateGroupResponse, GetGroupsResponse} from '../../contracts/groups/v1/groups';
 import {ApiTestConfig} from './api-test-config.model';
 
 @Component({
@@ -52,10 +52,18 @@ export class ApiTesterComponent {
     {
       title: 'Create Group',
       service: 'groups',
-      description: 'Create A testing User, This only works in development',
+      description: 'Create a new group and add user as member',
       path: '/v1/create-group',
       requestType: CreateGroupRequest,
       responseType: CreateGroupResponse
+    },
+    {
+      title: 'Get Groups',
+      service: 'groups',
+      description: 'Get all groups of user',
+      path: '/v1/get-groups',
+      requestType: null,
+      responseType: GetGroupsResponse
     },
   ];
 }

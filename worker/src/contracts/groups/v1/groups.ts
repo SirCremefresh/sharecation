@@ -57,6 +57,38 @@ export interface CreateGroupResponse {
         oneofKind: undefined;
     };
 }
+/**
+ * @generated from protobuf message groups.v1.Groups
+ */
+export interface Groups {
+    /**
+     * @generated from protobuf field: repeated groups.v1.Group groups = 1;
+     */
+    groups: Group[];
+}
+/**
+ * @generated from protobuf message groups.v1.GetGroupsResponse
+ */
+export interface GetGroupsResponse {
+    /**
+     * @generated from protobuf oneof: response
+     */
+    response: {
+        oneofKind: "ok";
+        /**
+         * @generated from protobuf field: groups.v1.Groups ok = 1;
+         */
+        ok: Groups;
+    } | {
+        oneofKind: "error";
+        /**
+         * @generated from protobuf field: errors.v1.BasicError error = 2;
+         */
+        error: BasicError;
+    } | {
+        oneofKind: undefined;
+    };
+}
 // @generated message type with reflection information, may provide speed optimized methods
 class Group$Type extends MessageType<Group> {
     constructor() {
@@ -218,3 +250,110 @@ class CreateGroupResponse$Type extends MessageType<CreateGroupResponse> {
  * @generated MessageType for protobuf message groups.v1.CreateGroupResponse
  */
 export const CreateGroupResponse = new CreateGroupResponse$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class Groups$Type extends MessageType<Groups> {
+    constructor() {
+        super("groups.v1.Groups", [
+            { no: 1, name: "groups", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => Group }
+        ]);
+    }
+    create(value?: PartialMessage<Groups>): Groups {
+        const message = { groups: [] };
+        globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
+        if (value !== undefined)
+            reflectionMergePartial<Groups>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: Groups): Groups {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* repeated groups.v1.Group groups */ 1:
+                    message.groups.push(Group.internalBinaryRead(reader, reader.uint32(), options));
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: Groups, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* repeated groups.v1.Group groups = 1; */
+        for (let i = 0; i < message.groups.length; i++)
+            Group.internalBinaryWrite(message.groups[i], writer.tag(1, WireType.LengthDelimited).fork(), options).join();
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message groups.v1.Groups
+ */
+export const Groups = new Groups$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class GetGroupsResponse$Type extends MessageType<GetGroupsResponse> {
+    constructor() {
+        super("groups.v1.GetGroupsResponse", [
+            { no: 1, name: "ok", kind: "message", oneof: "response", T: () => Groups },
+            { no: 2, name: "error", kind: "message", oneof: "response", T: () => BasicError }
+        ]);
+    }
+    create(value?: PartialMessage<GetGroupsResponse>): GetGroupsResponse {
+        const message = { response: { oneofKind: undefined } };
+        globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
+        if (value !== undefined)
+            reflectionMergePartial<GetGroupsResponse>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: GetGroupsResponse): GetGroupsResponse {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* groups.v1.Groups ok */ 1:
+                    message.response = {
+                        oneofKind: "ok",
+                        ok: Groups.internalBinaryRead(reader, reader.uint32(), options, (message.response as any).ok)
+                    };
+                    break;
+                case /* errors.v1.BasicError error */ 2:
+                    message.response = {
+                        oneofKind: "error",
+                        error: BasicError.internalBinaryRead(reader, reader.uint32(), options, (message.response as any).error)
+                    };
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: GetGroupsResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* groups.v1.Groups ok = 1; */
+        if (message.response.oneofKind === "ok")
+            Groups.internalBinaryWrite(message.response.ok, writer.tag(1, WireType.LengthDelimited).fork(), options).join();
+        /* errors.v1.BasicError error = 2; */
+        if (message.response.oneofKind === "error")
+            BasicError.internalBinaryWrite(message.response.error, writer.tag(2, WireType.LengthDelimited).fork(), options).join();
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message groups.v1.GetGroupsResponse
+ */
+export const GetGroupsResponse = new GetGroupsResponse$Type();

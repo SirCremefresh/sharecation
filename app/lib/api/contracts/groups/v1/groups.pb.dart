@@ -199,3 +199,124 @@ class CreateGroupResponse extends $pb.GeneratedMessage {
   $0.BasicError ensureError() => $_ensure(1);
 }
 
+class Groups extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Groups', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'groups.v1'), createEmptyInstance: create)
+    ..pc<Group>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'groups', $pb.PbFieldType.PM, subBuilder: Group.create)
+    ..hasRequiredFields = false
+  ;
+
+  Groups._() : super();
+  factory Groups({
+    $core.Iterable<Group>? groups,
+  }) {
+    final _result = create();
+    if (groups != null) {
+      _result.groups.addAll(groups);
+    }
+    return _result;
+  }
+  factory Groups.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory Groups.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  Groups clone() => Groups()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  Groups copyWith(void Function(Groups) updates) => super.copyWith((message) => updates(message as Groups)) as Groups; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static Groups create() => Groups._();
+  Groups createEmptyInstance() => create();
+  static $pb.PbList<Groups> createRepeated() => $pb.PbList<Groups>();
+  @$core.pragma('dart2js:noInline')
+  static Groups getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Groups>(create);
+  static Groups? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.List<Group> get groups => $_getList(0);
+}
+
+enum GetGroupsResponse_Response {
+  ok, 
+  error, 
+  notSet
+}
+
+class GetGroupsResponse extends $pb.GeneratedMessage {
+  static const $core.Map<$core.int, GetGroupsResponse_Response> _GetGroupsResponse_ResponseByTag = {
+    1 : GetGroupsResponse_Response.ok,
+    2 : GetGroupsResponse_Response.error,
+    0 : GetGroupsResponse_Response.notSet
+  };
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GetGroupsResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'groups.v1'), createEmptyInstance: create)
+    ..oo(0, [1, 2])
+    ..aOM<Groups>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'ok', subBuilder: Groups.create)
+    ..aOM<$0.BasicError>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'error', subBuilder: $0.BasicError.create)
+    ..hasRequiredFields = false
+  ;
+
+  GetGroupsResponse._() : super();
+  factory GetGroupsResponse({
+    Groups? ok,
+    $0.BasicError? error,
+  }) {
+    final _result = create();
+    if (ok != null) {
+      _result.ok = ok;
+    }
+    if (error != null) {
+      _result.error = error;
+    }
+    return _result;
+  }
+  factory GetGroupsResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetGroupsResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetGroupsResponse clone() => GetGroupsResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetGroupsResponse copyWith(void Function(GetGroupsResponse) updates) => super.copyWith((message) => updates(message as GetGroupsResponse)) as GetGroupsResponse; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static GetGroupsResponse create() => GetGroupsResponse._();
+  GetGroupsResponse createEmptyInstance() => create();
+  static $pb.PbList<GetGroupsResponse> createRepeated() => $pb.PbList<GetGroupsResponse>();
+  @$core.pragma('dart2js:noInline')
+  static GetGroupsResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetGroupsResponse>(create);
+  static GetGroupsResponse? _defaultInstance;
+
+  GetGroupsResponse_Response whichResponse() => _GetGroupsResponse_ResponseByTag[$_whichOneof(0)]!;
+  void clearResponse() => clearField($_whichOneof(0));
+
+  @$pb.TagNumber(1)
+  Groups get ok => $_getN(0);
+  @$pb.TagNumber(1)
+  set ok(Groups v) { setField(1, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasOk() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearOk() => clearField(1);
+  @$pb.TagNumber(1)
+  Groups ensureOk() => $_ensure(0);
+
+  @$pb.TagNumber(2)
+  $0.BasicError get error => $_getN(1);
+  @$pb.TagNumber(2)
+  set error($0.BasicError v) { setField(2, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasError() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearError() => clearField(2);
+  @$pb.TagNumber(2)
+  $0.BasicError ensureError() => $_ensure(1);
+}
+

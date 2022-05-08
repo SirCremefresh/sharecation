@@ -1,7 +1,14 @@
 import {CreateRoleBindingRequest, CreateRoleBindingResponse} from '../../contracts/authentication/v1/authentication';
 import {BasicError_BasicErrorCode} from '../../contracts/errors/v1/errors';
-import {CreateGroupRequest, CreateGroupResponse, Group,} from '../../contracts/groups/v1/groups';
+import {
+  CreateGroupRequest,
+  CreateGroupResponse,
+  GetGroupsResponse,
+  Group,
+  Groups,
+} from '../../contracts/groups/v1/groups';
 import {callApi} from '../../lib/api';
+import {isNotNullOrUndefined} from '../../lib/lib';
 import {addAuthenticationGuard} from '../../lib/middleware/authenticated-middleware';
 import {
   createProtoBufBasicErrorResponse,
@@ -38,15 +45,21 @@ function addGroupRoleBinding(serviceAccount: string, userId: string, newGroupId:
   );
 }
 
+interface GroupKv {
+  name: string,
+  groupId: string,
+  createdAt: string
+}
+
 // noinspection JSUnusedGlobalSymbols
 export default {
   fetch: onFetch<Environment>(
     'groups',
-    addRouter([
-      route(
-        'POST',
-        ['v1', 'create-group'],
-        addAuthenticationGuard(
+    addAuthenticationGuard(
+      addRouter([
+        route(
+          'POST',
+          ['v1', 'create-group'],
           protoBuf(
             CreateGroupRequest,
             CreateGroupResponse,
@@ -61,11 +74,12 @@ export default {
               }
 
               const groupsKv = new TypedKvNamespace(GROUPS_KV, env.GROUPS);
-              await groupsKv.namespace.put(groupsKv.keys.GROUP(newGroupId), JSON.stringify({
+              const value: GroupKv = {
                 createdAt: new Date().toISOString(),
                 groupId: newGroupId,
                 name: context.proto.body.name,
-              }));
+              };
+              await groupsKv.namespace.put(groupsKv.keys.GROUP(newGroupId), JSON.stringify(value));
 
               return createProtoBufOkResponse<Group>({
                 groupId: newGroupId,
@@ -74,7 +88,36 @@ export default {
             },
           ),
         ),
-      ),
-    ]),
+        route(
+          'POST',
+          ['v1', 'get-groups'],
+          protoBuf(
+            null,
+            GetGroupsResponse,
+            async (request, env, context) => {
+              const groupsKv = new TypedKvNamespace(GROUPS_KV, env.GROUPS);
+
+              const groupsPromises = Array.from(context.user.roles)
+                .filter(role => role.startsWith(ROLES.GROUPS))
+                .map(role => role.split(':')[1] as string)
+                .map(groupId => groupsKv.namespace.get<GroupKv>(groupsKv.keys.GROUP(groupId), 'json'));
+
+
+              const groups: Group[] = (await Promise.all(groupsPromises))
+                .filter(isNotNullOrUndefined)
+                .map(group => ({
+                  groupId: group.groupId,
+                  name: group.name,
+                }));
+
+
+              return createProtoBufOkResponse<Groups>({
+                groups
+              });
+            },
+          ),
+        ),
+      ]),
+    ),
   ),
 };

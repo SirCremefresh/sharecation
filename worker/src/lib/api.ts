@@ -20,7 +20,7 @@ export async function callApi<REQUEST_TYPE extends {}, RESPONSE_TYPE extends { r
   const bodyString = requestType.toJsonString(body);
   try {
     return await fetch(
-      `https://sharecation-${service}-${environment}.dowooo.ch${path}`,
+      `https://sharecation-${service}-${environment}.dowo.ch${path}`,
       {
         method: 'POST',
         headers: {

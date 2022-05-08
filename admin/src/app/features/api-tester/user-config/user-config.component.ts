@@ -21,7 +21,7 @@ export class UserConfigComponent implements OnInit {
   roles: string[] = [];
 
   ROLES_WITHOUT_PLACEHOLDERS = ['admin:roles:read', 'admin:roles:write', 'admin:roles:delete'];
-  ROLES_WITH_PLACEHOLDERS = ['roles:{}:member'];
+  ROLES_WITH_PLACEHOLDERS = ['groups:{}:member'];
 
   @ViewChild('roleInput') roleInput!: ElementRef<HTMLInputElement>;
 

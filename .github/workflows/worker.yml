@@ -22,6 +22,8 @@ jobs:
       - run: cd worker && npm ci
       - run: cd worker && npm run build
       - run: cd worker && npm run test
+      - run: echo ${{ github.ref }}
+      - run: echo ${{ github.ref == 'ref/heads/development' }}
       - name: Deploy to development environment
         if: ${{ github.ref == 'ref/heads/development' }}
         run: echo deploydevelopment

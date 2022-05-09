@@ -27,7 +27,8 @@ jobs:
         uses: cloudflare/wrangler-action@2.0.0
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
-          command: cd worker && npm run publish:development
+          command: whoami
+#          command: cd worker && npm run publish:development
       - name: Deploy to production environment
         if: ${{ github.ref == 'refs/heads/master' }}
         run: echo deployproduction

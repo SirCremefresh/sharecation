@@ -13,15 +13,17 @@ type UserConfig = {
   providedIn: 'root'
 })
 export class UserConfigService {
-  private configs: Map<string, UserConfig> = new Map();
 
   constructor(private readonly http: HttpClient) {
+    this.setConfig('get-roles', {
+      userId: 'get-roles',
+      roles: ['admin:roles:read']
+    });
   }
 
   setConfig(configName: string, config: UserConfig) {
     localStorage.setItem('user-config:' + configName + ':user-id', config.userId);
     localStorage.setItem('user-config:' + configName + ':roles', JSON.stringify(config.roles));
-    this.configs.set(configName, config);
   }
 
   getUserConfig(configName: string): UserConfig {

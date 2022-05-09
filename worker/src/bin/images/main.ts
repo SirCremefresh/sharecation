@@ -84,8 +84,16 @@ export default {
             GetImagesByGroupIdRequest,
             GetImagesByGroupIdResponse,
             async (request, env, context) => {
+              const groupId = context.proto.body.groupId;
+              if (!hasRole(ROLES.GROUP_MEMBER(groupId), context)) {
+                context.logger.info(`User does not have permission to access group with groupId=${groupId}`);
+                return createProtoBufBasicErrorResponse(
+                  'Does not have role',
+                  BasicError_BasicErrorCode.UNAUTHENTICATED,
+                );
+              }
               const results = await env.IMAGES.list<{ imageId: string }>({
-                prefix: IMAGES_KV.IMAGES_USER(context.user.userId),
+                prefix: IMAGES_KV.IMAGES_GROUP(groupId),
                 cursor: context.proto.body.cursor,
               });
               const imageUrls = [];

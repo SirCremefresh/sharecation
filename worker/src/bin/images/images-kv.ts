@@ -1,6 +1,6 @@
 export const IMAGES_KV = {
-  IMAGE: (userId: string, time: string, imageId: string) =>
-    `${IMAGES_KV.IMAGES_USER(userId)}${time}:${imageId}`,
-  IMAGES_USER: (userId: string) => `${IMAGES_KV.IMAGES}${userId}:`,
+  IMAGE: (groupId: string, time: string, imageId: string) =>
+    `${IMAGES_KV.IMAGES_GROUP(groupId)}${time}:${imageId}`,
+  IMAGES_GROUP: (groupId: string) => `${IMAGES_KV.IMAGES}${groupId}:`,
   IMAGES: 'images:',
 };

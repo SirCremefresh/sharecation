@@ -30,9 +30,13 @@ export interface User {
  */
 export interface CreateUserRequest {
     /**
-     * @generated from protobuf field: repeated string rights = 1;
+     * @generated from protobuf field: optional string user_id = 1;
      */
-    rights: string[];
+    userId?: string;
+    /**
+     * @generated from protobuf field: repeated string roles = 2;
+     */
+    roles: string[];
 }
 /**
  * @generated from protobuf message dev_tools.v1.CreateUserResponse
@@ -115,11 +119,12 @@ export const User = new User$Type();
 class CreateUserRequest$Type extends MessageType<CreateUserRequest> {
     constructor() {
         super("dev_tools.v1.CreateUserRequest", [
-            { no: 1, name: "rights", kind: "scalar", repeat: 2 /*RepeatType.UNPACKED*/, T: 9 /*ScalarType.STRING*/ }
+            { no: 1, name: "user_id", kind: "scalar", opt: true, T: 9 /*ScalarType.STRING*/ },
+            { no: 2, name: "roles", kind: "scalar", repeat: 2 /*RepeatType.UNPACKED*/, T: 9 /*ScalarType.STRING*/ }
         ]);
     }
     create(value?: PartialMessage<CreateUserRequest>): CreateUserRequest {
-        const message = { rights: [] };
+        const message = { roles: [] };
         globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
         if (value !== undefined)
             reflectionMergePartial<CreateUserRequest>(this, message, value);
@@ -130,8 +135,11 @@ class CreateUserRequest$Type extends MessageType<CreateUserRequest> {
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
-                case /* repeated string rights */ 1:
-                    message.rights.push(reader.string());
+                case /* optional string user_id */ 1:
+                    message.userId = reader.string();
+                    break;
+                case /* repeated string roles */ 2:
+                    message.roles.push(reader.string());
                     break;
                 default:
                     let u = options.readUnknownField;
@@ -145,9 +153,12 @@ class CreateUserRequest$Type extends MessageType<CreateUserRequest> {
         return message;
     }
     internalBinaryWrite(message: CreateUserRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
-        /* repeated string rights = 1; */
-        for (let i = 0; i < message.rights.length; i++)
-            writer.tag(1, WireType.LengthDelimited).string(message.rights[i]);
+        /* optional string user_id = 1; */
+        if (message.userId !== undefined)
+            writer.tag(1, WireType.LengthDelimited).string(message.userId);
+        /* repeated string roles = 2; */
+        for (let i = 0; i < message.roles.length; i++)
+            writer.tag(2, WireType.LengthDelimited).string(message.roles[i]);
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);

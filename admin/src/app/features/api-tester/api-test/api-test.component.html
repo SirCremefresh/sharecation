@@ -10,8 +10,13 @@
   {{config.description}} <br>
   response:
   <br>
+  <form *ngIf="dynamicFormConfig" [formGroup]="form">
+    <app-dynamic-form-group [config]="dynamicFormConfig" [formControlName]="'request'"></app-dynamic-form-group>
+  </form>
   <pre style="overflow-y: scroll;">{{response}}</pre>
   <mat-action-row>
-    <button mat-button color="primary" (click)="execute()">Execute</button>
+    <button mat-raised-button color="primary" (click)="executeWithUserConfig('user')">Execute User</button>
+    <button mat-raised-button color="primary" (click)="executeWithUserConfig('admin')">Execute Admin</button>
+    <button mat-raised-button color="primary" (click)="execute()">Execute Unauthenticated</button>
   </mat-action-row>
 </mat-expansion-panel>

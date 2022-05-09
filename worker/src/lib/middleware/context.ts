@@ -1,12 +1,12 @@
 import { MessageType } from '@protobuf-ts/runtime';
+import {Logger} from 'workers-loki-logger';
 import { MessageFormat } from '../http/types';
 import { isNotNullOrUndefined } from '../lib';
-import { Logger } from '../logger';
 
 export interface AuthenticatedContext {
   user: {
     userId: string;
-    rights: Set<string>;
+    roles: Set<string>;
   };
 }
 

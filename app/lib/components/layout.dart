@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:sharecation_app/service/api_service.dart';
 
 class Layout extends StatelessWidget {
   final Widget child;
@@ -36,6 +38,17 @@ class Layout extends StatelessWidget {
             label: "Gallery",
           )
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.camera),
+        onPressed: () async {
+          final ImagePicker _picker = ImagePicker();
+          final XFile? photo =
+              await _picker.pickImage(source: ImageSource.camera);
+          if (photo != null) {
+            await api.images.uploadImage(photo);
+          }
+        },
       ),
     );
   }

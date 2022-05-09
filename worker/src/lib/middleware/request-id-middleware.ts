@@ -1,8 +1,7 @@
+import {requestIdHeader} from '../request-id-header';
 import {RequestIdContext} from './context';
 
-const requestIdHeader = 'X-Request-ID';
 
-// This middleware is default on the following starters
 // on-fetch
 // on-durable-object-fetch
 export function addRequestId<REQUEST extends Request,

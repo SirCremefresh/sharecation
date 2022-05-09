@@ -3,6 +3,6 @@ export interface AuthenticationEnvironmentVariables {
   PUBLIC_KEYS: string;
   COMMON: KVNamespace;
   AUTHENTICATION: KVNamespace;
-  RIGHTS_STORAGE: DurableObjectNamespace;
+  ROLES_STORAGE: DurableObjectNamespace;
   LOKI_SECRET: string;
 }

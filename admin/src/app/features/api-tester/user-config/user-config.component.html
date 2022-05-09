@@ -1,0 +1,32 @@
+<h3>{{configDisplayName}}</h3>
+<mat-form-field appearance="fill">
+  <mat-label>Roles</mat-label>
+  <mat-chip-list #chipList aria-label="Roles">
+    <mat-chip
+      *ngFor="let fruit of roles"
+      (removed)="remove(fruit)">
+      {{fruit}}
+      <button matChipRemove>
+        <mat-icon>cancel</mat-icon>
+      </button>
+    </mat-chip>
+    <input
+      placeholder="New Role..."
+      #roleInput
+      [formControl]="rolesControl"
+      [matAutocomplete]="auto"
+      [matChipInputFor]="chipList"
+      [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+      (matChipInputTokenEnd)="add($event)">
+  </mat-chip-list>
+  <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+    <mat-option *ngFor="let role of filteredRoles | async" [value]="role">
+      {{role}}
+    </mat-option>
+  </mat-autocomplete>
+</mat-form-field>
+<mat-form-field>
+  <mat-label>User Id</mat-label>
+  <input matInput [formControl]="userIdControl">
+</mat-form-field>
+<button mat-button (click)="newUserId()"> new userId</button>

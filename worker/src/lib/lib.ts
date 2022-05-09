@@ -5,5 +5,3 @@ export function isNullOrUndefined(val: unknown): val is null | undefined {
 export function isNotNullOrUndefined<T>(val: T | null | undefined): val is T {
   return val !== null && val !== undefined;
 }
-
-export const NEVER_FN = (_: never): void => {};

@@ -1,0 +1,22 @@
+  execute(jwtString?: string) {
+    let body = null;
+    if (this.config.requestType !== null) {
+      body = this.form.value.request;
+    }
+    this.http.post(
+      `https://sharecation-${this.config.service}-development.donato-wolfisberg.workers.dev${this.config.path}`,
+      body,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+          // 'Content-Type': 'application/octet-stream',
+          // 'Accept': 'application/octet-stream'
+        },
+        responseType: 'json'
+        // responseType: 'arraybuffer'
+      }).pipe().subscribe((res) => {
+      // const ress = this.config.responseType.fromBinary(new Uint8Array(res));
+      this.response = JSON.stringify(res, null, 4);
+    });
+  }

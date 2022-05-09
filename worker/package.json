@@ -4,38 +4,40 @@
   "version": "1.0.0",
   "description": "A template for kick starting a Cloudflare Workers project",
   "main": "index.mjs",
+  "types": "module",
   "scripts": {
     "build": "tsc --noEmit",
     "build:emit": "tsc",
     "clean": "node clean.mjs",
     "format": "prettier --write '**/*.{ts,mjs,css,json,md}'",
-    "test": "NODE_OPTIONS=--experimental-vm-modules npx jest",
-    "publish:developement": "node publish.mjs --environment=development",
-    "publish:developement:ping": "node publish.mjs --environment=development --bins=ping",
-    "publish:developement:images": "node publish.mjs --environment=development --bins=images",
-    "publish:developement:groups": "node publish.mjs --environment=development --bins=groups",
-    "publish:developement:authentication": "node publish.mjs --environment=development --bins=authentication",
-    "publish:developement:authentication-scheduled": "node publish.mjs --environment=development --bins=authentication-scheduled",
-    "publish:developement:dev-tools": "node publish.mjs --environment=development --bins=dev-tools",
+    "test": "jest",
+    "publish:development": "node publish.mjs --environment=development",
+    "publish:development:ping": "node publish.mjs --environment=development --bins=ping",
+    "publish:development:images": "node publish.mjs --environment=development --bins=images",
+    "publish:development:groups": "node publish.mjs --environment=development --bins=groups",
+    "publish:development:authentication": "node publish.mjs --environment=development --bins=authentication",
+    "publish:development:authentication-scheduled": "node publish.mjs --environment=development --bins=authentication-scheduled",
+    "publish:development:dev-tools": "node publish.mjs --environment=development --bins=dev-tools",
     "publish:production": "node publish.mjs --environment=production"
   },
   "author": "donatowolfisberg <donato@wolfisberg.dev>",
   "license": "MIT",
   "devDependencies": {
-    "@cloudflare/workers-types": "3.5.1",
+    "@cloudflare/workers-types": "3.9.0",
     "@miniflare/kv": "2.4.0",
-    "@types/jest": "27.4.1",
-    "esbuild": "0.14.36",
-    "jest": "27.5.1",
-    "jest-config": "27.5.1",
+    "@types/jest": "27.5.0",
+    "esbuild": "0.14.38",
+    "jest": "28.1.0",
+    "jest-config": "28.1.0",
     "jest-environment-miniflare": "2.4.0",
     "miniflare": "2.4.0",
     "prettier": "2.6.2",
-    "ts-jest": "27.1.4",
-    "typescript": "4.6.3",
-    "wrangler": "0.0.26"
+    "ts-jest": "28.0.2",
+    "typescript": "4.6.4",
+    "wrangler": "2.0.1"
   },
   "dependencies": {
-    "@protobuf-ts/runtime": "2.4.0"
+    "@protobuf-ts/runtime": "2.5.0",
+    "workers-loki-logger": "0.1.9"
   }
 }

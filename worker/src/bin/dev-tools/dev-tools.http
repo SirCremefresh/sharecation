@@ -13,8 +13,8 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "rights": [
-    "admin:rights"
+  "roles": [
+    "admin:roles"
   ]
 }
 
@@ -23,10 +23,16 @@ Accept: application/json
 %}
 
 ### Upload a image
-POST development.sharecation-images.donato-wolfisberg.workers.dev/v1/images/asdf
+POST sharecation-images-development.donato-wolfisberg.workers.dev/v1/images/create-image
 Content-Type: multipart/form-data; boundary=boundary
 Accept: application/json
 Authorization: Bearer {{jwtString}}
+
+--boundary
+Content-Disposition: form-data; name="groupId"
+Content-Type: text/plain
+
+some-group-id
 
 --boundary
 Content-Disposition: form-data; name="file"; filename="file.png"
@@ -41,8 +47,8 @@ Accept: application/json
 Authorization: Bearer {{jwtString}}
 
 
-### get-rights-of-user
-POST sharecation-authentication-development.donato-wolfisberg.workers.dev/v1/get-rights-of-user
+### get-roles-of-user
+POST sharecation-authentication-development.donato-wolfisberg.workers.dev/v1/get-roles-of-user
 Content-Type: application/json
 Accept: application/json
 Authorization: Bearer {{jwtString}}
@@ -51,13 +57,13 @@ Authorization: Bearer {{jwtString}}
   "userId": "some-user-id-7"
 }
 
-### create-right-of-user
-POST sharecation-authentication-development.donato-wolfisberg.workers.dev/v1/create-right-of-user
+### create-role-binding
+POST sharecation-authentication-development.donato-wolfisberg.workers.dev/v1/create-role-binding
 Content-Type: application/json
 Accept: application/json
 Authorization: Bearer {{jwtString}}
 
 {
   "userId": "some-user-id-7",
-  "right": "rights:hello4"
+  "role": "roles:hello4"
 }

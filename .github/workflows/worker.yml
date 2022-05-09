@@ -22,3 +22,10 @@ jobs:
       - run: cd worker && npm ci
       - run: cd worker && npm run build
       - run: cd worker && npm run test
+      - name: Deploy to development environment
+        if: ${{ github.ref == 'refs/heads/development' }}
+        run: cd worker && CLOUDFLARE_API_TOKEN=${{ secrets.CF_API_TOKEN }} npm run publish:development
+      - name: Deploy to production environment
+        if: ${{ github.ref == 'refs/heads/master' }}
+        run: cd worker && CLOUDFLARE_API_TOKEN=${{ secrets.CF_API_TOKEN }} npm run publish:production
+

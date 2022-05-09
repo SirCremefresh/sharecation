@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:image_picker/image_picker.dart';
@@ -16,22 +15,36 @@ class ImagesApi {
       baseUrl:
           'https://sharecation-images-$environment.donato-wolfisberg.workers.dev'));
 
-  Future<void> uploadImage(XFile file) async {
+  Future<Image> uploadImage(XFile file) async {
     const _path = r'/v1/images/create-image';
     final _options = Options(
-      method: r'POST',
-      headers: <String, dynamic>{
-        r'Authorization': 'Bearer ' + await _jwtStringGetter(),
-      },
-    );
+        method: r'POST',
+        contentType: 'application/json',
+        responseType: ResponseType.bytes,
+        headers: {
+          r'Authorization': 'Bearer ' + await _jwtStringGetter(),
+          'Accept': 'application/octet-stream'
+        });
 
     var formData = FormData.fromMap({
       'groupId': 'asdf',
       'file': await MultipartFile.fromFile(file.path, filename: file.name),
     });
 
-    await _dio.request(_path, data: formData, options: _options);
-    log("uploaded image " + file.name);
+    var _response =
+        await _dio.request(_path, data: formData, options: _options);
+    try {
+      var getImagesByGroupIdResponse =
+          CreateImageResponse.fromBuffer(_response.data!);
+      return getImagesByGroupIdResponse.ok;
+    } catch (error, stackTrace) {
+      throw DioError(
+        requestOptions: _response.requestOptions,
+        response: _response,
+        type: DioErrorType.other,
+        error: error,
+      )..stackTrace = stackTrace;
+    }
   }
 
   Future<List<Image>> listImages() async {

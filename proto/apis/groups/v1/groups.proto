@@ -19,3 +19,14 @@ message CreateGroupResponse {
     errors.v1.BasicError error = 2;
   }
 }
+
+message Groups {
+  repeated Group groups = 1;
+}
+
+message GetGroupsResponse {
+  oneof response {
+    Groups ok = 1;
+    errors.v1.BasicError error = 2;
+  }
+}

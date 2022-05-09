@@ -101,10 +101,10 @@ export default {
         ...serviceAccountConfigs(accounts).map(async (account) => {
           const { jwtString } = await generateJwt(
             account.workerName,
-            account.rights,
+            account.roles,
             privateKey,
             kid,
-            TWO_DAYS_IN_SECONDS,
+            Math.floor(Date.now() / 1000) + TWO_DAYS_IN_SECONDS,
           );
           await setEnvironmentSecret({
             accountSecret: env.ACCOUNT_SECRET,

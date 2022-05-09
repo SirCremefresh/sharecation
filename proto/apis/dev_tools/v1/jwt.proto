@@ -10,7 +10,8 @@ message User {
 }
 
 message CreateUserRequest {
-  repeated string rights = 1;
+  optional string user_id = 1;
+  repeated string roles = 2;
 }
 
 message CreateUserResponse {

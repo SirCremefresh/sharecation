@@ -1,5 +1,3 @@
-import { some } from './jwt.mjs';
-
 export default {
   /**
    * Respond with hello worker text
@@ -23,7 +21,6 @@ export default {
         method: 'POST',
       },
     );
-    some();
     return new Response(`Hello worker! ${await res.text()}`, {
       headers: { 'content-type': 'text/plain' },
     });

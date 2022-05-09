@@ -21,18 +21,18 @@ let privateKeyAndLoadingTime: {
 
 export async function generateSharecationJwt(
   userId: string,
-  rights: string[],
+  roles: string[],
   authenticationKv: TypedKvNamespace<AUTHENTICATION_KV>,
   context: LoggerContext,
 ): Promise<{
   jwtString: string;
-  payload: { sub: string; exp: number; rights: string[] };
+  payload: { sub: string; exp: number; roles: string[] };
 }> {
   const privateKey = await getPrivateKey(authenticationKv, context);
   const exp = Math.floor(Date.now() / 1000) + EIGHT_HOURS_IN_SECONDS;
   return await generateJwt(
     userId,
-    rights,
+    roles,
     privateKey.cryptoKey,
     privateKey.kid,
     exp,

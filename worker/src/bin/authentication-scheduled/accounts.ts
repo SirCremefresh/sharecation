@@ -1,12 +1,12 @@
-import { isNullOrUndefined } from '../../lib/lib';
-import { RIGHTS } from '../../lib/rights';
+import {isNullOrUndefined} from '../../lib/lib';
+import {ROLES} from '../../lib/roles';
 
 interface ServiceAccountConfig {
   type: 'service-account';
   onlyEnvironment?: 'production' | 'development';
   workerName: string;
   envVariable: string;
-  rights: string[];
+  roles: string[];
 }
 
 interface PublicKeyConfig {
@@ -72,19 +72,19 @@ export function getAccounts(environment: string) {
 }
 
 const accounts: AccountConfig[] = [
-  ...defaultService({ workerName: 'sharecation-authentication' }),
+  ...defaultService({workerName: 'sharecation-authentication'}),
   ...defaultService({
     workerName: 'sharecation-dev-tools',
     onlyEnvironment: 'development',
   }),
-  ...defaultService({ workerName: 'sharecation-groups' }),
-  ...defaultService({ workerName: 'sharecation-images' }),
-  ...defaultService({ workerName: 'sharecation-ping' }),
+  ...defaultService({workerName: 'sharecation-groups'}),
+  ...defaultService({workerName: 'sharecation-images'}),
+  ...defaultService({workerName: 'sharecation-ping'}),
   {
     type: 'service-account',
     workerName: 'sharecation-groups',
     envVariable: 'SERVICE_ACCOUNT_KEY',
-    rights: [RIGHTS.ADMIN_GROUP],
+    roles: [ROLES.ADMIN_ROLES_WRITE],
   },
   {
     type: 'private-key',
@@ -94,9 +94,9 @@ const accounts: AccountConfig[] = [
 ];
 
 function defaultService({
-  workerName,
-  onlyEnvironment,
-}: {
+                          workerName,
+                          onlyEnvironment,
+                        }: {
   workerName: string;
   onlyEnvironment?: 'production' | 'development';
 }): AccountConfig[] {

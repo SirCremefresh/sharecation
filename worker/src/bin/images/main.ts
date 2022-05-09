@@ -9,14 +9,14 @@ import {
 import {isNotNullOrUndefined} from '../../lib/lib';
 import {addAuthenticationGuard} from '../../lib/middleware/authenticated-middleware';
 import {LoggerContext} from '../../lib/middleware/context';
-import {addLoggerContext} from '../../lib/middleware/logger-middleware';
 import {
   createProtoBufBasicErrorResponse,
   createProtoBufOkResponse,
   protoBuf,
 } from '../../lib/middleware/protobuf-middleware';
 import {addRouter, route} from '../../lib/middleware/router-middleware';
-import {getRights} from '../../lib/rights';
+import {getRoles, hasRole, ROLES} from '../../lib/roles';
+import {onFetch} from '../../lib/starter/on-fetch';
 import {IMAGES_KV} from './images-kv';
 
 interface EnvironmentVariables {
@@ -73,7 +73,7 @@ async function uploadFile(
 
 // noinspection JSUnusedGlobalSymbols
 export default {
-  fetch: addLoggerContext<EnvironmentVariables, Request, FetchEvent, Response>(
+  fetch: onFetch<EnvironmentVariables>(
     'images',
     addAuthenticationGuard(
       addRouter([
@@ -124,9 +124,13 @@ export default {
             async (request, env, context) => {
               const formData = await request.formData();
               const groupId = formData.get('groupId');
+
+              context.logger.info(
+                `Uploading image to groupId=${groupId}`,
+              );
               if (typeof groupId !== 'string') {
                 context.logger.error(
-                  `User tried to upload photo to group without rights. groupId=${groupId}, rights=${getRights(
+                  `User tried to upload photo to group without roles. groupId=${groupId}, roles=${getRoles(
                     context,
                   )}`,
                 );
@@ -135,12 +139,13 @@ export default {
                   BasicError_BasicErrorCode.BAD_REQUEST,
                 );
               }
-              // if (!hasRight(RIGHTS.GROUP(groupId), context)) {
-              //   context.logger.error(`User tried to upload photo to group without rights. groupId=${groupId}, rights=${getRights(context)}`);
-              //   return createProtoBufBasicErrorResponse('UNAUTHENTICATED', BasicError_BasicErrorCode.UNAUTHENTICATED);
-              // }
-              const file = formData.get('file');
+              const role = ROLES.GROUP_MEMBER(groupId);
+              if (!hasRole(role, context)) {
+                context.logger.error(`User tried to upload photo to group without requiredRole=${role}. groupId=${groupId}, roles=${getRoles(context)}`);
+                return createProtoBufBasicErrorResponse('UNAUTHENTICATED', BasicError_BasicErrorCode.UNAUTHENTICATED);
+              }
 
+              const file = formData.get('file');
               if (!(file instanceof File)) {
                 return createProtoBufBasicErrorResponse(
                   'Could not get image from request',
@@ -156,7 +161,7 @@ export default {
 
               if (!res.success) {
                 context.logger.error(
-                  `Error uploading image with response: ${JSON.stringify(
+                  `Error uploading image with response=${JSON.stringify(
                     res,
                   )}`,
                 );
@@ -165,6 +170,8 @@ export default {
                   BasicError_BasicErrorCode.INTERNAL,
                 );
               }
+
+              context.logger.info('Image uploaded successfully');
 
               const imageKey = IMAGES_KV.IMAGE(
                 context.user.userId,

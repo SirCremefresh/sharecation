@@ -62,7 +62,6 @@ class MyApp extends StatelessWidget {
               }),
             ])),
         '/camera': (context) => const CameraScreen(),
-        // '/camera': (context) => Layout(CameraScreen()),
       },
     );
   }

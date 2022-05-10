@@ -47,16 +47,21 @@ class ImagesApi {
     }
   }
 
-  Future<List<Image>> listImages() async {
-    const _path = r'/v1/images';
-    final _options =
-        Options(method: r'POST', responseType: ResponseType.bytes, headers: {
-      r'Authorization': 'Bearer ' + await _jwtStringGetter(),
-      'Accept': 'application/octet-stream'
-    });
+  Future<List<Image>> getImagesByGroupId() async {
+    const _path = r'/v1/get-images-by-group-id';
+    final _options = Options(
+        method: r'POST',
+        contentType: 'application/json',
+        responseType: ResponseType.bytes,
+        headers: {
+          r'Authorization': 'Bearer ' + await _jwtStringGetter(),
+          'Accept': 'application/octet-stream'
+        });
+    var requestBody = GetImagesByGroupIdRequest(groupId: 'asdf').toProto3Json();
 
     final _response = await _dio.request(
       _path,
+      data: requestBody,
       options: _options,
     );
 

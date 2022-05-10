@@ -23,7 +23,7 @@
   "author": "donatowolfisberg <donato@wolfisberg.dev>",
   "license": "MIT",
   "devDependencies": {
-    "@cloudflare/workers-types": "3.9.0",
+    "@cloudflare/workers-types": "3.10.0",
     "@miniflare/kv": "2.4.0",
     "@types/jest": "27.5.0",
     "esbuild": "0.14.38",

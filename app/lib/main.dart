@@ -61,7 +61,7 @@ class MyApp extends StatelessWidget {
                 Navigator.of(context).pushReplacementNamed('/sign-in');
               }),
             ])),
-        '/camera': (context) => const CameraScreen(),
+        '/camera': (context) => const Layout(CameraScreen()),
       },
     );
   }

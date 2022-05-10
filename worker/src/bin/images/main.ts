@@ -79,7 +79,7 @@ export default {
       addRouter([
         route(
           'POST',
-          ['v1', 'images', 'get-images-by-group-id'],
+          ['v1', 'get-images-by-group-id'],
           protoBuf(
             GetImagesByGroupIdRequest,
             GetImagesByGroupIdResponse,
@@ -125,7 +125,7 @@ export default {
         ),
         route(
           'POST',
-          ['v1', 'images', 'create-image'],
+          ['v1', 'create-image'],
           protoBuf(
             null,
             CreateImageResponse,
@@ -182,7 +182,7 @@ export default {
               context.logger.info('Image uploaded successfully');
 
               const imageKey = IMAGES_KV.IMAGE(
-                context.user.userId,
+                groupId,
                 new Date().toISOString(),
                 res.result.id,
               );

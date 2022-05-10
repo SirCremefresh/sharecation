@@ -16,7 +16,7 @@ class ImagesApi {
           'https://sharecation-images-$environment.donato-wolfisberg.workers.dev'));
 
   Future<Image> uploadImage(XFile file) async {
-    const _path = r'/v1/images/create-image';
+    const _path = r'/v1/create-image';
     final _options = Options(
         method: r'POST',
         contentType: 'application/json',

@@ -5,6 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterfire_ui/auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:sharecation_app/firebase_options.dart';
 import 'package:sharecation_app/pages/camera_screen.dart';
 import 'package:sharecation_app/service/api_service.dart';
 
@@ -12,8 +13,9 @@ import 'components/layout.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -24,7 +26,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     const providerConfigs = [
       GoogleProviderConfiguration(
-        clientId: '1:907454945637:android:03a2244e3dc3224acd698c',
+        clientId: '907454945637-be09k2vnpd6qcniu9rto8nrdghi9uhg5.apps.googleusercontent.com',
       ),
     ];
 

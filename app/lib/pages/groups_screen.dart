@@ -50,7 +50,7 @@ class _GroupScreenState extends State<GroupScreen> {
                   groups = newGroups;
                 });
               },
-              child: Text("submit")),
+              child: const Text("submit")),
           Text("your input is:" + text),
           Expanded(
             child: ListView.builder(

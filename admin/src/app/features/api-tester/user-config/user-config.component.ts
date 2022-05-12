@@ -1,9 +1,12 @@
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
+import {HttpClient} from '@angular/common/http';
 import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {MatChipInputEvent} from '@angular/material/chips';
-import {map, Observable, startWith} from 'rxjs';
+import {JsonValue} from '@protobuf-ts/runtime/build/types/json-typings';
+import {firstValueFrom, map, Observable, startWith} from 'rxjs';
+import {GetRolesOfUserRequest, GetRolesOfUserResponse} from '../../../contracts/authentication/v1/authentication';
 import {UserConfigService} from '../user-config.service';
 
 @Component({
@@ -25,7 +28,7 @@ export class UserConfigComponent implements OnInit {
 
   @ViewChild('roleInput') roleInput!: ElementRef<HTMLInputElement>;
 
-  constructor(private readonly userConfigService: UserConfigService) {
+  constructor(private readonly userConfigService: UserConfigService, private readonly http: HttpClient) {
     this.filteredRoles = this.rolesControl.valueChanges.pipe(
       startWith(null),
       map((newRole: string | null) => {
@@ -74,6 +77,33 @@ export class UserConfigComponent implements OnInit {
 
   newUserId() {
     this.userIdControl.setValue(crypto.randomUUID());
+  }
+
+  async loadRoles() {
+    const token = await this.userConfigService.getToken('get-roles');
+    const aa: GetRolesOfUserRequest = {
+      userId: this.userIdControl.value,
+    };
+    const response = await firstValueFrom(
+      this.http.post<JsonValue>(
+        `https://sharecation-authentication-development.donato-wolfisberg.workers.dev/v1/get-roles-of-user`,
+        JSON.stringify(GetRolesOfUserRequest.toJson(aa)),
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          responseType: 'json'
+        }).pipe(
+        map(response => GetRolesOfUserResponse.fromJson(response).response)
+      ));
+    if (response.oneofKind === 'ok') {
+      this.roles = response.ok.roles;
+      this.updateConfig()
+    } else {
+      throw new Error(JSON.stringify(response));
+    }
   }
 
   private updateConfig() {

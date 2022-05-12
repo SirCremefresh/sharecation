@@ -37,6 +37,13 @@
             {
               "client_id": "907454945637-be09k2vnpd6qcniu9rto8nrdghi9uhg5.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "907454945637-b0cbtsi0btbsoh7b64r0a0esdtsha4sm.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "dev.wolfisberg.sharecation.sharecationApp"
+              }
             }
           ]
         }

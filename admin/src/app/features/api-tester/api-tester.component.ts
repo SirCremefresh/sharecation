@@ -8,6 +8,7 @@ import {
 import {GetPublicJwksResponse} from '../../contracts/authentication/v1/public_jwk';
 import {CreateUserRequest, CreateUserResponse} from '../../contracts/dev-tools/v1/jwt';
 import {CreateGroupRequest, CreateGroupResponse, GetGroupsResponse} from '../../contracts/groups/v1/groups';
+import {GetImagesByGroupIdRequest, GetImagesByGroupIdResponse} from '../../contracts/images/v1/images';
 import {ApiTestConfig} from './api-test-config.model';
 
 @Component({
@@ -64,6 +65,14 @@ export class ApiTesterComponent {
       path: '/v1/get-groups',
       requestType: null,
       responseType: GetGroupsResponse
+    },
+    {
+      title: 'Get Images by groupId',
+      service: 'images',
+      description: 'Get all images of group',
+      path: '/v1/get-images-by-group-id',
+      requestType: GetImagesByGroupIdRequest,
+      responseType: GetImagesByGroupIdResponse
     },
   ];
 }

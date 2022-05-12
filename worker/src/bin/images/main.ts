@@ -79,13 +79,21 @@ export default {
       addRouter([
         route(
           'POST',
-          ['v1', 'images', 'get-images-by-group-id'],
+          ['v1', 'get-images-by-group-id'],
           protoBuf(
             GetImagesByGroupIdRequest,
             GetImagesByGroupIdResponse,
             async (request, env, context) => {
+              const groupId = context.proto.body.groupId;
+              if (!hasRole(ROLES.GROUP_MEMBER(groupId), context)) {
+                context.logger.info(`User does not have permission to access group with groupId=${groupId}`);
+                return createProtoBufBasicErrorResponse(
+                  'Does not have role',
+                  BasicError_BasicErrorCode.UNAUTHENTICATED,
+                );
+              }
               const results = await env.IMAGES.list<{ imageId: string }>({
-                prefix: IMAGES_KV.IMAGES_USER(context.user.userId),
+                prefix: IMAGES_KV.IMAGES_GROUP(groupId),
                 cursor: context.proto.body.cursor,
               });
               const imageUrls = [];
@@ -117,7 +125,7 @@ export default {
         ),
         route(
           'POST',
-          ['v1', 'images', 'create-image'],
+          ['v1', 'create-image'],
           protoBuf(
             null,
             CreateImageResponse,
@@ -174,7 +182,7 @@ export default {
               context.logger.info('Image uploaded successfully');
 
               const imageKey = IMAGES_KV.IMAGE(
-                context.user.userId,
+                groupId,
                 new Date().toISOString(),
                 res.result.id,
               );

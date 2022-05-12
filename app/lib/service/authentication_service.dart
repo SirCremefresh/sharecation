@@ -45,4 +45,8 @@ class AuthenticationService {
     }
     return _current!.expiresAt.isAfter(DateTime.now());
   }
+
+  invalidate() {
+    _current = null;
+  }
 }

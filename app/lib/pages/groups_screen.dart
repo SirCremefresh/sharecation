@@ -43,6 +43,8 @@ class _GroupScreenState extends State<GroupScreen> {
           ),
           TextButton(
               onPressed: () async {
+                await api.groups.createGroup(groupName: _controller.value.text);
+                authenticationService.invalidate();
                 var newGroups = await api.groups.getGroups();
                 setState(() {
                   groups = newGroups;

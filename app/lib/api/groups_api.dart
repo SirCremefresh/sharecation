@@ -36,4 +36,33 @@ class GroupsApi {
       )..stackTrace = stackTrace;
     }
   }
+
+  Future<Group> createGroup({
+    required String groupName,
+  }) async {
+    const _path = r'/v1/create-group';
+    final _options = Options(
+        method: r'POST',
+        contentType: 'application/json',
+        responseType: ResponseType.bytes,
+        headers: {
+          r'Authorization': 'Bearer ' + await _jwtStringGetter(),
+          'Accept': 'application/octet-stream'
+        });
+    var requestBody = CreateGroupRequest(name: groupName).toProto3Json();
+    final _response =
+        await _dio.request(_path, data: requestBody, options: _options);
+
+    try {
+      var responseBody = CreateGroupResponse.fromBuffer(_response.data!);
+      return responseBody.ok;
+    } catch (error, stackTrace) {
+      throw DioError(
+        requestOptions: _response.requestOptions,
+        response: _response,
+        type: DioErrorType.other,
+        error: error,
+      )..stackTrace = stackTrace;
+    }
+  }
 }

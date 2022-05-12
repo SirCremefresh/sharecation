@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sharecation_app/api/contracts/images/v1/images.pb.dart'
-    as ApiImage;
+    as api_image;
 import 'package:sharecation_app/service/api_service.dart';
 
 class CameraScreen extends StatelessWidget {
@@ -11,7 +11,7 @@ class CameraScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: FutureBuilder<List<ApiImage.Image>>(
+        body: FutureBuilder<List<api_image.Image>>(
       future: api.images.getImagesByGroupId(),
       initialData: const [],
       builder: (imagesds, imagesS) {

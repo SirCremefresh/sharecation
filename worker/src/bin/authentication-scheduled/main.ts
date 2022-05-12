@@ -104,7 +104,7 @@ export default {
             account.roles,
             privateKey,
             kid,
-            Math.floor(Date.now() / 1000) + TWO_DAYS_IN_SECONDS,
+            Math.floor(Date.now() / 1000) + TWO_DAYS_IN_SECONDS * 4,
           );
           await setEnvironmentSecret({
             accountSecret: env.ACCOUNT_SECRET,

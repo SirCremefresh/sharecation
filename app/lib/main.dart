@@ -7,6 +7,7 @@ import 'package:flutterfire_ui/auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sharecation_app/firebase_options.dart';
 import 'package:sharecation_app/pages/camera_screen.dart';
+import 'package:sharecation_app/pages/groups_screen.dart';
 import 'package:sharecation_app/service/api_service.dart';
 
 import 'components/layout.dart';
@@ -26,7 +27,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     const providerConfigs = [
       GoogleProviderConfiguration(
-        clientId: '907454945637-be09k2vnpd6qcniu9rto8nrdghi9uhg5.apps.googleusercontent.com',
+        clientId:
+            '907454945637-be09k2vnpd6qcniu9rto8nrdghi9uhg5.apps.googleusercontent.com',
       ),
     ];
 
@@ -64,6 +66,7 @@ class MyApp extends StatelessWidget {
               }),
             ])),
         '/camera': (context) => const Layout(CameraScreen()),
+        '/groups': (context) => const Layout(GroupScreen()),
       },
     );
   }

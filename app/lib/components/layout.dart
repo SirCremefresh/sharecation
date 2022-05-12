@@ -21,7 +21,7 @@ class Layout extends StatelessWidget {
           } else if (index == 1) {
             Navigator.of(context).pushReplacementNamed('/camera');
           } else {
-            Navigator.of(context).pushReplacementNamed('/profile');
+            Navigator.of(context).pushReplacementNamed('/groups');
           }
         },
         items: const [

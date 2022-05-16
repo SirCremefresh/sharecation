@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutterfire_ui/auth.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:sharecation_app/api/contracts/groups/v1/groups.pbserver.dart';
+import 'package:sharecation_app/blocs/groups_bloc.dart';
 import 'package:sharecation_app/service/api_service.dart';
 
 class Layout extends StatelessWidget {
@@ -11,6 +12,8 @@ class Layout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.read<GroupsBloc>().add(LoadGroupsEvent());
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Sharecation'),
@@ -47,7 +50,7 @@ class Layout extends StatelessWidget {
         onPressed: () async {
           final ImagePicker _picker = ImagePicker();
           final XFile? photo =
-          await _picker.pickImage(source: ImageSource.camera);
+              await _picker.pickImage(source: ImageSource.camera);
           if (photo != null) {
             await api.images.uploadImage(photo);
           }
@@ -58,34 +61,31 @@ class Layout extends StatelessWidget {
 
   Drawer buildDrawer() {
     return Drawer(
-      child: FutureBuilder<List<Group>>(
-        future: api.groups.getGroups(),
-        initialData: const [],
-        builder: (context, data) {
-          if (!data.hasData) {
-            return ListView(
-              children: [
-                buildDrawerHeader(),
-                const LoadingIndicator(
-                  borderWidth: 4,
-                  size: 50,
-                )
-              ],
-            );
+      child: BlocBuilder<GroupsBloc, GroupsState>(
+        builder: (context, state) {
+          if (state is GroupsLoaded) {
+            return ListView.builder(
+                padding: EdgeInsets.zero,
+                itemCount: state.groups.length + 1,
+                itemBuilder: (BuildContext context, int index) {
+                  if (index == 0) {
+                    return buildDrawerHeader();
+                  }
+                  return TextButton(
+                    onPressed: () {},
+                    child: Text(state.groups[index - 1].name),
+                  );
+                });
           }
-          var groups = data.data!;
-          return ListView.builder(
-              padding: EdgeInsets.zero,
-              itemCount: groups.length + 1,
-              itemBuilder: (BuildContext context, int index) {
-                if (index == 0) {
-                  return buildDrawerHeader();
-                }
-                return TextButton(
-                  onPressed: () {},
-                  child: Text(groups[index - 1].name),
-                );
-              });
+          return ListView(
+            children: [
+              buildDrawerHeader(),
+              const LoadingIndicator(
+                borderWidth: 4,
+                size: 50,
+              )
+            ],
+          );
         },
       ),
     );

@@ -37,7 +37,7 @@
     "wrangler": "2.0.5"
   },
   "dependencies": {
-    "@protobuf-ts/runtime": "2.5.0",
+    "@protobuf-ts/runtime": "2.6.0",
     "workers-loki-logger": "0.1.9"
   }
 }

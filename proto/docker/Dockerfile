@@ -6,7 +6,7 @@ ARG NODE_VERSION="16"
 # renovate: datasource=github-tags depName=bufbuild/buf
 ARG BUF_VERSION="v1.4.0"
 # renovate: datasource=npm depName=@protobuf-ts/plugin
-ARG PROTOBUF_TS_VERSION="2.5.0"
+ARG PROTOBUF_TS_VERSION="2.6.0"
 
 ENV DART_SDK /usr/lib/dart
 ENV PATH $DART_SDK/bin:/root/.pub-cache/bin:$PATH

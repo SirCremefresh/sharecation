@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutterfire_ui/auth.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sharecation_app/blocs/groups_bloc.dart';
 import 'package:sharecation_app/service/api_service.dart';
@@ -78,13 +77,7 @@ class Layout extends StatelessWidget {
                 });
           }
           return ListView(
-            children: [
-              buildDrawerHeader(),
-              const LoadingIndicator(
-                borderWidth: 4,
-                size: 50,
-              )
-            ],
+            children: [buildDrawerHeader(), const CircularProgressIndicator()],
           );
         },
       ),

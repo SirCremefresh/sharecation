@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:sharecation_app/blocs/active_group_bloc.dart';
 import 'package:sharecation_app/blocs/groups_bloc.dart';
 import 'package:sharecation_app/service/api_service.dart';
 
@@ -71,7 +72,9 @@ class Layout extends StatelessWidget {
                     return buildDrawerHeader();
                   }
                   return TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      context.read<ActiveGroupBloc>().add(SelectGroupEvent(groupId: state.groups[index - 1].groupId));
+                    },
                     child: Text(state.groups[index - 1].name),
                   );
                 });

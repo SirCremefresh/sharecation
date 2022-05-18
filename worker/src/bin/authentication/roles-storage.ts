@@ -1,82 +1,51 @@
-import { isNotNullOrUndefined } from '../../lib/lib';
-import { addLoggerContext } from '../../lib/middleware/logger-middleware';
-import {
-  addRouter,
-  pathParam,
-  route,
-} from '../../lib/middleware/router-middleware';
-import { onDurableObjectFetch } from '../../lib/starter/on-durable-object-fetch';
-import { TypedKvNamespace } from '../../lib/typed-kv-namespace';
-import { AuthenticationEnvironmentVariables } from './authentication-environment-variables';
-import { AUTHENTICATION_KV, createAuthenticationKv } from './authentication-kv';
+import {CheckDurableObjectMethods, DurableObjectWrapper} from '../../lib/durable-object-wrapper/durable-object-wrapper';
+import {isNotNullOrUndefined} from '../../lib/lib';
+import {LoggerContext} from '../../lib/middleware/context';
+import {TypedKvNamespace} from '../../lib/typed-kv-namespace';
+import {AuthenticationEnvironmentVariables} from './authentication-environment-variables';
+import {AUTHENTICATION_KV, createAuthenticationKv} from './authentication-kv';
 
-const SERVICE_NAME = 'authentication-roles-storage';
+export class RolesStorage extends DurableObjectWrapper<AuthenticationEnvironmentVariables> implements CheckDurableObjectMethods<RolesStorage> {
+  public static readonly serviceName: string = 'authentication-roles-storage';
 
-export class RolesStorage {
   constructor(
     private state: DurableObjectState,
-    private readonly env: AuthenticationEnvironmentVariables,
-  ) {}
+    protected override readonly env: AuthenticationEnvironmentVariables,
+  ) {
+    super(RolesStorage.serviceName);
+  }
 
-  fetch = onDurableObjectFetch<AuthenticationEnvironmentVariables>(
-    () => this.env,
-    addLoggerContext(
-      SERVICE_NAME,
-      addRouter([
-        route(
-          'GET',
-          ['v1', pathParam('userId'), 'roles'],
-          async (request, env, context) => {
-            const userId = context.route.params.userId;
-            context.logger.info(`getting roles for userId=${userId}`);
-            const authenticationKv = createAuthenticationKv(env.AUTHENTICATION);
+  public async getRolesOfUser({userId}: { userId: string }, context: LoggerContext): Promise<string[]> {
+    const authenticationKv = createAuthenticationKv(this.env.AUTHENTICATION);
+    context.logger.info(`getting roles for userId=${userId}`);
 
-            const roles = await this.getRoles(authenticationKv, userId);
+    return await this.getRoles(authenticationKv, userId);
+  }
 
-            return new Response(JSON.stringify(roles), {
-              headers: {
-                'content-type': 'application/json',
-              },
-            });
-          },
-        ),
-        route(
-          'POST',
-          ['v1', pathParam('userId'), 'roles'],
-          async (request, env, context) => {
-            const userId = context.route.params.userId;
-            const { role } = await request.json<{ role: string }>();
-            const authenticationKv = createAuthenticationKv(env.AUTHENTICATION);
+  public async addRoleToUser({
+                               userId,
+                               role
+                             }: { userId: string, role: string },
+                             context: LoggerContext): Promise<string> {
+    const authenticationKv = createAuthenticationKv(this.env.AUTHENTICATION);
+    context.logger.info(`Adding role to user. role=${role}`);
+    await this.addRole(authenticationKv, userId, role);
 
-            await this.addRole(authenticationKv, userId, role);
+    return role;
+  }
 
-            return new Response(JSON.stringify({ role }), {
-              headers: {
-                'content-type': 'application/json',
-              },
-            });
-          },
-        ),
-        route(
-          'DELETE',
-          ['v1', pathParam('userId'), 'roles', pathParam('role')],
-          async (request, env, context) => {
-            const userId = context.route.params.userId;
-            const role = context.route.params.role;
-            const authenticationKv = createAuthenticationKv(env.AUTHENTICATION);
+  public async deleteRoleOfUser({
+                                  userId,
+                                  role
+                                }: { userId: string, role: string },
+                                context: LoggerContext): Promise<string> {
+    const authenticationKv = createAuthenticationKv(this.env.AUTHENTICATION);
+    context.logger.info(`Deleting role from user. role=${role}`);
 
-            await this.deleteRole(authenticationKv, userId, role);
+    await this.deleteRole(authenticationKv, userId, role);
 
-            return new Response(JSON.stringify({ role }), {
-              headers: {
-                'content-type': 'application/json',
-              },
-            });
-          },
-        ),
-      ]),
-    ),
-  );
+    return role;
+  }
 
   private async getRoles(
     authenticationKv: TypedKvNamespace<AUTHENTICATION_KV>,
@@ -108,7 +77,7 @@ export class RolesStorage {
     }
     await Promise.all([
       this.state.storage.put(rolesKey, roles),
-      authenticationKv.namespace.put(roleKey, role, { metadata: role }),
+      authenticationKv.namespace.put(roleKey, role, {metadata: role}),
     ]);
   }
 
@@ -117,10 +86,13 @@ export class RolesStorage {
     userId: string,
     role: string,
   ) {
-    const key = authenticationKv.keys.USER_ROLE(userId, role);
+    const rolesKey = authenticationKv.keys.USER_ROLES(userId);
+    const roleKey = authenticationKv.keys.USER_ROLE(userId, role);
+    const roles: string[] = (await this.getRoles(authenticationKv, userId))
+      .filter(it => it !== role);
     await Promise.all([
-      this.state.storage.delete(key),
-      authenticationKv.namespace.delete(key),
+      this.state.storage.put(rolesKey, roles),
+      authenticationKv.namespace.delete(roleKey),
     ]);
   }
 }

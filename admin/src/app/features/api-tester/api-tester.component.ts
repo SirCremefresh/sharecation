@@ -2,6 +2,8 @@ import {Component} from '@angular/core';
 import {
   CreateRoleBindingRequest,
   CreateRoleBindingResponse,
+  DeleteRoleBindingRequest,
+  DeleteRoleBindingResponse,
   GetRolesOfUserRequest,
   GetRolesOfUserResponse
 } from '../../contracts/authentication/v1/authentication';
@@ -49,6 +51,14 @@ export class ApiTesterComponent {
       path: '/v1/create-role-binding',
       requestType: CreateRoleBindingRequest,
       responseType: CreateRoleBindingResponse
+    },
+    {
+      title: 'Delete Role Binding',
+      service: 'authentication',
+      description: 'Delete a role binding',
+      path: '/v1/delete-role-binding',
+      requestType: DeleteRoleBindingRequest,
+      responseType: DeleteRoleBindingResponse
     },
     {
       title: 'Create Group',

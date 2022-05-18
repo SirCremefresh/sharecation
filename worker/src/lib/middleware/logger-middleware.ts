@@ -23,12 +23,16 @@ function addLoggerToContext<CONTEXT extends {}>(
   return Object.assign(context, {logger});
 }
 
+function isString(type: any): type is string {
+  return typeof type === 'string';
+}
+
 export function addLoggerContext<ENV extends LoggerConfig,
   REQUEST,
   CONTEXT extends {},
   RESPONSE,
   >(
-  serviceName: string,
+  serviceNameParam: string | (() => string),
   fn: (
     request: REQUEST,
     env: ENV,
@@ -36,7 +40,12 @@ export function addLoggerContext<ENV extends LoggerConfig,
   ) => Promise<RESPONSE>,
 ) {
   return async (request: REQUEST, env: ENV, cfContext: CONTEXT) => {
-    const context = addLoggerToContext(serviceName, env, cfContext);
+    const serviceName = isString(serviceNameParam) ? serviceNameParam : serviceNameParam();
+    const context = addLoggerToContext(
+      serviceName,
+      env,
+      cfContext
+    );
     let response;
     try {
       response = await fn(request, env, context);

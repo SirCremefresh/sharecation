@@ -13,6 +13,7 @@ import {
 } from '../../contracts/authentication/v1/authentication';
 import {GetPublicJwksResponse, PublicJwks} from '../../contracts/authentication/v1/public_jwk';
 import {BasicError_BasicErrorCode} from '../../contracts/errors/v1/errors';
+import {getDurableObjectInstance} from '../../lib/durable-object-wrapper/durable-object-accessor';
 import {isNullOrUndefined} from '../../lib/lib';
 import {logInfo} from '../../lib/logger';
 import {addAuthenticatedToContext, addAuthenticationGuard,} from '../../lib/middleware/authenticated-middleware';
@@ -27,22 +28,15 @@ import {onFetch} from '../../lib/starter/on-fetch';
 import {AuthenticationEnvironmentVariables} from './authentication-environment-variables';
 import {createAuthenticationKv} from './authentication-kv';
 import {verifyGoogleJwt} from './google-keys';
+import {RolesStorage} from './roles-storage';
 import {generateSharecationJwt} from './sharecation-keys';
 // Make durable object visible
 export {RolesStorage} from './roles-storage';
 
 const SERVICE_NAME = 'authentication';
 
-function getRolesStorageProxy(env: AuthenticationEnvironmentVariables) {
-  return env.ROLES_STORAGE.get(env.ROLES_STORAGE.idFromName('0'));
-}
-
-async function getRolesOfUser(proxy: DurableObjectStub, userId: string) {
-  return await proxy
-    .fetch(proxyUrl(['v1', userId, 'roles']), {
-      method: 'GET',
-    })
-    .then((res) => res.json<string[]>());
+function getRolesStorageInstance(namespace: DurableObjectNamespace, context: {}) {
+  return getDurableObjectInstance(RolesStorage, namespace, '0', context);
 }
 
 // noinspection JSUnusedGlobalSymbols
@@ -89,8 +83,8 @@ export default {
                 BasicError_BasicErrorCode.BAD_REQUEST,
               );
             }
-            const proxy = getRolesStorageProxy(env);
-            const roles = await getRolesOfUser(proxy, userId);
+            const rolesStorage = getRolesStorageInstance(env.ROLES_STORAGE, context);
+            const roles = await rolesStorage.getRolesOfUser({userId});
             context = addAuthenticatedToContext(
               userId,
               new Set(roles),
@@ -133,14 +127,11 @@ export default {
                 );
               }
 
-              const proxy = getRolesStorageProxy(env);
+
               context.logger.info(`Adding role to user. role=${role}`);
-              await proxy.fetch(proxyUrl(['v1', userId, 'roles']), {
-                body: JSON.stringify({
-                  role,
-                }),
-                method: 'POST',
-              });
+
+              const rolesStorage = getRolesStorageInstance(env.ROLES_STORAGE, context);
+              await rolesStorage.addRoleToUser({userId, role});
 
               return createProtoBufOkResponse<RoleBinding>({
                 userId,
@@ -152,29 +143,27 @@ export default {
       ),
       route(
         'POST',
-        ['v1', 'delete-role-of-user'],
+        ['v1', 'delete-role-binding'],
         addAuthenticationGuard(
           protoBuf(
             DeleteRoleBindingRequest,
             DeleteRoleBindingResponse,
             async (request, env, context) => {
               const {userId, role} = context.proto.body;
-              if (!hasRole(ROLES.ADMIN_ROLES_READ, context)) {
+              if (!hasRole(ROLES.ADMIN_ROLES_DELETE, context)) {
                 context.logger.warn(
-                  `User tried to delete role without having permission. requiredRole=${ROLES.ADMIN_ROLES_WRITE}, userId=${context.user.userId}, roles=${context.user.roles}`,
+                  `User tried to delete role without having permission. requiredRole=${ROLES.ADMIN_ROLES_DELETE}, userId=${context.user.userId}, roles=${context.user.roles}`,
                   context,
                 );
                 return createProtoBufBasicErrorResponse(
-                  `Not allowed to delete role of user. userId=${userId}, role=${role}, requiredRole=${ROLES.ADMIN_ROLES_READ}`,
+                  `Not allowed to delete role of user. userId=${userId}, role=${role}, requiredRole=${ROLES.ADMIN_ROLES_DELETE}`,
                   BasicError_BasicErrorCode.UNAUTHENTICATED,
                 );
               }
 
-              const proxy = getRolesStorageProxy(env);
+              const rolesStorage = getRolesStorageInstance(env.ROLES_STORAGE, context);
               context.logger.info(`Deleting role ${role}`);
-              await proxy.fetch(proxyUrl(['v1', userId, 'roles', role]), {
-                method: 'DELETE',
-              });
+              await rolesStorage.deleteRoleOfUser({userId, role});
 
               return createProtoBufOkResponse<RoleBinding>({
                 userId,
@@ -199,8 +188,8 @@ export default {
                 );
               }
               const {userId} = context.proto.body;
-              const proxy = getRolesStorageProxy(env);
-              const roles = await getRolesOfUser(proxy, userId);
+              const rolesStorage = getRolesStorageInstance(env.ROLES_STORAGE, context);
+              const roles = await rolesStorage.getRolesOfUser({userId});
 
               logInfo(
                 `Got roles of user. roles=[${roles.join(', ')}]`,
@@ -216,7 +205,3 @@ export default {
     ]),
   ),
 };
-
-function proxyUrl(segments: string[]) {
-  return 'https://some.url/' + segments.join('/');
-}

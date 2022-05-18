@@ -15,7 +15,7 @@ class ImagesApi {
       baseUrl:
           'https://sharecation-images-$environment.donato-wolfisberg.workers.dev'));
 
-  Future<Image> uploadImage(XFile file) async {
+  Future<Image> uploadImage(String groupId, XFile file) async {
     const _path = r'/v1/create-image';
     final _options = Options(
         method: r'POST',
@@ -27,7 +27,7 @@ class ImagesApi {
         });
 
     var formData = FormData.fromMap({
-      'groupId': 'asdf',
+      'groupId': groupId,
       'file': await MultipartFile.fromFile(file.path, filename: file.name),
     });
 
@@ -47,7 +47,7 @@ class ImagesApi {
     }
   }
 
-  Future<List<Image>> getImagesByGroupId() async {
+  Future<List<Image>> getImagesByGroupId(String groupId) async {
     const _path = r'/v1/get-images-by-group-id';
     final _options = Options(
         method: r'POST',
@@ -57,7 +57,7 @@ class ImagesApi {
           r'Authorization': 'Bearer ' + await _jwtStringGetter(),
           'Accept': 'application/octet-stream'
         });
-    var requestBody = GetImagesByGroupIdRequest(groupId: 'asdf').toProto3Json();
+    var requestBody = GetImagesByGroupIdRequest(groupId: groupId).toProto3Json();
 
     final _response = await _dio.request(
       _path,

@@ -1,61 +1,18 @@
+import {CheckDurableObjectMethods, DurableObjectWrapper} from '../../lib/durable-object-wrapper/durable-object-wrapper';
 import {isNotNullOrUndefined} from '../../lib/lib';
-import {LoggerContext, RequestIdContext} from '../../lib/middleware/context';
-import {addLoggerContext, LoggerConfig} from '../../lib/middleware/logger-middleware';
-import {onDurableObjectFetch} from '../../lib/starter/on-durable-object-fetch';
+import {LoggerContext} from '../../lib/middleware/context';
 import {TypedKvNamespace} from '../../lib/typed-kv-namespace';
 import {AuthenticationEnvironmentVariables} from './authentication-environment-variables';
 import {AUTHENTICATION_KV, createAuthenticationKv} from './authentication-kv';
 
-const SERVICE_NAME = 'authentication-roles-storage';
+export class RolesStorage extends DurableObjectWrapper<AuthenticationEnvironmentVariables> implements CheckDurableObjectMethods<RolesStorage> {
+  public static readonly serviceName: string = 'authentication-roles-storage';
 
-type Invalid<T> = T & Error;
-type DurableObjectMethod = (body: any, context: RequestIdContext & LoggerContext) => Promise<any>;
-type CheckDurableObjectMethods<T> = {
-  [K in keyof T]: T[K] extends Function ?
-    (T[K] extends DurableObjectMethod ? T[K] :
-      Invalid<['method is not valid. name: ', K]>) : T[K]
-}
-
-
-export abstract class DoWrapper<Env extends LoggerConfig> {
-  protected abstract env: Env;
-  protected fetch = onDurableObjectFetch<Env>(
-    () => this.env,
-    addLoggerContext(
-      SERVICE_NAME,
-      async (request, env, context) => {
-        const path = new URL(request.url).pathname;
-        const methodName = path.startsWith('/') ? path.substring(1) : path;
-        const parameters = await request.json<unknown>();
-        const callableThis = this as any;
-        try {
-          const result = await callableThis[methodName](parameters, context);
-          return new Response(JSON.stringify(result), {
-            status: 200,
-            headers: {
-              'content-type': 'application/json',
-            },
-          });
-        } catch (error) {
-          context.logger.error('An error occurred in durable object', error);
-          return new Response(JSON.stringify({reason: 'unknown'}), {
-            status: 500,
-            headers: {
-              'content-type': 'application/json',
-            },
-          });
-        }
-      }
-    ),
-  );
-}
-
-export class RolesStorage extends DoWrapper<AuthenticationEnvironmentVariables> implements CheckDurableObjectMethods<RolesStorage> {
   constructor(
     private state: DurableObjectState,
     protected override readonly env: AuthenticationEnvironmentVariables,
   ) {
-    super();
+    super(RolesStorage.serviceName);
   }
 
   public async getRolesOfUser({userId}: { userId: string }, context: LoggerContext): Promise<string[]> {

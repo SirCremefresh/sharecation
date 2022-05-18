@@ -13,6 +13,7 @@ import {
 } from '../../contracts/authentication/v1/authentication';
 import {GetPublicJwksResponse, PublicJwks} from '../../contracts/authentication/v1/public_jwk';
 import {BasicError_BasicErrorCode} from '../../contracts/errors/v1/errors';
+import {getDurableObjectInstance} from '../../lib/durable-object-wrapper/durable-object-accessor';
 import {isNullOrUndefined} from '../../lib/lib';
 import {logInfo} from '../../lib/logger';
 import {addAuthenticatedToContext, addAuthenticationGuard,} from '../../lib/middleware/authenticated-middleware';
@@ -34,36 +35,8 @@ export {RolesStorage} from './roles-storage';
 
 const SERVICE_NAME = 'authentication';
 
-function getRolesStorageProxy(env: AuthenticationEnvironmentVariables) {
-  return env.ROLES_STORAGE.get(env.ROLES_STORAGE.idFromName('0'));
-}
-
-type NormalizeDurableObjectMethods<T> = {
-  [K in keyof T]:
-  T[K] extends (body: infer FIRST_ARG, ...args: any[]) => infer RETURN_TYPE ? (request: FIRST_ARG) => RETURN_TYPE :
-    never
-}
-
-function doOf<E extends {}>(durableObjectNamespace: DurableObjectNamespace, name: string): NormalizeDurableObjectMethods<E> {
-  return new Proxy({} as unknown as NormalizeDurableObjectMethods<E>, {
-    get(_, method: string): any {
-      return (argument: any) => {
-        const id = durableObjectNamespace.idFromName(name);
-        return durableObjectNamespace.get(id).fetch('https://dot.com/' + method, {
-          body: JSON.stringify(argument),
-          method: 'POST',
-        }).then(res => res.json());
-      };
-    }
-  });
-}
-
-async function getRolesOfUser(proxy: DurableObjectStub, userId: string) {
-  return await proxy
-    .fetch(proxyUrl(['v1', userId, 'roles']), {
-      method: 'GET',
-    })
-    .then((res) => res.json<string[]>());
+function getRolesStorageInstance(namespace: DurableObjectNamespace, context: {}) {
+  return getDurableObjectInstance(RolesStorage, namespace, '0', context);
 }
 
 // noinspection JSUnusedGlobalSymbols
@@ -110,8 +83,8 @@ export default {
                 BasicError_BasicErrorCode.BAD_REQUEST,
               );
             }
-            const proxy = getRolesStorageProxy(env);
-            const roles = await getRolesOfUser(proxy, userId);
+            const rolesStorage = getRolesStorageInstance(env.ROLES_STORAGE, context);
+            const roles = await rolesStorage.getRolesOfUser({userId});
             context = addAuthenticatedToContext(
               userId,
               new Set(roles),
@@ -157,7 +130,7 @@ export default {
 
               context.logger.info(`Adding role to user. role=${role}`);
 
-              const rolesStorage = doOf<RolesStorage>(env.ROLES_STORAGE, '0');
+              const rolesStorage = getRolesStorageInstance(env.ROLES_STORAGE, context);
               await rolesStorage.addRoleToUser({userId, role});
 
               return createProtoBufOkResponse<RoleBinding>({
@@ -188,11 +161,9 @@ export default {
                 );
               }
 
-              const proxy = getRolesStorageProxy(env);
+              const rolesStorage = getRolesStorageInstance(env.ROLES_STORAGE, context);
               context.logger.info(`Deleting role ${role}`);
-              await proxy.fetch(proxyUrl(['v1', userId, 'roles', role]), {
-                method: 'DELETE',
-              });
+              await rolesStorage.deleteRoleOfUser({userId, role});
 
               return createProtoBufOkResponse<RoleBinding>({
                 userId,
@@ -217,7 +188,7 @@ export default {
                 );
               }
               const {userId} = context.proto.body;
-              const rolesStorage = doOf<RolesStorage>(env.ROLES_STORAGE, '0');
+              const rolesStorage = getRolesStorageInstance(env.ROLES_STORAGE, context);
               const roles = await rolesStorage.getRolesOfUser({userId});
 
               logInfo(
@@ -234,7 +205,3 @@ export default {
     ]),
   ),
 };
-
-function proxyUrl(segments: string[]) {
-  return 'https://some.url/' + segments.join('/');
-}

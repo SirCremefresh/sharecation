@@ -27,6 +27,7 @@ import {onFetch} from '../../lib/starter/on-fetch';
 import {AuthenticationEnvironmentVariables} from './authentication-environment-variables';
 import {createAuthenticationKv} from './authentication-kv';
 import {verifyGoogleJwt} from './google-keys';
+import {RolesStorage} from './roles-storage';
 import {generateSharecationJwt} from './sharecation-keys';
 // Make durable object visible
 export {RolesStorage} from './roles-storage';
@@ -35,6 +36,27 @@ const SERVICE_NAME = 'authentication';
 
 function getRolesStorageProxy(env: AuthenticationEnvironmentVariables) {
   return env.ROLES_STORAGE.get(env.ROLES_STORAGE.idFromName('0'));
+}
+
+type FirstParameter<F extends Function> = F extends (...args: infer A) => any ? A[0] : never;
+type ReturnType<F extends Function> = F extends (...args: any) => infer A ? A : never;
+
+type NormalizeDurableObjectMethods<T> = {
+  [K in keyof T]: K extends 'fetch' ? never : T[K] extends Function ? (request: FirstParameter<T[K]>) => ReturnType<T[K]> : never
+}
+
+function doOf<E extends {}>(durableObjectNamespace: DurableObjectNamespace, name: string): NormalizeDurableObjectMethods<E> {
+  return new Proxy({} as unknown as NormalizeDurableObjectMethods<E>, {
+    get(_, method: string): any {
+      return (argument: any) => {
+        const id = durableObjectNamespace.idFromName(name);
+        return durableObjectNamespace.get(id).fetch('https://dot.com/' + method, {
+          body: JSON.stringify(argument),
+          method: 'POST',
+        }).then(res => res.json());
+      };
+    }
+  });
 }
 
 async function getRolesOfUser(proxy: DurableObjectStub, userId: string) {
@@ -132,6 +154,9 @@ export default {
                   BasicError_BasicErrorCode.UNAUTHENTICATED,
                 );
               }
+
+              const object = doOf<RolesStorage>(env.ROLES_STORAGE, '1');
+              object.deleteRoleOfUser({userId: 'ds', role: 'sdf'});
 
               const proxy = getRolesStorageProxy(env);
               context.logger.info(`Adding role to user. role=${role}`);

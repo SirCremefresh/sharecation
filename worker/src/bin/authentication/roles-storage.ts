@@ -86,10 +86,13 @@ export class RolesStorage extends DurableObjectWrapper<AuthenticationEnvironment
     userId: string,
     role: string,
   ) {
-    const key = authenticationKv.keys.USER_ROLE(userId, role);
+    const rolesKey = authenticationKv.keys.USER_ROLES(userId);
+    const roleKey = authenticationKv.keys.USER_ROLE(userId, role);
+    const roles: string[] = (await this.getRoles(authenticationKv, userId))
+      .filter(it => it !== role);
     await Promise.all([
-      this.state.storage.delete(key),
-      authenticationKv.namespace.delete(key),
+      this.state.storage.put(rolesKey, roles),
+      authenticationKv.namespace.delete(roleKey),
     ]);
   }
 }

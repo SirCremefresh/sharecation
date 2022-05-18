@@ -150,13 +150,13 @@ export default {
             DeleteRoleBindingResponse,
             async (request, env, context) => {
               const {userId, role} = context.proto.body;
-              if (!hasRole(ROLES.ADMIN_ROLES_READ, context)) {
+              if (!hasRole(ROLES.ADMIN_ROLES_DELETE, context)) {
                 context.logger.warn(
-                  `User tried to delete role without having permission. requiredRole=${ROLES.ADMIN_ROLES_WRITE}, userId=${context.user.userId}, roles=${context.user.roles}`,
+                  `User tried to delete role without having permission. requiredRole=${ROLES.ADMIN_ROLES_DELETE}, userId=${context.user.userId}, roles=${context.user.roles}`,
                   context,
                 );
                 return createProtoBufBasicErrorResponse(
-                  `Not allowed to delete role of user. userId=${userId}, role=${role}, requiredRole=${ROLES.ADMIN_ROLES_READ}`,
+                  `Not allowed to delete role of user. userId=${userId}, role=${role}, requiredRole=${ROLES.ADMIN_ROLES_DELETE}`,
                   BasicError_BasicErrorCode.UNAUTHENTICATED,
                 );
               }

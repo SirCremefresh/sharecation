@@ -154,17 +154,11 @@ export default {
                 );
               }
 
-              const object = doOf<RolesStorage>(env.ROLES_STORAGE, '0');
-              object.deleteRoleOfUser({userId: 'ds', role: 'sdf'});
 
-              const proxy = getRolesStorageProxy(env);
               context.logger.info(`Adding role to user. role=${role}`);
-              await proxy.fetch(proxyUrl(['v1', userId, 'roles']), {
-                body: JSON.stringify({
-                  role,
-                }),
-                method: 'POST',
-              });
+
+              const rolesStorage = doOf<RolesStorage>(env.ROLES_STORAGE, '0');
+              await rolesStorage.addRoleToUser({userId, role});
 
               return createProtoBufOkResponse<RoleBinding>({
                 userId,
@@ -223,8 +217,8 @@ export default {
                 );
               }
               const {userId} = context.proto.body;
-              const proxy = getRolesStorageProxy(env);
-              const roles = await getRolesOfUser(proxy, userId);
+              const rolesStorage = doOf<RolesStorage>(env.ROLES_STORAGE, '0');
+              const roles = await rolesStorage.getRolesOfUser({userId});
 
               logInfo(
                 `Got roles of user. roles=[${roles.join(', ')}]`,

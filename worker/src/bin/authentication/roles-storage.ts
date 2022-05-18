@@ -59,7 +59,7 @@ export class RolesStorage extends DoWrapper<AuthenticationEnvironmentVariables> 
     super();
   }
 
-  public async getRolesOfUser(userId: string, context: LoggerContext): Promise<string[]> {
+  public async getRolesOfUser({userId}: {userId: string}, context: LoggerContext): Promise<string[]> {
     const authenticationKv = createAuthenticationKv(this.env.AUTHENTICATION);
     context.logger.info(`getting roles for userId=${userId}`);
 

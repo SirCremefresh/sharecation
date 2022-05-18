@@ -38,11 +38,10 @@ function getRolesStorageProxy(env: AuthenticationEnvironmentVariables) {
   return env.ROLES_STORAGE.get(env.ROLES_STORAGE.idFromName('0'));
 }
 
-type FirstParameter<F extends Function> = F extends (...args: infer A) => any ? A[0] : never;
-type ReturnType<F extends Function> = F extends (...args: any) => infer A ? A : never;
-
 type NormalizeDurableObjectMethods<T> = {
-  [K in keyof T]: K extends 'fetch' ? never : T[K] extends Function ? (request: FirstParameter<T[K]>) => ReturnType<T[K]> : never
+  [K in keyof T]: K extends 'fetch' ? never :
+    T[K] extends (body: infer FIRST_ARG, ...args: any[]) => infer RETURN_TYPE ? (request: FIRST_ARG) => RETURN_TYPE :
+      never
 }
 
 function doOf<E extends {}>(durableObjectNamespace: DurableObjectNamespace, name: string): NormalizeDurableObjectMethods<E> {

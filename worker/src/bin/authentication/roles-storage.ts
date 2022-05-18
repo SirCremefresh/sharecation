@@ -12,15 +12,14 @@ type Invalid<T> = T & Error;
 type DurableObjectMethod = (body: any, context: RequestIdContext & LoggerContext) => Promise<any>;
 type CheckDurableObjectMethods<T> = {
   [K in keyof T]: T[K] extends Function ?
-    K extends 'fetch' ? T[K] :
-      (T[K] extends DurableObjectMethod ? T[K] :
-        Invalid<['method is not valid. name: ', K]>) : T[K]
+    (T[K] extends DurableObjectMethod ? T[K] :
+      Invalid<['method is not valid. name: ', K]>) : T[K]
 }
 
 
-export abstract class DoWrapper<Env extends LoggerConfig> implements DurableObject {
+export abstract class DoWrapper<Env extends LoggerConfig> {
   protected abstract env: Env;
-  fetch = onDurableObjectFetch<Env>(
+  protected fetch = onDurableObjectFetch<Env>(
     () => this.env,
     addLoggerContext(
       SERVICE_NAME,

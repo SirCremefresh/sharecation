@@ -39,9 +39,9 @@ function getRolesStorageProxy(env: AuthenticationEnvironmentVariables) {
 }
 
 type NormalizeDurableObjectMethods<T> = {
-  [K in keyof T]: K extends 'fetch' ? never :
-    T[K] extends (body: infer FIRST_ARG, ...args: any[]) => infer RETURN_TYPE ? (request: FIRST_ARG) => RETURN_TYPE :
-      never
+  [K in keyof T]:
+  T[K] extends (body: infer FIRST_ARG, ...args: any[]) => infer RETURN_TYPE ? (request: FIRST_ARG) => RETURN_TYPE :
+    never
 }
 
 function doOf<E extends {}>(durableObjectNamespace: DurableObjectNamespace, name: string): NormalizeDurableObjectMethods<E> {

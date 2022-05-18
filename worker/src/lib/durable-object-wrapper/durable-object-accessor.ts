@@ -7,12 +7,12 @@ type NormalizeDurableObjectMethods<DURABLE_OBJECT> = {
     never
 };
 
-export function getDurableObjectInstance<E extends {}>(
-  durableObject: { new(...args: any[]): E, serviceName: string },
+export function getDurableObjectInstance<DURABLE_OBJECT extends {}>(
+  durableObject: { new(...args: any[]): DURABLE_OBJECT, serviceName: string },
   durableObjectNamespace: DurableObjectNamespace,
   name: string,
-  context: {}): NormalizeDurableObjectMethods<E> {
-  return new Proxy({} as unknown as NormalizeDurableObjectMethods<E>, {
+  context: {}): NormalizeDurableObjectMethods<DURABLE_OBJECT> {
+  return new Proxy({} as unknown as NormalizeDurableObjectMethods<DURABLE_OBJECT>, {
     get(_, method: string): any {
       return (argument: any) => {
         const id = durableObjectNamespace.idFromName(name);

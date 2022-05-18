@@ -60,7 +60,7 @@ class Layout extends StatelessWidget {
               },
             );
           }
-          return Text("data");
+          return const SizedBox.shrink();
         },
       ),
     );

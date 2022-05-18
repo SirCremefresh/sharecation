@@ -59,7 +59,7 @@ export class RolesStorage extends DoWrapper<AuthenticationEnvironmentVariables> 
     super();
   }
 
-  public async getRolesOfUser({userId}: {userId: string}, context: LoggerContext): Promise<string[]> {
+  public async getRolesOfUser({userId}: { userId: string }, context: LoggerContext): Promise<string[]> {
     const authenticationKv = createAuthenticationKv(this.env.AUTHENTICATION);
     context.logger.info(`getting roles for userId=${userId}`);
 
@@ -72,7 +72,7 @@ export class RolesStorage extends DoWrapper<AuthenticationEnvironmentVariables> 
                              }: { userId: string, role: string },
                              context: LoggerContext): Promise<string> {
     const authenticationKv = createAuthenticationKv(this.env.AUTHENTICATION);
-
+    context.logger.info(`Adding role to user. role=${role}`);
     await this.addRole(authenticationKv, userId, role);
 
     return role;
@@ -84,6 +84,7 @@ export class RolesStorage extends DoWrapper<AuthenticationEnvironmentVariables> 
                                 }: { userId: string, role: string },
                                 context: LoggerContext): Promise<string> {
     const authenticationKv = createAuthenticationKv(this.env.AUTHENTICATION);
+    context.logger.info(`Deleting role from user. role=${role}`);
 
     await this.deleteRole(authenticationKv, userId, role);
 

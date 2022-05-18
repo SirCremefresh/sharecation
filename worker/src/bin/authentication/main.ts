@@ -154,7 +154,7 @@ export default {
                 );
               }
 
-              const object = doOf<RolesStorage>(env.ROLES_STORAGE, '1');
+              const object = doOf<RolesStorage>(env.ROLES_STORAGE, '0');
               object.deleteRoleOfUser({userId: 'ds', role: 'sdf'});
 
               const proxy = getRolesStorageProxy(env);

@@ -23,11 +23,11 @@ class Layout extends StatelessWidget {
       bottomNavigationBar: BottomNavigationBar(
         onTap: (index) {
           if (index == 0) {
-            Navigator.of(context).pushReplacementNamed('/profile');
+            Navigator.of(context).popAndPushNamed('/profile');
           } else if (index == 1) {
-            Navigator.of(context).pushReplacementNamed('/camera');
+            Navigator.of(context).popAndPushNamed('/camera');
           } else {
-            Navigator.of(context).pushReplacementNamed('/groups');
+            Navigator.of(context).popAndPushNamed('/groups');
           }
         },
         items: const [
@@ -45,15 +45,22 @@ class Layout extends StatelessWidget {
           )
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.camera),
-        onPressed: () async {
-          final ImagePicker _picker = ImagePicker();
-          final XFile? photo =
-              await _picker.pickImage(source: ImageSource.camera);
-          if (photo != null) {
-            await api.images.uploadImage(photo);
+      floatingActionButton: BlocBuilder<ActiveGroupBloc, ActiveGroupState>(
+        builder: (context, state) {
+          if (state is ActiveGroupSelected) {
+            return FloatingActionButton(
+              child: const Icon(Icons.camera),
+              onPressed: () async {
+                final ImagePicker _picker = ImagePicker();
+                final XFile? photo =
+                    await _picker.pickImage(source: ImageSource.camera);
+                if (photo != null) {
+                  await api.images.uploadImage(state.groupId,photo);
+                }
+              },
+            );
           }
+          return Text("data");
         },
       ),
     );
@@ -73,7 +80,8 @@ class Layout extends StatelessWidget {
                   }
                   return TextButton(
                     onPressed: () {
-                      context.read<ActiveGroupBloc>().add(SelectGroupEvent(groupId: state.groups[index - 1].groupId));
+                      context.read<ActiveGroupBloc>().add(SelectGroupEvent(
+                          groupId: state.groups[index - 1].groupId));
                     },
                     child: Text(state.groups[index - 1].name),
                   );

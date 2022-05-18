@@ -143,7 +143,7 @@ export default {
       ),
       route(
         'POST',
-        ['v1', 'delete-role-of-user'],
+        ['v1', 'delete-role-binding'],
         addAuthenticationGuard(
           protoBuf(
             DeleteRoleBindingRequest,

@@ -30,7 +30,10 @@ class ImagesScreen extends StatelessWidget {
       future: ImageRepository().listFiles(),
       initialData: const [],
       builder: (imagesds, imagesS) {
-        var images = imagesS.data!;
+        var images = imagesS.data;
+        if(images == null) {
+          return const SizedBox.shrink();
+        }
         return GridView.builder(
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisSpacing: 3,

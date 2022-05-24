@@ -64,9 +64,12 @@ class ImagesScreen extends StatelessWidget {
 
   Widget buildImage(SharecationImage image) {
     if (image.url != null) {
-      return Image.network(image.url!);
+      return Image.network(image.url!, fit: BoxFit.fill);
     }
-    return Image.file(File(image.path!));
+    return Stack(fit: StackFit.expand, children: [
+      Image.file(File(image.path!), fit: BoxFit.fill),
+      const Positioned(right: 4, top: 4, child: Icon(Icons.cloud_off))
+    ]);
   }
 
   FutureBuilder<List<api_image.Image>> buildImagesList(String groupId) {

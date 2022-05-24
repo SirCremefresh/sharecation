@@ -2,12 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sharecation_app/api/contracts/images/v1/images.pb.dart'
-    as api_image;
 import 'package:sharecation_app/blocs/active_group_bloc.dart';
 import 'package:sharecation_app/dtos/sharecation_image.dart';
 import 'package:sharecation_app/repositories/image_repository.dart';
-import 'package:sharecation_app/service/api_service.dart';
 
 class ImagesScreen extends StatelessWidget {
   const ImagesScreen({
@@ -36,6 +33,7 @@ class ImagesScreen extends StatelessWidget {
           return const SizedBox.shrink();
         }
         return GridView.builder(
+          padding: const EdgeInsets.all(3),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisSpacing: 3,
             mainAxisSpacing: 3,
@@ -43,21 +41,12 @@ class ImagesScreen extends StatelessWidget {
           ),
           itemCount: images.length,
           itemBuilder: (context, index) {
-            return buildImage(images[index]);
+            return ClipRRect(
+                borderRadius: const BorderRadius.all(Radius.circular(3)),
+                child: buildImage(images[index]));
             // Item rendering
           },
         );
-        // ListView.builder(
-        //     itemCount: images.length,
-        //     itemBuilder: (BuildContext context, int index) {
-        //       return Column(
-        //         children: [
-        //           Text("List item $index ${images[index].path}"),
-        //           Image.file(File(images[index].path))
-        //           // Image.network(images[index].imageId)
-        //         ],
-        //       );
-        //     });
       },
     );
   }
@@ -70,25 +59,5 @@ class ImagesScreen extends StatelessWidget {
       Image.file(File(image.path!), fit: BoxFit.fill),
       const Positioned(right: 4, top: 4, child: Icon(Icons.cloud_off))
     ]);
-  }
-
-  FutureBuilder<List<api_image.Image>> buildImagesList(String groupId) {
-    return FutureBuilder<List<api_image.Image>>(
-      future: api.images.getImagesByGroupId(groupId),
-      initialData: const [],
-      builder: (imagesds, imagesS) {
-        var images = imagesS.data!;
-        return ListView.builder(
-            itemCount: images.length,
-            itemBuilder: (BuildContext context, int index) {
-              return Column(
-                children: [
-                  Text("List item $index ${images[index].imageId}"),
-                  Image.network(images[index].imageId)
-                ],
-              );
-            });
-      },
-    );
   }
 }

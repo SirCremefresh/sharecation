@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sharecation_app/api/contracts/images/v1/images.pb.dart'
     as api_image;
 import 'package:sharecation_app/blocs/active_group_bloc.dart';
+import 'package:sharecation_app/dtos/sharecation_image.dart';
 import 'package:sharecation_app/repositories/image_repository.dart';
 import 'package:sharecation_app/service/api_service.dart';
 
@@ -25,13 +26,13 @@ class ImagesScreen extends StatelessWidget {
     ));
   }
 
-  FutureBuilder<List<FileSystemEntity>> buildImagesLocalList(String groupId) {
-    return FutureBuilder<List<FileSystemEntity>>(
-      future: ImageRepository().listFiles(),
+  FutureBuilder<List<SharecationImage>> buildImagesLocalList(String groupId) {
+    return FutureBuilder<List<SharecationImage>>(
+      future: ImageRepository().listFiles(groupId: groupId),
       initialData: const [],
       builder: (imagesds, imagesS) {
         var images = imagesS.data;
-        if(images == null) {
+        if (images == null) {
           return const SizedBox.shrink();
         }
         return GridView.builder(
@@ -42,7 +43,7 @@ class ImagesScreen extends StatelessWidget {
           ),
           itemCount: images.length,
           itemBuilder: (context, index) {
-            return Image.file(File(images[index].path));
+            return buildImage(images[index]);
             // Item rendering
           },
         );
@@ -59,6 +60,13 @@ class ImagesScreen extends StatelessWidget {
         //     });
       },
     );
+  }
+
+  Widget buildImage(SharecationImage image) {
+    if (image.url != null) {
+      return Image.network(image.url!);
+    }
+    return Image.file(File(image.path!));
   }
 
   FutureBuilder<List<api_image.Image>> buildImagesList(String groupId) {

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -8,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sharecation_app/blocs/active_group_bloc.dart';
 import 'package:sharecation_app/blocs/groups_bloc.dart';
 import 'package:sharecation_app/blocs/images_bloc.dart';
+import 'package:sharecation_app/dtos/sharecation_image.dart';
 import 'package:sharecation_app/firebase_options.dart';
 import 'package:sharecation_app/pages/groups_screen.dart';
 import 'package:sharecation_app/pages/images_screen.dart';
@@ -70,8 +70,8 @@ class ProfileScreen extends StatelessWidget {
   }
 
   Widget groupScreen(ActiveGroupSelected state) {
-    return FutureBuilder<List<FileSystemEntity>>(
-        future: ImageRepository().listFiles(),
+    return FutureBuilder<List<SharecationImage>>(
+        future: ImageRepository().listFiles(groupId: state.groupId),
         initialData: const [],
         builder: (context, snapshot) {
           final data = snapshot.data?.join(' ') ?? 'none';

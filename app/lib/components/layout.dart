@@ -50,7 +50,7 @@ class Layout extends StatelessWidget {
             return FloatingActionButton(
               child: const Icon(Icons.camera),
               onPressed: () async {
-                await ImageRepository().saveImage();
+                await ImageRepository().saveImage(groupId: state.groupId);
                 // final ImagePicker _picker = ImagePicker();
                 // final XFile? photo =
                 //     await _picker.pickImage(source: ImageSource.camera);

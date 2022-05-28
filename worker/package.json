@@ -29,7 +29,7 @@
     "esbuild": "0.14.41",
     "jest": "28.1.0",
     "jest-config": "28.1.0",
-    "jest-environment-miniflare": "2.4.0",
+    "jest-environment-miniflare": "2.5.0",
     "miniflare": "2.5.0",
     "prettier": "2.6.2",
     "ts-jest": "28.0.3",

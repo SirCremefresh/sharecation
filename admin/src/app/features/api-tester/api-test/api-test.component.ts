@@ -4,6 +4,8 @@ import {FormControl, FormGroup} from '@angular/forms';
 import {FieldInfo, RepeatType, ScalarType} from '@protobuf-ts/runtime';
 import {DynamicFormConfig} from '../../../shared/dynamic-form/dynamic-form-config.model';
 import {ApiTestConfig} from '../api-test-config.model';
+import {ApiTesterService} from '../api-tester.service';
+import {Executor} from '../executor.model';
 import {UserConfigService} from '../user-config.service';
 
 @Component({
@@ -21,7 +23,10 @@ export class ApiTestComponent implements OnInit {
     request: new FormControl()
   });
 
-  constructor(private readonly http: HttpClient, private readonly userConfigService: UserConfigService) {
+  constructor(
+    private readonly http: HttpClient,
+    private readonly userConfigService: UserConfigService,
+    private readonly apiTesterService: ApiTesterService) {
   }
 
   ngOnInit(): void {
@@ -35,32 +40,12 @@ export class ApiTestComponent implements OnInit {
     }
   }
 
-  async executeWithUserConfig(userConfig: string) {
-    const token = await this.userConfigService.getToken(userConfig);
-    this.execute(token);
+  async execute(executor: Executor) {
+    const res = await this.apiTesterService.execute(this.config, executor, this.form.value.request);
+    this.response = JSON.stringify(res, null, 4);
   }
 
-  execute(jwtString?: string) {
-    let body = null;
-    if (this.config.requestType !== null) {
-      body = this.form.value.request;
-    }
-    this.http.post(
-      `https://sharecation-${this.config.service}-development.donato-wolfisberg.workers.dev${this.config.path}`,
-      body,
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          ...(jwtString ? {'Authorization': `Bearer ${jwtString}`} : {})
-        },
-        responseType: 'json'
-      }).pipe().subscribe((res) => {
-      this.response = JSON.stringify(res, null, 4);
-    });
-  }
-
-  private scalarTypeToFormControlType(scalarType: ScalarType): 'string' | 'number' | 'boolean' {
+  private static scalarTypeToFormControlType(scalarType: ScalarType): 'string' | 'number' | 'boolean' {
     if (scalarType === ScalarType.STRING) {
       return 'string';
     }
@@ -94,10 +79,10 @@ export class ApiTestComponent implements OnInit {
     if (field.kind === 'scalar') {
       return {
         formType: 'field',
-        type: this.scalarTypeToFormControlType(field.T),
+        type: ApiTestComponent.scalarTypeToFormControlType(field.T),
         ...baseField
       };
     }
-    throw new Error(`Could not map fild of kind: ${field.kind}`);
+    throw new Error(`Could not map field of kind: ${field.kind}`);
   }
 }

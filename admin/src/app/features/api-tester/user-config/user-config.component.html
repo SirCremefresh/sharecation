@@ -1,13 +1,16 @@
 <h3>{{configDisplayName}}</h3>
-<mat-form-field appearance="fill">
+<mat-form-field appearance="fill" style="width: 100%">
   <mat-label>Roles</mat-label>
   <mat-chip-list #chipList aria-label="Roles">
     <mat-chip
-      *ngFor="let fruit of roles"
-      (removed)="remove(fruit)">
-      {{fruit}}
+      *ngFor="let role of roles"
+      (removed)="remove(role)">
+      {{role}}
       <button matChipRemove>
         <mat-icon>cancel</mat-icon>
+      </button>
+      <button [cdkCopyToClipboard]="role" mat-icon-button>
+        <mat-icon>content_copy</mat-icon>
       </button>
     </mat-chip>
     <input
@@ -30,4 +33,4 @@
   <input matInput [formControl]="userIdControl">
 </mat-form-field>
 <button mat-button (click)="newUserId()">new userId</button>
-<button mat-button (click)="loadRoles()">load roles</button>
+<button mat-button (click)="loadRoles()">reload roles</button>

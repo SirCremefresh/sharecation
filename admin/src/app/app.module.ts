@@ -1,3 +1,4 @@
+import {ClipboardModule} from '@angular/cdk/clipboard';
 import {HttpClientModule} from '@angular/common/http';
 import {NgModule} from '@angular/core';
 import {ReactiveFormsModule} from '@angular/forms';
@@ -40,7 +41,8 @@ import { UserConfigComponent } from './features/api-tester/user-config/user-conf
     MatInputModule,
     MatChipsModule,
     MatAutocompleteModule,
-    MatIconModule
+    MatIconModule,
+    ClipboardModule
   ],
   providers: [],
   bootstrap: [AppComponent]

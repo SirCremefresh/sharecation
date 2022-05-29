@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sharecation_app/blocs/groups_bloc.dart';
 import 'package:sharecation_app/components/group_scaffold.dart';
 
 class GroupInfoScreen extends StatefulWidget {
@@ -19,7 +21,23 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
     return Layout(
       groupScaffoldTab: GroupScaffoldTab.groupInfo,
       groupId: widget.groupId,
-      child: const Text("GroupInfoScreen"),
+      child: BlocBuilder<GroupsBloc, GroupsState>(
+        builder: (context, state) {
+          return Column(
+            children: [
+              const Text(
+                "Group Info",
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 20),
+              ),
+              if (state is GroupsLoaded) ...[
+                Text("Name: ${state.activeGroup.name}"),
+                Text("GroupId: ${state.activeGroup.groupId}"),
+              ]
+            ],
+          );
+        },
+      ),
     );
   }
 }

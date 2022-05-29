@@ -30,25 +30,36 @@ class _GalleryScreenState extends State<GalleryScreen> {
             return const CircularProgressIndicator();
           }
           if (state.images.isEmpty) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                Text(
-                  "No Pictures",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 20),
-                ),
-                Text(
-                  "Make a picture and it will appear here",
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            );
+            return const NoImages();
           }
           return ImagesGrid(images: state.images);
         },
       )),
+    );
+  }
+}
+
+class NoImages extends StatelessWidget {
+  const NoImages({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: const [
+        Text(
+          "No Pictures",
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 20),
+        ),
+        Text(
+          "Make a picture and it will appear here",
+          textAlign: TextAlign.center,
+        ),
+      ],
     );
   }
 }

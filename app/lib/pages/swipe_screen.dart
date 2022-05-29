@@ -17,6 +17,7 @@ class _SwipeScreenState extends State<SwipeScreen> {
   @override
   Widget build(BuildContext context) {
     return Layout(
+      groupScaffoldTab: GroupScaffoldTab.swipe,
       groupId: widget.groupId,
       child: const Text("SwipeScreen"),
     );

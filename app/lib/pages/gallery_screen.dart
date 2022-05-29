@@ -22,6 +22,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
   @override
   Widget build(BuildContext context) {
     return Layout(
+      groupScaffoldTab: GroupScaffoldTab.gallery,
       groupId: widget.groupId,
       child: Scaffold(body: BlocBuilder<ImagesBloc, ImagesState>(
         builder: (context, state) {

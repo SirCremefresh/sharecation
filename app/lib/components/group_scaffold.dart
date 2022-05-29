@@ -10,8 +10,9 @@ enum GroupScaffoldTab { groupInfo, swipe, gallery }
 class Layout extends StatelessWidget {
   final Widget child;
   final String groupId;
+  final GroupScaffoldTab groupScaffoldTab;
 
-  const Layout({Key? key, required this.child, required this.groupId})
+  const Layout({Key? key, required this.child, required this.groupId, required this.groupScaffoldTab})
       : super(key: key);
 
   @override
@@ -35,6 +36,7 @@ class Layout extends StatelessWidget {
             context.go('/groups/$groupId/info');
           }
         },
+        currentIndex: groupScaffoldTab.index,
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.info_outline),

@@ -17,6 +17,7 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
   @override
   Widget build(BuildContext context) {
     return Layout(
+      groupScaffoldTab: GroupScaffoldTab.groupInfo,
       groupId: widget.groupId,
       child: const Text("GroupInfoScreen"),
     );

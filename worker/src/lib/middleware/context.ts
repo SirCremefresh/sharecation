@@ -1,7 +1,18 @@
-import { MessageType } from '@protobuf-ts/runtime';
+import {MessageType} from '@protobuf-ts/runtime';
 import {Logger} from 'workers-loki-logger';
-import { MessageFormat } from '../http/types';
-import { isNotNullOrUndefined } from '../lib';
+import {MessageFormat} from '../http/types';
+import {isNotNullOrUndefined} from '../lib';
+
+export interface TestingContext {
+  test: true;
+}
+
+export function isTestingContext<T extends {}>(
+  context: T | undefined | null,
+): context is T & TestingContext {
+  return isNotNullOrUndefined(context) && context.hasOwnProperty('test');
+}
+
 
 export interface AuthenticatedContext {
   user: {
@@ -57,7 +68,10 @@ export function isExecutionContext<T extends {}>(
   // Like the other contexts
   return (
     isNotNullOrUndefined(context) &&
-    Object.getPrototypeOf(context).hasOwnProperty('waitUntil')
+    (
+      Object.getPrototypeOf(context).hasOwnProperty('waitUntil') ||
+      context.hasOwnProperty('waitUntil')
+    )
   );
 }
 

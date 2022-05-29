@@ -4,17 +4,17 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sharecation_app/blocs/active_group_bloc.dart';
+import 'package:sharecation_app/blocs/authentication_bloc.dart';
 import 'package:sharecation_app/blocs/groups_bloc.dart';
 import 'package:sharecation_app/blocs/images_bloc.dart';
-import 'package:sharecation_app/dtos/sharecation_image.dart';
 import 'package:sharecation_app/firebase_options.dart';
-import 'package:sharecation_app/pages/groups_screen.dart';
-import 'package:sharecation_app/pages/images_screen.dart';
+import 'package:sharecation_app/pages/gallery_screen.dart';
+import 'package:sharecation_app/pages/group_info_screen.dart';
 import 'package:sharecation_app/pages/login_screen.dart';
-import 'package:sharecation_app/repositories/image_repository.dart';
-
-import 'components/layout.dart';
+import 'package:sharecation_app/pages/select_group_screen.dart';
+import 'package:sharecation_app/pages/swipe_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,51 +31,95 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => GroupsBloc()),
-        BlocProvider(create: (context) => ImagesBloc()),
         BlocProvider(
-            create: (context) => ActiveGroupBloc(
-                groupsBloc: context.read<GroupsBloc>(),
-                imagesBloc: context.read<ImagesBloc>())),
+          create: (context) => GroupsBloc(),
+        ),
+        BlocProvider(
+          create: (context) => ImagesBloc(),
+        ),
+        BlocProvider(
+          create: (context) => ActiveGroupBloc(
+            imagesBloc: context.read<ImagesBloc>(),
+            groupsBloc: context.read<GroupsBloc>(),
+          ),
+        ),
+        BlocProvider(
+          create: (context) => AuthenticationBloc(
+            imagesBloc: context.read<ImagesBloc>(),
+            groupsBloc: context.read<GroupsBloc>(),
+            activeGroupBloc: context.read<ActiveGroupBloc>(),
+          ),
+        ),
       ],
-      child: MaterialApp(
-        initialRoute:
-            FirebaseAuth.instance.currentUser == null ? '/sign-in' : '/profile',
-        routes: {
-          '/sign-in': (context) => const LoginScreen(),
-          '/profile': (context) => const Layout(ProfileScreen()),
-          '/camera': (context) => const Layout(ImagesScreen()),
-          '/groups': (context) => const Layout(GroupScreen()),
-        },
-      ),
+      child: const Router(),
     );
   }
 }
 
-class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({
+class Router extends StatelessWidget {
+  const Router({
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ActiveGroupBloc, ActiveGroupState>(
-      builder: (context, state) {
-        if (state is ActiveGroupSelected) {
-          return groupScreen(state);
-        }
-        return const Text('no group selected');
-      },
+    final _router = getGoRouter(context);
+    return MaterialApp.router(
+      routeInformationParser: _router.routeInformationParser,
+      routerDelegate: _router.routerDelegate,
     );
   }
 
-  Widget groupScreen(ActiveGroupSelected state) {
-    return FutureBuilder<List<SharecationImage>>(
-        future: ImageRepository().listFiles(groupId: state.groupId),
-        initialData: const [],
-        builder: (context, snapshot) {
-          final data = snapshot.data?.join(' ') ?? 'none';
-          return Text('selected group: ' + state.groupId + 'images: ' + data);
+  GoRouter getGoRouter(BuildContext context) {
+    return GoRouter(
+        initialLocation: '/sign-in',
+        routes: [
+          GoRoute(
+            path: '/sign-in',
+            builder: (context, state) {
+              return const LoginScreen();
+            },
+          ),
+          GoRoute(
+            path: '/groups',
+            pageBuilder: (context, state) => NoTransitionPage<void>(
+              key: state.pageKey,
+              child: const SelectGroupScreen(),
+            ),
+          ),
+          GoRoute(
+            path: '/groups/:groupId/info',
+            pageBuilder: (context, state) => NoTransitionPage<void>(
+              key: state.pageKey,
+              child: GroupInfoScreen(groupId: state.params["groupId"]!),
+            ),
+          ),
+          GoRoute(
+            path: '/groups/:groupId/gallery',
+            pageBuilder: (context, state) => NoTransitionPage<void>(
+              key: state.pageKey,
+              child: GalleryScreen(groupId: state.params["groupId"]!),
+            ),
+          ),
+          GoRoute(
+            path: '/groups/:groupId/swipe',
+            pageBuilder: (context, state) => NoTransitionPage<void>(
+              key: state.pageKey,
+              child: SwipeScreen(groupId: state.params["groupId"]!),
+            ),
+          ),
+        ],
+        redirect: (state) {
+          String? newPath;
+          if (FirebaseAuth.instance.currentUser == null) {
+            newPath = "/sign-in";
+          } else if (state.location == "/sign-in") {
+            newPath = "/groups";
+            context
+                .read<AuthenticationBloc>()
+                .add(const AuthenticationEventSignedIn());
+          }
+          return newPath;
         });
   }
 }

@@ -4,19 +4,19 @@ abstract class ImagesEvent extends Equatable {
   const ImagesEvent();
 }
 
-class AddImageEvent extends ImagesEvent {
+class ImagesEventAdd extends ImagesEvent {
   final Image image;
 
-  const AddImageEvent({required this.image});
+  const ImagesEventAdd({required this.image});
 
   @override
   List<Object> get props => [image];
 }
 
-class GroupIdChangedEvent extends ImagesEvent {
+class ImagesEventLoad extends ImagesEvent {
   final String groupId;
 
-  const GroupIdChangedEvent({required this.groupId});
+  const ImagesEventLoad({required this.groupId});
 
   @override
   List<Object> get props => [groupId];

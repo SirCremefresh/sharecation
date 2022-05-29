@@ -10,8 +10,17 @@ part 'groups_state.dart';
 class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
   GroupsBloc() : super(GroupsLoading()) {
     on<LoadGroupsEvent>((event, emit) async {
+      if (event.force) {
+        authenticationService.invalidate();
+      }
       var groups = await api.groups.getGroups();
-      emit(GroupsLoaded(groups: groups));
+      emit(GroupsLoaded(groups: groups, activeGroup: groups[0]));
+    });
+    on<GroupsEventAdd>((event, emit) async {
+      final group = await api.groups.createGroup(groupName: event.name);
+      authenticationService.invalidate();
+      final groups = await api.groups.getGroups();
+      emit(GroupsLoaded(groups: groups, activeGroup: group));
     });
   }
 }

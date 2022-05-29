@@ -67,30 +67,42 @@ class Layout extends StatelessWidget {
 
   Drawer buildDrawer() {
     return Drawer(
-      child: BlocBuilder<GroupsBloc, GroupsState>(
-        builder: (context, state) {
-          if (state is GroupsLoaded) {
-            return ListView.builder(
-                padding: EdgeInsets.zero,
-                itemCount: state.groups.length + 1,
-                itemBuilder: (BuildContext context, int index) {
-                  if (index == 0) {
-                    return buildDrawerHeader();
-                  }
-                  return TextButton(
-                    onPressed: () {
-                      context.read<ActiveGroupBloc>().add(SelectGroupEvent(
-                          groupId: state.groups[index - 1].groupId));
-                    },
-                    child: Text(state.groups[index - 1].name),
-                  );
-                });
-          }
-          return ListView(
-            children: [buildDrawerHeader(), const CircularProgressIndicator()],
-          );
-        },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          buildDrawerHeader(),
+          BlocBuilder<GroupsBloc, GroupsState>(
+            builder: (context, state) {
+              if (state is GroupsLoaded) {
+                return buildGroupsList(state);
+              }
+              return const CircularProgressIndicator();
+            },
+          ),
+          TextButton(
+            onPressed: () {},
+            child: const Text("Create Group"),
+          )
+        ],
       ),
+    );
+  }
+
+  Expanded buildGroupsList(GroupsLoaded state) {
+    return Expanded(
+      child: ListView.builder(
+          padding: EdgeInsets.zero,
+          itemCount: state.groups.length,
+          itemBuilder: (BuildContext context, int index) {
+            return TextButton(
+              onPressed: () {
+                context.read<ActiveGroupBloc>().add(
+                      SelectGroupEvent(groupId: state.groups[index].groupId),
+                    );
+              },
+              child: Text(state.groups[index].name),
+            );
+          }),
     );
   }
 
@@ -98,7 +110,11 @@ class Layout extends StatelessWidget {
     return const SizedBox(
       height: 64.0,
       child: DrawerHeader(
-        child: Text('Groups', style: TextStyle(color: Colors.white)),
+        child: Text(
+          'Groups',
+          textAlign: TextAlign.center,
+          style: TextStyle(color: Colors.white, fontSize: 30),
+        ),
         decoration: BoxDecoration(color: Colors.black),
         margin: EdgeInsets.all(0.0),
         padding: EdgeInsets.all(0.0),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:sharecation_app/api/contracts/groups/v1/groups.pb.dart';
 import 'package:sharecation_app/blocs/active_group_bloc.dart';
 import 'package:sharecation_app/blocs/groups_bloc.dart';
 import 'package:sharecation_app/repositories/image_repository.dart';
@@ -28,7 +29,7 @@ class Layout extends StatelessWidget {
         title: const Text('Sharecation'),
       ),
       body: child,
-      drawer: buildDrawer(),
+      drawer: const SharecationDrawer(),
       bottomNavigationBar: BottomNavigationBar(
         onTap: (index) {
           final tab = GroupScaffoldTab.values[index];
@@ -64,13 +65,20 @@ class Layout extends StatelessWidget {
       ),
     );
   }
+}
 
-  Drawer buildDrawer() {
+class SharecationDrawer extends StatelessWidget {
+  const SharecationDrawer({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     return Drawer(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          buildDrawerHeader(),
+          shareCationDrawerHeader(),
           BlocBuilder<GroupsBloc, GroupsState>(
             builder: (context, state) {
               if (state is GroupsLoaded) {
@@ -80,7 +88,12 @@ class Layout extends StatelessWidget {
             },
           ),
           TextButton(
-            onPressed: () {},
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) => const CreateGroup(),
+              );
+            },
             child: const Text("Create Group"),
           )
         ],
@@ -106,7 +119,7 @@ class Layout extends StatelessWidget {
     );
   }
 
-  SizedBox buildDrawerHeader() {
+  SizedBox shareCationDrawerHeader() {
     return const SizedBox(
       height: 64.0,
       child: DrawerHeader(
@@ -118,6 +131,67 @@ class Layout extends StatelessWidget {
         decoration: BoxDecoration(color: Colors.black),
         margin: EdgeInsets.all(0.0),
         padding: EdgeInsets.all(0.0),
+      ),
+    );
+  }
+}
+
+class CreateGroup extends StatefulWidget {
+  const CreateGroup({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  State<CreateGroup> createState() => _CreateGroupState();
+}
+
+class _CreateGroupState extends State<CreateGroup> {
+  late TextEditingController _controller;
+  String text = "";
+  List<Group> groups = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController();
+    _controller.addListener(() {
+      setState(() {
+        text = _controller.value.text;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      child: Container(
+        padding: const EdgeInsets.all(5),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text(
+              "New Group",
+              style: TextStyle(
+                fontSize: 30,
+              ),
+            ),
+            TextField(
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Name',
+              ),
+              controller: _controller,
+            ),
+            TextButton(onPressed: () async {}, child: const Text("create")),
+          ],
+        ),
       ),
     );
   }

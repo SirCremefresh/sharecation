@@ -17,7 +17,7 @@ export default {
     addRouter([
       route(
         'POST',
-        [],
+        ['v1', 'get-ping'],
         protoBuf(
           GetPingRequest,
           GetPingResponse,

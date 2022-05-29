@@ -12,7 +12,11 @@ class Layout extends StatelessWidget {
   final String groupId;
   final GroupScaffoldTab groupScaffoldTab;
 
-  const Layout({Key? key, required this.child, required this.groupId, required this.groupScaffoldTab})
+  const Layout(
+      {Key? key,
+      required this.child,
+      required this.groupId,
+      required this.groupScaffoldTab})
       : super(key: key);
 
   @override
@@ -52,17 +56,10 @@ class Layout extends StatelessWidget {
           )
         ],
       ),
-      floatingActionButton: BlocBuilder<ActiveGroupBloc, ActiveGroupState>(
-        builder: (context, state) {
-          if (state is ActiveGroupSelected) {
-            return FloatingActionButton(
-              child: const Icon(Icons.camera),
-              onPressed: () async {
-                await ImageRepository().saveImage(groupId: state.groupId);
-              },
-            );
-          }
-          return const SizedBox.shrink();
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.camera),
+        onPressed: () async {
+          await ImageRepository().saveImage(groupId: groupId);
         },
       ),
     );

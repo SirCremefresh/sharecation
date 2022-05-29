@@ -40,6 +40,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => ActiveGroupBloc(
             imagesBloc: context.read<ImagesBloc>(),
+            groupsBloc: context.read<GroupsBloc>(),
           ),
         ),
         BlocProvider(

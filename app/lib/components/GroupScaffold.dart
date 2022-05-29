@@ -5,10 +5,14 @@ import 'package:sharecation_app/blocs/active_group_bloc.dart';
 import 'package:sharecation_app/blocs/groups_bloc.dart';
 import 'package:sharecation_app/repositories/image_repository.dart';
 
+enum GroupScaffoldTab { groupInfo, swipe, gallery }
+
 class Layout extends StatelessWidget {
   final Widget child;
+  final String groupId;
 
-  const Layout({Key? key, required this.child}) : super(key: key);
+  const Layout({Key? key, required this.child, required this.groupId})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,21 +28,21 @@ class Layout extends StatelessWidget {
         onTap: (index) {
           final tab = GroupScaffoldTab.values[index];
           if (tab == GroupScaffoldTab.gallery) {
-            context.go('/profile');
+            context.go('/groups/$groupId/gallery');
           } else if (tab == GroupScaffoldTab.swipe) {
-            context.go('/camera');
+            context.go('/groups/$groupId/swipe');
           } else {
-            context.go('/groups');
+            context.go('/groups/$groupId/info');
           }
         },
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle),
-            label: "Profile",
+            icon: Icon(Icons.info_outline),
+            label: "Info",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.camera_enhance_outlined),
-            label: "Camera",
+            icon: Icon(Icons.local_fire_department),
+            label: "Swipe",
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.camera_roll_outlined),
@@ -103,5 +107,3 @@ class Layout extends StatelessWidget {
     );
   }
 }
-
-enum GroupScaffoldTab { groupInfo, swipe, gallery }

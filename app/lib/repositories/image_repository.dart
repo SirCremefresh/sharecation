@@ -20,8 +20,17 @@ class ImageRepository {
 
       await io.File(photo.path)
           .rename("${directory.path}/${const Uuid().v4()}.$extension");
-      // await api.images.uploadImage(state.groupId,photo);
     }
+  }
+
+  Future<void> uploadImage(
+      {required String groupId, required String path}) async {
+    var file = XFile(path);
+    await api.images.uploadImage(
+      groupId,
+      file,
+    );
+    await io.File(path).delete();
   }
 
   Future<List<SharecationImage>> listFiles({required String groupId}) async {

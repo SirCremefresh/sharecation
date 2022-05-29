@@ -9,6 +9,11 @@ class ImagesEventAdd extends ImagesEvent {
   List<Object> get props => [];
 }
 
+class ImagesEventUpload extends ImagesEvent {
+  @override
+  List<Object> get props => [];
+}
+
 class ImagesEventLoad extends ImagesEvent {
   final String groupId;
 

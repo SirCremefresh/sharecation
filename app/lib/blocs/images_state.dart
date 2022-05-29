@@ -11,9 +11,10 @@ class ImagesLoading extends ImagesState {
 
 class ImagesLoaded extends ImagesState {
   final List<SharecationImage> images;
+  final String groupId;
 
-  const ImagesLoaded({required this.images});
+  const ImagesLoaded({required this.images, required this.groupId});
 
   @override
-  List<Object> get props => [images];
+  List<Object> get props => [images, groupId];
 }

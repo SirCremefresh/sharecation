@@ -5,12 +5,8 @@ abstract class ImagesEvent extends Equatable {
 }
 
 class ImagesEventAdd extends ImagesEvent {
-  final Image image;
-
-  const ImagesEventAdd({required this.image});
-
   @override
-  List<Object> get props => [image];
+  List<Object> get props => [];
 }
 
 class ImagesEventLoad extends ImagesEvent {

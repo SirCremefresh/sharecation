@@ -22,8 +22,6 @@ class Layout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<GroupsBloc>().add(LoadGroupsEvent());
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Sharecation'),
@@ -82,7 +80,7 @@ class SharecationDrawer extends StatelessWidget {
           BlocBuilder<GroupsBloc, GroupsState>(
             builder: (context, state) {
               if (state is GroupsLoaded) {
-                return buildGroupsList(state);
+                return DrawerGroupsList(groups: state.groups);
               }
               return const CircularProgressIndicator();
             },
@@ -101,24 +99,6 @@ class SharecationDrawer extends StatelessWidget {
     );
   }
 
-  Expanded buildGroupsList(GroupsLoaded state) {
-    return Expanded(
-      child: ListView.builder(
-          padding: EdgeInsets.zero,
-          itemCount: state.groups.length,
-          itemBuilder: (BuildContext context, int index) {
-            return TextButton(
-              onPressed: () {
-                context.read<ActiveGroupBloc>().add(
-                      SelectGroupEvent(groupId: state.groups[index].groupId),
-                    );
-              },
-              child: Text(state.groups[index].name),
-            );
-          }),
-    );
-  }
-
   SizedBox shareCationDrawerHeader() {
     return const SizedBox(
       height: 64.0,
@@ -131,6 +111,39 @@ class SharecationDrawer extends StatelessWidget {
         decoration: BoxDecoration(color: Colors.black),
         margin: EdgeInsets.all(0.0),
         padding: EdgeInsets.all(0.0),
+      ),
+    );
+  }
+}
+
+class DrawerGroupsList extends StatelessWidget {
+  final List<Group> groups;
+
+  const DrawerGroupsList({
+    required this.groups,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: RefreshIndicator(
+        onRefresh: () async {
+          context.read<GroupsBloc>().add(LoadGroupsEvent(force: true));
+        },
+        child: ListView.builder(
+            padding: EdgeInsets.zero,
+            itemCount: groups.length,
+            itemBuilder: (BuildContext context, int index) {
+              return TextButton(
+                onPressed: () {
+                  context.read<ActiveGroupBloc>().add(
+                        SelectGroupEvent(groupId: groups[index].groupId),
+                      );
+                },
+                child: Text(groups[index].name),
+              );
+            }),
       ),
     );
   }
@@ -189,7 +202,13 @@ class _CreateGroupState extends State<CreateGroup> {
               ),
               controller: _controller,
             ),
-            TextButton(onPressed: () async {}, child: const Text("create")),
+            TextButton(
+                onPressed: () async {
+                  context
+                      .read<GroupsBloc>()
+                      .add(GroupsEventAdd(name: _controller.value.text));
+                },
+                child: const Text("create")),
           ],
         ),
       ),

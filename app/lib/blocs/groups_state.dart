@@ -11,9 +11,10 @@ class GroupsLoading extends GroupsState {
 
 class GroupsLoaded extends GroupsState {
   final List<Group> groups;
+  final Group activeGroup;
 
-  const GroupsLoaded({required this.groups});
+  const GroupsLoaded({required this.groups, required this.activeGroup});
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [groups, activeGroup];
 }

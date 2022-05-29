@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sharecation_app/api/contracts/groups/v1/groups.pb.dart';
+import 'package:sharecation_app/components/layout.dart';
 import 'package:sharecation_app/service/api_service.dart';
 
 class GroupScreen extends StatefulWidget {
@@ -35,31 +36,34 @@ class _GroupScreenState extends State<GroupScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [
-          TextField(
-            controller: _controller,
-          ),
-          TextButton(
-              onPressed: () async {
-                await api.groups.createGroup(groupName: _controller.value.text);
-                authenticationService.invalidate();
-                var newGroups = await api.groups.getGroups();
-                setState(() {
-                  groups = newGroups;
-                });
-              },
-              child: const Text("submit")),
-          Text("your input is:" + text),
-          Expanded(
-            child: ListView.builder(
-                itemCount: groups.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Text("List item $index ${groups[index].name}");
-                }),
-          )
-        ],
+    return Layout(
+      child: Scaffold(
+        body: Column(
+          children: [
+            TextField(
+              controller: _controller,
+            ),
+            TextButton(
+                onPressed: () async {
+                  await api.groups
+                      .createGroup(groupName: _controller.value.text);
+                  authenticationService.invalidate();
+                  var newGroups = await api.groups.getGroups();
+                  setState(() {
+                    groups = newGroups;
+                  });
+                },
+                child: const Text("submit")),
+            Text("your input is:" + text),
+            Expanded(
+              child: ListView.builder(
+                  itemCount: groups.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Text("List item $index ${groups[index].name}");
+                  }),
+            )
+          ],
+        ),
       ),
     );
   }

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sharecation_app/blocs/active_group_bloc.dart';
+import 'package:sharecation_app/components/layout.dart';
 import 'package:sharecation_app/dtos/sharecation_image.dart';
 import 'package:sharecation_app/repositories/image_repository.dart';
 
@@ -13,14 +14,16 @@ class ImagesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: BlocBuilder<ActiveGroupBloc, ActiveGroupState>(
-      builder: (context, state) {
-        if (state is ActiveGroupSelected) {
-          return buildImagesLocalList(state.groupId);
-        }
-        return const CircularProgressIndicator();
-      },
-    ));
+    return Layout(
+      child: Scaffold(body: BlocBuilder<ActiveGroupBloc, ActiveGroupState>(
+        builder: (context, state) {
+          if (state is ActiveGroupSelected) {
+            return buildImagesLocalList(state.groupId);
+          }
+          return const CircularProgressIndicator();
+        },
+      )),
+    );
   }
 
   FutureBuilder<List<SharecationImage>> buildImagesLocalList(String groupId) {

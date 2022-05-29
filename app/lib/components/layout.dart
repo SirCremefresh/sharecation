@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sharecation_app/blocs/active_group_bloc.dart';
 import 'package:sharecation_app/blocs/groups_bloc.dart';
 import 'package:sharecation_app/repositories/image_repository.dart';
@@ -7,7 +8,7 @@ import 'package:sharecation_app/repositories/image_repository.dart';
 class Layout extends StatelessWidget {
   final Widget child;
 
-  const Layout(this.child, {Key? key}) : super(key: key);
+  const Layout({Key? key, required this.child}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,11 +23,11 @@ class Layout extends StatelessWidget {
       bottomNavigationBar: BottomNavigationBar(
         onTap: (index) {
           if (index == 0) {
-            Navigator.of(context).popAndPushNamed('/profile');
+            context.go('/profile');
           } else if (index == 1) {
-            Navigator.of(context).popAndPushNamed('/camera');
+            context.go('/camera');
           } else {
-            Navigator.of(context).popAndPushNamed('/groups');
+            context.go('/groups');
           }
         },
         items: const [

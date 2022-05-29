@@ -1,31 +1,28 @@
 import 'dart:async';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sharecation_app/blocs/active_group_bloc.dart';
 import 'package:sharecation_app/blocs/groups_bloc.dart';
 import 'package:sharecation_app/blocs/images_bloc.dart';
-import 'package:sharecation_app/dtos/sharecation_image.dart';
 import 'package:sharecation_app/firebase_options.dart';
 import 'package:sharecation_app/pages/groups_screen.dart';
 import 'package:sharecation_app/pages/images_screen.dart';
 import 'package:sharecation_app/pages/login_screen.dart';
-import 'package:sharecation_app/repositories/image_repository.dart';
-
-import 'components/layout.dart';
+import 'package:sharecation_app/pages/profile_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -38,44 +35,40 @@ class MyApp extends StatelessWidget {
                 groupsBloc: context.read<GroupsBloc>(),
                 imagesBloc: context.read<ImagesBloc>())),
       ],
-      child: MaterialApp(
-        initialRoute:
-            FirebaseAuth.instance.currentUser == null ? '/sign-in' : '/profile',
-        routes: {
-          '/sign-in': (context) => const LoginScreen(),
-          '/profile': (context) => const Layout(ProfileScreen()),
-          '/camera': (context) => const Layout(ImagesScreen()),
-          '/groups': (context) => const Layout(GroupScreen()),
-        },
+      child: MaterialApp.router(
+        routeInformationParser: _router.routeInformationParser,
+        routerDelegate: _router.routerDelegate,
       ),
     );
   }
-}
 
-class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<ActiveGroupBloc, ActiveGroupState>(
-      builder: (context, state) {
-        if (state is ActiveGroupSelected) {
-          return groupScreen(state);
-        }
-        return const Text('no group selected');
-      },
-    );
-  }
-
-  Widget groupScreen(ActiveGroupSelected state) {
-    return FutureBuilder<List<SharecationImage>>(
-        future: ImageRepository().listFiles(groupId: state.groupId),
-        initialData: const [],
-        builder: (context, snapshot) {
-          final data = snapshot.data?.join(' ') ?? 'none';
-          return Text('selected group: ' + state.groupId + 'images: ' + data);
-        });
-  }
+  final _router = GoRouter(
+    initialLocation: '/sign-in',
+    routes: [
+      GoRoute(
+        path: '/sign-in',
+        builder: (context, state) {
+          return const LoginScreen();
+        },
+      ),
+      GoRoute(
+        path: '/profile',
+        builder: (context, state) {
+          return const ProfileScreen();
+        },
+      ),
+      GoRoute(
+        path: '/camera',
+        builder: (context, state) {
+          return const ImagesScreen();
+        },
+      ),
+      GoRoute(
+        path: '/groups',
+        builder: (context, state) {
+          return const GroupScreen();
+        },
+      ),
+    ],
+  );
 }

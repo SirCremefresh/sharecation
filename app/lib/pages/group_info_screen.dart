@@ -4,7 +4,7 @@ import 'package:sharecation_app/components/group_scaffold.dart';
 class GroupInfoScreen extends StatefulWidget {
   final String groupId;
 
-  GroupInfoScreen({
+  const GroupInfoScreen({
     required this.groupId,
     Key? key,
   }) : super(key: key);

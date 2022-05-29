@@ -54,6 +54,5 @@ class _SelectGroupScreenState extends State<SelectGroupScreen> {
             );
           }),
     );
-    ;
   }
 }

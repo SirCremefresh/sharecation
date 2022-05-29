@@ -9,7 +9,7 @@ import 'package:sharecation_app/dtos/sharecation_image.dart';
 class GalleryScreen extends StatefulWidget {
   final String groupId;
 
-  GalleryScreen({
+  const GalleryScreen({
     required this.groupId,
     Key? key,
   }) : super(key: key);

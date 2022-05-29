@@ -6,8 +6,6 @@ import {onFetch} from '../../lib/starter/on-fetch';
 type Environment = {
   LOKI_SECRET: string;
   ENVIRONMENT: string;
-  PUBLIC_KEYS: string;
-  COMMON: KVNamespace;
 };
 
 // noinspection JSUnusedGlobalSymbols

@@ -206,6 +206,7 @@ class _CreateGroupState extends State<CreateGroup> {
                   context
                       .read<GroupsBloc>()
                       .add(GroupsEventAdd(name: _controller.value.text));
+                  Navigator.pop(context);
                 },
                 child: const Text("create")),
           ],

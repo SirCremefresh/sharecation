@@ -22,9 +22,10 @@ class Layout extends StatelessWidget {
       drawer: buildDrawer(),
       bottomNavigationBar: BottomNavigationBar(
         onTap: (index) {
-          if (index == 0) {
+          final tab = GroupScaffoldTab.values[index];
+          if (tab == GroupScaffoldTab.gallery) {
             context.go('/profile');
-          } else if (index == 1) {
+          } else if (tab == GroupScaffoldTab.swipe) {
             context.go('/camera');
           } else {
             context.go('/groups');
@@ -52,17 +53,6 @@ class Layout extends StatelessWidget {
               child: const Icon(Icons.camera),
               onPressed: () async {
                 await ImageRepository().saveImage(groupId: state.groupId);
-                // final ImagePicker _picker = ImagePicker();
-                // final XFile? photo =
-                //     await _picker.pickImage(source: ImageSource.camera);
-                // if (photo != null) {
-                //   Directory appDocDir =
-                //       await getApplicationDocumentsDirectory();
-                //   String appDocPath = appDocDir.path;
-                //
-                //   await File(photo.path).rename("$appDocPath/cool-file.jpg");
-                //   // await api.images.uploadImage(state.groupId,photo);
-                // }
               },
             );
           }
@@ -113,3 +103,5 @@ class Layout extends StatelessWidget {
     );
   }
 }
+
+enum GroupScaffoldTab { groupInfo, swipe, gallery }

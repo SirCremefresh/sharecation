@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sharecation_app/api/contracts/groups/v1/groups.pb.dart';
-import 'package:sharecation_app/components/layout.dart';
+import 'package:sharecation_app/components/GroupScaffold.dart';
 import 'package:sharecation_app/service/api_service.dart';
 
 class GroupScreen extends StatefulWidget {

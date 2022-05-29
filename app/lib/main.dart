@@ -53,21 +53,24 @@ class MyApp extends StatelessWidget {
       ),
       GoRoute(
         path: '/profile',
-        builder: (context, state) {
-          return const ProfileScreen();
-        },
+        pageBuilder: (context, state) => NoTransitionPage<void>(
+          key: state.pageKey,
+          child: const ProfileScreen(),
+        ),
       ),
       GoRoute(
         path: '/camera',
-        builder: (context, state) {
-          return const ImagesScreen();
-        },
+        pageBuilder: (context, state) => NoTransitionPage<void>(
+          key: state.pageKey,
+          child: const ImagesScreen(),
+        ),
       ),
       GoRoute(
         path: '/groups',
-        builder: (context, state) {
-          return const GroupScreen();
-        },
+        pageBuilder: (context, state) => NoTransitionPage<void>(
+          key: state.pageKey,
+          child: const GroupScreen(),
+        ),
       ),
     ],
   );

@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sharecation_app/blocs/active_group_bloc.dart';
-import 'package:sharecation_app/components/layout.dart';
+import 'package:sharecation_app/components/GroupScaffold.dart';
 import 'package:sharecation_app/dtos/sharecation_image.dart';
 import 'package:sharecation_app/repositories/image_repository.dart';
 

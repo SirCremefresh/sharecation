@@ -20,8 +20,10 @@ export default {
           GetPingRequest,
           GetPingResponse,
           async (request, env, context) => {
+            let pingId = context.proto.body.pingId;
+            context.logger.info(`received ping with pingId=${pingId}`)
             return createProtoBufOkResponse<Ping>({
-              pingId: context.proto.body.pingId,
+              pingId: pingId,
               message: 'pong',
             });
           },

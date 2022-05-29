@@ -129,7 +129,7 @@ class DrawerGroupsList extends StatelessWidget {
     return Expanded(
       child: RefreshIndicator(
         onRefresh: () async {
-          context.read<GroupsBloc>().add(LoadGroupsEvent(force: true));
+          context.read<GroupsBloc>().add(const LoadGroupsEvent(force: true));
         },
         child: ListView.builder(
             padding: EdgeInsets.zero,

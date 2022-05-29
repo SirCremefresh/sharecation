@@ -20,7 +20,7 @@ class AuthenticationBloc
     required this.imagesBloc,
   }) : super(AuthenticationInitial()) {
     on<AuthenticationEventSignedIn>((event, emit) {
-      groupsBloc.add(LoadGroupsEvent());
+      groupsBloc.add(const LoadGroupsEvent());
     });
   }
 }

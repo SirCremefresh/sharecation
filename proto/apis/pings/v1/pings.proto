@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+import "errors/v1/errors.proto";
+
 package pings.v1;
 
 message Ping {
@@ -12,5 +14,8 @@ message GetPingRequest {
 }
 
 message GetPingResponse {
-  Ping ping = 1;
+  oneof response {
+    Ping ok = 1;
+    errors.v1.BasicError error = 2;
+  }
 }

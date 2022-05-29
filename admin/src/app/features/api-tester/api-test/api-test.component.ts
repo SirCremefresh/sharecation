@@ -42,6 +42,7 @@ export class ApiTestComponent implements OnInit {
 
   async execute(executor: Executor) {
     const res = await this.apiTesterService.execute(this.config, executor, this.form.value.request);
+    console.log('response:', res);
     this.response = JSON.stringify(res, null, 4);
   }
 

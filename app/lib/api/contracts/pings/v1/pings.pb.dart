@@ -9,6 +9,8 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
+import '../../errors/v1/errors.pb.dart' as $0;
+
 class Ping extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Ping', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'pings.v1'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'pingId')
@@ -117,19 +119,36 @@ class GetPingRequest extends $pb.GeneratedMessage {
   void clearPingId() => clearField(1);
 }
 
+enum GetPingResponse_Response {
+  ok, 
+  error, 
+  notSet
+}
+
 class GetPingResponse extends $pb.GeneratedMessage {
+  static const $core.Map<$core.int, GetPingResponse_Response> _GetPingResponse_ResponseByTag = {
+    1 : GetPingResponse_Response.ok,
+    2 : GetPingResponse_Response.error,
+    0 : GetPingResponse_Response.notSet
+  };
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GetPingResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'pings.v1'), createEmptyInstance: create)
-    ..aOM<Ping>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'ping', subBuilder: Ping.create)
+    ..oo(0, [1, 2])
+    ..aOM<Ping>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'ok', subBuilder: Ping.create)
+    ..aOM<$0.BasicError>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'error', subBuilder: $0.BasicError.create)
     ..hasRequiredFields = false
   ;
 
   GetPingResponse._() : super();
   factory GetPingResponse({
-    Ping? ping,
+    Ping? ok,
+    $0.BasicError? error,
   }) {
     final _result = create();
-    if (ping != null) {
-      _result.ping = ping;
+    if (ok != null) {
+      _result.ok = ok;
+    }
+    if (error != null) {
+      _result.error = error;
     }
     return _result;
   }
@@ -154,15 +173,29 @@ class GetPingResponse extends $pb.GeneratedMessage {
   static GetPingResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetPingResponse>(create);
   static GetPingResponse? _defaultInstance;
 
+  GetPingResponse_Response whichResponse() => _GetPingResponse_ResponseByTag[$_whichOneof(0)]!;
+  void clearResponse() => clearField($_whichOneof(0));
+
   @$pb.TagNumber(1)
-  Ping get ping => $_getN(0);
+  Ping get ok => $_getN(0);
   @$pb.TagNumber(1)
-  set ping(Ping v) { setField(1, v); }
+  set ok(Ping v) { setField(1, v); }
   @$pb.TagNumber(1)
-  $core.bool hasPing() => $_has(0);
+  $core.bool hasOk() => $_has(0);
   @$pb.TagNumber(1)
-  void clearPing() => clearField(1);
+  void clearOk() => clearField(1);
   @$pb.TagNumber(1)
-  Ping ensurePing() => $_ensure(0);
+  Ping ensureOk() => $_ensure(0);
+
+  @$pb.TagNumber(2)
+  $0.BasicError get error => $_getN(1);
+  @$pb.TagNumber(2)
+  set error($0.BasicError v) { setField(2, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasError() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearError() => clearField(2);
+  @$pb.TagNumber(2)
+  $0.BasicError ensureError() => $_ensure(1);
 }
 

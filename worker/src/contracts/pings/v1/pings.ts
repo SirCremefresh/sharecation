@@ -11,6 +11,7 @@ import type { PartialMessage } from "@protobuf-ts/runtime";
 import { reflectionMergePartial } from "@protobuf-ts/runtime";
 import { MESSAGE_TYPE } from "@protobuf-ts/runtime";
 import { MessageType } from "@protobuf-ts/runtime";
+import { BasicError } from "../../errors/v1/errors";
 /**
  * @generated from protobuf message pings.v1.Ping
  */
@@ -38,9 +39,23 @@ export interface GetPingRequest {
  */
 export interface GetPingResponse {
     /**
-     * @generated from protobuf field: pings.v1.Ping ping = 1;
+     * @generated from protobuf oneof: response
      */
-    ping?: Ping;
+    response: {
+        oneofKind: "ok";
+        /**
+         * @generated from protobuf field: pings.v1.Ping ok = 1;
+         */
+        ok: Ping;
+    } | {
+        oneofKind: "error";
+        /**
+         * @generated from protobuf field: errors.v1.BasicError error = 2;
+         */
+        error: BasicError;
+    } | {
+        oneofKind: undefined;
+    };
 }
 // @generated message type with reflection information, may provide speed optimized methods
 class Ping$Type extends MessageType<Ping> {
@@ -147,11 +162,12 @@ export const GetPingRequest = new GetPingRequest$Type();
 class GetPingResponse$Type extends MessageType<GetPingResponse> {
     constructor() {
         super("pings.v1.GetPingResponse", [
-            { no: 1, name: "ping", kind: "message", T: () => Ping }
+            { no: 1, name: "ok", kind: "message", oneof: "response", T: () => Ping },
+            { no: 2, name: "error", kind: "message", oneof: "response", T: () => BasicError }
         ]);
     }
     create(value?: PartialMessage<GetPingResponse>): GetPingResponse {
-        const message = {};
+        const message = { response: { oneofKind: undefined } };
         globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
         if (value !== undefined)
             reflectionMergePartial<GetPingResponse>(this, message, value);
@@ -162,8 +178,17 @@ class GetPingResponse$Type extends MessageType<GetPingResponse> {
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
-                case /* pings.v1.Ping ping */ 1:
-                    message.ping = Ping.internalBinaryRead(reader, reader.uint32(), options, message.ping);
+                case /* pings.v1.Ping ok */ 1:
+                    message.response = {
+                        oneofKind: "ok",
+                        ok: Ping.internalBinaryRead(reader, reader.uint32(), options, (message.response as any).ok)
+                    };
+                    break;
+                case /* errors.v1.BasicError error */ 2:
+                    message.response = {
+                        oneofKind: "error",
+                        error: BasicError.internalBinaryRead(reader, reader.uint32(), options, (message.response as any).error)
+                    };
                     break;
                 default:
                     let u = options.readUnknownField;
@@ -177,9 +202,12 @@ class GetPingResponse$Type extends MessageType<GetPingResponse> {
         return message;
     }
     internalBinaryWrite(message: GetPingResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
-        /* pings.v1.Ping ping = 1; */
-        if (message.ping)
-            Ping.internalBinaryWrite(message.ping, writer.tag(1, WireType.LengthDelimited).fork(), options).join();
+        /* pings.v1.Ping ok = 1; */
+        if (message.response.oneofKind === "ok")
+            Ping.internalBinaryWrite(message.response.ok, writer.tag(1, WireType.LengthDelimited).fork(), options).join();
+        /* errors.v1.BasicError error = 2; */
+        if (message.response.oneofKind === "error")
+            BasicError.internalBinaryWrite(message.response.error, writer.tag(2, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);

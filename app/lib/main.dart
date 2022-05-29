@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,11 +21,11 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  MyApp({Key? key}) : super(key: key);
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -49,50 +50,75 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ],
-      child: MaterialApp.router(
-        routeInformationParser: _router.routeInformationParser,
-        routerDelegate: _router.routerDelegate,
-      ),
+      child: const Router(),
+    );
+  }
+}
+
+class Router extends StatelessWidget {
+  const Router({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final _router = getGoRouter(context);
+    return MaterialApp.router(
+      routeInformationParser: _router.routeInformationParser,
+      routerDelegate: _router.routerDelegate,
     );
   }
 
-  final _router = GoRouter(
-    initialLocation: '/sign-in',
-    routes: [
-      GoRoute(
-        path: '/sign-in',
-        builder: (context, state) {
-          return const LoginScreen();
-        },
-      ),
-      GoRoute(
-        path: '/groups',
-        pageBuilder: (context, state) => NoTransitionPage<void>(
-          key: state.pageKey,
-          child: const SelectGroupScreen(),
-        ),
-      ),
-      GoRoute(
-        path: '/groups/:groupId/info',
-        pageBuilder: (context, state) => NoTransitionPage<void>(
-          key: state.pageKey,
-          child: GroupInfoScreen(groupId: state.params["groupId"]!),
-        ),
-      ),
-      GoRoute(
-        path: '/groups/:groupId/gallery',
-        pageBuilder: (context, state) => NoTransitionPage<void>(
-          key: state.pageKey,
-          child: GalleryScreen(groupId: state.params["groupId"]!),
-        ),
-      ),
-      GoRoute(
-        path: '/groups/:groupId/swipe',
-        pageBuilder: (context, state) => NoTransitionPage<void>(
-          key: state.pageKey,
-          child: SwipeScreen(groupId: state.params["groupId"]!),
-        ),
-      ),
-    ],
-  );
+  GoRouter getGoRouter(BuildContext context) {
+    return GoRouter(
+        initialLocation: '/sign-in',
+        routes: [
+          GoRoute(
+            path: '/sign-in',
+            builder: (context, state) {
+              return const LoginScreen();
+            },
+          ),
+          GoRoute(
+            path: '/groups',
+            pageBuilder: (context, state) => NoTransitionPage<void>(
+              key: state.pageKey,
+              child: const SelectGroupScreen(),
+            ),
+          ),
+          GoRoute(
+            path: '/groups/:groupId/info',
+            pageBuilder: (context, state) => NoTransitionPage<void>(
+              key: state.pageKey,
+              child: GroupInfoScreen(groupId: state.params["groupId"]!),
+            ),
+          ),
+          GoRoute(
+            path: '/groups/:groupId/gallery',
+            pageBuilder: (context, state) => NoTransitionPage<void>(
+              key: state.pageKey,
+              child: GalleryScreen(groupId: state.params["groupId"]!),
+            ),
+          ),
+          GoRoute(
+            path: '/groups/:groupId/swipe',
+            pageBuilder: (context, state) => NoTransitionPage<void>(
+              key: state.pageKey,
+              child: SwipeScreen(groupId: state.params["groupId"]!),
+            ),
+          ),
+        ],
+        redirect: (state) {
+          String? newPath;
+          if (FirebaseAuth.instance.currentUser == null) {
+            newPath = "/sign-in";
+          } else if (state.location == "/sign-in") {
+            newPath = "/groups";
+            context
+                .read<AuthenticationBloc>()
+                .add(const AuthenticationEventSignedIn());
+          }
+          return newPath;
+        });
+  }
 }

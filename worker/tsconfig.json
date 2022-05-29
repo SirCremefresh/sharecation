@@ -4,7 +4,8 @@
     "module": "NodeNext",
     "moduleResolution": "node",
     "lib": ["esnext"],
-    "types": ["@cloudflare/workers-types", "@types/jest"],
+    "types": ["@cloudflare/workers-types"],
+    "esModuleInterop": true,
     "strict": true,
     "strictNullChecks": true,
     "noImplicitReturns": true,
@@ -15,6 +16,7 @@
     "emitDecoratorMetadata": true,
     "noUnusedLocals": true,
     "allowSyntheticDefaultImports": false,
-    "baseUrl": "./src",
+    "skipLibCheck": true,
+    "baseUrl": "./src"
   },
 }

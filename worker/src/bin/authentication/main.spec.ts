@@ -1,5 +1,4 @@
-// test/index.spec.mjs
-
+import {test, expect} from '@jest/globals';
 // When using `format = "modules"`, bindings are included in the `env` parameter,
 // which we don't have access to in tests. Miniflare therefore provides a custom
 // global method to access these.

@@ -26,10 +26,27 @@ class _GalleryScreenState extends State<GalleryScreen> {
       groupId: widget.groupId,
       child: Scaffold(body: BlocBuilder<ImagesBloc, ImagesState>(
         builder: (context, state) {
-          if (state is ImagesLoaded) {
-            return ImagesGrid(images: state.images);
+          if (state is! ImagesLoaded) {
+            return const CircularProgressIndicator();
           }
-          return const CircularProgressIndicator();
+          if (state.images.isEmpty) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                Text(
+                  "No Pictures",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 20),
+                ),
+                Text(
+                  "Make a picture and it will appear here",
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            );
+          }
+          return ImagesGrid(images: state.images);
         },
       )),
     );

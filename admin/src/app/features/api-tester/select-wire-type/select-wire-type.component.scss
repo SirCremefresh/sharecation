@@ -1,0 +1,14 @@
+.container {
+  display: flex;
+  gap: 3rem;
+  flex-direction: row;
+}
+
+.format-selector {
+  display: flex;
+  flex-direction: column;
+}
+
+mat-radio-button {
+  display: block;
+}

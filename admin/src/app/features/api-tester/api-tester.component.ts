@@ -11,6 +11,7 @@ import {GetPublicJwksResponse} from '../../contracts/authentication/v1/public_jw
 import {CreateUserRequest, CreateUserResponse} from '../../contracts/dev-tools/v1/jwt';
 import {CreateGroupRequest, CreateGroupResponse, GetGroupsResponse} from '../../contracts/groups/v1/groups';
 import {GetImagesByGroupIdRequest, GetImagesByGroupIdResponse} from '../../contracts/images/v1/images';
+import {GetPingRequest, GetPingResponse} from '../../contracts/pings/v1/pings';
 import {ApiTestConfig} from './api-test-config.model';
 
 @Component({
@@ -83,6 +84,14 @@ export class ApiTesterComponent {
       path: '/v1/get-images-by-group-id',
       requestType: GetImagesByGroupIdRequest,
       responseType: GetImagesByGroupIdResponse
+    },
+    {
+      title: 'Ping Pong',
+      service: 'ping',
+      description: 'Sample resource to test client',
+      path: '/v1/get-ping',
+      requestType: GetPingRequest,
+      responseType: GetPingResponse
     },
   ];
 }

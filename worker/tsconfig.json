@@ -1,9 +1,11 @@
 {
   "compilerOptions": {
     "target": "esnext",
-    "module": "esnext",
+    "module": "NodeNext",
+    "moduleResolution": "node",
     "lib": ["esnext"],
-    "types": ["@cloudflare/workers-types", "@types/jest"],
+    "types": ["@cloudflare/workers-types"],
+    "esModuleInterop": true,
     "strict": true,
     "strictNullChecks": true,
     "noImplicitReturns": true,
@@ -13,8 +15,8 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "noUnusedLocals": true,
-    "allowSyntheticDefaultImports": true,
-    "baseUrl": "./src",
-    "moduleResolution": "Node"
-  }
+    "allowSyntheticDefaultImports": false,
+    "skipLibCheck": true,
+    "baseUrl": "./src"
+  },
 }

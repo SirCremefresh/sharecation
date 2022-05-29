@@ -1,0 +1,29 @@
+<div class="container">
+  <div class="format-selector">
+    <label>Request Format</label>
+    <mat-radio-group
+      value="json"
+      (change)="requestFormatChanged($event.value)">
+      <mat-radio-button [value]="'json'">
+        json
+      </mat-radio-button>
+      <mat-radio-button [value]="'proto'">
+        proto
+      </mat-radio-button>
+    </mat-radio-group>
+  </div>
+
+  <div class="format-selector">
+    <label>Response Format</label>
+    <mat-radio-group
+      value="json"
+      (change)="responseFormatChanged($event.value)">
+      <mat-radio-button [value]="'json'">
+        json
+      </mat-radio-button>
+      <mat-radio-button [value]="'proto'">
+        proto
+      </mat-radio-button>
+    </mat-radio-group>
+  </div>
+</div>

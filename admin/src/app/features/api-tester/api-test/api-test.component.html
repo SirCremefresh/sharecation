@@ -15,8 +15,8 @@
   </form>
   <pre style="overflow-y: scroll;">{{response}}</pre>
   <mat-action-row>
-    <button mat-raised-button color="primary" (click)="executeWithUserConfig('user')">Execute User</button>
-    <button mat-raised-button color="primary" (click)="executeWithUserConfig('admin')">Execute Admin</button>
-    <button mat-raised-button color="primary" (click)="execute()">Execute Unauthenticated</button>
+    <button mat-raised-button color="primary" (click)="execute('USER')">Execute User</button>
+    <button mat-raised-button color="primary" (click)="execute('ADMIN')">Execute Admin</button>
+    <button mat-raised-button color="primary" (click)="execute('UNAUTHENTICATED')">Execute Unauthenticated</button>
   </mat-action-row>
 </mat-expansion-panel>

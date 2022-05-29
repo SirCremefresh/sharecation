@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ApiTesterComponent } from './api-tester.component';
+import { SelectWireTypeComponent } from './select-wire-type.component';
 
-describe('ApiTesterComponent', () => {
-  let component: ApiTesterComponent;
-  let fixture: ComponentFixture<ApiTesterComponent>;
+describe('SelectWireTypeComponent', () => {
+  let component: SelectWireTypeComponent;
+  let fixture: ComponentFixture<SelectWireTypeComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ApiTesterComponent ]
+      declarations: [ SelectWireTypeComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ApiTesterComponent);
+    fixture = TestBed.createComponent(SelectWireTypeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

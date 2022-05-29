@@ -41,12 +41,10 @@ export class DynamicFormGroupComponent implements OnInit, ControlValueAccessor {
   }
 
   registerOnChange(fn: any): void {
-    console.log('on change');
     this.formGroup.valueChanges.subscribe(fn);
   }
 
   registerOnTouched(fn: any): void {
-    console.log('on blur');
     this.onTouched = fn;
   }
 

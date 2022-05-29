@@ -33,9 +33,13 @@ final $typed_data.Uint8List getPingRequestDescriptor = $convert.base64Decode('Cg
 const GetPingResponse$json = const {
   '1': 'GetPingResponse',
   '2': const [
-    const {'1': 'ping', '3': 1, '4': 1, '5': 11, '6': '.pings.v1.Ping', '10': 'ping'},
+    const {'1': 'ok', '3': 1, '4': 1, '5': 11, '6': '.pings.v1.Ping', '9': 0, '10': 'ok'},
+    const {'1': 'error', '3': 2, '4': 1, '5': 11, '6': '.errors.v1.BasicError', '9': 0, '10': 'error'},
+  ],
+  '8': const [
+    const {'1': 'response'},
   ],
 };
 
 /// Descriptor for `GetPingResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List getPingResponseDescriptor = $convert.base64Decode('Cg9HZXRQaW5nUmVzcG9uc2USIgoEcGluZxgBIAEoCzIOLnBpbmdzLnYxLlBpbmdSBHBpbmc=');
+final $typed_data.Uint8List getPingResponseDescriptor = $convert.base64Decode('Cg9HZXRQaW5nUmVzcG9uc2USIAoCb2sYASABKAsyDi5waW5ncy52MS5QaW5nSABSAm9rEi0KBWVycm9yGAIgASgLMhUuZXJyb3JzLnYxLkJhc2ljRXJyb3JIAFIFZXJyb3JCCgoIcmVzcG9uc2U=');

@@ -1,12 +1,12 @@
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
-import {HttpClient} from '@angular/common/http';
 import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {MatChipInputEvent} from '@angular/material/chips';
-import {JsonValue} from '@protobuf-ts/runtime/build/types/json-typings';
-import {firstValueFrom, map, Observable, startWith} from 'rxjs';
+import {map, Observable, startWith} from 'rxjs';
 import {GetRolesOfUserRequest, GetRolesOfUserResponse} from '../../../contracts/authentication/v1/authentication';
+import {ApiTesterService} from '../api-tester.service';
+import {Executor} from '../executor.model';
 import {UserConfigService} from '../user-config.service';
 
 @Component({
@@ -15,7 +15,7 @@ import {UserConfigService} from '../user-config.service';
   styleUrls: ['./user-config.component.scss']
 })
 export class UserConfigComponent implements OnInit {
-  @Input() configName: string = '';
+  @Input() configName!: Executor;
   @Input() configDisplayName: string = '';
   separatorKeysCodes: number[] = [ENTER, COMMA];
   rolesControl = new FormControl();
@@ -28,7 +28,10 @@ export class UserConfigComponent implements OnInit {
 
   @ViewChild('roleInput') roleInput!: ElementRef<HTMLInputElement>;
 
-  constructor(private readonly userConfigService: UserConfigService, private readonly http: HttpClient) {
+  constructor(
+    private readonly userConfigService: UserConfigService,
+    private readonly apiTesterService: ApiTesterService,
+  ) {
     this.filteredRoles = this.rolesControl.valueChanges.pipe(
       startWith(null),
       map((newRole: string | null) => {
@@ -80,27 +83,13 @@ export class UserConfigComponent implements OnInit {
   }
 
   async loadRoles() {
-    const token = await this.userConfigService.getToken('get-roles');
-    const aa: GetRolesOfUserRequest = {
+    const request: GetRolesOfUserRequest = {
       userId: this.userIdControl.value,
     };
-    const response = await firstValueFrom(
-      this.http.post<JsonValue>(
-        `https://sharecation-authentication-development.donato-wolfisberg.workers.dev/v1/get-roles-of-user`,
-        JSON.stringify(GetRolesOfUserRequest.toJson(aa)),
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'Authorization': `Bearer ${token}`
-          },
-          responseType: 'json'
-        }).pipe(
-        map(response => GetRolesOfUserResponse.fromJson(response).response)
-      ));
+    const response = await this.apiTesterService.execute(getRolesEndpointConfig, 'GET_ROLES', request);
     if (response.oneofKind === 'ok') {
       this.roles = response.ok.roles;
-      this.updateConfig()
+      this.updateConfig();
     } else {
       throw new Error(JSON.stringify(response));
     }
@@ -113,3 +102,12 @@ export class UserConfigComponent implements OnInit {
     });
   }
 }
+
+const getRolesEndpointConfig = {
+  title: 'Get Roles of user',
+  service: 'authentication',
+  description: 'Get roles of specific user user.',
+  path: '/v1/get-roles-of-user',
+  requestType: GetRolesOfUserRequest,
+  responseType: GetRolesOfUserResponse
+};

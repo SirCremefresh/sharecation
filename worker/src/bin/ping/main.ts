@@ -1,5 +1,5 @@
-import {GetPingRequest, GetPingResponse,} from '../../contracts/pings/v1/pings';
-import {protoBuf} from '../../lib/middleware/protobuf-middleware';
+import {GetPingRequest, GetPingResponse, Ping,} from '../../contracts/pings/v1/pings';
+import {createProtoBufOkResponse, protoBuf} from '../../lib/middleware/protobuf-middleware';
 import {addRouter, route} from '../../lib/middleware/router-middleware';
 import {onFetch} from '../../lib/starter/on-fetch';
 
@@ -17,17 +17,15 @@ export default {
     addRouter([
       route(
         'POST',
-        [],
+        ['v1', 'get-ping'],
         protoBuf(
           GetPingRequest,
           GetPingResponse,
           async (request, env, context) => {
-            return {
-              ping: {
-                pingId: context.proto.body.pingId,
-                message: 'pong',
-              },
-            };
+            return createProtoBufOkResponse<Ping>({
+              pingId: context.proto.body.pingId,
+              message: 'pong',
+            });
           },
         ),
       ),

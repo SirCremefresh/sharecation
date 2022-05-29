@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {ApiTesterService} from '../api-tester.service';
 
 @Component({
@@ -6,13 +6,10 @@ import {ApiTesterService} from '../api-tester.service';
   templateUrl: './select-wire-type.component.html',
   styleUrls: ['./select-wire-type.component.scss']
 })
-export class SelectWireTypeComponent implements OnInit {
+export class SelectWireTypeComponent {
 
 
   constructor(private readonly apiTesterService: ApiTesterService) {
-  }
-
-  ngOnInit(): void {
   }
 
   requestFormatChanged(value: 'json' | 'proto') {

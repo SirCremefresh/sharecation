@@ -21,3 +21,12 @@ class GroupsEventAdd extends GroupsEvent {
   @override
   List<Object?> get props => [name];
 }
+
+class GroupsEventSelect extends GroupsEvent {
+  final String groupId;
+
+  const GroupsEventSelect({required this.groupId});
+
+  @override
+  List<Object?> get props => [groupId];
+}

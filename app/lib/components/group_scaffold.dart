@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sharecation_app/api/contracts/groups/v1/groups.pb.dart';
-import 'package:sharecation_app/blocs/active_group_bloc.dart';
 import 'package:sharecation_app/blocs/groups_bloc.dart';
 import 'package:sharecation_app/repositories/image_repository.dart';
 
@@ -137,8 +136,8 @@ class DrawerGroupsList extends StatelessWidget {
             itemBuilder: (BuildContext context, int index) {
               return TextButton(
                 onPressed: () {
-                  context.read<ActiveGroupBloc>().add(
-                        SelectGroupEvent(groupId: groups[index].groupId),
+                  context.read<GroupsBloc>().add(
+                        GroupsEventSelect(groupId: groups[index].groupId),
                       );
                 },
                 child: Text(groups[index].name),

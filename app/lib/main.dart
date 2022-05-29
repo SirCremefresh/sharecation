@@ -5,7 +5,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:sharecation_app/blocs/active_group_bloc.dart';
 import 'package:sharecation_app/blocs/authentication_bloc.dart';
 import 'package:sharecation_app/blocs/groups_bloc.dart';
 import 'package:sharecation_app/blocs/images_bloc.dart';
@@ -31,23 +30,19 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(
-          create: (context) => GroupsBloc(),
-        ),
+
         BlocProvider(
           create: (context) => ImagesBloc(),
         ),
         BlocProvider(
-          create: (context) => ActiveGroupBloc(
+          create: (context) => GroupsBloc(
             imagesBloc: context.read<ImagesBloc>(),
-            groupsBloc: context.read<GroupsBloc>(),
           ),
         ),
         BlocProvider(
           create: (context) => AuthenticationBloc(
             imagesBloc: context.read<ImagesBloc>(),
             groupsBloc: context.read<GroupsBloc>(),
-            activeGroupBloc: context.read<ActiveGroupBloc>(),
           ),
         ),
       ],

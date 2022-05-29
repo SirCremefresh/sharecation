@@ -1,5 +1,6 @@
 import {expect, test} from '@jest/globals';
 import {GetPingRequest, GetPingResponse} from '../../contracts/pings/v1/pings';
+import {unwrapOk} from '../../test-lib/response-lib';
 import ping from './main';
 
 // const { COMMON } = getMiniflareBindings();
@@ -15,13 +16,6 @@ function buildFakeContext(): ExecutionContext {
   };
 }
 
-function unwrapOk(responseBody: GetPingResponse) {
-  if (responseBody.response.oneofKind === 'ok') {
-    return responseBody.response.ok;
-  }
-  expect(responseBody.response.oneofKind).toEqual('ok');
-  throw new Error('not possible');
-}
 
 test('Should return pong with given pingId', async () => {
   let pingId = 'some-id';

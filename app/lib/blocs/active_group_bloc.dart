@@ -11,7 +11,7 @@ class ActiveGroupBloc extends Bloc<ActiveGroupEvent, ActiveGroupState> {
 
   ActiveGroupBloc({required this.imagesBloc}) : super(ActiveGroupInitial()) {
     on<SelectGroupEvent>((event, emit) {
-      imagesBloc.add(GroupIdChangedEvent(groupId: event.groupId));
+      imagesBloc.add(ImagesEventLoad(groupId: event.groupId));
       emit(ActiveGroupSelected(groupId: event.groupId));
     });
   }

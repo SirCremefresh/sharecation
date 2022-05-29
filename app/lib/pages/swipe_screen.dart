@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sharecation_app/components/GroupScaffold.dart';
+import 'package:sharecation_app/components/group_scaffold.dart';
 
 class SwipeScreen extends StatefulWidget {
   final String groupId;

@@ -27,15 +27,25 @@ class _GalleryScreenState extends State<GalleryScreen> {
       child: Scaffold(body: BlocBuilder<ImagesBloc, ImagesState>(
         builder: (context, state) {
           if (state is ImagesLoaded) {
-            return buildImagesLocalList(state.images);
+            return ImagesGrid(images: state.images);
           }
           return const CircularProgressIndicator();
         },
       )),
     );
   }
+}
 
-  Widget buildImagesLocalList(List<SharecationImage> images) {
+class ImagesGrid extends StatelessWidget {
+  final List<SharecationImage> images;
+
+  const ImagesGrid({
+    required this.images,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     return GridView.builder(
       padding: const EdgeInsets.all(3),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -46,14 +56,24 @@ class _GalleryScreenState extends State<GalleryScreen> {
       itemCount: images.length,
       itemBuilder: (context, index) {
         return ClipRRect(
-            borderRadius: const BorderRadius.all(Radius.circular(3)),
-            child: buildImage(images[index]));
-        // Item rendering
+          borderRadius: const BorderRadius.all(Radius.circular(3)),
+          child: PreviewImage(image: images[index]),
+        );
       },
     );
   }
+}
 
-  Widget buildImage(SharecationImage image) {
+class PreviewImage extends StatelessWidget {
+  final SharecationImage image;
+
+  const PreviewImage({
+    required this.image,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     if (image.url != null) {
       return Image.network(image.url!, fit: BoxFit.fill);
     }

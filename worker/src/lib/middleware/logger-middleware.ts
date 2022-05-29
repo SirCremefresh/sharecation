@@ -1,6 +1,6 @@
 import {Logger} from 'workers-loki-logger';
 import {logError} from '../logger';
-import {isAuthenticatedContext, isRequestIdContext, isRouteContext, LoggerContext} from './context';
+import {isAuthenticatedContext, isRequestIdContext, isRouteContext, isTestingContext, LoggerContext} from './context';
 
 export interface LoggerConfig {
   LOKI_SECRET: string;
@@ -63,7 +63,9 @@ export function addLoggerContext<ENV extends LoggerConfig,
       if (isRouteContext(context)) {
         context.logger.mdcSet('path', context.route.path);
       }
-      await context.logger.flush();
+      if (!isTestingContext(context)) {
+        await context.logger.flush();
+      }
     }
     return response;
   };

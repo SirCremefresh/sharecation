@@ -30,7 +30,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-
         BlocProvider(
           create: (context) => ImagesBloc(),
         ),
@@ -84,31 +83,47 @@ class Router extends StatelessWidget {
           ),
           GoRoute(
             path: '/groups/:groupId/info',
-            pageBuilder: (context, state) => NoTransitionPage<void>(
-              key: state.pageKey,
-              child: GroupInfoScreen(groupId: state.params["groupId"]!),
-            ),
+            pageBuilder: (context, state) {
+              final groupId = state.params["groupId"]!;
+              context
+                  .read<GroupsBloc>()
+                  .add(GroupsEventSelect(groupId: groupId));
+              return NoTransitionPage<void>(
+                child: GroupInfoScreen(groupId: groupId),
+              );
+            },
           ),
           GoRoute(
-            path: '/groups/:groupId/gallery',
-            pageBuilder: (context, state) => NoTransitionPage<void>(
-              key: state.pageKey,
-              child: GalleryScreen(groupId: state.params["groupId"]!),
-            ),
-          ),
+              path: '/groups/:groupId/gallery',
+              pageBuilder: (context, state) {
+                final groupId = state.params["groupId"]!;
+                context
+                    .read<GroupsBloc>()
+                    .add(GroupsEventSelect(groupId: groupId));
+                return NoTransitionPage<void>(
+                  child: GalleryScreen(groupId: groupId),
+                );
+              }),
           GoRoute(
             path: '/groups/:groupId/swipe',
-            pageBuilder: (context, state) => NoTransitionPage<void>(
-              key: state.pageKey,
-              child: SwipeScreen(groupId: state.params["groupId"]!),
-            ),
+            pageBuilder: (context, state) {
+              final groupId = state.params["groupId"]!;
+              context
+                  .read<GroupsBloc>()
+                  .add(GroupsEventSelect(groupId: groupId));
+              return NoTransitionPage<void>(
+                child: SwipeScreen(groupId: groupId),
+              );
+            },
           ),
         ],
         redirect: (state) {
-          if (FirebaseAuth.instance.currentUser == null && state.location != "/sign-in") {
+          if (FirebaseAuth.instance.currentUser == null &&
+              state.location != "/sign-in") {
             return "/sign-in";
           }
-          if (FirebaseAuth.instance.currentUser != null && state.location == "/sign-in") {
+          if (FirebaseAuth.instance.currentUser != null &&
+              state.location == "/sign-in") {
             context
                 .read<AuthenticationBloc>()
                 .add(const AuthenticationEventSignedIn());

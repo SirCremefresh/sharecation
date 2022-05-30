@@ -44,9 +44,6 @@ class _SelectGroupScreenState extends State<SelectGroupScreen> {
           itemBuilder: (BuildContext context, int index) {
             return TextButton(
               onPressed: () {
-                context
-                    .read<GroupsBloc>()
-                    .add(GroupsEventSelect(groupId: groups[index].groupId));
                 context.go("/groups/${groups[index].groupId}/gallery");
               },
               child: Text(groups[index].name),

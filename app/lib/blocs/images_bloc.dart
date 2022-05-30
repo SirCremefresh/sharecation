@@ -13,7 +13,11 @@ class ImagesBloc extends Bloc<ImagesEvent, ImagesState> {
       emit(ImagesStateLoading());
       final images = await ImageRepository().listFiles(groupId: event.groupId);
       emit(ImagesStateLoaded(images: images, groupId: event.groupId));
-      if (event.force) {}
+      if (event.force) {
+        await ImageRepository()
+            .downloadImagesFromServer(groupId: event.groupId);
+        add(ImagesEventLoad(groupId: event.groupId, force: false));
+      }
     });
     on<ImagesEventAdd>((event, emit) async {
       final localState = state;

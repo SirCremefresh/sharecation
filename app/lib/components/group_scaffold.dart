@@ -136,9 +136,7 @@ class DrawerGroupsList extends StatelessWidget {
             itemBuilder: (BuildContext context, int index) {
               return TextButton(
                 onPressed: () {
-                  context.read<GroupsBloc>().add(
-                        GroupsEventSelect(groupId: groups[index].groupId),
-                      );
+                  context.go('/groups/${groups[index].groupId}/info');
                 },
                 child: Text(groups[index].name),
               );

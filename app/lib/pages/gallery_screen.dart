@@ -6,7 +6,7 @@ import 'package:sharecation_app/blocs/images_bloc.dart';
 import 'package:sharecation_app/components/group_scaffold.dart';
 import 'package:sharecation_app/dtos/sharecation_image.dart';
 
-class GalleryScreen extends StatefulWidget {
+class GalleryScreen extends StatelessWidget {
   final String groupId;
 
   const GalleryScreen({
@@ -15,15 +15,10 @@ class GalleryScreen extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<GalleryScreen> createState() => _GalleryScreenState();
-}
-
-class _GalleryScreenState extends State<GalleryScreen> {
-  @override
   Widget build(BuildContext context) {
     return Layout(
       groupScaffoldTab: GroupScaffoldTab.gallery,
-      groupId: widget.groupId,
+      groupId: groupId,
       child: Scaffold(body: BlocBuilder<ImagesBloc, ImagesState>(
         builder: (context, state) {
           if (state is! ImagesStateLoaded) {
@@ -32,7 +27,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
           if (state.images.isEmpty) {
             return const NoImages();
           }
-          return ImagesGrid(images: state.images, groupId: widget.groupId);
+          return ImagesGrid(images: state.images, groupId: groupId);
         },
       )),
     );

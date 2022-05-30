@@ -1,15 +1,8 @@
 part of 'authentication_bloc.dart';
 
-abstract class AuthenticationState extends Equatable {
-  const AuthenticationState();
-}
+@freezed
+class AuthenticationState with _$AuthenticationState {
+  const factory AuthenticationState.initialState() = _InitialState;
 
-class AuthenticationStateInitial extends AuthenticationState {
-  @override
-  List<Object> get props => [];
-}
-
-class AuthenticationStateSignedIn extends AuthenticationState {
-  @override
-  List<Object> get props => [];
+  const factory AuthenticationState.signedInState() = _SignedInState;
 }

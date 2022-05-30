@@ -87,7 +87,7 @@ class Router extends StatelessWidget {
               final groupId = state.params["groupId"]!;
               context
                   .read<GroupsBloc>()
-                  .add(GroupsEventSelect(groupId: groupId));
+                  .add(GroupsEvent.selectEvent(groupId: groupId));
               return NoTransitionPage<void>(
                 child: GroupInfoScreen(groupId: groupId),
               );
@@ -99,7 +99,7 @@ class Router extends StatelessWidget {
                 final groupId = state.params["groupId"]!;
                 context
                     .read<GroupsBloc>()
-                    .add(GroupsEventSelect(groupId: groupId));
+                    .add(GroupsEvent.selectEvent(groupId: groupId));
                 return NoTransitionPage<void>(
                   child: GalleryScreen(groupId: groupId),
                 );
@@ -110,7 +110,7 @@ class Router extends StatelessWidget {
               final groupId = state.params["groupId"]!;
               context
                   .read<GroupsBloc>()
-                  .add(GroupsEventSelect(groupId: groupId));
+                  .add(GroupsEvent.selectEvent(groupId: groupId));
               return NoTransitionPage<void>(
                 child: SwipeScreen(groupId: groupId),
               );
@@ -126,7 +126,7 @@ class Router extends StatelessWidget {
               state.location == "/sign-in") {
             context
                 .read<AuthenticationBloc>()
-                .add(const AuthenticationEventSignedIn());
+                .add(const AuthenticationEvent.signedInEvent());
             return "/groups";
           }
           return null;

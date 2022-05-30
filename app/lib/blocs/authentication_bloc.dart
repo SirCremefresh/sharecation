@@ -1,7 +1,9 @@
 import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:sharecation_app/blocs/groups_bloc.dart';
 import 'package:sharecation_app/blocs/images_bloc.dart';
+
+part 'authentication_bloc.freezed.dart';
 
 part 'authentication_event.dart';
 
@@ -15,9 +17,9 @@ class AuthenticationBloc
   AuthenticationBloc({
     required this.groupsBloc,
     required this.imagesBloc,
-  }) : super(AuthenticationStateInitial()) {
-    on<AuthenticationEventSignedIn>((event, emit) {
-      groupsBloc.add(const GroupsEventLoad());
+  }) : super(const AuthenticationState.initialState()) {
+    on<_SignedInEvent>((event, emit) {
+      groupsBloc.add(const GroupsEvent.loadEvent());
     });
   }
 }

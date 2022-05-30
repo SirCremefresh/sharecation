@@ -1,38 +1,40 @@
 import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:sharecation_app/dtos/sharecation_image.dart';
 import 'package:sharecation_app/repositories/image_repository.dart';
+
+part 'images_bloc.freezed.dart';
 
 part 'images_event.dart';
 
 part 'images_state.dart';
 
 class ImagesBloc extends Bloc<ImagesEvent, ImagesState> {
-  ImagesBloc() : super(ImagesStateLoading()) {
-    on<ImagesEventLoad>((event, emit) async {
-      emit(ImagesStateLoading());
+  ImagesBloc() : super(const ImagesState.loadingState()) {
+    on<_LoadEvent>((event, emit) async {
+      emit(const ImagesState.loadingState());
       final images = await ImageRepository().listFiles(groupId: event.groupId);
-      emit(ImagesStateLoaded(images: images, groupId: event.groupId));
+      emit(ImagesState.loadedState(images: images, groupId: event.groupId));
       if (event.force) {
         await ImageRepository()
             .downloadImagesFromServer(groupId: event.groupId);
-        add(ImagesEventLoad(groupId: event.groupId, force: false));
+        add(ImagesEvent.loadEvent(groupId: event.groupId, force: false));
       }
     });
-    on<ImagesEventAdd>((event, emit) async {
+    on<_AddEvent>((event, emit) async {
       final localState = state;
-      if (localState is! ImagesStateLoaded) {
+      if (localState is! _LoadedState) {
         return;
       }
 
       await ImageRepository().saveImage(groupId: localState.groupId);
       final images =
           await ImageRepository().listFiles(groupId: localState.groupId);
-      emit(ImagesStateLoaded(images: images, groupId: localState.groupId));
+      emit(ImagesState.loadedState(images: images, groupId: localState.groupId));
     });
-    on<ImagesEventUpload>((event, emit) async {
+    on<_UploadEvent>((event, emit) async {
       final localState = state;
-      if (localState is! ImagesStateLoaded) {
+      if (localState is! _LoadedState) {
         return;
       }
 
@@ -45,10 +47,10 @@ class ImagesBloc extends Bloc<ImagesEvent, ImagesState> {
             .uploadImage(groupId: localState.groupId, path: image.path);
         localState.images.remove(image);
         localState.images.add(uploadedImage);
-        emit(ImagesStateLoaded(
+        emit(ImagesState.loadedState(
             images: localState.images, groupId: localState.groupId));
       }
-      add(ImagesEventLoad(groupId: localState.groupId));
+      add(ImagesEvent.loadEvent(groupId: localState.groupId));
     });
   }
 }

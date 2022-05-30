@@ -19,16 +19,16 @@ class GalleryScreen extends StatelessWidget {
     return Layout(
       groupScaffoldTab: GroupScaffoldTab.gallery,
       groupId: groupId,
-      child: Scaffold(body: BlocBuilder<ImagesBloc, ImagesState>(
-        builder: (context, state) {
-          if (state is! ImagesStateLoaded) {
-            return const CircularProgressIndicator();
-          }
-          if (state.images.isEmpty) {
-            return const NoImages();
-          }
-          return ImagesGrid(images: state.images, groupId: groupId);
-        },
+      child: Scaffold(
+          body: BlocBuilder<ImagesBloc, ImagesState>(
+        builder: (context, state) => state.when(
+            loadingState: () => const CircularProgressIndicator(),
+            loadedState: (images, groupId) {
+              if (images.isEmpty) {
+                return const NoImages();
+              }
+              return ImagesGrid(images: images, groupId: groupId);
+            }),
       )),
     );
   }
@@ -73,7 +73,9 @@ class ImagesGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: () async {
-        context.read<ImagesBloc>().add(ImagesEventLoad(groupId: groupId, force: true));
+        context
+            .read<ImagesBloc>()
+            .add(ImagesEvent.loadEvent(groupId: groupId, force: true));
       },
       child: GridView.builder(
         padding: const EdgeInsets.all(3),

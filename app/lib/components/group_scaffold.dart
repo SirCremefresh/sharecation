@@ -57,7 +57,7 @@ class Layout extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.camera),
         onPressed: () async {
-          context.read<ImagesBloc>().add(ImagesEventAdd());
+          context.read<ImagesBloc>().add(const ImagesEvent.addEvent());
         },
       ),
     );
@@ -77,12 +77,11 @@ class SharecationDrawer extends StatelessWidget {
         children: [
           shareCationDrawerHeader(),
           BlocBuilder<GroupsBloc, GroupsState>(
-            builder: (context, state) {
-              if (state is GroupsStateLoaded) {
-                return DrawerGroupsList(groups: state.groups);
-              }
-              return const CircularProgressIndicator();
-            },
+            builder: (context, state) => state.when(
+              loadingState: () => const CircularProgressIndicator(),
+              loadedState: (groups, activeGroup) =>
+                  DrawerGroupsList(groups: groups),
+            ),
           ),
           TextButton(
             onPressed: () {
@@ -128,7 +127,9 @@ class DrawerGroupsList extends StatelessWidget {
     return Expanded(
       child: RefreshIndicator(
         onRefresh: () async {
-          context.read<GroupsBloc>().add(const GroupsEventLoad(force: true));
+          context
+              .read<GroupsBloc>()
+              .add(const GroupsEvent.loadEvent(force: true));
         },
         child: ListView.builder(
             padding: EdgeInsets.zero,
@@ -203,7 +204,7 @@ class _CreateGroupState extends State<CreateGroup> {
                 onPressed: () async {
                   context
                       .read<GroupsBloc>()
-                      .add(GroupsEventAdd(name: _controller.value.text));
+                      .add(GroupsEvent.addEvent(name: _controller.value.text));
                   Navigator.pop(context);
                 },
                 child: const Text("create")),

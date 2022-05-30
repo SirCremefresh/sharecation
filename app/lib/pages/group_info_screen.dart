@@ -34,17 +34,21 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 20),
               ),
-              if (state is GroupsStateLoaded) ...[
-                Text("Name: ${state.activeGroup.name}"),
-                Text("GroupId: ${state.activeGroup.groupId}"),
-                const NotUploadedPictures(),
-                IconButton(
-                  onPressed: () {
-                    context.read<ImagesBloc>().add(ImagesEventUpload());
-                  },
-                  icon: const Icon(Icons.cloud_upload_outlined),
-                ),
-              ]
+              ...state.maybeWhen<List<Widget>>(
+                  loadedState: (groups, activeGroup) => [
+                        Text("Name: ${activeGroup.name}"),
+                        Text("GroupId: ${activeGroup.groupId}"),
+                        const NotUploadedPictures(),
+                        IconButton(
+                          onPressed: () {
+                            context
+                                .read<ImagesBloc>()
+                                .add(const ImagesEvent.uploadEvent());
+                          },
+                          icon: const Icon(Icons.cloud_upload_outlined),
+                        ),
+                      ],
+                  orElse: () => [])
             ],
           );
         },
@@ -61,12 +65,15 @@ class NotUploadedPictures extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ImagesBloc, ImagesState>(builder: (context, state) {
-      if (state is! ImagesStateLoaded) {
-        return const SizedBox.shrink();
-      }
-      final localImages =
-          state.images.where((element) => element.status == SharecationImageStatus.localOnly).toList();
-      return Text("Not backed up images ${localImages.length}");
+      return state.when(
+          loadingState: () => const SizedBox.shrink(),
+          loadedState: (images, groupId) {
+            final localImages = images
+                .where((element) =>
+                    element.status == SharecationImageStatus.localOnly)
+                .toList();
+            return Text("Not backed up images ${localImages.length}");
+          });
     });
   }
 }

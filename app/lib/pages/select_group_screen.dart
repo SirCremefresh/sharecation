@@ -25,10 +25,10 @@ class _SelectGroupScreenState extends State<SelectGroupScreen> {
           const Text("Select A group"),
           BlocBuilder<GroupsBloc, GroupsState>(
             builder: (context, state) {
-              if (state is GroupsStateLoaded) {
-                return buildGroupsList(context, state.groups);
-              }
-              return const CircularProgressIndicator();
+              return state.when(
+                  loadingState: () => const CircularProgressIndicator(),
+                  loadedState: (groups, activeGroup) =>
+                      buildGroupsList(context, groups));
             },
           ),
         ],

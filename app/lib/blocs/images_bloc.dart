@@ -13,6 +13,8 @@ class ImagesBloc extends Bloc<ImagesEvent, ImagesState> {
       emit(ImagesStateLoading());
       final images = await ImageRepository().listFiles(groupId: event.groupId);
       emit(ImagesStateLoaded(images: images, groupId: event.groupId));
+      if (event.force) {
+      }
     });
     on<ImagesEventAdd>((event, emit) async {
       final localState = state;
@@ -31,14 +33,17 @@ class ImagesBloc extends Bloc<ImagesEvent, ImagesState> {
         return;
       }
 
-      final localImages =
-          localState.images.where((element) => element.path != null).toList();
+      final localImages = localState.images
+          .where(
+              (element) => element.status == SharecationImageStatus.localOnly)
+          .toList();
       for (var image in localImages) {
-        await ImageRepository()
-            .uploadImage(groupId: localState.groupId, path: image.path!);
-        final images =
-            await ImageRepository().listFiles(groupId: localState.groupId);
-        emit(ImagesStateLoaded(images: images, groupId: localState.groupId));
+        final uploadedImage = await ImageRepository()
+            .uploadImage(groupId: localState.groupId, path: image.path);
+        localState.images.remove(image);
+        localState.images.add(uploadedImage);
+        emit(ImagesStateLoaded(
+            images: localState.images, groupId: localState.groupId));
       }
     });
   }

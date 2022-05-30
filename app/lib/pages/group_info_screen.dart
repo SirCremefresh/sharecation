@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sharecation_app/blocs/groups_bloc.dart';
 import 'package:sharecation_app/blocs/images_bloc.dart';
 import 'package:sharecation_app/components/group_scaffold.dart';
+import 'package:sharecation_app/dtos/sharecation_image.dart';
 
 class GroupInfoScreen extends StatefulWidget {
   final String groupId;
@@ -64,7 +65,7 @@ class NotUploadedPictures extends StatelessWidget {
         return const SizedBox.shrink();
       }
       final localImages =
-          state.images.where((element) => element.path != null).toList();
+          state.images.where((element) => element.status == SharecationImageStatus.localOnly).toList();
       return Text("Not backed up images ${localImages.length}");
     });
   }

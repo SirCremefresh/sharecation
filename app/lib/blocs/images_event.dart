@@ -16,8 +16,9 @@ class ImagesEventUpload extends ImagesEvent {
 
 class ImagesEventLoad extends ImagesEvent {
   final String groupId;
+  final bool force;
 
-  const ImagesEventLoad({required this.groupId});
+  const ImagesEventLoad({required this.groupId, this.force = false});
 
   @override
   List<Object> get props => [groupId];

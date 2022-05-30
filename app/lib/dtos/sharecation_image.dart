@@ -1,6 +1,10 @@
 class SharecationImage {
-  final String? url;
-  final String? path;
+  final String imageId;
+  final SharecationImageStatus status;
+  final String path;
 
-  const SharecationImage({this.url, this.path});
+  const SharecationImage(
+      {required this.imageId, required this.status, required this.path});
 }
+
+enum SharecationImageStatus { localOnly, synced }

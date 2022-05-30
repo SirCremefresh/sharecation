@@ -32,7 +32,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
           if (state.images.isEmpty) {
             return const NoImages();
           }
-          return ImagesGrid(images: state.images);
+          return ImagesGrid(images: state.images, groupId: widget.groupId);
         },
       )),
     );
@@ -66,28 +66,35 @@ class NoImages extends StatelessWidget {
 
 class ImagesGrid extends StatelessWidget {
   final List<SharecationImage> images;
+  final String groupId;
 
   const ImagesGrid({
     required this.images,
+    required this.groupId,
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
-      padding: const EdgeInsets.all(3),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisSpacing: 3,
-        mainAxisSpacing: 3,
-        crossAxisCount: 3,
-      ),
-      itemCount: images.length,
-      itemBuilder: (context, index) {
-        return ClipRRect(
-          borderRadius: const BorderRadius.all(Radius.circular(3)),
-          child: PreviewImage(image: images[index]),
-        );
+    return RefreshIndicator(
+      onRefresh: () async {
+        context.read<ImagesBloc>().add(ImagesEventLoad(groupId: groupId, force: true));
       },
+      child: GridView.builder(
+        padding: const EdgeInsets.all(3),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisSpacing: 3,
+          mainAxisSpacing: 3,
+          crossAxisCount: 3,
+        ),
+        itemCount: images.length,
+        itemBuilder: (context, index) {
+          return ClipRRect(
+            borderRadius: const BorderRadius.all(Radius.circular(3)),
+            child: PreviewImage(image: images[index]),
+          );
+        },
+      ),
     );
   }
 }
@@ -102,11 +109,11 @@ class PreviewImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (image.url != null) {
-      return Image.network(image.url!, fit: BoxFit.fill);
+    if (image.status == SharecationImageStatus.synced) {
+      return Image.file(File(image.path), fit: BoxFit.fill);
     }
     return Stack(fit: StackFit.expand, children: [
-      Image.file(File(image.path!), fit: BoxFit.fill),
+      Image.file(File(image.path), fit: BoxFit.fill),
       const Positioned(right: 4, top: 4, child: Icon(Icons.cloud_off))
     ]);
   }

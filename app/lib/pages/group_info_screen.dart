@@ -33,7 +33,7 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 20),
               ),
-              if (state is GroupsLoaded) ...[
+              if (state is GroupsStateLoaded) ...[
                 Text("Name: ${state.activeGroup.name}"),
                 Text("GroupId: ${state.activeGroup.groupId}"),
                 const NotUploadedPictures(),
@@ -60,7 +60,7 @@ class NotUploadedPictures extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ImagesBloc, ImagesState>(builder: (context, state) {
-      if (state is! ImagesLoaded) {
+      if (state is! ImagesStateLoaded) {
         return const SizedBox.shrink();
       }
       final localImages =

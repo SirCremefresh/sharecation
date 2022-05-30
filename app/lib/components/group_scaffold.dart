@@ -78,7 +78,7 @@ class SharecationDrawer extends StatelessWidget {
           shareCationDrawerHeader(),
           BlocBuilder<GroupsBloc, GroupsState>(
             builder: (context, state) {
-              if (state is GroupsLoaded) {
+              if (state is GroupsStateLoaded) {
                 return DrawerGroupsList(groups: state.groups);
               }
               return const CircularProgressIndicator();
@@ -128,7 +128,7 @@ class DrawerGroupsList extends StatelessWidget {
     return Expanded(
       child: RefreshIndicator(
         onRefresh: () async {
-          context.read<GroupsBloc>().add(const LoadGroupsEvent(force: true));
+          context.read<GroupsBloc>().add(const GroupsEventLoad(force: true));
         },
         child: ListView.builder(
             padding: EdgeInsets.zero,

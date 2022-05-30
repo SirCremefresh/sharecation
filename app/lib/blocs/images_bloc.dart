@@ -8,26 +8,26 @@ part 'images_event.dart';
 part 'images_state.dart';
 
 class ImagesBloc extends Bloc<ImagesEvent, ImagesState> {
-  ImagesBloc() : super(ImagesLoading()) {
+  ImagesBloc() : super(ImagesStateLoading()) {
     on<ImagesEventLoad>((event, emit) async {
-      emit(ImagesLoading());
+      emit(ImagesStateLoading());
       final images = await ImageRepository().listFiles(groupId: event.groupId);
-      emit(ImagesLoaded(images: images, groupId: event.groupId));
+      emit(ImagesStateLoaded(images: images, groupId: event.groupId));
     });
     on<ImagesEventAdd>((event, emit) async {
       final localState = state;
-      if (localState is! ImagesLoaded) {
+      if (localState is! ImagesStateLoaded) {
         return;
       }
 
       await ImageRepository().saveImage(groupId: localState.groupId);
       final images =
           await ImageRepository().listFiles(groupId: localState.groupId);
-      emit(ImagesLoaded(images: images, groupId: localState.groupId));
+      emit(ImagesStateLoaded(images: images, groupId: localState.groupId));
     });
     on<ImagesEventUpload>((event, emit) async {
       final localState = state;
-      if (localState is! ImagesLoaded) {
+      if (localState is! ImagesStateLoaded) {
         return;
       }
 
@@ -38,7 +38,7 @@ class ImagesBloc extends Bloc<ImagesEvent, ImagesState> {
             .uploadImage(groupId: localState.groupId, path: image.path!);
         final images =
             await ImageRepository().listFiles(groupId: localState.groupId);
-        emit(ImagesLoaded(images: images, groupId: localState.groupId));
+        emit(ImagesStateLoaded(images: images, groupId: localState.groupId));
       }
     });
   }

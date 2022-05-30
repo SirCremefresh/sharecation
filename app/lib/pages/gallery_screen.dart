@@ -26,7 +26,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
       groupId: widget.groupId,
       child: Scaffold(body: BlocBuilder<ImagesBloc, ImagesState>(
         builder: (context, state) {
-          if (state is! ImagesLoaded) {
+          if (state is! ImagesStateLoaded) {
             return const CircularProgressIndicator();
           }
           if (state.images.isEmpty) {

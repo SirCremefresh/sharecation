@@ -4,10 +4,10 @@ abstract class GroupsEvent extends Equatable {
   const GroupsEvent();
 }
 
-class LoadGroupsEvent extends GroupsEvent {
+class GroupsEventLoad extends GroupsEvent {
   final bool force;
 
-  const LoadGroupsEvent({this.force = false});
+  const GroupsEventLoad({this.force = false});
 
   @override
   List<Object?> get props => [force];

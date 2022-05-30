@@ -15,9 +15,9 @@ class AuthenticationBloc
   AuthenticationBloc({
     required this.groupsBloc,
     required this.imagesBloc,
-  }) : super(AuthenticationInitial()) {
+  }) : super(AuthenticationStateInitial()) {
     on<AuthenticationEventSignedIn>((event, emit) {
-      groupsBloc.add(const LoadGroupsEvent());
+      groupsBloc.add(const GroupsEventLoad());
     });
   }
 }

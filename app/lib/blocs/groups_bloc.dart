@@ -11,29 +11,29 @@ part 'groups_state.dart';
 class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
   final ImagesBloc imagesBloc;
 
-  GroupsBloc({required this.imagesBloc}) : super(GroupsLoading()) {
-    on<LoadGroupsEvent>((event, emit) async {
+  GroupsBloc({required this.imagesBloc}) : super(GroupsStateLoading()) {
+    on<GroupsEventLoad>((event, emit) async {
       if (event.force) {
         authenticationService.invalidate();
       }
       var groups = await api.groups.getGroups();
       var activeGroup = groups[0];
-      emit(GroupsLoaded(groups: groups, activeGroup: activeGroup));
+      emit(GroupsStateLoaded(groups: groups, activeGroup: activeGroup));
       imagesBloc.add(ImagesEventLoad(groupId: activeGroup.groupId));
     });
     on<GroupsEventAdd>((event, emit) async {
       final group = await api.groups.createGroup(groupName: event.name);
       authenticationService.invalidate();
       final groups = await api.groups.getGroups();
-      emit(GroupsLoaded(groups: groups, activeGroup: group));
+      emit(GroupsStateLoaded(groups: groups, activeGroup: group));
     });
     on<GroupsEventSelect>((event, emit) async {
-      if (state is GroupsLoaded) {
-        GroupsLoaded groupsLoaded = state as GroupsLoaded;
+      if (state is GroupsStateLoaded) {
+        GroupsStateLoaded groupsLoaded = state as GroupsStateLoaded;
         final activeGroup = groupsLoaded.groups
             .firstWhere((element) => element.groupId == event.groupId);
 
-        emit(GroupsLoaded(
+        emit(GroupsStateLoaded(
             groups: groupsLoaded.groups, activeGroup: activeGroup));
         imagesBloc.add(ImagesEventLoad(groupId: activeGroup.groupId));
       }

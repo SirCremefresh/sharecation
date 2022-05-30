@@ -4,12 +4,12 @@ abstract class AuthenticationState extends Equatable {
   const AuthenticationState();
 }
 
-class AuthenticationInitial extends AuthenticationState {
+class AuthenticationStateInitial extends AuthenticationState {
   @override
   List<Object> get props => [];
 }
 
-class AuthenticationSignedIn extends AuthenticationState {
+class AuthenticationStateSignedIn extends AuthenticationState {
   @override
   List<Object> get props => [];
 }

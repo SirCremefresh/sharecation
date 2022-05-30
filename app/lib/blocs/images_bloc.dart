@@ -13,8 +13,7 @@ class ImagesBloc extends Bloc<ImagesEvent, ImagesState> {
       emit(ImagesStateLoading());
       final images = await ImageRepository().listFiles(groupId: event.groupId);
       emit(ImagesStateLoaded(images: images, groupId: event.groupId));
-      if (event.force) {
-      }
+      if (event.force) {}
     });
     on<ImagesEventAdd>((event, emit) async {
       final localState = state;
@@ -45,6 +44,7 @@ class ImagesBloc extends Bloc<ImagesEvent, ImagesState> {
         emit(ImagesStateLoaded(
             images: localState.images, groupId: localState.groupId));
       }
+      add(ImagesEventLoad(groupId: localState.groupId));
     });
   }
 }

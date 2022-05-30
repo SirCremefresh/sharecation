@@ -21,9 +21,9 @@ export interface Image {
      */
     imageId: string;
     /**
-     * @generated from protobuf field: string type = 2;
+     * @generated from protobuf field: string url = 2;
      */
-    type: string;
+    url: string;
 }
 /**
  * @generated from protobuf message images.v1.Images
@@ -105,11 +105,11 @@ class Image$Type extends MessageType<Image> {
     constructor() {
         super("images.v1.Image", [
             { no: 1, name: "image_id", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 2, name: "type", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
+            { no: 2, name: "url", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
         ]);
     }
     create(value?: PartialMessage<Image>): Image {
-        const message = { imageId: "", type: "" };
+        const message = { imageId: "", url: "" };
         globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
         if (value !== undefined)
             reflectionMergePartial<Image>(this, message, value);
@@ -123,8 +123,8 @@ class Image$Type extends MessageType<Image> {
                 case /* string image_id */ 1:
                     message.imageId = reader.string();
                     break;
-                case /* string type */ 2:
-                    message.type = reader.string();
+                case /* string url */ 2:
+                    message.url = reader.string();
                     break;
                 default:
                     let u = options.readUnknownField;
@@ -141,9 +141,9 @@ class Image$Type extends MessageType<Image> {
         /* string image_id = 1; */
         if (message.imageId !== "")
             writer.tag(1, WireType.LengthDelimited).string(message.imageId);
-        /* string type = 2; */
-        if (message.type !== "")
-            writer.tag(2, WireType.LengthDelimited).string(message.type);
+        /* string url = 2; */
+        if (message.url !== "")
+            writer.tag(2, WireType.LengthDelimited).string(message.url);
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);

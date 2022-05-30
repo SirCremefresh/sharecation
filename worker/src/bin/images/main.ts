@@ -71,6 +71,10 @@ async function uploadFile(
   ).then((res) => res.json<UploadImageResponse>());
 }
 
+function getUrlFromImageId(imageId: string) {
+  return `https://imagedelivery.net/lBSTOnVnm_g3jeLWNwAYiA/${imageId}/preview`;
+}
+
 // noinspection JSUnusedGlobalSymbols
 export default {
   fetch: onFetch<EnvironmentVariables>(
@@ -96,7 +100,7 @@ export default {
                 prefix: IMAGES_KV.IMAGES_GROUP(groupId),
                 cursor: context.proto.body.cursor,
               });
-              const imageUrls = [];
+              const images = [];
               for (const key of results.keys) {
                 const metadata = key.metadata;
                 if (!isImageMetadata(metadata)) {
@@ -108,16 +112,14 @@ export default {
                     BasicError_BasicErrorCode.INTERNAL,
                   );
                 }
-                imageUrls.push(
-                  `https://imagedelivery.net/lBSTOnVnm_g3jeLWNwAYiA/${metadata.imageId}/preview`,
-                );
+                images.push({
+                  imageId: metadata.imageId,
+                  url: getUrlFromImageId(metadata.imageId),
+                });
               }
 
               return createProtoBufOkResponse<Images>({
-                images: imageUrls.map((url) => ({
-                  imageId: url,
-                  type: '',
-                })),
+                images,
                 cursor: results.cursor,
               });
             },
@@ -181,22 +183,23 @@ export default {
 
               context.logger.info('Image uploaded successfully');
 
+              let imageId = res.result.id;
               const imageKey = IMAGES_KV.IMAGE(
                 groupId,
                 new Date().toISOString(),
-                res.result.id,
+                imageId,
               );
               env.IMAGES.put(
                 imageKey,
-                JSON.stringify({imageId: res.result.id}),
+                JSON.stringify({imageId: imageId}),
                 {
-                  metadata: {imageId: res.result.id},
+                  metadata: {imageId: imageId},
                 },
               );
 
               return createProtoBufOkResponse<Image>({
-                imageId: res.result.id,
-                type: file.type,
+                imageId: imageId,
+                url: getUrlFromImageId(imageId),
               });
             },
           ),

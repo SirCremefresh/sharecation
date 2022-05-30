@@ -2,12 +2,14 @@ name = "sharecation-authentication-scheduled"
 compatibility_date = "2022-04-01"
 usage_model = "unbound"
 legacy_env = true
+workers_dev = false
 
 [vars]
 ENVIRONMENT = ""
 
 [triggers]
-crons = ["0 0 * * mon"]
+# At 03:00 on Monday, Wednesday, and Friday.
+crons = ["0 3 * * 2,4,6"]
 
 [env.development]
 vars = { ENVIRONMENT = "development" }

@@ -105,16 +105,16 @@ class Router extends StatelessWidget {
           ),
         ],
         redirect: (state) {
-          String? newPath;
-          if (FirebaseAuth.instance.currentUser == null) {
-            newPath = "/sign-in";
-          } else if (state.location == "/sign-in") {
-            newPath = "/groups";
+          if (FirebaseAuth.instance.currentUser == null && state.location != "/sign-in") {
+            return "/sign-in";
+          }
+          if (FirebaseAuth.instance.currentUser != null && state.location == "/sign-in") {
             context
                 .read<AuthenticationBloc>()
                 .add(const AuthenticationEventSignedIn());
+            return "/groups";
           }
-          return newPath;
+          return null;
         });
   }
 }

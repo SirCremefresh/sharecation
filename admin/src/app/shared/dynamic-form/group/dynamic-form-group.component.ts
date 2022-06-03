@@ -1,5 +1,5 @@
 import {Component, forwardRef, Input, OnInit} from '@angular/core';
-import {ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR} from '@angular/forms';
+import {ControlValueAccessor, UntypedFormControl, UntypedFormGroup, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {DynamicFormConfig, DynamicFormConfigGroup} from '../dynamic-form-config.model';
 
 @Component({
@@ -15,7 +15,7 @@ import {DynamicFormConfig, DynamicFormConfigGroup} from '../dynamic-form-config.
   ]
 })
 export class DynamicFormGroupComponent implements OnInit, ControlValueAccessor {
-  public formGroup: FormGroup = new FormGroup({});
+  public formGroup: UntypedFormGroup = new UntypedFormGroup({});
 
   _config!: DynamicFormConfigGroup;
 
@@ -29,7 +29,7 @@ export class DynamicFormGroupComponent implements OnInit, ControlValueAccessor {
 
   ngOnInit() {
     for (let child of this._config.children) {
-      this.formGroup.addControl(child.name, new FormControl());
+      this.formGroup.addControl(child.name, new UntypedFormControl());
     }
   }
 

@@ -1,5 +1,5 @@
 import {Component, forwardRef, Input} from '@angular/core';
-import {ControlValueAccessor, FormArray, FormControl, FormGroup, NG_VALUE_ACCESSOR} from '@angular/forms';
+import {ControlValueAccessor, UntypedFormArray, UntypedFormControl, UntypedFormGroup, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {NOOP_FN} from '../../../util/noop';
 import {DynamicFormConfig} from '../dynamic-form-config.model';
 
@@ -17,16 +17,16 @@ import {DynamicFormConfig} from '../dynamic-form-config.model';
 })
 export class DynamicFormRepeatedComponent implements ControlValueAccessor {
   @Input() config!: DynamicFormConfig;
-  public formArray = new FormArray([
-    new FormControl()
+  public formArray = new UntypedFormArray([
+    new UntypedFormControl()
   ]);
-  formGroup = new FormGroup({
+  formGroup = new UntypedFormGroup({
     array: this.formArray
   });
   public onTouched = NOOP_FN;
 
   add() {
-    this.formArray.push(new FormControl());
+    this.formArray.push(new UntypedFormControl());
   }
 
   writeValue(val: any): void {

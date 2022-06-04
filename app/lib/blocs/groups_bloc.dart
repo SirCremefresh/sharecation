@@ -5,6 +5,7 @@ import 'package:sharecation_app/blocs/images_bloc.dart';
 import 'package:sharecation_app/service/api_service.dart';
 
 part 'groups_bloc.freezed.dart';
+part 'groups_bloc.g.dart';
 
 part 'groups_event.dart';
 

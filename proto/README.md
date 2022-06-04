@@ -36,3 +36,9 @@ docker run -t --rm -v $(pwd):/tmp/ donatowolfisberg/sharecation-proto-builder:ma
 ```bash
 docker run -t --rm -v $(pwd):/tmp/ donatowolfisberg/sharecation-proto-builder:master buf format --write
 ```
+
+### breaking
+
+```bash
+docker run -t --rm -v $(pwd):/tmp/ donatowolfisberg/sharecation-proto-builder:master buf breaking --against 'https://github.com/SirCremefresh/sharecation.git#branch=master,subdir=proto'
+```

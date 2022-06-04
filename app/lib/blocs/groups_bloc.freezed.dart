@@ -815,3 +815,421 @@ abstract class _LoadedState implements GroupsState {
   _$$_LoadedStateCopyWith<_$_LoadedState> get copyWith =>
       throw _privateConstructorUsedError;
 }
+
+SharecationImage _$SharecationImageFromJson(Map<String, dynamic> json) {
+  return _SharecationImage.fromJson(json);
+}
+
+/// @nodoc
+mixin _$SharecationImage {
+  String get localId => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $SharecationImageCopyWith<SharecationImage> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $SharecationImageCopyWith<$Res> {
+  factory $SharecationImageCopyWith(
+          SharecationImage value, $Res Function(SharecationImage) then) =
+      _$SharecationImageCopyWithImpl<$Res>;
+  $Res call({String localId});
+}
+
+/// @nodoc
+class _$SharecationImageCopyWithImpl<$Res>
+    implements $SharecationImageCopyWith<$Res> {
+  _$SharecationImageCopyWithImpl(this._value, this._then);
+
+  final SharecationImage _value;
+  // ignore: unused_field
+  final $Res Function(SharecationImage) _then;
+
+  @override
+  $Res call({
+    Object? localId = freezed,
+  }) {
+    return _then(_value.copyWith(
+      localId: localId == freezed
+          ? _value.localId
+          : localId // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+abstract class _$$_SharecationImageCopyWith<$Res>
+    implements $SharecationImageCopyWith<$Res> {
+  factory _$$_SharecationImageCopyWith(
+          _$_SharecationImage value, $Res Function(_$_SharecationImage) then) =
+      __$$_SharecationImageCopyWithImpl<$Res>;
+  @override
+  $Res call({String localId});
+}
+
+/// @nodoc
+class __$$_SharecationImageCopyWithImpl<$Res>
+    extends _$SharecationImageCopyWithImpl<$Res>
+    implements _$$_SharecationImageCopyWith<$Res> {
+  __$$_SharecationImageCopyWithImpl(
+      _$_SharecationImage _value, $Res Function(_$_SharecationImage) _then)
+      : super(_value, (v) => _then(v as _$_SharecationImage));
+
+  @override
+  _$_SharecationImage get _value => super._value as _$_SharecationImage;
+
+  @override
+  $Res call({
+    Object? localId = freezed,
+  }) {
+    return _then(_$_SharecationImage(
+      localId: localId == freezed
+          ? _value.localId
+          : localId // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$_SharecationImage implements _SharecationImage {
+  const _$_SharecationImage({required this.localId});
+
+  factory _$_SharecationImage.fromJson(Map<String, dynamic> json) =>
+      _$$_SharecationImageFromJson(json);
+
+  @override
+  final String localId;
+
+  @override
+  String toString() {
+    return 'SharecationImage(localId: $localId)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_SharecationImage &&
+            const DeepCollectionEquality().equals(other.localId, localId));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(localId));
+
+  @JsonKey(ignore: true)
+  @override
+  _$$_SharecationImageCopyWith<_$_SharecationImage> get copyWith =>
+      __$$_SharecationImageCopyWithImpl<_$_SharecationImage>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$_SharecationImageToJson(this);
+  }
+}
+
+abstract class _SharecationImage implements SharecationImage {
+  const factory _SharecationImage({required final String localId}) =
+      _$_SharecationImage;
+
+  factory _SharecationImage.fromJson(Map<String, dynamic> json) =
+      _$_SharecationImage.fromJson;
+
+  @override
+  String get localId => throw _privateConstructorUsedError;
+  @override
+  @JsonKey(ignore: true)
+  _$$_SharecationImageCopyWith<_$_SharecationImage> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+SharecationGroup _$SharecationGroupFromJson(Map<String, dynamic> json) {
+  return _SharecationGroup.fromJson(json);
+}
+
+/// @nodoc
+mixin _$SharecationGroup {
+  Map<String, SharecationImage> get images =>
+      throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $SharecationGroupCopyWith<SharecationGroup> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $SharecationGroupCopyWith<$Res> {
+  factory $SharecationGroupCopyWith(
+          SharecationGroup value, $Res Function(SharecationGroup) then) =
+      _$SharecationGroupCopyWithImpl<$Res>;
+  $Res call({Map<String, SharecationImage> images});
+}
+
+/// @nodoc
+class _$SharecationGroupCopyWithImpl<$Res>
+    implements $SharecationGroupCopyWith<$Res> {
+  _$SharecationGroupCopyWithImpl(this._value, this._then);
+
+  final SharecationGroup _value;
+  // ignore: unused_field
+  final $Res Function(SharecationGroup) _then;
+
+  @override
+  $Res call({
+    Object? images = freezed,
+  }) {
+    return _then(_value.copyWith(
+      images: images == freezed
+          ? _value.images
+          : images // ignore: cast_nullable_to_non_nullable
+              as Map<String, SharecationImage>,
+    ));
+  }
+}
+
+/// @nodoc
+abstract class _$$_SharecationGroupCopyWith<$Res>
+    implements $SharecationGroupCopyWith<$Res> {
+  factory _$$_SharecationGroupCopyWith(
+          _$_SharecationGroup value, $Res Function(_$_SharecationGroup) then) =
+      __$$_SharecationGroupCopyWithImpl<$Res>;
+  @override
+  $Res call({Map<String, SharecationImage> images});
+}
+
+/// @nodoc
+class __$$_SharecationGroupCopyWithImpl<$Res>
+    extends _$SharecationGroupCopyWithImpl<$Res>
+    implements _$$_SharecationGroupCopyWith<$Res> {
+  __$$_SharecationGroupCopyWithImpl(
+      _$_SharecationGroup _value, $Res Function(_$_SharecationGroup) _then)
+      : super(_value, (v) => _then(v as _$_SharecationGroup));
+
+  @override
+  _$_SharecationGroup get _value => super._value as _$_SharecationGroup;
+
+  @override
+  $Res call({
+    Object? images = freezed,
+  }) {
+    return _then(_$_SharecationGroup(
+      images: images == freezed
+          ? _value._images
+          : images // ignore: cast_nullable_to_non_nullable
+              as Map<String, SharecationImage>,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$_SharecationGroup implements _SharecationGroup {
+  const _$_SharecationGroup(
+      {required final Map<String, SharecationImage> images})
+      : _images = images;
+
+  factory _$_SharecationGroup.fromJson(Map<String, dynamic> json) =>
+      _$$_SharecationGroupFromJson(json);
+
+  final Map<String, SharecationImage> _images;
+  @override
+  Map<String, SharecationImage> get images {
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(_images);
+  }
+
+  @override
+  String toString() {
+    return 'SharecationGroup(images: $images)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_SharecationGroup &&
+            const DeepCollectionEquality().equals(other._images, _images));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(_images));
+
+  @JsonKey(ignore: true)
+  @override
+  _$$_SharecationGroupCopyWith<_$_SharecationGroup> get copyWith =>
+      __$$_SharecationGroupCopyWithImpl<_$_SharecationGroup>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$_SharecationGroupToJson(this);
+  }
+}
+
+abstract class _SharecationGroup implements SharecationGroup {
+  const factory _SharecationGroup(
+          {required final Map<String, SharecationImage> images}) =
+      _$_SharecationGroup;
+
+  factory _SharecationGroup.fromJson(Map<String, dynamic> json) =
+      _$_SharecationGroup.fromJson;
+
+  @override
+  Map<String, SharecationImage> get images =>
+      throw _privateConstructorUsedError;
+  @override
+  @JsonKey(ignore: true)
+  _$$_SharecationGroupCopyWith<_$_SharecationGroup> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+SharecationGroups _$SharecationGroupsFromJson(Map<String, dynamic> json) {
+  return _SharecationGroups.fromJson(json);
+}
+
+/// @nodoc
+mixin _$SharecationGroups {
+  Map<String, SharecationGroup> get groups =>
+      throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $SharecationGroupsCopyWith<SharecationGroups> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $SharecationGroupsCopyWith<$Res> {
+  factory $SharecationGroupsCopyWith(
+          SharecationGroups value, $Res Function(SharecationGroups) then) =
+      _$SharecationGroupsCopyWithImpl<$Res>;
+  $Res call({Map<String, SharecationGroup> groups});
+}
+
+/// @nodoc
+class _$SharecationGroupsCopyWithImpl<$Res>
+    implements $SharecationGroupsCopyWith<$Res> {
+  _$SharecationGroupsCopyWithImpl(this._value, this._then);
+
+  final SharecationGroups _value;
+  // ignore: unused_field
+  final $Res Function(SharecationGroups) _then;
+
+  @override
+  $Res call({
+    Object? groups = freezed,
+  }) {
+    return _then(_value.copyWith(
+      groups: groups == freezed
+          ? _value.groups
+          : groups // ignore: cast_nullable_to_non_nullable
+              as Map<String, SharecationGroup>,
+    ));
+  }
+}
+
+/// @nodoc
+abstract class _$$_SharecationGroupsCopyWith<$Res>
+    implements $SharecationGroupsCopyWith<$Res> {
+  factory _$$_SharecationGroupsCopyWith(_$_SharecationGroups value,
+          $Res Function(_$_SharecationGroups) then) =
+      __$$_SharecationGroupsCopyWithImpl<$Res>;
+  @override
+  $Res call({Map<String, SharecationGroup> groups});
+}
+
+/// @nodoc
+class __$$_SharecationGroupsCopyWithImpl<$Res>
+    extends _$SharecationGroupsCopyWithImpl<$Res>
+    implements _$$_SharecationGroupsCopyWith<$Res> {
+  __$$_SharecationGroupsCopyWithImpl(
+      _$_SharecationGroups _value, $Res Function(_$_SharecationGroups) _then)
+      : super(_value, (v) => _then(v as _$_SharecationGroups));
+
+  @override
+  _$_SharecationGroups get _value => super._value as _$_SharecationGroups;
+
+  @override
+  $Res call({
+    Object? groups = freezed,
+  }) {
+    return _then(_$_SharecationGroups(
+      groups: groups == freezed
+          ? _value._groups
+          : groups // ignore: cast_nullable_to_non_nullable
+              as Map<String, SharecationGroup>,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$_SharecationGroups implements _SharecationGroups {
+  const _$_SharecationGroups(
+      {required final Map<String, SharecationGroup> groups})
+      : _groups = groups;
+
+  factory _$_SharecationGroups.fromJson(Map<String, dynamic> json) =>
+      _$$_SharecationGroupsFromJson(json);
+
+  final Map<String, SharecationGroup> _groups;
+  @override
+  Map<String, SharecationGroup> get groups {
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(_groups);
+  }
+
+  @override
+  String toString() {
+    return 'SharecationGroups(groups: $groups)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_SharecationGroups &&
+            const DeepCollectionEquality().equals(other._groups, _groups));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(_groups));
+
+  @JsonKey(ignore: true)
+  @override
+  _$$_SharecationGroupsCopyWith<_$_SharecationGroups> get copyWith =>
+      __$$_SharecationGroupsCopyWithImpl<_$_SharecationGroups>(
+          this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$_SharecationGroupsToJson(this);
+  }
+}
+
+abstract class _SharecationGroups implements SharecationGroups {
+  const factory _SharecationGroups(
+          {required final Map<String, SharecationGroup> groups}) =
+      _$_SharecationGroups;
+
+  factory _SharecationGroups.fromJson(Map<String, dynamic> json) =
+      _$_SharecationGroups.fromJson;
+
+  @override
+  Map<String, SharecationGroup> get groups =>
+      throw _privateConstructorUsedError;
+  @override
+  @JsonKey(ignore: true)
+  _$$_SharecationGroupsCopyWith<_$_SharecationGroups> get copyWith =>
+      throw _privateConstructorUsedError;
+}

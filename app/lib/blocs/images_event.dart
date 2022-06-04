@@ -1,23 +1,9 @@
 part of 'images_bloc.dart';
 
-abstract class ImagesEvent extends Equatable {
-  const ImagesEvent();
+@freezed
+class ImagesEvent with _$ImagesEvent {
+  const factory ImagesEvent.addEvent() = _AddEvent;
+  const factory ImagesEvent.uploadEvent() = _UploadEvent;
+  const factory ImagesEvent.loadEvent({required String groupId, @Default(false) bool force}) = _LoadEvent;
 }
 
-class ImagesEventAdd extends ImagesEvent {
-  final Image image;
-
-  const ImagesEventAdd({required this.image});
-
-  @override
-  List<Object> get props => [image];
-}
-
-class ImagesEventLoad extends ImagesEvent {
-  final String groupId;
-
-  const ImagesEventLoad({required this.groupId});
-
-  @override
-  List<Object> get props => [groupId];
-}

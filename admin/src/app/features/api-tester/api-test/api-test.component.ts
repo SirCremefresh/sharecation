@@ -1,6 +1,6 @@
 import {HttpClient} from '@angular/common/http';
 import {Component, Input, OnInit} from '@angular/core';
-import {FormControl, FormGroup} from '@angular/forms';
+import {UntypedFormControl, UntypedFormGroup} from '@angular/forms';
 import {FieldInfo, RepeatType, ScalarType} from '@protobuf-ts/runtime';
 import {DynamicFormConfig} from '../../../shared/dynamic-form/dynamic-form-config.model';
 import {ApiTestConfig} from '../api-test-config.model';
@@ -19,8 +19,8 @@ export class ApiTestComponent implements OnInit {
 
   dynamicFormConfig?: DynamicFormConfig;
 
-  form = new FormGroup({
-    request: new FormControl()
+  form = new UntypedFormGroup({
+    request: new UntypedFormControl()
   });
 
   constructor(

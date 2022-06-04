@@ -18,3 +18,8 @@ samples, guidance on mobile development, and a full API reference.
 
 # analyze
 flutter analyze
+
+
+
+# code gen
+flutter pub run build_runner build

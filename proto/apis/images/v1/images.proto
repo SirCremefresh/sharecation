@@ -6,7 +6,7 @@ import "errors/v1/errors.proto";
 
 message Image {
   string image_id = 1;
-  string type = 2;
+  string url = 2;
 }
 
 message Images {

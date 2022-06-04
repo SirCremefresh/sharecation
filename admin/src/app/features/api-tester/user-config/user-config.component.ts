@@ -1,6 +1,6 @@
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
-import {FormControl} from '@angular/forms';
+import {UntypedFormControl} from '@angular/forms';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {MatChipInputEvent} from '@angular/material/chips';
 import {map, Observable, startWith} from 'rxjs';
@@ -18,8 +18,8 @@ export class UserConfigComponent implements OnInit {
   @Input() configName!: Executor;
   @Input() configDisplayName: string = '';
   separatorKeysCodes: number[] = [ENTER, COMMA];
-  rolesControl = new FormControl();
-  userIdControl = new FormControl();
+  rolesControl = new UntypedFormControl();
+  userIdControl = new UntypedFormControl();
   filteredRoles: Observable<string[]>;
   roles: string[] = [];
 

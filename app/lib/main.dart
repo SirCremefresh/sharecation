@@ -5,7 +5,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:sharecation_app/blocs/active_group_bloc.dart';
 import 'package:sharecation_app/blocs/authentication_bloc.dart';
 import 'package:sharecation_app/blocs/groups_bloc.dart';
 import 'package:sharecation_app/blocs/images_bloc.dart';
@@ -32,22 +31,17 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => GroupsBloc(),
-        ),
-        BlocProvider(
           create: (context) => ImagesBloc(),
         ),
         BlocProvider(
-          create: (context) => ActiveGroupBloc(
+          create: (context) => GroupsBloc(
             imagesBloc: context.read<ImagesBloc>(),
-            groupsBloc: context.read<GroupsBloc>(),
           ),
         ),
         BlocProvider(
           create: (context) => AuthenticationBloc(
             imagesBloc: context.read<ImagesBloc>(),
             groupsBloc: context.read<GroupsBloc>(),
-            activeGroupBloc: context.read<ActiveGroupBloc>(),
           ),
         ),
       ],
@@ -89,37 +83,53 @@ class Router extends StatelessWidget {
           ),
           GoRoute(
             path: '/groups/:groupId/info',
-            pageBuilder: (context, state) => NoTransitionPage<void>(
-              key: state.pageKey,
-              child: GroupInfoScreen(groupId: state.params["groupId"]!),
-            ),
+            pageBuilder: (context, state) {
+              final groupId = state.params["groupId"]!;
+              context
+                  .read<GroupsBloc>()
+                  .add(GroupsEvent.selectEvent(groupId: groupId));
+              return NoTransitionPage<void>(
+                child: GroupInfoScreen(groupId: groupId),
+              );
+            },
           ),
           GoRoute(
-            path: '/groups/:groupId/gallery',
-            pageBuilder: (context, state) => NoTransitionPage<void>(
-              key: state.pageKey,
-              child: GalleryScreen(groupId: state.params["groupId"]!),
-            ),
-          ),
+              path: '/groups/:groupId/gallery',
+              pageBuilder: (context, state) {
+                final groupId = state.params["groupId"]!;
+                context
+                    .read<GroupsBloc>()
+                    .add(GroupsEvent.selectEvent(groupId: groupId));
+                return NoTransitionPage<void>(
+                  child: GalleryScreen(groupId: groupId),
+                );
+              }),
           GoRoute(
             path: '/groups/:groupId/swipe',
-            pageBuilder: (context, state) => NoTransitionPage<void>(
-              key: state.pageKey,
-              child: SwipeScreen(groupId: state.params["groupId"]!),
-            ),
+            pageBuilder: (context, state) {
+              final groupId = state.params["groupId"]!;
+              context
+                  .read<GroupsBloc>()
+                  .add(GroupsEvent.selectEvent(groupId: groupId));
+              return NoTransitionPage<void>(
+                child: SwipeScreen(groupId: groupId),
+              );
+            },
           ),
         ],
         redirect: (state) {
-          String? newPath;
-          if (FirebaseAuth.instance.currentUser == null) {
-            newPath = "/sign-in";
-          } else if (state.location == "/sign-in") {
-            newPath = "/groups";
+          if (FirebaseAuth.instance.currentUser == null &&
+              state.location != "/sign-in") {
+            return "/sign-in";
+          }
+          if (FirebaseAuth.instance.currentUser != null &&
+              state.location == "/sign-in") {
             context
                 .read<AuthenticationBloc>()
-                .add(const AuthenticationEventSignedIn());
+                .add(const AuthenticationEvent.signedInEvent());
+            return "/groups";
           }
-          return newPath;
+          return null;
         });
   }
 }

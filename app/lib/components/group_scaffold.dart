@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sharecation_app/api/contracts/groups/v1/groups.pb.dart';
-import 'package:sharecation_app/blocs/active_group_bloc.dart';
 import 'package:sharecation_app/blocs/groups_bloc.dart';
-import 'package:sharecation_app/repositories/image_repository.dart';
+import 'package:sharecation_app/blocs/images_bloc.dart';
 
 enum GroupScaffoldTab { groupInfo, swipe, gallery }
 
@@ -58,7 +57,7 @@ class Layout extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.camera),
         onPressed: () async {
-          await ImageRepository().saveImage(groupId: groupId);
+          context.read<ImagesBloc>().add(const ImagesEvent.addEvent());
         },
       ),
     );
@@ -78,12 +77,11 @@ class SharecationDrawer extends StatelessWidget {
         children: [
           shareCationDrawerHeader(),
           BlocBuilder<GroupsBloc, GroupsState>(
-            builder: (context, state) {
-              if (state is GroupsLoaded) {
-                return DrawerGroupsList(groups: state.groups);
-              }
-              return const CircularProgressIndicator();
-            },
+            builder: (context, state) => state.when(
+              loadingState: () => const CircularProgressIndicator(),
+              loadedState: (groups, activeGroup) =>
+                  DrawerGroupsList(groups: groups),
+            ),
           ),
           TextButton(
             onPressed: () {
@@ -129,7 +127,9 @@ class DrawerGroupsList extends StatelessWidget {
     return Expanded(
       child: RefreshIndicator(
         onRefresh: () async {
-          context.read<GroupsBloc>().add(const LoadGroupsEvent(force: true));
+          context
+              .read<GroupsBloc>()
+              .add(const GroupsEvent.loadEvent(force: true));
         },
         child: ListView.builder(
             padding: EdgeInsets.zero,
@@ -137,9 +137,7 @@ class DrawerGroupsList extends StatelessWidget {
             itemBuilder: (BuildContext context, int index) {
               return TextButton(
                 onPressed: () {
-                  context.read<ActiveGroupBloc>().add(
-                        SelectGroupEvent(groupId: groups[index].groupId),
-                      );
+                  context.go('/groups/${groups[index].groupId}/info');
                 },
                 child: Text(groups[index].name),
               );
@@ -206,7 +204,8 @@ class _CreateGroupState extends State<CreateGroup> {
                 onPressed: () async {
                   context
                       .read<GroupsBloc>()
-                      .add(GroupsEventAdd(name: _controller.value.text));
+                      .add(GroupsEvent.addEvent(name: _controller.value.text));
+                  Navigator.pop(context);
                 },
                 child: const Text("create")),
           ],

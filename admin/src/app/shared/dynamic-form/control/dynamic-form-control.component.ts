@@ -1,5 +1,5 @@
 import {Component, forwardRef, Input} from '@angular/core';
-import {ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR} from '@angular/forms';
+import {ControlValueAccessor, UntypedFormControl, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {DynamicFormConfig} from '../dynamic-form-config.model';
 
 @Component({
@@ -16,7 +16,7 @@ import {DynamicFormConfig} from '../dynamic-form-config.model';
 })
 export class DynamicFormControlComponent implements ControlValueAccessor {
   @Input() config!: DynamicFormConfig;
-  public formControl: FormControl = new FormControl();
+  public formControl: UntypedFormControl = new UntypedFormControl();
 
   public onTouched: () => void = () => {
   };

@@ -1,23 +1,12 @@
 part of 'groups_bloc.dart';
 
-abstract class GroupsEvent extends Equatable {
-  const GroupsEvent();
-}
+@freezed
+class GroupsEvent with _$GroupsEvent {
+  const factory GroupsEvent.loadEvent({@Default(false) bool force}) =
+      _LoadEvent;
 
-class LoadGroupsEvent extends GroupsEvent {
-  final bool force;
+  const factory GroupsEvent.selectEvent({required String groupId}) =
+      _SelectEvent;
 
-  const LoadGroupsEvent({this.force = false});
-
-  @override
-  List<Object?> get props => [force];
-}
-
-class GroupsEventAdd extends GroupsEvent {
-  final String name;
-
-  const GroupsEventAdd({required this.name});
-
-  @override
-  List<Object?> get props => [name];
+  const factory GroupsEvent.addEvent({required String name}) = _AddEvent;
 }

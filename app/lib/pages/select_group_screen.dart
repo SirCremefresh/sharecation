@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sharecation_app/api/contracts/groups/v1/groups.pb.dart';
-import 'package:sharecation_app/blocs/active_group_bloc.dart';
 import 'package:sharecation_app/blocs/groups_bloc.dart';
 
 class SelectGroupScreen extends StatefulWidget {
@@ -26,10 +25,10 @@ class _SelectGroupScreenState extends State<SelectGroupScreen> {
           const Text("Select A group"),
           BlocBuilder<GroupsBloc, GroupsState>(
             builder: (context, state) {
-              if (state is GroupsLoaded) {
-                return buildGroupsList(context, state.groups);
-              }
-              return const CircularProgressIndicator();
+              return state.when(
+                  loadingState: () => const CircularProgressIndicator(),
+                  loadedState: (groups, activeGroup) =>
+                      buildGroupsList(context, groups));
             },
           ),
         ],
@@ -45,9 +44,6 @@ class _SelectGroupScreenState extends State<SelectGroupScreen> {
           itemBuilder: (BuildContext context, int index) {
             return TextButton(
               onPressed: () {
-                context
-                    .read<ActiveGroupBloc>()
-                    .add(SelectGroupEvent(groupId: groups[index].groupId));
                 context.go("/groups/${groups[index].groupId}/gallery");
               },
               child: Text(groups[index].name),

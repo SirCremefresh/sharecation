@@ -33,7 +33,7 @@ class LoginScreen extends StatelessWidget {
               await authenticationService.getJwtString();
               context
                   .read<AuthenticationBloc>()
-                  .add(const AuthenticationEventSignedIn());
+                  .add(const AuthenticationEvent.signedInEvent());
               context.go('/groups');
             } catch (e) {
               Fluttertoast.showToast(

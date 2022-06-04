@@ -47,6 +47,10 @@ class ImagesApi {
     }
   }
 
+  Future<void> downloadImage(String url, String path) async {
+    await _dio.download(url, path);
+  }
+
   Future<List<Image>> getImagesByGroupId(String groupId) async {
     const _path = r'/v1/get-images-by-group-id';
     final _options = Options(
@@ -57,7 +61,8 @@ class ImagesApi {
           r'Authorization': 'Bearer ' + await _jwtStringGetter(),
           'Accept': 'application/octet-stream'
         });
-    var requestBody = GetImagesByGroupIdRequest(groupId: groupId).toProto3Json();
+    var requestBody =
+        GetImagesByGroupIdRequest(groupId: groupId).toProto3Json();
 
     final _response = await _dio.request(
       _path,

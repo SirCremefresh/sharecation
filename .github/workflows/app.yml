@@ -22,4 +22,5 @@ jobs:
           channel: 'stable'
       - run: cd app && flutter pub get
       - run: cd app && flutter analyze
+      - run: cd app && flutter test
       - run: cd app && flutter build appbundle

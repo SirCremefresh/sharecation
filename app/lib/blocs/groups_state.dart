@@ -8,9 +8,25 @@ class GroupsState with _$GroupsState {
       {required List<Group> groups, required Group activeGroup}) = _LoadedState;
 }
 
-@freezed
+@Freezed(unionKey: 'type')
 class SharecationImage with _$SharecationImage {
-  const factory SharecationImage({required String localId}) = _SharecationImage;
+  @FreezedUnionValue('locale')
+  const factory SharecationImage.locale(
+      {required String externalId,
+      required String path}) = _SharecationImageLocal;
+
+  @FreezedUnionValue('remote')
+  const factory SharecationImage.remote(
+      {required String externalId,
+      required String imageId,
+      required String url}) = _SharecationImageRemote;
+
+  @FreezedUnionValue('synced')
+  const factory SharecationImage.synced(
+      {required String externalId,
+      required String imageId,
+      required String url,
+      required String path}) = _SharecationImageSynced;
 
   factory SharecationImage.fromJson(Map<String, dynamic> json) =>
       _$SharecationImageFromJson(json);
@@ -34,14 +50,14 @@ class SharecationGroups with _$SharecationGroups {
       _$SharecationGroupsFromJson(json);
 }
 
-void adsf() {
-  const sharecationImage = SharecationImage(localId: "localId");
-  const group = SharecationGroup(images: {"a": sharecationImage});
-  const groups = SharecationGroups(groups: {"b": group});
-  var images2 = {...group.images};
-  images2.remove("a");
-  final copy = group.copyWith(images: images2);
-  groups.copyWith(groups: {...groups.groups, "b": copy});
-  // var test = FTest(asdf: Map());
-  // test.copyWith(asdf: {...test.asdf, "ads": "asdf"});
-}
+// void adsf() {
+//   const sharecationImage = SharecationImage.locale(externalId: "externalId", path: "path");
+//   const group = SharecationGroup(images: {"a": sharecationImage});
+//   const groups = SharecationGroups(groups: {"b": group});
+//   var images2 = {...group.images};
+//   images2.remove("a");
+//   final copy = group.copyWith(images: images2);
+//   groups.copyWith(groups: {...groups.groups, "b": copy});
+//   // var test = FTest(asdf: Map());
+//   // test.copyWith(asdf: {...test.asdf, "ads": "asdf"});
+// }

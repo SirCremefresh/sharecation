@@ -817,13 +817,74 @@ abstract class _LoadedState implements GroupsState {
 }
 
 SharecationImage _$SharecationImageFromJson(Map<String, dynamic> json) {
-  return _SharecationImage.fromJson(json);
+  switch (json['type']) {
+    case 'locale':
+      return _SharecationImageLocal.fromJson(json);
+    case 'remote':
+      return _SharecationImageRemote.fromJson(json);
+    case 'synced':
+      return _SharecationImageSynced.fromJson(json);
+
+    default:
+      throw CheckedFromJsonException(json, 'type', 'SharecationImage',
+          'Invalid union type "${json['type']}"!');
+  }
 }
 
 /// @nodoc
 mixin _$SharecationImage {
-  String get localId => throw _privateConstructorUsedError;
-
+  String get externalId => throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(String externalId, String path) locale,
+    required TResult Function(String externalId, String imageId, String url)
+        remote,
+    required TResult Function(
+            String externalId, String imageId, String url, String path)
+        synced,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(String externalId, String path)? locale,
+    TResult Function(String externalId, String imageId, String url)? remote,
+    TResult Function(
+            String externalId, String imageId, String url, String path)?
+        synced,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(String externalId, String path)? locale,
+    TResult Function(String externalId, String imageId, String url)? remote,
+    TResult Function(
+            String externalId, String imageId, String url, String path)?
+        synced,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_SharecationImageLocal value) locale,
+    required TResult Function(_SharecationImageRemote value) remote,
+    required TResult Function(_SharecationImageSynced value) synced,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_SharecationImageLocal value)? locale,
+    TResult Function(_SharecationImageRemote value)? remote,
+    TResult Function(_SharecationImageSynced value)? synced,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_SharecationImageLocal value)? locale,
+    TResult Function(_SharecationImageRemote value)? remote,
+    TResult Function(_SharecationImageSynced value)? synced,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $SharecationImageCopyWith<SharecationImage> get copyWith =>
@@ -835,7 +896,7 @@ abstract class $SharecationImageCopyWith<$Res> {
   factory $SharecationImageCopyWith(
           SharecationImage value, $Res Function(SharecationImage) then) =
       _$SharecationImageCopyWithImpl<$Res>;
-  $Res call({String localId});
+  $Res call({String externalId});
 }
 
 /// @nodoc
@@ -849,46 +910,52 @@ class _$SharecationImageCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? localId = freezed,
+    Object? externalId = freezed,
   }) {
     return _then(_value.copyWith(
-      localId: localId == freezed
-          ? _value.localId
-          : localId // ignore: cast_nullable_to_non_nullable
+      externalId: externalId == freezed
+          ? _value.externalId
+          : externalId // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
 }
 
 /// @nodoc
-abstract class _$$_SharecationImageCopyWith<$Res>
+abstract class _$$_SharecationImageLocalCopyWith<$Res>
     implements $SharecationImageCopyWith<$Res> {
-  factory _$$_SharecationImageCopyWith(
-          _$_SharecationImage value, $Res Function(_$_SharecationImage) then) =
-      __$$_SharecationImageCopyWithImpl<$Res>;
+  factory _$$_SharecationImageLocalCopyWith(_$_SharecationImageLocal value,
+          $Res Function(_$_SharecationImageLocal) then) =
+      __$$_SharecationImageLocalCopyWithImpl<$Res>;
   @override
-  $Res call({String localId});
+  $Res call({String externalId, String path});
 }
 
 /// @nodoc
-class __$$_SharecationImageCopyWithImpl<$Res>
+class __$$_SharecationImageLocalCopyWithImpl<$Res>
     extends _$SharecationImageCopyWithImpl<$Res>
-    implements _$$_SharecationImageCopyWith<$Res> {
-  __$$_SharecationImageCopyWithImpl(
-      _$_SharecationImage _value, $Res Function(_$_SharecationImage) _then)
-      : super(_value, (v) => _then(v as _$_SharecationImage));
+    implements _$$_SharecationImageLocalCopyWith<$Res> {
+  __$$_SharecationImageLocalCopyWithImpl(_$_SharecationImageLocal _value,
+      $Res Function(_$_SharecationImageLocal) _then)
+      : super(_value, (v) => _then(v as _$_SharecationImageLocal));
 
   @override
-  _$_SharecationImage get _value => super._value as _$_SharecationImage;
+  _$_SharecationImageLocal get _value =>
+      super._value as _$_SharecationImageLocal;
 
   @override
   $Res call({
-    Object? localId = freezed,
+    Object? externalId = freezed,
+    Object? path = freezed,
   }) {
-    return _then(_$_SharecationImage(
-      localId: localId == freezed
-          ? _value.localId
-          : localId // ignore: cast_nullable_to_non_nullable
+    return _then(_$_SharecationImageLocal(
+      externalId: externalId == freezed
+          ? _value.externalId
+          : externalId // ignore: cast_nullable_to_non_nullable
+              as String,
+      path: path == freezed
+          ? _value.path
+          : path // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
@@ -896,56 +963,553 @@ class __$$_SharecationImageCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_SharecationImage implements _SharecationImage {
-  const _$_SharecationImage({required this.localId});
+class _$_SharecationImageLocal implements _SharecationImageLocal {
+  const _$_SharecationImageLocal(
+      {required this.externalId, required this.path, final String? $type})
+      : $type = $type ?? 'locale';
 
-  factory _$_SharecationImage.fromJson(Map<String, dynamic> json) =>
-      _$$_SharecationImageFromJson(json);
+  factory _$_SharecationImageLocal.fromJson(Map<String, dynamic> json) =>
+      _$$_SharecationImageLocalFromJson(json);
 
   @override
-  final String localId;
+  final String externalId;
+  @override
+  final String path;
+
+  @JsonKey(name: 'type')
+  final String $type;
 
   @override
   String toString() {
-    return 'SharecationImage(localId: $localId)';
+    return 'SharecationImage.locale(externalId: $externalId, path: $path)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_SharecationImage &&
-            const DeepCollectionEquality().equals(other.localId, localId));
+            other is _$_SharecationImageLocal &&
+            const DeepCollectionEquality()
+                .equals(other.externalId, externalId) &&
+            const DeepCollectionEquality().equals(other.path, path));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(localId));
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(externalId),
+      const DeepCollectionEquality().hash(path));
 
   @JsonKey(ignore: true)
   @override
-  _$$_SharecationImageCopyWith<_$_SharecationImage> get copyWith =>
-      __$$_SharecationImageCopyWithImpl<_$_SharecationImage>(this, _$identity);
+  _$$_SharecationImageLocalCopyWith<_$_SharecationImageLocal> get copyWith =>
+      __$$_SharecationImageLocalCopyWithImpl<_$_SharecationImageLocal>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(String externalId, String path) locale,
+    required TResult Function(String externalId, String imageId, String url)
+        remote,
+    required TResult Function(
+            String externalId, String imageId, String url, String path)
+        synced,
+  }) {
+    return locale(externalId, path);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(String externalId, String path)? locale,
+    TResult Function(String externalId, String imageId, String url)? remote,
+    TResult Function(
+            String externalId, String imageId, String url, String path)?
+        synced,
+  }) {
+    return locale?.call(externalId, path);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(String externalId, String path)? locale,
+    TResult Function(String externalId, String imageId, String url)? remote,
+    TResult Function(
+            String externalId, String imageId, String url, String path)?
+        synced,
+    required TResult orElse(),
+  }) {
+    if (locale != null) {
+      return locale(externalId, path);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_SharecationImageLocal value) locale,
+    required TResult Function(_SharecationImageRemote value) remote,
+    required TResult Function(_SharecationImageSynced value) synced,
+  }) {
+    return locale(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_SharecationImageLocal value)? locale,
+    TResult Function(_SharecationImageRemote value)? remote,
+    TResult Function(_SharecationImageSynced value)? synced,
+  }) {
+    return locale?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_SharecationImageLocal value)? locale,
+    TResult Function(_SharecationImageRemote value)? remote,
+    TResult Function(_SharecationImageSynced value)? synced,
+    required TResult orElse(),
+  }) {
+    if (locale != null) {
+      return locale(this);
+    }
+    return orElse();
+  }
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_SharecationImageToJson(this);
+    return _$$_SharecationImageLocalToJson(this);
   }
 }
 
-abstract class _SharecationImage implements SharecationImage {
-  const factory _SharecationImage({required final String localId}) =
-      _$_SharecationImage;
+abstract class _SharecationImageLocal implements SharecationImage {
+  const factory _SharecationImageLocal(
+      {required final String externalId,
+      required final String path}) = _$_SharecationImageLocal;
 
-  factory _SharecationImage.fromJson(Map<String, dynamic> json) =
-      _$_SharecationImage.fromJson;
+  factory _SharecationImageLocal.fromJson(Map<String, dynamic> json) =
+      _$_SharecationImageLocal.fromJson;
 
   @override
-  String get localId => throw _privateConstructorUsedError;
+  String get externalId => throw _privateConstructorUsedError;
+  String get path => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
-  _$$_SharecationImageCopyWith<_$_SharecationImage> get copyWith =>
+  _$$_SharecationImageLocalCopyWith<_$_SharecationImageLocal> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$_SharecationImageRemoteCopyWith<$Res>
+    implements $SharecationImageCopyWith<$Res> {
+  factory _$$_SharecationImageRemoteCopyWith(_$_SharecationImageRemote value,
+          $Res Function(_$_SharecationImageRemote) then) =
+      __$$_SharecationImageRemoteCopyWithImpl<$Res>;
+  @override
+  $Res call({String externalId, String imageId, String url});
+}
+
+/// @nodoc
+class __$$_SharecationImageRemoteCopyWithImpl<$Res>
+    extends _$SharecationImageCopyWithImpl<$Res>
+    implements _$$_SharecationImageRemoteCopyWith<$Res> {
+  __$$_SharecationImageRemoteCopyWithImpl(_$_SharecationImageRemote _value,
+      $Res Function(_$_SharecationImageRemote) _then)
+      : super(_value, (v) => _then(v as _$_SharecationImageRemote));
+
+  @override
+  _$_SharecationImageRemote get _value =>
+      super._value as _$_SharecationImageRemote;
+
+  @override
+  $Res call({
+    Object? externalId = freezed,
+    Object? imageId = freezed,
+    Object? url = freezed,
+  }) {
+    return _then(_$_SharecationImageRemote(
+      externalId: externalId == freezed
+          ? _value.externalId
+          : externalId // ignore: cast_nullable_to_non_nullable
+              as String,
+      imageId: imageId == freezed
+          ? _value.imageId
+          : imageId // ignore: cast_nullable_to_non_nullable
+              as String,
+      url: url == freezed
+          ? _value.url
+          : url // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$_SharecationImageRemote implements _SharecationImageRemote {
+  const _$_SharecationImageRemote(
+      {required this.externalId,
+      required this.imageId,
+      required this.url,
+      final String? $type})
+      : $type = $type ?? 'remote';
+
+  factory _$_SharecationImageRemote.fromJson(Map<String, dynamic> json) =>
+      _$$_SharecationImageRemoteFromJson(json);
+
+  @override
+  final String externalId;
+  @override
+  final String imageId;
+  @override
+  final String url;
+
+  @JsonKey(name: 'type')
+  final String $type;
+
+  @override
+  String toString() {
+    return 'SharecationImage.remote(externalId: $externalId, imageId: $imageId, url: $url)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_SharecationImageRemote &&
+            const DeepCollectionEquality()
+                .equals(other.externalId, externalId) &&
+            const DeepCollectionEquality().equals(other.imageId, imageId) &&
+            const DeepCollectionEquality().equals(other.url, url));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(externalId),
+      const DeepCollectionEquality().hash(imageId),
+      const DeepCollectionEquality().hash(url));
+
+  @JsonKey(ignore: true)
+  @override
+  _$$_SharecationImageRemoteCopyWith<_$_SharecationImageRemote> get copyWith =>
+      __$$_SharecationImageRemoteCopyWithImpl<_$_SharecationImageRemote>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(String externalId, String path) locale,
+    required TResult Function(String externalId, String imageId, String url)
+        remote,
+    required TResult Function(
+            String externalId, String imageId, String url, String path)
+        synced,
+  }) {
+    return remote(externalId, imageId, url);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(String externalId, String path)? locale,
+    TResult Function(String externalId, String imageId, String url)? remote,
+    TResult Function(
+            String externalId, String imageId, String url, String path)?
+        synced,
+  }) {
+    return remote?.call(externalId, imageId, url);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(String externalId, String path)? locale,
+    TResult Function(String externalId, String imageId, String url)? remote,
+    TResult Function(
+            String externalId, String imageId, String url, String path)?
+        synced,
+    required TResult orElse(),
+  }) {
+    if (remote != null) {
+      return remote(externalId, imageId, url);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_SharecationImageLocal value) locale,
+    required TResult Function(_SharecationImageRemote value) remote,
+    required TResult Function(_SharecationImageSynced value) synced,
+  }) {
+    return remote(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_SharecationImageLocal value)? locale,
+    TResult Function(_SharecationImageRemote value)? remote,
+    TResult Function(_SharecationImageSynced value)? synced,
+  }) {
+    return remote?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_SharecationImageLocal value)? locale,
+    TResult Function(_SharecationImageRemote value)? remote,
+    TResult Function(_SharecationImageSynced value)? synced,
+    required TResult orElse(),
+  }) {
+    if (remote != null) {
+      return remote(this);
+    }
+    return orElse();
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$_SharecationImageRemoteToJson(this);
+  }
+}
+
+abstract class _SharecationImageRemote implements SharecationImage {
+  const factory _SharecationImageRemote(
+      {required final String externalId,
+      required final String imageId,
+      required final String url}) = _$_SharecationImageRemote;
+
+  factory _SharecationImageRemote.fromJson(Map<String, dynamic> json) =
+      _$_SharecationImageRemote.fromJson;
+
+  @override
+  String get externalId => throw _privateConstructorUsedError;
+  String get imageId => throw _privateConstructorUsedError;
+  String get url => throw _privateConstructorUsedError;
+  @override
+  @JsonKey(ignore: true)
+  _$$_SharecationImageRemoteCopyWith<_$_SharecationImageRemote> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$_SharecationImageSyncedCopyWith<$Res>
+    implements $SharecationImageCopyWith<$Res> {
+  factory _$$_SharecationImageSyncedCopyWith(_$_SharecationImageSynced value,
+          $Res Function(_$_SharecationImageSynced) then) =
+      __$$_SharecationImageSyncedCopyWithImpl<$Res>;
+  @override
+  $Res call({String externalId, String imageId, String url, String path});
+}
+
+/// @nodoc
+class __$$_SharecationImageSyncedCopyWithImpl<$Res>
+    extends _$SharecationImageCopyWithImpl<$Res>
+    implements _$$_SharecationImageSyncedCopyWith<$Res> {
+  __$$_SharecationImageSyncedCopyWithImpl(_$_SharecationImageSynced _value,
+      $Res Function(_$_SharecationImageSynced) _then)
+      : super(_value, (v) => _then(v as _$_SharecationImageSynced));
+
+  @override
+  _$_SharecationImageSynced get _value =>
+      super._value as _$_SharecationImageSynced;
+
+  @override
+  $Res call({
+    Object? externalId = freezed,
+    Object? imageId = freezed,
+    Object? url = freezed,
+    Object? path = freezed,
+  }) {
+    return _then(_$_SharecationImageSynced(
+      externalId: externalId == freezed
+          ? _value.externalId
+          : externalId // ignore: cast_nullable_to_non_nullable
+              as String,
+      imageId: imageId == freezed
+          ? _value.imageId
+          : imageId // ignore: cast_nullable_to_non_nullable
+              as String,
+      url: url == freezed
+          ? _value.url
+          : url // ignore: cast_nullable_to_non_nullable
+              as String,
+      path: path == freezed
+          ? _value.path
+          : path // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$_SharecationImageSynced implements _SharecationImageSynced {
+  const _$_SharecationImageSynced(
+      {required this.externalId,
+      required this.imageId,
+      required this.url,
+      required this.path,
+      final String? $type})
+      : $type = $type ?? 'synced';
+
+  factory _$_SharecationImageSynced.fromJson(Map<String, dynamic> json) =>
+      _$$_SharecationImageSyncedFromJson(json);
+
+  @override
+  final String externalId;
+  @override
+  final String imageId;
+  @override
+  final String url;
+  @override
+  final String path;
+
+  @JsonKey(name: 'type')
+  final String $type;
+
+  @override
+  String toString() {
+    return 'SharecationImage.synced(externalId: $externalId, imageId: $imageId, url: $url, path: $path)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_SharecationImageSynced &&
+            const DeepCollectionEquality()
+                .equals(other.externalId, externalId) &&
+            const DeepCollectionEquality().equals(other.imageId, imageId) &&
+            const DeepCollectionEquality().equals(other.url, url) &&
+            const DeepCollectionEquality().equals(other.path, path));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(externalId),
+      const DeepCollectionEquality().hash(imageId),
+      const DeepCollectionEquality().hash(url),
+      const DeepCollectionEquality().hash(path));
+
+  @JsonKey(ignore: true)
+  @override
+  _$$_SharecationImageSyncedCopyWith<_$_SharecationImageSynced> get copyWith =>
+      __$$_SharecationImageSyncedCopyWithImpl<_$_SharecationImageSynced>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(String externalId, String path) locale,
+    required TResult Function(String externalId, String imageId, String url)
+        remote,
+    required TResult Function(
+            String externalId, String imageId, String url, String path)
+        synced,
+  }) {
+    return synced(externalId, imageId, url, path);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(String externalId, String path)? locale,
+    TResult Function(String externalId, String imageId, String url)? remote,
+    TResult Function(
+            String externalId, String imageId, String url, String path)?
+        synced,
+  }) {
+    return synced?.call(externalId, imageId, url, path);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(String externalId, String path)? locale,
+    TResult Function(String externalId, String imageId, String url)? remote,
+    TResult Function(
+            String externalId, String imageId, String url, String path)?
+        synced,
+    required TResult orElse(),
+  }) {
+    if (synced != null) {
+      return synced(externalId, imageId, url, path);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_SharecationImageLocal value) locale,
+    required TResult Function(_SharecationImageRemote value) remote,
+    required TResult Function(_SharecationImageSynced value) synced,
+  }) {
+    return synced(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_SharecationImageLocal value)? locale,
+    TResult Function(_SharecationImageRemote value)? remote,
+    TResult Function(_SharecationImageSynced value)? synced,
+  }) {
+    return synced?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_SharecationImageLocal value)? locale,
+    TResult Function(_SharecationImageRemote value)? remote,
+    TResult Function(_SharecationImageSynced value)? synced,
+    required TResult orElse(),
+  }) {
+    if (synced != null) {
+      return synced(this);
+    }
+    return orElse();
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$_SharecationImageSyncedToJson(this);
+  }
+}
+
+abstract class _SharecationImageSynced implements SharecationImage {
+  const factory _SharecationImageSynced(
+      {required final String externalId,
+      required final String imageId,
+      required final String url,
+      required final String path}) = _$_SharecationImageSynced;
+
+  factory _SharecationImageSynced.fromJson(Map<String, dynamic> json) =
+      _$_SharecationImageSynced.fromJson;
+
+  @override
+  String get externalId => throw _privateConstructorUsedError;
+  String get imageId => throw _privateConstructorUsedError;
+  String get url => throw _privateConstructorUsedError;
+  String get path => throw _privateConstructorUsedError;
+  @override
+  @JsonKey(ignore: true)
+  _$$_SharecationImageSyncedCopyWith<_$_SharecationImageSynced> get copyWith =>
       throw _privateConstructorUsedError;
 }
 

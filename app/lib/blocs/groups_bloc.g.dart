@@ -6,14 +6,58 @@ part of 'groups_bloc.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_SharecationImage _$$_SharecationImageFromJson(Map<String, dynamic> json) =>
-    _$_SharecationImage(
-      localId: json['localId'] as String,
+_$_SharecationImageLocal _$$_SharecationImageLocalFromJson(
+        Map<String, dynamic> json) =>
+    _$_SharecationImageLocal(
+      externalId: json['externalId'] as String,
+      path: json['path'] as String,
+      $type: json['type'] as String?,
     );
 
-Map<String, dynamic> _$$_SharecationImageToJson(_$_SharecationImage instance) =>
+Map<String, dynamic> _$$_SharecationImageLocalToJson(
+        _$_SharecationImageLocal instance) =>
     <String, dynamic>{
-      'localId': instance.localId,
+      'externalId': instance.externalId,
+      'path': instance.path,
+      'type': instance.$type,
+    };
+
+_$_SharecationImageRemote _$$_SharecationImageRemoteFromJson(
+        Map<String, dynamic> json) =>
+    _$_SharecationImageRemote(
+      externalId: json['externalId'] as String,
+      imageId: json['imageId'] as String,
+      url: json['url'] as String,
+      $type: json['type'] as String?,
+    );
+
+Map<String, dynamic> _$$_SharecationImageRemoteToJson(
+        _$_SharecationImageRemote instance) =>
+    <String, dynamic>{
+      'externalId': instance.externalId,
+      'imageId': instance.imageId,
+      'url': instance.url,
+      'type': instance.$type,
+    };
+
+_$_SharecationImageSynced _$$_SharecationImageSyncedFromJson(
+        Map<String, dynamic> json) =>
+    _$_SharecationImageSynced(
+      externalId: json['externalId'] as String,
+      imageId: json['imageId'] as String,
+      url: json['url'] as String,
+      path: json['path'] as String,
+      $type: json['type'] as String?,
+    );
+
+Map<String, dynamic> _$$_SharecationImageSyncedToJson(
+        _$_SharecationImageSynced instance) =>
+    <String, dynamic>{
+      'externalId': instance.externalId,
+      'imageId': instance.imageId,
+      'url': instance.url,
+      'path': instance.path,
+      'type': instance.$type,
     };
 
 _$_SharecationGroup _$$_SharecationGroupFromJson(Map<String, dynamic> json) =>

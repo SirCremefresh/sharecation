@@ -14,18 +14,23 @@ import '../../errors/v1/errors.pb.dart' as $0;
 class Image extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Image', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'images.v1'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'imageId')
-    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'url')
+    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'externalId')
+    ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'url')
     ..hasRequiredFields = false
   ;
 
   Image._() : super();
   factory Image({
     $core.String? imageId,
+    $core.String? externalId,
     $core.String? url,
   }) {
     final _result = create();
     if (imageId != null) {
       _result.imageId = imageId;
+    }
+    if (externalId != null) {
+      _result.externalId = externalId;
     }
     if (url != null) {
       _result.url = url;
@@ -63,13 +68,22 @@ class Image extends $pb.GeneratedMessage {
   void clearImageId() => clearField(1);
 
   @$pb.TagNumber(2)
-  $core.String get url => $_getSZ(1);
+  $core.String get externalId => $_getSZ(1);
   @$pb.TagNumber(2)
-  set url($core.String v) { $_setString(1, v); }
+  set externalId($core.String v) { $_setString(1, v); }
   @$pb.TagNumber(2)
-  $core.bool hasUrl() => $_has(1);
+  $core.bool hasExternalId() => $_has(1);
   @$pb.TagNumber(2)
-  void clearUrl() => clearField(2);
+  void clearExternalId() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get url => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set url($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasUrl() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearUrl() => clearField(3);
 }
 
 class Images extends $pb.GeneratedMessage {

@@ -21,7 +21,11 @@ export interface Image {
      */
     imageId: string;
     /**
-     * @generated from protobuf field: string url = 2;
+     * @generated from protobuf field: string external_id = 2;
+     */
+    externalId: string;
+    /**
+     * @generated from protobuf field: string url = 3;
      */
     url: string;
 }
@@ -105,11 +109,12 @@ class Image$Type extends MessageType<Image> {
     constructor() {
         super("images.v1.Image", [
             { no: 1, name: "image_id", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 2, name: "url", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
+            { no: 2, name: "external_id", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 3, name: "url", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
         ]);
     }
     create(value?: PartialMessage<Image>): Image {
-        const message = { imageId: "", url: "" };
+        const message = { imageId: "", externalId: "", url: "" };
         globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
         if (value !== undefined)
             reflectionMergePartial<Image>(this, message, value);
@@ -123,7 +128,10 @@ class Image$Type extends MessageType<Image> {
                 case /* string image_id */ 1:
                     message.imageId = reader.string();
                     break;
-                case /* string url */ 2:
+                case /* string external_id */ 2:
+                    message.externalId = reader.string();
+                    break;
+                case /* string url */ 3:
                     message.url = reader.string();
                     break;
                 default:
@@ -141,9 +149,12 @@ class Image$Type extends MessageType<Image> {
         /* string image_id = 1; */
         if (message.imageId !== "")
             writer.tag(1, WireType.LengthDelimited).string(message.imageId);
-        /* string url = 2; */
+        /* string external_id = 2; */
+        if (message.externalId !== "")
+            writer.tag(2, WireType.LengthDelimited).string(message.externalId);
+        /* string url = 3; */
         if (message.url !== "")
-            writer.tag(2, WireType.LengthDelimited).string(message.url);
+            writer.tag(3, WireType.LengthDelimited).string(message.url);
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);

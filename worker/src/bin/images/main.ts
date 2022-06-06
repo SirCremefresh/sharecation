@@ -96,7 +96,7 @@ export default {
                   BasicError_BasicErrorCode.UNAUTHENTICATED,
                 );
               }
-              const results = await env.IMAGES.list<{ imageId: string }>({
+              const results = await env.IMAGES.list<{ imageId: string, externalId: string }>({
                 prefix: IMAGES_KV.IMAGES_GROUP(groupId),
                 cursor: context.proto.body.cursor,
               });
@@ -114,6 +114,7 @@ export default {
                 }
                 images.push({
                   imageId: metadata.imageId,
+                  externalId: metadata.externalId,
                   url: getUrlFromImageId(metadata.imageId),
                 });
               }
@@ -134,18 +135,26 @@ export default {
             async (request, env, context) => {
               const formData = await request.formData();
               const groupId = formData.get('groupId');
+              const externalId = formData.get('externalId');
 
               context.logger.info(
                 `Uploading image to groupId=${groupId}`,
               );
               if (typeof groupId !== 'string') {
                 context.logger.error(
-                  `User tried to upload photo to group without roles. groupId=${groupId}, roles=${getRoles(
-                    context,
-                  )}`,
+                  `User tried to upload photo to group without groupId. groupId=${groupId}`,
                 );
                 return createProtoBufBasicErrorResponse(
                   'No groupId provided',
+                  BasicError_BasicErrorCode.BAD_REQUEST,
+                );
+              }
+              if (typeof externalId !== 'string') {
+                context.logger.error(
+                  `User tried to upload photo to group without externalId. groupId=${groupId}`,
+                );
+                return createProtoBufBasicErrorResponse(
+                  'No externalId provided',
                   BasicError_BasicErrorCode.BAD_REQUEST,
                 );
               }
@@ -191,14 +200,15 @@ export default {
               );
               env.IMAGES.put(
                 imageKey,
-                JSON.stringify({imageId: imageId}),
+                JSON.stringify({imageId, externalId}),
                 {
-                  metadata: {imageId: imageId},
+                  metadata: {imageId, externalId},
                 },
               );
 
               return createProtoBufOkResponse<Image>({
-                imageId: imageId,
+                imageId,
+                externalId,
                 url: getUrlFromImageId(imageId),
               });
             },

@@ -6,7 +6,8 @@ import "errors/v1/errors.proto";
 
 message Image {
   string image_id = 1;
-  string url = 2;
+  string external_id = 2;
+  string url = 3;
 }
 
 message Images {

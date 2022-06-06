@@ -12,7 +12,7 @@ import 'package:sharecation_app/pages/gallery_screen.dart';
 import 'package:sharecation_app/pages/group_info_screen.dart';
 import 'package:sharecation_app/pages/loading_screen.dart';
 import 'package:sharecation_app/pages/login_screen.dart';
-import 'package:sharecation_app/pages/select_group_screen.dart';
+import 'package:sharecation_app/pages/no_groups_screen.dart';
 import 'package:sharecation_app/pages/swipe_screen.dart';
 import 'package:sharecation_app/pages/synchronise_screen.dart';
 import 'package:sharecation_app/repositories/groups_file_accessor_repository.dart';
@@ -118,7 +118,7 @@ class _RouterState extends State<Router> {
               path: '/groups',
               pageBuilder: (context, state) => NoTransitionPage<void>(
                     key: state.pageKey,
-                    child: const SelectGroupScreen(),
+                    child: const NoGroupsScreen(),
                   ),
               redirect: (state) {
                 return context.read<GroupsBloc>().state.whenOrNull<String?>(

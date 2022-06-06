@@ -1,19 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sharecation_app/blocs/groups_bloc.dart';
 import 'package:sharecation_app/components/create_group_modal.dart';
 import 'package:sharecation_app/components/group_scaffold.dart';
 
-class SelectGroupScreen extends StatefulWidget {
-  const SelectGroupScreen({
-    Key? key,
-  }) : super(key: key);
+class NoGroupsScreen extends StatelessWidget {
+  const NoGroupsScreen({Key? key}) : super(key: key);
 
-  @override
-  State<SelectGroupScreen> createState() => _SelectGroupScreenState();
-}
-
-class _SelectGroupScreenState extends State<SelectGroupScreen> {
   @override
   Widget build(BuildContext context) {
     return Layout(
@@ -24,10 +18,13 @@ class _SelectGroupScreenState extends State<SelectGroupScreen> {
               child: CircularProgressIndicator(),
             ),
             loadedState: (groups, userId) {
+              if (groups.groups.isNotEmpty) {
+                groutToGroup(context, groups);
+              }
               return Center(
                 child: Column(
                   children: [
-                    Text("No groups create group"),
+                    const Text("No groups create group"),
                     TextButton(
                       onPressed: () {
                         showDialog(
@@ -35,7 +32,7 @@ class _SelectGroupScreenState extends State<SelectGroupScreen> {
                           builder: (context) => const CreateGroup(),
                         );
                       },
-                      child: Text("Create Group"),
+                      child: const Text("Create Group"),
                     ),
                   ],
                 ),
@@ -45,5 +42,12 @@ class _SelectGroupScreenState extends State<SelectGroupScreen> {
         },
       ),
     );
+  }
+
+  Future<void> groutToGroup(
+      BuildContext context, SharecationGroups groups) async {
+    await Future.delayed(const Duration(milliseconds: 10));
+    context
+        .go("/groups/${groups.groups[groups.groups.keys.first]!.groupId}/info");
   }
 }

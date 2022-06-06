@@ -1,8 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sharecation_app/blocs/images_bloc.dart';
 import 'package:sharecation_app/components/group_scaffold.dart';
 import 'package:sharecation_app/dtos/sharecation_image.dart';
 
@@ -19,17 +17,18 @@ class GalleryScreen extends StatelessWidget {
     return Layout(
       groupScaffoldTab: GroupScaffoldTab.gallery,
       groupId: groupId,
-      child: Scaffold(
-          body: BlocBuilder<ImagesBloc, ImagesState>(
-        builder: (context, state) => state.when(
-            loadingState: () => const CircularProgressIndicator(),
-            loadedState: (images, groupId) {
-              if (images.isEmpty) {
-                return const NoImages();
-              }
-              return ImagesGrid(images: images, groupId: groupId);
-            }),
-      )),
+      child: const Text("asdf"),
+      // child: Scaffold(
+      //     body: BlocBuilder<ImagesBloc, ImagesState>(
+      //   builder: (context, state) => state.when(
+      //       loadingState: () => const CircularProgressIndicator(),
+      //       loadedState: (images, groupId) {
+      //         if (images.isEmpty) {
+      //           return const NoImages();
+      //         }
+      //         return ImagesGrid(images: images, groupId: groupId);
+      //       }),
+      // )),
     );
   }
 }
@@ -73,9 +72,9 @@ class ImagesGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: () async {
-        context
-            .read<ImagesBloc>()
-            .add(ImagesEvent.loadEvent(groupId: groupId, force: true));
+        // context
+        //     .read<ImagesBloc>()
+        //     .add(ImagesEvent.loadEvent(groupId: groupId, force: true));
       },
       child: GridView.builder(
         padding: const EdgeInsets.all(3),

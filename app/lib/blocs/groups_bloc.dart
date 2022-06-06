@@ -17,11 +17,11 @@ class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
   GroupsBloc({required this.fileRepository})
       : super(const GroupsState.loadingState()) {
     on<_LoadGroupsForUser>((event, emit) async {
-      {
+      if (event.loadFromFile) {
         final groups = await fileRepository.read();
         emit(GroupsState.loadedState(state: groups, userId: event.userId));
       }
-      {
+      if (event.loadFromServer) {
         var groups = await api.groups.getGroups();
         add(
           GroupsEvent.groupsLoaded(
@@ -36,7 +36,7 @@ class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
       }
     });
     on<_GroupsLoadedEvent>((event, emit) async {
-      final loadedState = assertLoadedState();
+      final loadedState = _assertLoadedState();
       final Map<String, SharecationGroup> groups = {};
 
       for (final group in event.groups) {
@@ -53,7 +53,7 @@ class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
           userId: loadedState.userId));
     });
     on<_ImageUpdatedEvent>((event, emit) async {
-      final loadedState = assertLoadedState();
+      final loadedState = _assertLoadedState();
 
       final group = loadedState.state.groups[event.groupId]!;
 
@@ -86,7 +86,7 @@ class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
     //   imagesBloc.add(ImagesEvent.loadEvent(groupId: activeGroup.groupId));
     // });
     on<_AddEvent>((event, emit) async {
-      final localState = assertLoadedState();
+      final localState = _assertLoadedState();
       final group = await api.groups.createGroup(groupName: event.name);
       authenticationService.invalidate();
 
@@ -106,25 +106,22 @@ class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
         ),
       );
 
-      add(GroupsEvent.loadGroupsForUser(userId: localState.userId));
+      add(GroupsEvent.loadGroupsForUser(userId: localState.userId, loadFromFile: false, loadFromServer: true));
     });
-    // on<_SelectEvent>((event, emit) async {
-    //   if (state is _LoadedState) {
-    //     final groupsLoaded = state as _LoadedState;
-    //     final activeGroup = groupsLoaded.groups
-    //         .firstWhere((element) => element.groupId == event.groupId);
-    //
-    //     emit(GroupsState.loadedState(
-    //         groups: groupsLoaded.groups, activeGroup: activeGroup));
-    //     imagesBloc.add(ImagesEvent.loadEvent(groupId: activeGroup.groupId));
-    //   }
-    // });
   }
 
-  _LoadedState assertLoadedState() {
+  _LoadedState _assertLoadedState() {
     if (state is! _LoadedState) {
       throw Exception("");
     }
     return state as _LoadedState;
+  }
+
+  @override
+  void onTransition(Transition<GroupsEvent, GroupsState> transition) {
+    super.onTransition(transition);
+    transition.nextState.whenOrNull<void>(loadedState: (state, userId) {
+      fileRepository.write(state);
+    });
   }
 }

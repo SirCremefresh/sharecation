@@ -7,7 +7,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sharecation_app/blocs/authentication_bloc.dart';
 import 'package:sharecation_app/blocs/groups_bloc.dart';
-import 'package:sharecation_app/blocs/images_bloc.dart';
 import 'package:sharecation_app/firebase_options.dart';
 import 'package:sharecation_app/pages/gallery_screen.dart';
 import 'package:sharecation_app/pages/group_info_screen.dart';
@@ -42,12 +41,8 @@ class MyApp extends StatelessWidget {
       child: MultiBlocProvider(
         providers: [
           BlocProvider(
-            create: (context) => ImagesBloc(),
-          ),
-          BlocProvider(
             create: (context) => GroupsBloc(
-              fileRepository: context.read<GroupsFileAccessorRepository>()
-            ),
+                fileRepository: context.read<GroupsFileAccessorRepository>()),
           ),
           BlocProvider(
             create: (context) => AuthenticationBloc(

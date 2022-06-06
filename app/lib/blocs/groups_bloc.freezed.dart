@@ -18,8 +18,11 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$GroupsEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(bool force) loadEvent,
-    required TResult Function(String userId) loadGroupsForUser,
+    required TResult Function(
+            String userId, bool loadFromFile, bool loadFromServer)
+        loadGroupsForUser,
+    required TResult Function(bool loadFromFile, bool loadFromServer)
+        loadGroups,
     required TResult Function(SharecationGroups groups) initialLoad,
     required TResult Function(List<SharecationEmptyGroup> groups) groupsLoaded,
     required TResult Function(String groupId, SharecationImage image)
@@ -30,8 +33,9 @@ mixin _$GroupsEvent {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(bool force)? loadEvent,
-    TResult Function(String userId)? loadGroupsForUser,
+    TResult Function(String userId, bool loadFromFile, bool loadFromServer)?
+        loadGroupsForUser,
+    TResult Function(bool loadFromFile, bool loadFromServer)? loadGroups,
     TResult Function(SharecationGroups groups)? initialLoad,
     TResult Function(List<SharecationEmptyGroup> groups)? groupsLoaded,
     TResult Function(String groupId, SharecationImage image)? imageUpdated,
@@ -41,8 +45,9 @@ mixin _$GroupsEvent {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(bool force)? loadEvent,
-    TResult Function(String userId)? loadGroupsForUser,
+    TResult Function(String userId, bool loadFromFile, bool loadFromServer)?
+        loadGroupsForUser,
+    TResult Function(bool loadFromFile, bool loadFromServer)? loadGroups,
     TResult Function(SharecationGroups groups)? initialLoad,
     TResult Function(List<SharecationEmptyGroup> groups)? groupsLoaded,
     TResult Function(String groupId, SharecationImage image)? imageUpdated,
@@ -53,8 +58,8 @@ mixin _$GroupsEvent {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_LoadEvent value) loadEvent,
     required TResult Function(_LoadGroupsForUser value) loadGroupsForUser,
+    required TResult Function(_LoadGroups value) loadGroups,
     required TResult Function(_InitialLoadEvent value) initialLoad,
     required TResult Function(_GroupsLoadedEvent value) groupsLoaded,
     required TResult Function(_ImageUpdatedEvent value) imageUpdated,
@@ -64,8 +69,8 @@ mixin _$GroupsEvent {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_LoadEvent value)? loadEvent,
     TResult Function(_LoadGroupsForUser value)? loadGroupsForUser,
+    TResult Function(_LoadGroups value)? loadGroups,
     TResult Function(_InitialLoadEvent value)? initialLoad,
     TResult Function(_GroupsLoadedEvent value)? groupsLoaded,
     TResult Function(_ImageUpdatedEvent value)? imageUpdated,
@@ -75,8 +80,8 @@ mixin _$GroupsEvent {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_LoadEvent value)? loadEvent,
     TResult Function(_LoadGroupsForUser value)? loadGroupsForUser,
+    TResult Function(_LoadGroups value)? loadGroups,
     TResult Function(_InitialLoadEvent value)? initialLoad,
     TResult Function(_GroupsLoadedEvent value)? groupsLoaded,
     TResult Function(_ImageUpdatedEvent value)? imageUpdated,
@@ -104,176 +109,11 @@ class _$GroupsEventCopyWithImpl<$Res> implements $GroupsEventCopyWith<$Res> {
 }
 
 /// @nodoc
-abstract class _$$_LoadEventCopyWith<$Res> {
-  factory _$$_LoadEventCopyWith(
-          _$_LoadEvent value, $Res Function(_$_LoadEvent) then) =
-      __$$_LoadEventCopyWithImpl<$Res>;
-  $Res call({bool force});
-}
-
-/// @nodoc
-class __$$_LoadEventCopyWithImpl<$Res> extends _$GroupsEventCopyWithImpl<$Res>
-    implements _$$_LoadEventCopyWith<$Res> {
-  __$$_LoadEventCopyWithImpl(
-      _$_LoadEvent _value, $Res Function(_$_LoadEvent) _then)
-      : super(_value, (v) => _then(v as _$_LoadEvent));
-
-  @override
-  _$_LoadEvent get _value => super._value as _$_LoadEvent;
-
-  @override
-  $Res call({
-    Object? force = freezed,
-  }) {
-    return _then(_$_LoadEvent(
-      force: force == freezed
-          ? _value.force
-          : force // ignore: cast_nullable_to_non_nullable
-              as bool,
-    ));
-  }
-}
-
-/// @nodoc
-
-class _$_LoadEvent implements _LoadEvent {
-  const _$_LoadEvent({this.force = false});
-
-  @override
-  @JsonKey()
-  final bool force;
-
-  @override
-  String toString() {
-    return 'GroupsEvent.loadEvent(force: $force)';
-  }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$_LoadEvent &&
-            const DeepCollectionEquality().equals(other.force, force));
-  }
-
-  @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(force));
-
-  @JsonKey(ignore: true)
-  @override
-  _$$_LoadEventCopyWith<_$_LoadEvent> get copyWith =>
-      __$$_LoadEventCopyWithImpl<_$_LoadEvent>(this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(bool force) loadEvent,
-    required TResult Function(String userId) loadGroupsForUser,
-    required TResult Function(SharecationGroups groups) initialLoad,
-    required TResult Function(List<SharecationEmptyGroup> groups) groupsLoaded,
-    required TResult Function(String groupId, SharecationImage image)
-        imageUpdated,
-    required TResult Function(String groupId) selectEvent,
-    required TResult Function(String name) addEvent,
-  }) {
-    return loadEvent(force);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(bool force)? loadEvent,
-    TResult Function(String userId)? loadGroupsForUser,
-    TResult Function(SharecationGroups groups)? initialLoad,
-    TResult Function(List<SharecationEmptyGroup> groups)? groupsLoaded,
-    TResult Function(String groupId, SharecationImage image)? imageUpdated,
-    TResult Function(String groupId)? selectEvent,
-    TResult Function(String name)? addEvent,
-  }) {
-    return loadEvent?.call(force);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(bool force)? loadEvent,
-    TResult Function(String userId)? loadGroupsForUser,
-    TResult Function(SharecationGroups groups)? initialLoad,
-    TResult Function(List<SharecationEmptyGroup> groups)? groupsLoaded,
-    TResult Function(String groupId, SharecationImage image)? imageUpdated,
-    TResult Function(String groupId)? selectEvent,
-    TResult Function(String name)? addEvent,
-    required TResult orElse(),
-  }) {
-    if (loadEvent != null) {
-      return loadEvent(force);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_LoadEvent value) loadEvent,
-    required TResult Function(_LoadGroupsForUser value) loadGroupsForUser,
-    required TResult Function(_InitialLoadEvent value) initialLoad,
-    required TResult Function(_GroupsLoadedEvent value) groupsLoaded,
-    required TResult Function(_ImageUpdatedEvent value) imageUpdated,
-    required TResult Function(_SelectEvent value) selectEvent,
-    required TResult Function(_AddEvent value) addEvent,
-  }) {
-    return loadEvent(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_LoadEvent value)? loadEvent,
-    TResult Function(_LoadGroupsForUser value)? loadGroupsForUser,
-    TResult Function(_InitialLoadEvent value)? initialLoad,
-    TResult Function(_GroupsLoadedEvent value)? groupsLoaded,
-    TResult Function(_ImageUpdatedEvent value)? imageUpdated,
-    TResult Function(_SelectEvent value)? selectEvent,
-    TResult Function(_AddEvent value)? addEvent,
-  }) {
-    return loadEvent?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_LoadEvent value)? loadEvent,
-    TResult Function(_LoadGroupsForUser value)? loadGroupsForUser,
-    TResult Function(_InitialLoadEvent value)? initialLoad,
-    TResult Function(_GroupsLoadedEvent value)? groupsLoaded,
-    TResult Function(_ImageUpdatedEvent value)? imageUpdated,
-    TResult Function(_SelectEvent value)? selectEvent,
-    TResult Function(_AddEvent value)? addEvent,
-    required TResult orElse(),
-  }) {
-    if (loadEvent != null) {
-      return loadEvent(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _LoadEvent implements GroupsEvent {
-  const factory _LoadEvent({final bool force}) = _$_LoadEvent;
-
-  bool get force => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
-  _$$_LoadEventCopyWith<_$_LoadEvent> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
 abstract class _$$_LoadGroupsForUserCopyWith<$Res> {
   factory _$$_LoadGroupsForUserCopyWith(_$_LoadGroupsForUser value,
           $Res Function(_$_LoadGroupsForUser) then) =
       __$$_LoadGroupsForUserCopyWithImpl<$Res>;
-  $Res call({String userId});
+  $Res call({String userId, bool loadFromFile, bool loadFromServer});
 }
 
 /// @nodoc
@@ -290,12 +130,22 @@ class __$$_LoadGroupsForUserCopyWithImpl<$Res>
   @override
   $Res call({
     Object? userId = freezed,
+    Object? loadFromFile = freezed,
+    Object? loadFromServer = freezed,
   }) {
     return _then(_$_LoadGroupsForUser(
       userId: userId == freezed
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
               as String,
+      loadFromFile: loadFromFile == freezed
+          ? _value.loadFromFile
+          : loadFromFile // ignore: cast_nullable_to_non_nullable
+              as bool,
+      loadFromServer: loadFromServer == freezed
+          ? _value.loadFromServer
+          : loadFromServer // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -303,14 +153,23 @@ class __$$_LoadGroupsForUserCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_LoadGroupsForUser implements _LoadGroupsForUser {
-  const _$_LoadGroupsForUser({required this.userId});
+  const _$_LoadGroupsForUser(
+      {required this.userId,
+      this.loadFromFile = true,
+      this.loadFromServer = false});
 
   @override
   final String userId;
+  @override
+  @JsonKey()
+  final bool loadFromFile;
+  @override
+  @JsonKey()
+  final bool loadFromServer;
 
   @override
   String toString() {
-    return 'GroupsEvent.loadGroupsForUser(userId: $userId)';
+    return 'GroupsEvent.loadGroupsForUser(userId: $userId, loadFromFile: $loadFromFile, loadFromServer: $loadFromServer)';
   }
 
   @override
@@ -318,12 +177,19 @@ class _$_LoadGroupsForUser implements _LoadGroupsForUser {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_LoadGroupsForUser &&
-            const DeepCollectionEquality().equals(other.userId, userId));
+            const DeepCollectionEquality().equals(other.userId, userId) &&
+            const DeepCollectionEquality()
+                .equals(other.loadFromFile, loadFromFile) &&
+            const DeepCollectionEquality()
+                .equals(other.loadFromServer, loadFromServer));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(userId));
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(userId),
+      const DeepCollectionEquality().hash(loadFromFile),
+      const DeepCollectionEquality().hash(loadFromServer));
 
   @JsonKey(ignore: true)
   @override
@@ -334,8 +200,11 @@ class _$_LoadGroupsForUser implements _LoadGroupsForUser {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(bool force) loadEvent,
-    required TResult Function(String userId) loadGroupsForUser,
+    required TResult Function(
+            String userId, bool loadFromFile, bool loadFromServer)
+        loadGroupsForUser,
+    required TResult Function(bool loadFromFile, bool loadFromServer)
+        loadGroups,
     required TResult Function(SharecationGroups groups) initialLoad,
     required TResult Function(List<SharecationEmptyGroup> groups) groupsLoaded,
     required TResult Function(String groupId, SharecationImage image)
@@ -343,28 +212,30 @@ class _$_LoadGroupsForUser implements _LoadGroupsForUser {
     required TResult Function(String groupId) selectEvent,
     required TResult Function(String name) addEvent,
   }) {
-    return loadGroupsForUser(userId);
+    return loadGroupsForUser(userId, loadFromFile, loadFromServer);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(bool force)? loadEvent,
-    TResult Function(String userId)? loadGroupsForUser,
+    TResult Function(String userId, bool loadFromFile, bool loadFromServer)?
+        loadGroupsForUser,
+    TResult Function(bool loadFromFile, bool loadFromServer)? loadGroups,
     TResult Function(SharecationGroups groups)? initialLoad,
     TResult Function(List<SharecationEmptyGroup> groups)? groupsLoaded,
     TResult Function(String groupId, SharecationImage image)? imageUpdated,
     TResult Function(String groupId)? selectEvent,
     TResult Function(String name)? addEvent,
   }) {
-    return loadGroupsForUser?.call(userId);
+    return loadGroupsForUser?.call(userId, loadFromFile, loadFromServer);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(bool force)? loadEvent,
-    TResult Function(String userId)? loadGroupsForUser,
+    TResult Function(String userId, bool loadFromFile, bool loadFromServer)?
+        loadGroupsForUser,
+    TResult Function(bool loadFromFile, bool loadFromServer)? loadGroups,
     TResult Function(SharecationGroups groups)? initialLoad,
     TResult Function(List<SharecationEmptyGroup> groups)? groupsLoaded,
     TResult Function(String groupId, SharecationImage image)? imageUpdated,
@@ -373,7 +244,7 @@ class _$_LoadGroupsForUser implements _LoadGroupsForUser {
     required TResult orElse(),
   }) {
     if (loadGroupsForUser != null) {
-      return loadGroupsForUser(userId);
+      return loadGroupsForUser(userId, loadFromFile, loadFromServer);
     }
     return orElse();
   }
@@ -381,8 +252,8 @@ class _$_LoadGroupsForUser implements _LoadGroupsForUser {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_LoadEvent value) loadEvent,
     required TResult Function(_LoadGroupsForUser value) loadGroupsForUser,
+    required TResult Function(_LoadGroups value) loadGroups,
     required TResult Function(_InitialLoadEvent value) initialLoad,
     required TResult Function(_GroupsLoadedEvent value) groupsLoaded,
     required TResult Function(_ImageUpdatedEvent value) imageUpdated,
@@ -395,8 +266,8 @@ class _$_LoadGroupsForUser implements _LoadGroupsForUser {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_LoadEvent value)? loadEvent,
     TResult Function(_LoadGroupsForUser value)? loadGroupsForUser,
+    TResult Function(_LoadGroups value)? loadGroups,
     TResult Function(_InitialLoadEvent value)? initialLoad,
     TResult Function(_GroupsLoadedEvent value)? groupsLoaded,
     TResult Function(_ImageUpdatedEvent value)? imageUpdated,
@@ -409,8 +280,8 @@ class _$_LoadGroupsForUser implements _LoadGroupsForUser {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_LoadEvent value)? loadEvent,
     TResult Function(_LoadGroupsForUser value)? loadGroupsForUser,
+    TResult Function(_LoadGroups value)? loadGroups,
     TResult Function(_InitialLoadEvent value)? initialLoad,
     TResult Function(_GroupsLoadedEvent value)? groupsLoaded,
     TResult Function(_ImageUpdatedEvent value)? imageUpdated,
@@ -426,12 +297,201 @@ class _$_LoadGroupsForUser implements _LoadGroupsForUser {
 }
 
 abstract class _LoadGroupsForUser implements GroupsEvent {
-  const factory _LoadGroupsForUser({required final String userId}) =
-      _$_LoadGroupsForUser;
+  const factory _LoadGroupsForUser(
+      {required final String userId,
+      final bool loadFromFile,
+      final bool loadFromServer}) = _$_LoadGroupsForUser;
 
   String get userId => throw _privateConstructorUsedError;
+  bool get loadFromFile => throw _privateConstructorUsedError;
+  bool get loadFromServer => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   _$$_LoadGroupsForUserCopyWith<_$_LoadGroupsForUser> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$_LoadGroupsCopyWith<$Res> {
+  factory _$$_LoadGroupsCopyWith(
+          _$_LoadGroups value, $Res Function(_$_LoadGroups) then) =
+      __$$_LoadGroupsCopyWithImpl<$Res>;
+  $Res call({bool loadFromFile, bool loadFromServer});
+}
+
+/// @nodoc
+class __$$_LoadGroupsCopyWithImpl<$Res> extends _$GroupsEventCopyWithImpl<$Res>
+    implements _$$_LoadGroupsCopyWith<$Res> {
+  __$$_LoadGroupsCopyWithImpl(
+      _$_LoadGroups _value, $Res Function(_$_LoadGroups) _then)
+      : super(_value, (v) => _then(v as _$_LoadGroups));
+
+  @override
+  _$_LoadGroups get _value => super._value as _$_LoadGroups;
+
+  @override
+  $Res call({
+    Object? loadFromFile = freezed,
+    Object? loadFromServer = freezed,
+  }) {
+    return _then(_$_LoadGroups(
+      loadFromFile: loadFromFile == freezed
+          ? _value.loadFromFile
+          : loadFromFile // ignore: cast_nullable_to_non_nullable
+              as bool,
+      loadFromServer: loadFromServer == freezed
+          ? _value.loadFromServer
+          : loadFromServer // ignore: cast_nullable_to_non_nullable
+              as bool,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$_LoadGroups implements _LoadGroups {
+  const _$_LoadGroups({this.loadFromFile = true, this.loadFromServer = false});
+
+  @override
+  @JsonKey()
+  final bool loadFromFile;
+  @override
+  @JsonKey()
+  final bool loadFromServer;
+
+  @override
+  String toString() {
+    return 'GroupsEvent.loadGroups(loadFromFile: $loadFromFile, loadFromServer: $loadFromServer)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_LoadGroups &&
+            const DeepCollectionEquality()
+                .equals(other.loadFromFile, loadFromFile) &&
+            const DeepCollectionEquality()
+                .equals(other.loadFromServer, loadFromServer));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(loadFromFile),
+      const DeepCollectionEquality().hash(loadFromServer));
+
+  @JsonKey(ignore: true)
+  @override
+  _$$_LoadGroupsCopyWith<_$_LoadGroups> get copyWith =>
+      __$$_LoadGroupsCopyWithImpl<_$_LoadGroups>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(
+            String userId, bool loadFromFile, bool loadFromServer)
+        loadGroupsForUser,
+    required TResult Function(bool loadFromFile, bool loadFromServer)
+        loadGroups,
+    required TResult Function(SharecationGroups groups) initialLoad,
+    required TResult Function(List<SharecationEmptyGroup> groups) groupsLoaded,
+    required TResult Function(String groupId, SharecationImage image)
+        imageUpdated,
+    required TResult Function(String groupId) selectEvent,
+    required TResult Function(String name) addEvent,
+  }) {
+    return loadGroups(loadFromFile, loadFromServer);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(String userId, bool loadFromFile, bool loadFromServer)?
+        loadGroupsForUser,
+    TResult Function(bool loadFromFile, bool loadFromServer)? loadGroups,
+    TResult Function(SharecationGroups groups)? initialLoad,
+    TResult Function(List<SharecationEmptyGroup> groups)? groupsLoaded,
+    TResult Function(String groupId, SharecationImage image)? imageUpdated,
+    TResult Function(String groupId)? selectEvent,
+    TResult Function(String name)? addEvent,
+  }) {
+    return loadGroups?.call(loadFromFile, loadFromServer);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(String userId, bool loadFromFile, bool loadFromServer)?
+        loadGroupsForUser,
+    TResult Function(bool loadFromFile, bool loadFromServer)? loadGroups,
+    TResult Function(SharecationGroups groups)? initialLoad,
+    TResult Function(List<SharecationEmptyGroup> groups)? groupsLoaded,
+    TResult Function(String groupId, SharecationImage image)? imageUpdated,
+    TResult Function(String groupId)? selectEvent,
+    TResult Function(String name)? addEvent,
+    required TResult orElse(),
+  }) {
+    if (loadGroups != null) {
+      return loadGroups(loadFromFile, loadFromServer);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_LoadGroupsForUser value) loadGroupsForUser,
+    required TResult Function(_LoadGroups value) loadGroups,
+    required TResult Function(_InitialLoadEvent value) initialLoad,
+    required TResult Function(_GroupsLoadedEvent value) groupsLoaded,
+    required TResult Function(_ImageUpdatedEvent value) imageUpdated,
+    required TResult Function(_SelectEvent value) selectEvent,
+    required TResult Function(_AddEvent value) addEvent,
+  }) {
+    return loadGroups(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_LoadGroupsForUser value)? loadGroupsForUser,
+    TResult Function(_LoadGroups value)? loadGroups,
+    TResult Function(_InitialLoadEvent value)? initialLoad,
+    TResult Function(_GroupsLoadedEvent value)? groupsLoaded,
+    TResult Function(_ImageUpdatedEvent value)? imageUpdated,
+    TResult Function(_SelectEvent value)? selectEvent,
+    TResult Function(_AddEvent value)? addEvent,
+  }) {
+    return loadGroups?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_LoadGroupsForUser value)? loadGroupsForUser,
+    TResult Function(_LoadGroups value)? loadGroups,
+    TResult Function(_InitialLoadEvent value)? initialLoad,
+    TResult Function(_GroupsLoadedEvent value)? groupsLoaded,
+    TResult Function(_ImageUpdatedEvent value)? imageUpdated,
+    TResult Function(_SelectEvent value)? selectEvent,
+    TResult Function(_AddEvent value)? addEvent,
+    required TResult orElse(),
+  }) {
+    if (loadGroups != null) {
+      return loadGroups(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _LoadGroups implements GroupsEvent {
+  const factory _LoadGroups(
+      {final bool loadFromFile, final bool loadFromServer}) = _$_LoadGroups;
+
+  bool get loadFromFile => throw _privateConstructorUsedError;
+  bool get loadFromServer => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  _$$_LoadGroupsCopyWith<_$_LoadGroups> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -509,8 +569,11 @@ class _$_InitialLoadEvent implements _InitialLoadEvent {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(bool force) loadEvent,
-    required TResult Function(String userId) loadGroupsForUser,
+    required TResult Function(
+            String userId, bool loadFromFile, bool loadFromServer)
+        loadGroupsForUser,
+    required TResult Function(bool loadFromFile, bool loadFromServer)
+        loadGroups,
     required TResult Function(SharecationGroups groups) initialLoad,
     required TResult Function(List<SharecationEmptyGroup> groups) groupsLoaded,
     required TResult Function(String groupId, SharecationImage image)
@@ -524,8 +587,9 @@ class _$_InitialLoadEvent implements _InitialLoadEvent {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(bool force)? loadEvent,
-    TResult Function(String userId)? loadGroupsForUser,
+    TResult Function(String userId, bool loadFromFile, bool loadFromServer)?
+        loadGroupsForUser,
+    TResult Function(bool loadFromFile, bool loadFromServer)? loadGroups,
     TResult Function(SharecationGroups groups)? initialLoad,
     TResult Function(List<SharecationEmptyGroup> groups)? groupsLoaded,
     TResult Function(String groupId, SharecationImage image)? imageUpdated,
@@ -538,8 +602,9 @@ class _$_InitialLoadEvent implements _InitialLoadEvent {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(bool force)? loadEvent,
-    TResult Function(String userId)? loadGroupsForUser,
+    TResult Function(String userId, bool loadFromFile, bool loadFromServer)?
+        loadGroupsForUser,
+    TResult Function(bool loadFromFile, bool loadFromServer)? loadGroups,
     TResult Function(SharecationGroups groups)? initialLoad,
     TResult Function(List<SharecationEmptyGroup> groups)? groupsLoaded,
     TResult Function(String groupId, SharecationImage image)? imageUpdated,
@@ -556,8 +621,8 @@ class _$_InitialLoadEvent implements _InitialLoadEvent {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_LoadEvent value) loadEvent,
     required TResult Function(_LoadGroupsForUser value) loadGroupsForUser,
+    required TResult Function(_LoadGroups value) loadGroups,
     required TResult Function(_InitialLoadEvent value) initialLoad,
     required TResult Function(_GroupsLoadedEvent value) groupsLoaded,
     required TResult Function(_ImageUpdatedEvent value) imageUpdated,
@@ -570,8 +635,8 @@ class _$_InitialLoadEvent implements _InitialLoadEvent {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_LoadEvent value)? loadEvent,
     TResult Function(_LoadGroupsForUser value)? loadGroupsForUser,
+    TResult Function(_LoadGroups value)? loadGroups,
     TResult Function(_InitialLoadEvent value)? initialLoad,
     TResult Function(_GroupsLoadedEvent value)? groupsLoaded,
     TResult Function(_ImageUpdatedEvent value)? imageUpdated,
@@ -584,8 +649,8 @@ class _$_InitialLoadEvent implements _InitialLoadEvent {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_LoadEvent value)? loadEvent,
     TResult Function(_LoadGroupsForUser value)? loadGroupsForUser,
+    TResult Function(_LoadGroups value)? loadGroups,
     TResult Function(_InitialLoadEvent value)? initialLoad,
     TResult Function(_GroupsLoadedEvent value)? groupsLoaded,
     TResult Function(_ImageUpdatedEvent value)? imageUpdated,
@@ -682,8 +747,11 @@ class _$_GroupsLoadedEvent implements _GroupsLoadedEvent {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(bool force) loadEvent,
-    required TResult Function(String userId) loadGroupsForUser,
+    required TResult Function(
+            String userId, bool loadFromFile, bool loadFromServer)
+        loadGroupsForUser,
+    required TResult Function(bool loadFromFile, bool loadFromServer)
+        loadGroups,
     required TResult Function(SharecationGroups groups) initialLoad,
     required TResult Function(List<SharecationEmptyGroup> groups) groupsLoaded,
     required TResult Function(String groupId, SharecationImage image)
@@ -697,8 +765,9 @@ class _$_GroupsLoadedEvent implements _GroupsLoadedEvent {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(bool force)? loadEvent,
-    TResult Function(String userId)? loadGroupsForUser,
+    TResult Function(String userId, bool loadFromFile, bool loadFromServer)?
+        loadGroupsForUser,
+    TResult Function(bool loadFromFile, bool loadFromServer)? loadGroups,
     TResult Function(SharecationGroups groups)? initialLoad,
     TResult Function(List<SharecationEmptyGroup> groups)? groupsLoaded,
     TResult Function(String groupId, SharecationImage image)? imageUpdated,
@@ -711,8 +780,9 @@ class _$_GroupsLoadedEvent implements _GroupsLoadedEvent {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(bool force)? loadEvent,
-    TResult Function(String userId)? loadGroupsForUser,
+    TResult Function(String userId, bool loadFromFile, bool loadFromServer)?
+        loadGroupsForUser,
+    TResult Function(bool loadFromFile, bool loadFromServer)? loadGroups,
     TResult Function(SharecationGroups groups)? initialLoad,
     TResult Function(List<SharecationEmptyGroup> groups)? groupsLoaded,
     TResult Function(String groupId, SharecationImage image)? imageUpdated,
@@ -729,8 +799,8 @@ class _$_GroupsLoadedEvent implements _GroupsLoadedEvent {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_LoadEvent value) loadEvent,
     required TResult Function(_LoadGroupsForUser value) loadGroupsForUser,
+    required TResult Function(_LoadGroups value) loadGroups,
     required TResult Function(_InitialLoadEvent value) initialLoad,
     required TResult Function(_GroupsLoadedEvent value) groupsLoaded,
     required TResult Function(_ImageUpdatedEvent value) imageUpdated,
@@ -743,8 +813,8 @@ class _$_GroupsLoadedEvent implements _GroupsLoadedEvent {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_LoadEvent value)? loadEvent,
     TResult Function(_LoadGroupsForUser value)? loadGroupsForUser,
+    TResult Function(_LoadGroups value)? loadGroups,
     TResult Function(_InitialLoadEvent value)? initialLoad,
     TResult Function(_GroupsLoadedEvent value)? groupsLoaded,
     TResult Function(_ImageUpdatedEvent value)? imageUpdated,
@@ -757,8 +827,8 @@ class _$_GroupsLoadedEvent implements _GroupsLoadedEvent {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_LoadEvent value)? loadEvent,
     TResult Function(_LoadGroupsForUser value)? loadGroupsForUser,
+    TResult Function(_LoadGroups value)? loadGroups,
     TResult Function(_InitialLoadEvent value)? initialLoad,
     TResult Function(_GroupsLoadedEvent value)? groupsLoaded,
     TResult Function(_ImageUpdatedEvent value)? imageUpdated,
@@ -869,8 +939,11 @@ class _$_ImageUpdatedEvent implements _ImageUpdatedEvent {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(bool force) loadEvent,
-    required TResult Function(String userId) loadGroupsForUser,
+    required TResult Function(
+            String userId, bool loadFromFile, bool loadFromServer)
+        loadGroupsForUser,
+    required TResult Function(bool loadFromFile, bool loadFromServer)
+        loadGroups,
     required TResult Function(SharecationGroups groups) initialLoad,
     required TResult Function(List<SharecationEmptyGroup> groups) groupsLoaded,
     required TResult Function(String groupId, SharecationImage image)
@@ -884,8 +957,9 @@ class _$_ImageUpdatedEvent implements _ImageUpdatedEvent {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(bool force)? loadEvent,
-    TResult Function(String userId)? loadGroupsForUser,
+    TResult Function(String userId, bool loadFromFile, bool loadFromServer)?
+        loadGroupsForUser,
+    TResult Function(bool loadFromFile, bool loadFromServer)? loadGroups,
     TResult Function(SharecationGroups groups)? initialLoad,
     TResult Function(List<SharecationEmptyGroup> groups)? groupsLoaded,
     TResult Function(String groupId, SharecationImage image)? imageUpdated,
@@ -898,8 +972,9 @@ class _$_ImageUpdatedEvent implements _ImageUpdatedEvent {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(bool force)? loadEvent,
-    TResult Function(String userId)? loadGroupsForUser,
+    TResult Function(String userId, bool loadFromFile, bool loadFromServer)?
+        loadGroupsForUser,
+    TResult Function(bool loadFromFile, bool loadFromServer)? loadGroups,
     TResult Function(SharecationGroups groups)? initialLoad,
     TResult Function(List<SharecationEmptyGroup> groups)? groupsLoaded,
     TResult Function(String groupId, SharecationImage image)? imageUpdated,
@@ -916,8 +991,8 @@ class _$_ImageUpdatedEvent implements _ImageUpdatedEvent {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_LoadEvent value) loadEvent,
     required TResult Function(_LoadGroupsForUser value) loadGroupsForUser,
+    required TResult Function(_LoadGroups value) loadGroups,
     required TResult Function(_InitialLoadEvent value) initialLoad,
     required TResult Function(_GroupsLoadedEvent value) groupsLoaded,
     required TResult Function(_ImageUpdatedEvent value) imageUpdated,
@@ -930,8 +1005,8 @@ class _$_ImageUpdatedEvent implements _ImageUpdatedEvent {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_LoadEvent value)? loadEvent,
     TResult Function(_LoadGroupsForUser value)? loadGroupsForUser,
+    TResult Function(_LoadGroups value)? loadGroups,
     TResult Function(_InitialLoadEvent value)? initialLoad,
     TResult Function(_GroupsLoadedEvent value)? groupsLoaded,
     TResult Function(_ImageUpdatedEvent value)? imageUpdated,
@@ -944,8 +1019,8 @@ class _$_ImageUpdatedEvent implements _ImageUpdatedEvent {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_LoadEvent value)? loadEvent,
     TResult Function(_LoadGroupsForUser value)? loadGroupsForUser,
+    TResult Function(_LoadGroups value)? loadGroups,
     TResult Function(_InitialLoadEvent value)? initialLoad,
     TResult Function(_GroupsLoadedEvent value)? groupsLoaded,
     TResult Function(_ImageUpdatedEvent value)? imageUpdated,
@@ -1036,8 +1111,11 @@ class _$_SelectEvent implements _SelectEvent {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(bool force) loadEvent,
-    required TResult Function(String userId) loadGroupsForUser,
+    required TResult Function(
+            String userId, bool loadFromFile, bool loadFromServer)
+        loadGroupsForUser,
+    required TResult Function(bool loadFromFile, bool loadFromServer)
+        loadGroups,
     required TResult Function(SharecationGroups groups) initialLoad,
     required TResult Function(List<SharecationEmptyGroup> groups) groupsLoaded,
     required TResult Function(String groupId, SharecationImage image)
@@ -1051,8 +1129,9 @@ class _$_SelectEvent implements _SelectEvent {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(bool force)? loadEvent,
-    TResult Function(String userId)? loadGroupsForUser,
+    TResult Function(String userId, bool loadFromFile, bool loadFromServer)?
+        loadGroupsForUser,
+    TResult Function(bool loadFromFile, bool loadFromServer)? loadGroups,
     TResult Function(SharecationGroups groups)? initialLoad,
     TResult Function(List<SharecationEmptyGroup> groups)? groupsLoaded,
     TResult Function(String groupId, SharecationImage image)? imageUpdated,
@@ -1065,8 +1144,9 @@ class _$_SelectEvent implements _SelectEvent {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(bool force)? loadEvent,
-    TResult Function(String userId)? loadGroupsForUser,
+    TResult Function(String userId, bool loadFromFile, bool loadFromServer)?
+        loadGroupsForUser,
+    TResult Function(bool loadFromFile, bool loadFromServer)? loadGroups,
     TResult Function(SharecationGroups groups)? initialLoad,
     TResult Function(List<SharecationEmptyGroup> groups)? groupsLoaded,
     TResult Function(String groupId, SharecationImage image)? imageUpdated,
@@ -1083,8 +1163,8 @@ class _$_SelectEvent implements _SelectEvent {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_LoadEvent value) loadEvent,
     required TResult Function(_LoadGroupsForUser value) loadGroupsForUser,
+    required TResult Function(_LoadGroups value) loadGroups,
     required TResult Function(_InitialLoadEvent value) initialLoad,
     required TResult Function(_GroupsLoadedEvent value) groupsLoaded,
     required TResult Function(_ImageUpdatedEvent value) imageUpdated,
@@ -1097,8 +1177,8 @@ class _$_SelectEvent implements _SelectEvent {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_LoadEvent value)? loadEvent,
     TResult Function(_LoadGroupsForUser value)? loadGroupsForUser,
+    TResult Function(_LoadGroups value)? loadGroups,
     TResult Function(_InitialLoadEvent value)? initialLoad,
     TResult Function(_GroupsLoadedEvent value)? groupsLoaded,
     TResult Function(_ImageUpdatedEvent value)? imageUpdated,
@@ -1111,8 +1191,8 @@ class _$_SelectEvent implements _SelectEvent {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_LoadEvent value)? loadEvent,
     TResult Function(_LoadGroupsForUser value)? loadGroupsForUser,
+    TResult Function(_LoadGroups value)? loadGroups,
     TResult Function(_InitialLoadEvent value)? initialLoad,
     TResult Function(_GroupsLoadedEvent value)? groupsLoaded,
     TResult Function(_ImageUpdatedEvent value)? imageUpdated,
@@ -1200,8 +1280,11 @@ class _$_AddEvent implements _AddEvent {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(bool force) loadEvent,
-    required TResult Function(String userId) loadGroupsForUser,
+    required TResult Function(
+            String userId, bool loadFromFile, bool loadFromServer)
+        loadGroupsForUser,
+    required TResult Function(bool loadFromFile, bool loadFromServer)
+        loadGroups,
     required TResult Function(SharecationGroups groups) initialLoad,
     required TResult Function(List<SharecationEmptyGroup> groups) groupsLoaded,
     required TResult Function(String groupId, SharecationImage image)
@@ -1215,8 +1298,9 @@ class _$_AddEvent implements _AddEvent {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(bool force)? loadEvent,
-    TResult Function(String userId)? loadGroupsForUser,
+    TResult Function(String userId, bool loadFromFile, bool loadFromServer)?
+        loadGroupsForUser,
+    TResult Function(bool loadFromFile, bool loadFromServer)? loadGroups,
     TResult Function(SharecationGroups groups)? initialLoad,
     TResult Function(List<SharecationEmptyGroup> groups)? groupsLoaded,
     TResult Function(String groupId, SharecationImage image)? imageUpdated,
@@ -1229,8 +1313,9 @@ class _$_AddEvent implements _AddEvent {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(bool force)? loadEvent,
-    TResult Function(String userId)? loadGroupsForUser,
+    TResult Function(String userId, bool loadFromFile, bool loadFromServer)?
+        loadGroupsForUser,
+    TResult Function(bool loadFromFile, bool loadFromServer)? loadGroups,
     TResult Function(SharecationGroups groups)? initialLoad,
     TResult Function(List<SharecationEmptyGroup> groups)? groupsLoaded,
     TResult Function(String groupId, SharecationImage image)? imageUpdated,
@@ -1247,8 +1332,8 @@ class _$_AddEvent implements _AddEvent {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_LoadEvent value) loadEvent,
     required TResult Function(_LoadGroupsForUser value) loadGroupsForUser,
+    required TResult Function(_LoadGroups value) loadGroups,
     required TResult Function(_InitialLoadEvent value) initialLoad,
     required TResult Function(_GroupsLoadedEvent value) groupsLoaded,
     required TResult Function(_ImageUpdatedEvent value) imageUpdated,
@@ -1261,8 +1346,8 @@ class _$_AddEvent implements _AddEvent {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_LoadEvent value)? loadEvent,
     TResult Function(_LoadGroupsForUser value)? loadGroupsForUser,
+    TResult Function(_LoadGroups value)? loadGroups,
     TResult Function(_InitialLoadEvent value)? initialLoad,
     TResult Function(_GroupsLoadedEvent value)? groupsLoaded,
     TResult Function(_ImageUpdatedEvent value)? imageUpdated,
@@ -1275,8 +1360,8 @@ class _$_AddEvent implements _AddEvent {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_LoadEvent value)? loadEvent,
     TResult Function(_LoadGroupsForUser value)? loadGroupsForUser,
+    TResult Function(_LoadGroups value)? loadGroups,
     TResult Function(_InitialLoadEvent value)? initialLoad,
     TResult Function(_GroupsLoadedEvent value)? groupsLoaded,
     TResult Function(_ImageUpdatedEvent value)? imageUpdated,

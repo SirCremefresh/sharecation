@@ -64,9 +64,6 @@ class AuthenticationGuard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AuthenticationBloc, AuthenticationState>(
-      buildWhen: (previous, current) {
-        return previous != current;
-      },
       builder: (context, state) {
         return state.maybeWhen(
           initialState: () {
@@ -117,12 +114,17 @@ class _RouterState extends State<Router> {
             },
           ),
           GoRoute(
-            path: '/groups',
-            pageBuilder: (context, state) => NoTransitionPage<void>(
-              key: state.pageKey,
-              child: const SelectGroupScreen(),
-            ),
-          ),
+              path: '/groups',
+              pageBuilder: (context, state) => NoTransitionPage<void>(
+                    key: state.pageKey,
+                    child: const SelectGroupScreen(),
+                  ),
+              redirect: (state) {
+                return context.read<GroupsBloc>().state.whenOrNull(
+                      loadedState: (state, userId) =>
+                          "/groups/${state.groups[state.groups.keys.first]!.groupId}/info",
+                    );
+              }),
           GoRoute(
             path: '/groups/:groupId/info',
             pageBuilder: (context, state) {

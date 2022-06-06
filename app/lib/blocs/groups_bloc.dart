@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:sharecation_app/api/contracts/groups/v1/groups.pb.dart';
 import 'package:sharecation_app/repositories/groups_file_accessor_repository.dart';
 import 'package:sharecation_app/service/api_service.dart';
 
@@ -23,16 +24,9 @@ class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
       }
       if (event.loadFromServer) {
         var groups = await api.groups.getGroups();
-        add(
-          GroupsEvent.groupsLoaded(
-            groups: groups
-                .map(
-                  (e) =>
-                      SharecationEmptyGroup(groupId: e.groupId, name: e.name),
-                )
-                .toList(growable: false),
-          ),
-        );
+        add(GroupsEvent.groupsLoaded(
+          groups: _mapToSharecationGroups(groups),
+        ));
       }
     });
     on<_GroupsLoadedEvent>((event, emit) async {
@@ -76,15 +70,6 @@ class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
         ),
       );
     });
-    // on<_LoadEvent>((event, emit) async {
-    //   if (event.force) {
-    //     authenticationService.invalidate();
-    //   }
-    //   var groups = await api.groups.getGroups();
-    //   var activeGroup = groups[0];
-    //   emit(GroupsState.loadedState(groups: groups, activeGroup: activeGroup));
-    //   imagesBloc.add(ImagesEvent.loadEvent(groupId: activeGroup.groupId));
-    // });
     on<_AddEvent>((event, emit) async {
       final localState = _assertLoadedState();
       final group = await api.groups.createGroup(groupName: event.name);
@@ -106,8 +91,19 @@ class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
         ),
       );
 
-      add(GroupsEvent.loadGroupsForUser(userId: localState.userId, loadFromFile: false, loadFromServer: true));
+      add(GroupsEvent.loadGroupsForUser(
+          userId: localState.userId,
+          loadFromFile: false,
+          loadFromServer: true));
     });
+  }
+
+  List<SharecationEmptyGroup> _mapToSharecationGroups(List<Group> groups) {
+    return groups
+        .map(
+          (e) => SharecationEmptyGroup(groupId: e.groupId, name: e.name),
+        )
+        .toList(growable: false);
   }
 
   _LoadedState _assertLoadedState() {

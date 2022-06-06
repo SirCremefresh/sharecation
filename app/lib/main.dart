@@ -121,9 +121,12 @@ class _RouterState extends State<Router> {
                     child: const SelectGroupScreen(),
                   ),
               redirect: (state) {
-                return context.read<GroupsBloc>().state.whenOrNull(
-                      loadedState: (state, userId) =>
-                          "/groups/${state.groups[state.groups.keys.first]!.groupId}/info",
+                return context.read<GroupsBloc>().state.whenOrNull<String?>(
+                      loadedState: (state, userId) {
+                        final keys = state.groups.keys;
+                        if(keys.isEmpty) return null;
+                        return "/groups/${state.groups[keys.first]!.groupId}/info";
+                      },
                     );
               }),
           GoRoute(

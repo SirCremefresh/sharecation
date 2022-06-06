@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:sharecation_app/api/contracts/groups/v1/groups.pb.dart';
 import 'package:sharecation_app/repositories/groups_file_accessor_repository.dart';
+import 'package:sharecation_app/repositories/image_repository.dart';
 import 'package:sharecation_app/service/api_service.dart';
 
 part 'groups_bloc.freezed.dart';
@@ -29,6 +30,14 @@ class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
         ));
       }
     });
+    on<_AddImageEvent>((event, emit) async {
+      _assertLoadedState();
+      final sharecationImage =
+          await ImageRepository().saveImage(groupId: event.groupId);
+      if (sharecationImage == null) return;
+      add(GroupsEvent.imageUpdated(
+          groupId: event.groupId, image: sharecationImage));
+    });
     on<_LoadImages>((event, emit) async {
       final loadedState = _assertLoadedState();
       for (var group in loadedState.state.groups.values) {
@@ -40,11 +49,8 @@ class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
       final group = loadedState.state.groups[event.groupId]!;
       for (final image in event.images) {
         final storedImage = group.images[image.externalId];
-        if(storedImage == null) {
-
-        } else {
-
-        }
+        if (storedImage == null) {
+        } else {}
       }
     });
     on<_GroupsLoadedEvent>((event, emit) async {
@@ -119,9 +125,11 @@ class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
   Future<void> loadImagesForGroup(SharecationGroup group) async {
     final images = (await api.images.getImagesByGroupId(group.groupId))
         .map((e) => SharecationImage.remote(
-            externalId: e.imageId, imageId: e.imageId, url: e.url))
+            externalId: e.externalId, imageId: e.imageId, url: e.url))
         .toList(growable: false);
-    add(GroupsEvent.patchImages(images: images, groupId: group.groupId));
+    for (final image in images) {
+      add(GroupsEvent.imageUpdated(image: image, groupId: group.groupId));
+    }
   }
 
   List<SharecationEmptyGroup> _mapToSharecationGroups(List<Group> groups) {

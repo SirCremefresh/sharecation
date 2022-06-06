@@ -15,6 +15,8 @@ class GroupsEvent with _$GroupsEvent {
 
   const factory GroupsEvent.loadImages() = _LoadImages;
 
+  const factory GroupsEvent.addImage({required String groupId}) = _AddImageEvent;
+
   const factory GroupsEvent.initialLoad({required SharecationGroups groups}) =
       _InitialLoadEvent;
 

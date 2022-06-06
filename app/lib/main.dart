@@ -14,6 +14,7 @@ import 'package:sharecation_app/pages/loading_screen.dart';
 import 'package:sharecation_app/pages/login_screen.dart';
 import 'package:sharecation_app/pages/select_group_screen.dart';
 import 'package:sharecation_app/pages/swipe_screen.dart';
+import 'package:sharecation_app/pages/synchronise_screen.dart';
 import 'package:sharecation_app/repositories/groups_file_accessor_repository.dart';
 
 Future<void> main() async {
@@ -125,6 +126,13 @@ class _RouterState extends State<Router> {
                           "/groups/${state.groups[state.groups.keys.first]!.groupId}/info",
                     );
               }),
+          GoRoute(
+            path: '/synchronise',
+            pageBuilder: (context, state) => NoTransitionPage<void>(
+              key: state.pageKey,
+              child: const SynchroniseScreen(),
+            ),
+          ),
           GoRoute(
             path: '/groups/:groupId/info',
             pageBuilder: (context, state) {

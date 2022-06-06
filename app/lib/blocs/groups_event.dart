@@ -13,8 +13,13 @@ class GroupsEvent with _$GroupsEvent {
     @Default(false) bool loadFromServer,
   }) = _LoadGroups;
 
+  const factory GroupsEvent.loadImages() = _LoadImages;
+
   const factory GroupsEvent.initialLoad({required SharecationGroups groups}) =
       _InitialLoadEvent;
+
+  const factory GroupsEvent.patchImages({required String groupId, required List<SharecationImage> images}) =
+      _PatchImagesEvent;
 
   const factory GroupsEvent.groupsLoaded(
       {required List<SharecationEmptyGroup> groups}) = _GroupsLoadedEvent;

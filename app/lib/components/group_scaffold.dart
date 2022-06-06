@@ -4,18 +4,18 @@ import 'package:go_router/go_router.dart';
 import 'package:sharecation_app/blocs/groups_bloc.dart';
 import 'package:sharecation_app/components/create_group_modal.dart';
 
-enum GroupScaffoldTab { groupInfo, swipe, gallery }
+enum GroupScaffoldTab { groupInfo, swipe, gallery, none }
 
 class Layout extends StatelessWidget {
   final Widget child;
-  final String groupId;
+  final String? groupId;
   final GroupScaffoldTab groupScaffoldTab;
 
   const Layout(
       {Key? key,
       required this.child,
-      required this.groupId,
-      required this.groupScaffoldTab})
+      this.groupId,
+      this.groupScaffoldTab = GroupScaffoldTab.none})
       : super(key: key);
 
   @override
@@ -26,39 +26,60 @@ class Layout extends StatelessWidget {
       ),
       body: child,
       drawer: const SharecationDrawer(),
-      bottomNavigationBar: BottomNavigationBar(
-        onTap: (index) {
-          final tab = GroupScaffoldTab.values[index];
-          if (tab == GroupScaffoldTab.gallery) {
-            context.go('/groups/$groupId/gallery');
-          } else if (tab == GroupScaffoldTab.swipe) {
-            context.go('/groups/$groupId/swipe');
-          } else {
-            context.go('/groups/$groupId/info');
-          }
-        },
-        currentIndex: groupScaffoldTab.index,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.info_outline),
-            label: "Info",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.local_fire_department),
-            label: "Swipe",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.camera_roll_outlined),
-            label: "Gallery",
-          )
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.camera),
-        onPressed: () async {
-          // context.read<ImagesBloc>().add(const ImagesEvent.addEvent());
-        },
-      ),
+      bottomNavigationBar: groupId != null
+          ? SharecationBottomNavigationBar(
+              groupId: groupId, groupScaffoldTab: groupScaffoldTab)
+          : null,
+      floatingActionButton: groupId != null
+          ? FloatingActionButton(
+              child: const Icon(Icons.camera),
+              onPressed: () async {
+                // context.read<ImagesBloc>().add(const ImagesEvent.addEvent());
+              },
+            )
+          : null,
+    );
+  }
+}
+
+class SharecationBottomNavigationBar extends StatelessWidget {
+  const SharecationBottomNavigationBar({
+    Key? key,
+    required this.groupId,
+    required this.groupScaffoldTab,
+  }) : super(key: key);
+
+  final String? groupId;
+  final GroupScaffoldTab groupScaffoldTab;
+
+  @override
+  Widget build(BuildContext context) {
+    return BottomNavigationBar(
+      onTap: (index) {
+        final tab = GroupScaffoldTab.values[index];
+        if (tab == GroupScaffoldTab.gallery) {
+          context.go('/groups/$groupId/gallery');
+        } else if (tab == GroupScaffoldTab.swipe) {
+          context.go('/groups/$groupId/swipe');
+        } else {
+          context.go('/groups/$groupId/info');
+        }
+      },
+      currentIndex: groupScaffoldTab.index,
+      items: const [
+        BottomNavigationBarItem(
+          icon: Icon(Icons.info_outline),
+          label: "Info",
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.local_fire_department),
+          label: "Swipe",
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.camera_roll_outlined),
+          label: "Gallery",
+        )
+      ],
     );
   }
 }
@@ -81,6 +102,12 @@ class SharecationDrawer extends StatelessWidget {
               loadedState: (groups, userId) =>
                   DrawerGroupsList(groups: groups.groups),
             ),
+          ),
+          TextButton(
+            onPressed: () {
+              context.go("/synchronise");
+            },
+            child: const Text("Refresh screen"),
           ),
           TextButton(
             onPressed: () {

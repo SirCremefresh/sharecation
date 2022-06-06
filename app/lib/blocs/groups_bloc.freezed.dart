@@ -23,7 +23,10 @@ mixin _$GroupsEvent {
         loadGroupsForUser,
     required TResult Function(bool loadFromFile, bool loadFromServer)
         loadGroups,
+    required TResult Function() loadImages,
     required TResult Function(SharecationGroups groups) initialLoad,
+    required TResult Function(String groupId, List<SharecationImage> images)
+        patchImages,
     required TResult Function(List<SharecationEmptyGroup> groups) groupsLoaded,
     required TResult Function(String groupId, SharecationImage image)
         imageUpdated,
@@ -36,7 +39,10 @@ mixin _$GroupsEvent {
     TResult Function(String userId, bool loadFromFile, bool loadFromServer)?
         loadGroupsForUser,
     TResult Function(bool loadFromFile, bool loadFromServer)? loadGroups,
+    TResult Function()? loadImages,
     TResult Function(SharecationGroups groups)? initialLoad,
+    TResult Function(String groupId, List<SharecationImage> images)?
+        patchImages,
     TResult Function(List<SharecationEmptyGroup> groups)? groupsLoaded,
     TResult Function(String groupId, SharecationImage image)? imageUpdated,
     TResult Function(String groupId)? selectEvent,
@@ -48,7 +54,10 @@ mixin _$GroupsEvent {
     TResult Function(String userId, bool loadFromFile, bool loadFromServer)?
         loadGroupsForUser,
     TResult Function(bool loadFromFile, bool loadFromServer)? loadGroups,
+    TResult Function()? loadImages,
     TResult Function(SharecationGroups groups)? initialLoad,
+    TResult Function(String groupId, List<SharecationImage> images)?
+        patchImages,
     TResult Function(List<SharecationEmptyGroup> groups)? groupsLoaded,
     TResult Function(String groupId, SharecationImage image)? imageUpdated,
     TResult Function(String groupId)? selectEvent,
@@ -60,7 +69,9 @@ mixin _$GroupsEvent {
   TResult map<TResult extends Object?>({
     required TResult Function(_LoadGroupsForUser value) loadGroupsForUser,
     required TResult Function(_LoadGroups value) loadGroups,
+    required TResult Function(_LoadImages value) loadImages,
     required TResult Function(_InitialLoadEvent value) initialLoad,
+    required TResult Function(_PatchImagesEvent value) patchImages,
     required TResult Function(_GroupsLoadedEvent value) groupsLoaded,
     required TResult Function(_ImageUpdatedEvent value) imageUpdated,
     required TResult Function(_SelectEvent value) selectEvent,
@@ -71,7 +82,9 @@ mixin _$GroupsEvent {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(_LoadGroupsForUser value)? loadGroupsForUser,
     TResult Function(_LoadGroups value)? loadGroups,
+    TResult Function(_LoadImages value)? loadImages,
     TResult Function(_InitialLoadEvent value)? initialLoad,
+    TResult Function(_PatchImagesEvent value)? patchImages,
     TResult Function(_GroupsLoadedEvent value)? groupsLoaded,
     TResult Function(_ImageUpdatedEvent value)? imageUpdated,
     TResult Function(_SelectEvent value)? selectEvent,
@@ -82,7 +95,9 @@ mixin _$GroupsEvent {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_LoadGroupsForUser value)? loadGroupsForUser,
     TResult Function(_LoadGroups value)? loadGroups,
+    TResult Function(_LoadImages value)? loadImages,
     TResult Function(_InitialLoadEvent value)? initialLoad,
+    TResult Function(_PatchImagesEvent value)? patchImages,
     TResult Function(_GroupsLoadedEvent value)? groupsLoaded,
     TResult Function(_ImageUpdatedEvent value)? imageUpdated,
     TResult Function(_SelectEvent value)? selectEvent,
@@ -205,7 +220,10 @@ class _$_LoadGroupsForUser implements _LoadGroupsForUser {
         loadGroupsForUser,
     required TResult Function(bool loadFromFile, bool loadFromServer)
         loadGroups,
+    required TResult Function() loadImages,
     required TResult Function(SharecationGroups groups) initialLoad,
+    required TResult Function(String groupId, List<SharecationImage> images)
+        patchImages,
     required TResult Function(List<SharecationEmptyGroup> groups) groupsLoaded,
     required TResult Function(String groupId, SharecationImage image)
         imageUpdated,
@@ -221,7 +239,10 @@ class _$_LoadGroupsForUser implements _LoadGroupsForUser {
     TResult Function(String userId, bool loadFromFile, bool loadFromServer)?
         loadGroupsForUser,
     TResult Function(bool loadFromFile, bool loadFromServer)? loadGroups,
+    TResult Function()? loadImages,
     TResult Function(SharecationGroups groups)? initialLoad,
+    TResult Function(String groupId, List<SharecationImage> images)?
+        patchImages,
     TResult Function(List<SharecationEmptyGroup> groups)? groupsLoaded,
     TResult Function(String groupId, SharecationImage image)? imageUpdated,
     TResult Function(String groupId)? selectEvent,
@@ -236,7 +257,10 @@ class _$_LoadGroupsForUser implements _LoadGroupsForUser {
     TResult Function(String userId, bool loadFromFile, bool loadFromServer)?
         loadGroupsForUser,
     TResult Function(bool loadFromFile, bool loadFromServer)? loadGroups,
+    TResult Function()? loadImages,
     TResult Function(SharecationGroups groups)? initialLoad,
+    TResult Function(String groupId, List<SharecationImage> images)?
+        patchImages,
     TResult Function(List<SharecationEmptyGroup> groups)? groupsLoaded,
     TResult Function(String groupId, SharecationImage image)? imageUpdated,
     TResult Function(String groupId)? selectEvent,
@@ -254,7 +278,9 @@ class _$_LoadGroupsForUser implements _LoadGroupsForUser {
   TResult map<TResult extends Object?>({
     required TResult Function(_LoadGroupsForUser value) loadGroupsForUser,
     required TResult Function(_LoadGroups value) loadGroups,
+    required TResult Function(_LoadImages value) loadImages,
     required TResult Function(_InitialLoadEvent value) initialLoad,
+    required TResult Function(_PatchImagesEvent value) patchImages,
     required TResult Function(_GroupsLoadedEvent value) groupsLoaded,
     required TResult Function(_ImageUpdatedEvent value) imageUpdated,
     required TResult Function(_SelectEvent value) selectEvent,
@@ -268,7 +294,9 @@ class _$_LoadGroupsForUser implements _LoadGroupsForUser {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(_LoadGroupsForUser value)? loadGroupsForUser,
     TResult Function(_LoadGroups value)? loadGroups,
+    TResult Function(_LoadImages value)? loadImages,
     TResult Function(_InitialLoadEvent value)? initialLoad,
+    TResult Function(_PatchImagesEvent value)? patchImages,
     TResult Function(_GroupsLoadedEvent value)? groupsLoaded,
     TResult Function(_ImageUpdatedEvent value)? imageUpdated,
     TResult Function(_SelectEvent value)? selectEvent,
@@ -282,7 +310,9 @@ class _$_LoadGroupsForUser implements _LoadGroupsForUser {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_LoadGroupsForUser value)? loadGroupsForUser,
     TResult Function(_LoadGroups value)? loadGroups,
+    TResult Function(_LoadImages value)? loadImages,
     TResult Function(_InitialLoadEvent value)? initialLoad,
+    TResult Function(_PatchImagesEvent value)? patchImages,
     TResult Function(_GroupsLoadedEvent value)? groupsLoaded,
     TResult Function(_ImageUpdatedEvent value)? imageUpdated,
     TResult Function(_SelectEvent value)? selectEvent,
@@ -393,7 +423,10 @@ class _$_LoadGroups implements _LoadGroups {
         loadGroupsForUser,
     required TResult Function(bool loadFromFile, bool loadFromServer)
         loadGroups,
+    required TResult Function() loadImages,
     required TResult Function(SharecationGroups groups) initialLoad,
+    required TResult Function(String groupId, List<SharecationImage> images)
+        patchImages,
     required TResult Function(List<SharecationEmptyGroup> groups) groupsLoaded,
     required TResult Function(String groupId, SharecationImage image)
         imageUpdated,
@@ -409,7 +442,10 @@ class _$_LoadGroups implements _LoadGroups {
     TResult Function(String userId, bool loadFromFile, bool loadFromServer)?
         loadGroupsForUser,
     TResult Function(bool loadFromFile, bool loadFromServer)? loadGroups,
+    TResult Function()? loadImages,
     TResult Function(SharecationGroups groups)? initialLoad,
+    TResult Function(String groupId, List<SharecationImage> images)?
+        patchImages,
     TResult Function(List<SharecationEmptyGroup> groups)? groupsLoaded,
     TResult Function(String groupId, SharecationImage image)? imageUpdated,
     TResult Function(String groupId)? selectEvent,
@@ -424,7 +460,10 @@ class _$_LoadGroups implements _LoadGroups {
     TResult Function(String userId, bool loadFromFile, bool loadFromServer)?
         loadGroupsForUser,
     TResult Function(bool loadFromFile, bool loadFromServer)? loadGroups,
+    TResult Function()? loadImages,
     TResult Function(SharecationGroups groups)? initialLoad,
+    TResult Function(String groupId, List<SharecationImage> images)?
+        patchImages,
     TResult Function(List<SharecationEmptyGroup> groups)? groupsLoaded,
     TResult Function(String groupId, SharecationImage image)? imageUpdated,
     TResult Function(String groupId)? selectEvent,
@@ -442,7 +481,9 @@ class _$_LoadGroups implements _LoadGroups {
   TResult map<TResult extends Object?>({
     required TResult Function(_LoadGroupsForUser value) loadGroupsForUser,
     required TResult Function(_LoadGroups value) loadGroups,
+    required TResult Function(_LoadImages value) loadImages,
     required TResult Function(_InitialLoadEvent value) initialLoad,
+    required TResult Function(_PatchImagesEvent value) patchImages,
     required TResult Function(_GroupsLoadedEvent value) groupsLoaded,
     required TResult Function(_ImageUpdatedEvent value) imageUpdated,
     required TResult Function(_SelectEvent value) selectEvent,
@@ -456,7 +497,9 @@ class _$_LoadGroups implements _LoadGroups {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(_LoadGroupsForUser value)? loadGroupsForUser,
     TResult Function(_LoadGroups value)? loadGroups,
+    TResult Function(_LoadImages value)? loadImages,
     TResult Function(_InitialLoadEvent value)? initialLoad,
+    TResult Function(_PatchImagesEvent value)? patchImages,
     TResult Function(_GroupsLoadedEvent value)? groupsLoaded,
     TResult Function(_ImageUpdatedEvent value)? imageUpdated,
     TResult Function(_SelectEvent value)? selectEvent,
@@ -470,7 +513,9 @@ class _$_LoadGroups implements _LoadGroups {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_LoadGroupsForUser value)? loadGroupsForUser,
     TResult Function(_LoadGroups value)? loadGroups,
+    TResult Function(_LoadImages value)? loadImages,
     TResult Function(_InitialLoadEvent value)? initialLoad,
+    TResult Function(_PatchImagesEvent value)? patchImages,
     TResult Function(_GroupsLoadedEvent value)? groupsLoaded,
     TResult Function(_ImageUpdatedEvent value)? imageUpdated,
     TResult Function(_SelectEvent value)? selectEvent,
@@ -493,6 +538,161 @@ abstract class _LoadGroups implements GroupsEvent {
   @JsonKey(ignore: true)
   _$$_LoadGroupsCopyWith<_$_LoadGroups> get copyWith =>
       throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$_LoadImagesCopyWith<$Res> {
+  factory _$$_LoadImagesCopyWith(
+          _$_LoadImages value, $Res Function(_$_LoadImages) then) =
+      __$$_LoadImagesCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$_LoadImagesCopyWithImpl<$Res> extends _$GroupsEventCopyWithImpl<$Res>
+    implements _$$_LoadImagesCopyWith<$Res> {
+  __$$_LoadImagesCopyWithImpl(
+      _$_LoadImages _value, $Res Function(_$_LoadImages) _then)
+      : super(_value, (v) => _then(v as _$_LoadImages));
+
+  @override
+  _$_LoadImages get _value => super._value as _$_LoadImages;
+}
+
+/// @nodoc
+
+class _$_LoadImages implements _LoadImages {
+  const _$_LoadImages();
+
+  @override
+  String toString() {
+    return 'GroupsEvent.loadImages()';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$_LoadImages);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(
+            String userId, bool loadFromFile, bool loadFromServer)
+        loadGroupsForUser,
+    required TResult Function(bool loadFromFile, bool loadFromServer)
+        loadGroups,
+    required TResult Function() loadImages,
+    required TResult Function(SharecationGroups groups) initialLoad,
+    required TResult Function(String groupId, List<SharecationImage> images)
+        patchImages,
+    required TResult Function(List<SharecationEmptyGroup> groups) groupsLoaded,
+    required TResult Function(String groupId, SharecationImage image)
+        imageUpdated,
+    required TResult Function(String groupId) selectEvent,
+    required TResult Function(String name) addEvent,
+  }) {
+    return loadImages();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(String userId, bool loadFromFile, bool loadFromServer)?
+        loadGroupsForUser,
+    TResult Function(bool loadFromFile, bool loadFromServer)? loadGroups,
+    TResult Function()? loadImages,
+    TResult Function(SharecationGroups groups)? initialLoad,
+    TResult Function(String groupId, List<SharecationImage> images)?
+        patchImages,
+    TResult Function(List<SharecationEmptyGroup> groups)? groupsLoaded,
+    TResult Function(String groupId, SharecationImage image)? imageUpdated,
+    TResult Function(String groupId)? selectEvent,
+    TResult Function(String name)? addEvent,
+  }) {
+    return loadImages?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(String userId, bool loadFromFile, bool loadFromServer)?
+        loadGroupsForUser,
+    TResult Function(bool loadFromFile, bool loadFromServer)? loadGroups,
+    TResult Function()? loadImages,
+    TResult Function(SharecationGroups groups)? initialLoad,
+    TResult Function(String groupId, List<SharecationImage> images)?
+        patchImages,
+    TResult Function(List<SharecationEmptyGroup> groups)? groupsLoaded,
+    TResult Function(String groupId, SharecationImage image)? imageUpdated,
+    TResult Function(String groupId)? selectEvent,
+    TResult Function(String name)? addEvent,
+    required TResult orElse(),
+  }) {
+    if (loadImages != null) {
+      return loadImages();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_LoadGroupsForUser value) loadGroupsForUser,
+    required TResult Function(_LoadGroups value) loadGroups,
+    required TResult Function(_LoadImages value) loadImages,
+    required TResult Function(_InitialLoadEvent value) initialLoad,
+    required TResult Function(_PatchImagesEvent value) patchImages,
+    required TResult Function(_GroupsLoadedEvent value) groupsLoaded,
+    required TResult Function(_ImageUpdatedEvent value) imageUpdated,
+    required TResult Function(_SelectEvent value) selectEvent,
+    required TResult Function(_AddEvent value) addEvent,
+  }) {
+    return loadImages(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_LoadGroupsForUser value)? loadGroupsForUser,
+    TResult Function(_LoadGroups value)? loadGroups,
+    TResult Function(_LoadImages value)? loadImages,
+    TResult Function(_InitialLoadEvent value)? initialLoad,
+    TResult Function(_PatchImagesEvent value)? patchImages,
+    TResult Function(_GroupsLoadedEvent value)? groupsLoaded,
+    TResult Function(_ImageUpdatedEvent value)? imageUpdated,
+    TResult Function(_SelectEvent value)? selectEvent,
+    TResult Function(_AddEvent value)? addEvent,
+  }) {
+    return loadImages?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_LoadGroupsForUser value)? loadGroupsForUser,
+    TResult Function(_LoadGroups value)? loadGroups,
+    TResult Function(_LoadImages value)? loadImages,
+    TResult Function(_InitialLoadEvent value)? initialLoad,
+    TResult Function(_PatchImagesEvent value)? patchImages,
+    TResult Function(_GroupsLoadedEvent value)? groupsLoaded,
+    TResult Function(_ImageUpdatedEvent value)? imageUpdated,
+    TResult Function(_SelectEvent value)? selectEvent,
+    TResult Function(_AddEvent value)? addEvent,
+    required TResult orElse(),
+  }) {
+    if (loadImages != null) {
+      return loadImages(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _LoadImages implements GroupsEvent {
+  const factory _LoadImages() = _$_LoadImages;
 }
 
 /// @nodoc
@@ -574,7 +774,10 @@ class _$_InitialLoadEvent implements _InitialLoadEvent {
         loadGroupsForUser,
     required TResult Function(bool loadFromFile, bool loadFromServer)
         loadGroups,
+    required TResult Function() loadImages,
     required TResult Function(SharecationGroups groups) initialLoad,
+    required TResult Function(String groupId, List<SharecationImage> images)
+        patchImages,
     required TResult Function(List<SharecationEmptyGroup> groups) groupsLoaded,
     required TResult Function(String groupId, SharecationImage image)
         imageUpdated,
@@ -590,7 +793,10 @@ class _$_InitialLoadEvent implements _InitialLoadEvent {
     TResult Function(String userId, bool loadFromFile, bool loadFromServer)?
         loadGroupsForUser,
     TResult Function(bool loadFromFile, bool loadFromServer)? loadGroups,
+    TResult Function()? loadImages,
     TResult Function(SharecationGroups groups)? initialLoad,
+    TResult Function(String groupId, List<SharecationImage> images)?
+        patchImages,
     TResult Function(List<SharecationEmptyGroup> groups)? groupsLoaded,
     TResult Function(String groupId, SharecationImage image)? imageUpdated,
     TResult Function(String groupId)? selectEvent,
@@ -605,7 +811,10 @@ class _$_InitialLoadEvent implements _InitialLoadEvent {
     TResult Function(String userId, bool loadFromFile, bool loadFromServer)?
         loadGroupsForUser,
     TResult Function(bool loadFromFile, bool loadFromServer)? loadGroups,
+    TResult Function()? loadImages,
     TResult Function(SharecationGroups groups)? initialLoad,
+    TResult Function(String groupId, List<SharecationImage> images)?
+        patchImages,
     TResult Function(List<SharecationEmptyGroup> groups)? groupsLoaded,
     TResult Function(String groupId, SharecationImage image)? imageUpdated,
     TResult Function(String groupId)? selectEvent,
@@ -623,7 +832,9 @@ class _$_InitialLoadEvent implements _InitialLoadEvent {
   TResult map<TResult extends Object?>({
     required TResult Function(_LoadGroupsForUser value) loadGroupsForUser,
     required TResult Function(_LoadGroups value) loadGroups,
+    required TResult Function(_LoadImages value) loadImages,
     required TResult Function(_InitialLoadEvent value) initialLoad,
+    required TResult Function(_PatchImagesEvent value) patchImages,
     required TResult Function(_GroupsLoadedEvent value) groupsLoaded,
     required TResult Function(_ImageUpdatedEvent value) imageUpdated,
     required TResult Function(_SelectEvent value) selectEvent,
@@ -637,7 +848,9 @@ class _$_InitialLoadEvent implements _InitialLoadEvent {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(_LoadGroupsForUser value)? loadGroupsForUser,
     TResult Function(_LoadGroups value)? loadGroups,
+    TResult Function(_LoadImages value)? loadImages,
     TResult Function(_InitialLoadEvent value)? initialLoad,
+    TResult Function(_PatchImagesEvent value)? patchImages,
     TResult Function(_GroupsLoadedEvent value)? groupsLoaded,
     TResult Function(_ImageUpdatedEvent value)? imageUpdated,
     TResult Function(_SelectEvent value)? selectEvent,
@@ -651,7 +864,9 @@ class _$_InitialLoadEvent implements _InitialLoadEvent {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_LoadGroupsForUser value)? loadGroupsForUser,
     TResult Function(_LoadGroups value)? loadGroups,
+    TResult Function(_LoadImages value)? loadImages,
     TResult Function(_InitialLoadEvent value)? initialLoad,
+    TResult Function(_PatchImagesEvent value)? patchImages,
     TResult Function(_GroupsLoadedEvent value)? groupsLoaded,
     TResult Function(_ImageUpdatedEvent value)? imageUpdated,
     TResult Function(_SelectEvent value)? selectEvent,
@@ -672,6 +887,210 @@ abstract class _InitialLoadEvent implements GroupsEvent {
   SharecationGroups get groups => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   _$$_InitialLoadEventCopyWith<_$_InitialLoadEvent> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$_PatchImagesEventCopyWith<$Res> {
+  factory _$$_PatchImagesEventCopyWith(
+          _$_PatchImagesEvent value, $Res Function(_$_PatchImagesEvent) then) =
+      __$$_PatchImagesEventCopyWithImpl<$Res>;
+  $Res call({String groupId, List<SharecationImage> images});
+}
+
+/// @nodoc
+class __$$_PatchImagesEventCopyWithImpl<$Res>
+    extends _$GroupsEventCopyWithImpl<$Res>
+    implements _$$_PatchImagesEventCopyWith<$Res> {
+  __$$_PatchImagesEventCopyWithImpl(
+      _$_PatchImagesEvent _value, $Res Function(_$_PatchImagesEvent) _then)
+      : super(_value, (v) => _then(v as _$_PatchImagesEvent));
+
+  @override
+  _$_PatchImagesEvent get _value => super._value as _$_PatchImagesEvent;
+
+  @override
+  $Res call({
+    Object? groupId = freezed,
+    Object? images = freezed,
+  }) {
+    return _then(_$_PatchImagesEvent(
+      groupId: groupId == freezed
+          ? _value.groupId
+          : groupId // ignore: cast_nullable_to_non_nullable
+              as String,
+      images: images == freezed
+          ? _value._images
+          : images // ignore: cast_nullable_to_non_nullable
+              as List<SharecationImage>,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$_PatchImagesEvent implements _PatchImagesEvent {
+  const _$_PatchImagesEvent(
+      {required this.groupId, required final List<SharecationImage> images})
+      : _images = images;
+
+  @override
+  final String groupId;
+  final List<SharecationImage> _images;
+  @override
+  List<SharecationImage> get images {
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_images);
+  }
+
+  @override
+  String toString() {
+    return 'GroupsEvent.patchImages(groupId: $groupId, images: $images)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_PatchImagesEvent &&
+            const DeepCollectionEquality().equals(other.groupId, groupId) &&
+            const DeepCollectionEquality().equals(other._images, _images));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(groupId),
+      const DeepCollectionEquality().hash(_images));
+
+  @JsonKey(ignore: true)
+  @override
+  _$$_PatchImagesEventCopyWith<_$_PatchImagesEvent> get copyWith =>
+      __$$_PatchImagesEventCopyWithImpl<_$_PatchImagesEvent>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(
+            String userId, bool loadFromFile, bool loadFromServer)
+        loadGroupsForUser,
+    required TResult Function(bool loadFromFile, bool loadFromServer)
+        loadGroups,
+    required TResult Function() loadImages,
+    required TResult Function(SharecationGroups groups) initialLoad,
+    required TResult Function(String groupId, List<SharecationImage> images)
+        patchImages,
+    required TResult Function(List<SharecationEmptyGroup> groups) groupsLoaded,
+    required TResult Function(String groupId, SharecationImage image)
+        imageUpdated,
+    required TResult Function(String groupId) selectEvent,
+    required TResult Function(String name) addEvent,
+  }) {
+    return patchImages(groupId, images);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(String userId, bool loadFromFile, bool loadFromServer)?
+        loadGroupsForUser,
+    TResult Function(bool loadFromFile, bool loadFromServer)? loadGroups,
+    TResult Function()? loadImages,
+    TResult Function(SharecationGroups groups)? initialLoad,
+    TResult Function(String groupId, List<SharecationImage> images)?
+        patchImages,
+    TResult Function(List<SharecationEmptyGroup> groups)? groupsLoaded,
+    TResult Function(String groupId, SharecationImage image)? imageUpdated,
+    TResult Function(String groupId)? selectEvent,
+    TResult Function(String name)? addEvent,
+  }) {
+    return patchImages?.call(groupId, images);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(String userId, bool loadFromFile, bool loadFromServer)?
+        loadGroupsForUser,
+    TResult Function(bool loadFromFile, bool loadFromServer)? loadGroups,
+    TResult Function()? loadImages,
+    TResult Function(SharecationGroups groups)? initialLoad,
+    TResult Function(String groupId, List<SharecationImage> images)?
+        patchImages,
+    TResult Function(List<SharecationEmptyGroup> groups)? groupsLoaded,
+    TResult Function(String groupId, SharecationImage image)? imageUpdated,
+    TResult Function(String groupId)? selectEvent,
+    TResult Function(String name)? addEvent,
+    required TResult orElse(),
+  }) {
+    if (patchImages != null) {
+      return patchImages(groupId, images);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_LoadGroupsForUser value) loadGroupsForUser,
+    required TResult Function(_LoadGroups value) loadGroups,
+    required TResult Function(_LoadImages value) loadImages,
+    required TResult Function(_InitialLoadEvent value) initialLoad,
+    required TResult Function(_PatchImagesEvent value) patchImages,
+    required TResult Function(_GroupsLoadedEvent value) groupsLoaded,
+    required TResult Function(_ImageUpdatedEvent value) imageUpdated,
+    required TResult Function(_SelectEvent value) selectEvent,
+    required TResult Function(_AddEvent value) addEvent,
+  }) {
+    return patchImages(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_LoadGroupsForUser value)? loadGroupsForUser,
+    TResult Function(_LoadGroups value)? loadGroups,
+    TResult Function(_LoadImages value)? loadImages,
+    TResult Function(_InitialLoadEvent value)? initialLoad,
+    TResult Function(_PatchImagesEvent value)? patchImages,
+    TResult Function(_GroupsLoadedEvent value)? groupsLoaded,
+    TResult Function(_ImageUpdatedEvent value)? imageUpdated,
+    TResult Function(_SelectEvent value)? selectEvent,
+    TResult Function(_AddEvent value)? addEvent,
+  }) {
+    return patchImages?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_LoadGroupsForUser value)? loadGroupsForUser,
+    TResult Function(_LoadGroups value)? loadGroups,
+    TResult Function(_LoadImages value)? loadImages,
+    TResult Function(_InitialLoadEvent value)? initialLoad,
+    TResult Function(_PatchImagesEvent value)? patchImages,
+    TResult Function(_GroupsLoadedEvent value)? groupsLoaded,
+    TResult Function(_ImageUpdatedEvent value)? imageUpdated,
+    TResult Function(_SelectEvent value)? selectEvent,
+    TResult Function(_AddEvent value)? addEvent,
+    required TResult orElse(),
+  }) {
+    if (patchImages != null) {
+      return patchImages(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _PatchImagesEvent implements GroupsEvent {
+  const factory _PatchImagesEvent(
+      {required final String groupId,
+      required final List<SharecationImage> images}) = _$_PatchImagesEvent;
+
+  String get groupId => throw _privateConstructorUsedError;
+  List<SharecationImage> get images => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  _$$_PatchImagesEventCopyWith<_$_PatchImagesEvent> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -752,7 +1171,10 @@ class _$_GroupsLoadedEvent implements _GroupsLoadedEvent {
         loadGroupsForUser,
     required TResult Function(bool loadFromFile, bool loadFromServer)
         loadGroups,
+    required TResult Function() loadImages,
     required TResult Function(SharecationGroups groups) initialLoad,
+    required TResult Function(String groupId, List<SharecationImage> images)
+        patchImages,
     required TResult Function(List<SharecationEmptyGroup> groups) groupsLoaded,
     required TResult Function(String groupId, SharecationImage image)
         imageUpdated,
@@ -768,7 +1190,10 @@ class _$_GroupsLoadedEvent implements _GroupsLoadedEvent {
     TResult Function(String userId, bool loadFromFile, bool loadFromServer)?
         loadGroupsForUser,
     TResult Function(bool loadFromFile, bool loadFromServer)? loadGroups,
+    TResult Function()? loadImages,
     TResult Function(SharecationGroups groups)? initialLoad,
+    TResult Function(String groupId, List<SharecationImage> images)?
+        patchImages,
     TResult Function(List<SharecationEmptyGroup> groups)? groupsLoaded,
     TResult Function(String groupId, SharecationImage image)? imageUpdated,
     TResult Function(String groupId)? selectEvent,
@@ -783,7 +1208,10 @@ class _$_GroupsLoadedEvent implements _GroupsLoadedEvent {
     TResult Function(String userId, bool loadFromFile, bool loadFromServer)?
         loadGroupsForUser,
     TResult Function(bool loadFromFile, bool loadFromServer)? loadGroups,
+    TResult Function()? loadImages,
     TResult Function(SharecationGroups groups)? initialLoad,
+    TResult Function(String groupId, List<SharecationImage> images)?
+        patchImages,
     TResult Function(List<SharecationEmptyGroup> groups)? groupsLoaded,
     TResult Function(String groupId, SharecationImage image)? imageUpdated,
     TResult Function(String groupId)? selectEvent,
@@ -801,7 +1229,9 @@ class _$_GroupsLoadedEvent implements _GroupsLoadedEvent {
   TResult map<TResult extends Object?>({
     required TResult Function(_LoadGroupsForUser value) loadGroupsForUser,
     required TResult Function(_LoadGroups value) loadGroups,
+    required TResult Function(_LoadImages value) loadImages,
     required TResult Function(_InitialLoadEvent value) initialLoad,
+    required TResult Function(_PatchImagesEvent value) patchImages,
     required TResult Function(_GroupsLoadedEvent value) groupsLoaded,
     required TResult Function(_ImageUpdatedEvent value) imageUpdated,
     required TResult Function(_SelectEvent value) selectEvent,
@@ -815,7 +1245,9 @@ class _$_GroupsLoadedEvent implements _GroupsLoadedEvent {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(_LoadGroupsForUser value)? loadGroupsForUser,
     TResult Function(_LoadGroups value)? loadGroups,
+    TResult Function(_LoadImages value)? loadImages,
     TResult Function(_InitialLoadEvent value)? initialLoad,
+    TResult Function(_PatchImagesEvent value)? patchImages,
     TResult Function(_GroupsLoadedEvent value)? groupsLoaded,
     TResult Function(_ImageUpdatedEvent value)? imageUpdated,
     TResult Function(_SelectEvent value)? selectEvent,
@@ -829,7 +1261,9 @@ class _$_GroupsLoadedEvent implements _GroupsLoadedEvent {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_LoadGroupsForUser value)? loadGroupsForUser,
     TResult Function(_LoadGroups value)? loadGroups,
+    TResult Function(_LoadImages value)? loadImages,
     TResult Function(_InitialLoadEvent value)? initialLoad,
+    TResult Function(_PatchImagesEvent value)? patchImages,
     TResult Function(_GroupsLoadedEvent value)? groupsLoaded,
     TResult Function(_ImageUpdatedEvent value)? imageUpdated,
     TResult Function(_SelectEvent value)? selectEvent,
@@ -944,7 +1378,10 @@ class _$_ImageUpdatedEvent implements _ImageUpdatedEvent {
         loadGroupsForUser,
     required TResult Function(bool loadFromFile, bool loadFromServer)
         loadGroups,
+    required TResult Function() loadImages,
     required TResult Function(SharecationGroups groups) initialLoad,
+    required TResult Function(String groupId, List<SharecationImage> images)
+        patchImages,
     required TResult Function(List<SharecationEmptyGroup> groups) groupsLoaded,
     required TResult Function(String groupId, SharecationImage image)
         imageUpdated,
@@ -960,7 +1397,10 @@ class _$_ImageUpdatedEvent implements _ImageUpdatedEvent {
     TResult Function(String userId, bool loadFromFile, bool loadFromServer)?
         loadGroupsForUser,
     TResult Function(bool loadFromFile, bool loadFromServer)? loadGroups,
+    TResult Function()? loadImages,
     TResult Function(SharecationGroups groups)? initialLoad,
+    TResult Function(String groupId, List<SharecationImage> images)?
+        patchImages,
     TResult Function(List<SharecationEmptyGroup> groups)? groupsLoaded,
     TResult Function(String groupId, SharecationImage image)? imageUpdated,
     TResult Function(String groupId)? selectEvent,
@@ -975,7 +1415,10 @@ class _$_ImageUpdatedEvent implements _ImageUpdatedEvent {
     TResult Function(String userId, bool loadFromFile, bool loadFromServer)?
         loadGroupsForUser,
     TResult Function(bool loadFromFile, bool loadFromServer)? loadGroups,
+    TResult Function()? loadImages,
     TResult Function(SharecationGroups groups)? initialLoad,
+    TResult Function(String groupId, List<SharecationImage> images)?
+        patchImages,
     TResult Function(List<SharecationEmptyGroup> groups)? groupsLoaded,
     TResult Function(String groupId, SharecationImage image)? imageUpdated,
     TResult Function(String groupId)? selectEvent,
@@ -993,7 +1436,9 @@ class _$_ImageUpdatedEvent implements _ImageUpdatedEvent {
   TResult map<TResult extends Object?>({
     required TResult Function(_LoadGroupsForUser value) loadGroupsForUser,
     required TResult Function(_LoadGroups value) loadGroups,
+    required TResult Function(_LoadImages value) loadImages,
     required TResult Function(_InitialLoadEvent value) initialLoad,
+    required TResult Function(_PatchImagesEvent value) patchImages,
     required TResult Function(_GroupsLoadedEvent value) groupsLoaded,
     required TResult Function(_ImageUpdatedEvent value) imageUpdated,
     required TResult Function(_SelectEvent value) selectEvent,
@@ -1007,7 +1452,9 @@ class _$_ImageUpdatedEvent implements _ImageUpdatedEvent {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(_LoadGroupsForUser value)? loadGroupsForUser,
     TResult Function(_LoadGroups value)? loadGroups,
+    TResult Function(_LoadImages value)? loadImages,
     TResult Function(_InitialLoadEvent value)? initialLoad,
+    TResult Function(_PatchImagesEvent value)? patchImages,
     TResult Function(_GroupsLoadedEvent value)? groupsLoaded,
     TResult Function(_ImageUpdatedEvent value)? imageUpdated,
     TResult Function(_SelectEvent value)? selectEvent,
@@ -1021,7 +1468,9 @@ class _$_ImageUpdatedEvent implements _ImageUpdatedEvent {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_LoadGroupsForUser value)? loadGroupsForUser,
     TResult Function(_LoadGroups value)? loadGroups,
+    TResult Function(_LoadImages value)? loadImages,
     TResult Function(_InitialLoadEvent value)? initialLoad,
+    TResult Function(_PatchImagesEvent value)? patchImages,
     TResult Function(_GroupsLoadedEvent value)? groupsLoaded,
     TResult Function(_ImageUpdatedEvent value)? imageUpdated,
     TResult Function(_SelectEvent value)? selectEvent,
@@ -1116,7 +1565,10 @@ class _$_SelectEvent implements _SelectEvent {
         loadGroupsForUser,
     required TResult Function(bool loadFromFile, bool loadFromServer)
         loadGroups,
+    required TResult Function() loadImages,
     required TResult Function(SharecationGroups groups) initialLoad,
+    required TResult Function(String groupId, List<SharecationImage> images)
+        patchImages,
     required TResult Function(List<SharecationEmptyGroup> groups) groupsLoaded,
     required TResult Function(String groupId, SharecationImage image)
         imageUpdated,
@@ -1132,7 +1584,10 @@ class _$_SelectEvent implements _SelectEvent {
     TResult Function(String userId, bool loadFromFile, bool loadFromServer)?
         loadGroupsForUser,
     TResult Function(bool loadFromFile, bool loadFromServer)? loadGroups,
+    TResult Function()? loadImages,
     TResult Function(SharecationGroups groups)? initialLoad,
+    TResult Function(String groupId, List<SharecationImage> images)?
+        patchImages,
     TResult Function(List<SharecationEmptyGroup> groups)? groupsLoaded,
     TResult Function(String groupId, SharecationImage image)? imageUpdated,
     TResult Function(String groupId)? selectEvent,
@@ -1147,7 +1602,10 @@ class _$_SelectEvent implements _SelectEvent {
     TResult Function(String userId, bool loadFromFile, bool loadFromServer)?
         loadGroupsForUser,
     TResult Function(bool loadFromFile, bool loadFromServer)? loadGroups,
+    TResult Function()? loadImages,
     TResult Function(SharecationGroups groups)? initialLoad,
+    TResult Function(String groupId, List<SharecationImage> images)?
+        patchImages,
     TResult Function(List<SharecationEmptyGroup> groups)? groupsLoaded,
     TResult Function(String groupId, SharecationImage image)? imageUpdated,
     TResult Function(String groupId)? selectEvent,
@@ -1165,7 +1623,9 @@ class _$_SelectEvent implements _SelectEvent {
   TResult map<TResult extends Object?>({
     required TResult Function(_LoadGroupsForUser value) loadGroupsForUser,
     required TResult Function(_LoadGroups value) loadGroups,
+    required TResult Function(_LoadImages value) loadImages,
     required TResult Function(_InitialLoadEvent value) initialLoad,
+    required TResult Function(_PatchImagesEvent value) patchImages,
     required TResult Function(_GroupsLoadedEvent value) groupsLoaded,
     required TResult Function(_ImageUpdatedEvent value) imageUpdated,
     required TResult Function(_SelectEvent value) selectEvent,
@@ -1179,7 +1639,9 @@ class _$_SelectEvent implements _SelectEvent {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(_LoadGroupsForUser value)? loadGroupsForUser,
     TResult Function(_LoadGroups value)? loadGroups,
+    TResult Function(_LoadImages value)? loadImages,
     TResult Function(_InitialLoadEvent value)? initialLoad,
+    TResult Function(_PatchImagesEvent value)? patchImages,
     TResult Function(_GroupsLoadedEvent value)? groupsLoaded,
     TResult Function(_ImageUpdatedEvent value)? imageUpdated,
     TResult Function(_SelectEvent value)? selectEvent,
@@ -1193,7 +1655,9 @@ class _$_SelectEvent implements _SelectEvent {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_LoadGroupsForUser value)? loadGroupsForUser,
     TResult Function(_LoadGroups value)? loadGroups,
+    TResult Function(_LoadImages value)? loadImages,
     TResult Function(_InitialLoadEvent value)? initialLoad,
+    TResult Function(_PatchImagesEvent value)? patchImages,
     TResult Function(_GroupsLoadedEvent value)? groupsLoaded,
     TResult Function(_ImageUpdatedEvent value)? imageUpdated,
     TResult Function(_SelectEvent value)? selectEvent,
@@ -1285,7 +1749,10 @@ class _$_AddEvent implements _AddEvent {
         loadGroupsForUser,
     required TResult Function(bool loadFromFile, bool loadFromServer)
         loadGroups,
+    required TResult Function() loadImages,
     required TResult Function(SharecationGroups groups) initialLoad,
+    required TResult Function(String groupId, List<SharecationImage> images)
+        patchImages,
     required TResult Function(List<SharecationEmptyGroup> groups) groupsLoaded,
     required TResult Function(String groupId, SharecationImage image)
         imageUpdated,
@@ -1301,7 +1768,10 @@ class _$_AddEvent implements _AddEvent {
     TResult Function(String userId, bool loadFromFile, bool loadFromServer)?
         loadGroupsForUser,
     TResult Function(bool loadFromFile, bool loadFromServer)? loadGroups,
+    TResult Function()? loadImages,
     TResult Function(SharecationGroups groups)? initialLoad,
+    TResult Function(String groupId, List<SharecationImage> images)?
+        patchImages,
     TResult Function(List<SharecationEmptyGroup> groups)? groupsLoaded,
     TResult Function(String groupId, SharecationImage image)? imageUpdated,
     TResult Function(String groupId)? selectEvent,
@@ -1316,7 +1786,10 @@ class _$_AddEvent implements _AddEvent {
     TResult Function(String userId, bool loadFromFile, bool loadFromServer)?
         loadGroupsForUser,
     TResult Function(bool loadFromFile, bool loadFromServer)? loadGroups,
+    TResult Function()? loadImages,
     TResult Function(SharecationGroups groups)? initialLoad,
+    TResult Function(String groupId, List<SharecationImage> images)?
+        patchImages,
     TResult Function(List<SharecationEmptyGroup> groups)? groupsLoaded,
     TResult Function(String groupId, SharecationImage image)? imageUpdated,
     TResult Function(String groupId)? selectEvent,
@@ -1334,7 +1807,9 @@ class _$_AddEvent implements _AddEvent {
   TResult map<TResult extends Object?>({
     required TResult Function(_LoadGroupsForUser value) loadGroupsForUser,
     required TResult Function(_LoadGroups value) loadGroups,
+    required TResult Function(_LoadImages value) loadImages,
     required TResult Function(_InitialLoadEvent value) initialLoad,
+    required TResult Function(_PatchImagesEvent value) patchImages,
     required TResult Function(_GroupsLoadedEvent value) groupsLoaded,
     required TResult Function(_ImageUpdatedEvent value) imageUpdated,
     required TResult Function(_SelectEvent value) selectEvent,
@@ -1348,7 +1823,9 @@ class _$_AddEvent implements _AddEvent {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(_LoadGroupsForUser value)? loadGroupsForUser,
     TResult Function(_LoadGroups value)? loadGroups,
+    TResult Function(_LoadImages value)? loadImages,
     TResult Function(_InitialLoadEvent value)? initialLoad,
+    TResult Function(_PatchImagesEvent value)? patchImages,
     TResult Function(_GroupsLoadedEvent value)? groupsLoaded,
     TResult Function(_ImageUpdatedEvent value)? imageUpdated,
     TResult Function(_SelectEvent value)? selectEvent,
@@ -1362,7 +1839,9 @@ class _$_AddEvent implements _AddEvent {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_LoadGroupsForUser value)? loadGroupsForUser,
     TResult Function(_LoadGroups value)? loadGroups,
+    TResult Function(_LoadImages value)? loadImages,
     TResult Function(_InitialLoadEvent value)? initialLoad,
+    TResult Function(_PatchImagesEvent value)? patchImages,
     TResult Function(_GroupsLoadedEvent value)? groupsLoaded,
     TResult Function(_ImageUpdatedEvent value)? imageUpdated,
     TResult Function(_SelectEvent value)? selectEvent,

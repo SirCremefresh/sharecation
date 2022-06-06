@@ -29,6 +29,24 @@ class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
         ));
       }
     });
+    on<_LoadImages>((event, emit) async {
+      final loadedState = _assertLoadedState();
+      for (var group in loadedState.state.groups.values) {
+        loadImagesForGroup(group);
+      }
+    });
+    on<_PatchImagesEvent>((event, emit) async {
+      final loadedState = _assertLoadedState();
+      final group = loadedState.state.groups[event.groupId]!;
+      for (final image in event.images) {
+        final storedImage = group.images[image.externalId];
+        if(storedImage == null) {
+
+        } else {
+
+        }
+      }
+    });
     on<_GroupsLoadedEvent>((event, emit) async {
       final loadedState = _assertLoadedState();
       final Map<String, SharecationGroup> groups = {};
@@ -96,6 +114,14 @@ class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
           loadFromFile: false,
           loadFromServer: true));
     });
+  }
+
+  Future<void> loadImagesForGroup(SharecationGroup group) async {
+    final images = (await api.images.getImagesByGroupId(group.groupId))
+        .map((e) => SharecationImage.remote(
+            externalId: e.imageId, imageId: e.imageId, url: e.url))
+        .toList(growable: false);
+    add(GroupsEvent.patchImages(images: images, groupId: group.groupId));
   }
 
   List<SharecationEmptyGroup> _mapToSharecationGroups(List<Group> groups) {

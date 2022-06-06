@@ -34,7 +34,9 @@ class Layout extends StatelessWidget {
           ? FloatingActionButton(
               child: const Icon(Icons.camera),
               onPressed: () async {
-                // context.read<ImagesBloc>().add(const ImagesEvent.addEvent());
+                context
+                    .read<GroupsBloc>()
+                    .add(GroupsEvent.addImage(groupId: groupId!));
               },
             )
           : null,

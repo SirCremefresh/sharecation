@@ -4,12 +4,15 @@ part of 'groups_bloc.dart';
 class GroupsState with _$GroupsState {
   const factory GroupsState.loadingState() = _LoadingState;
 
-  const factory GroupsState.loadedState({required SharecationGroups state, required String userId}) =
-      _LoadedState;
+  const factory GroupsState.loadedState(
+      {required SharecationGroups state,
+      required String userId}) = _LoadedState;
 }
 
 @Freezed(unionKey: 'type')
 class SharecationImage with _$SharecationImage {
+  const SharecationImage._();
+
   @FreezedUnionValue('locale')
   const factory SharecationImage.locale(
       {required String externalId,
@@ -30,6 +33,12 @@ class SharecationImage with _$SharecationImage {
 
   factory SharecationImage.fromJson(Map<String, dynamic> json) =>
       _$SharecationImageFromJson(json);
+
+  bool displayable() => maybeMap(
+        locale: (_) => true,
+        synced: (_) => true,
+        orElse: () => false,
+      );
 }
 
 @freezed
@@ -47,10 +56,12 @@ class SharecationGroup with _$SharecationGroup {
 @freezed
 class SharecationEmptyGroup with _$SharecationEmptyGroup {
   const SharecationEmptyGroup._();
+
   const factory SharecationEmptyGroup(
       {required String groupId, required String name}) = _SharecationEmptyGroup;
 
-  SharecationGroup toGroup() => SharecationGroup(name: name, groupId: groupId, images: {});
+  SharecationGroup toGroup() =>
+      SharecationGroup(name: name, groupId: groupId, images: {});
 }
 
 @freezed

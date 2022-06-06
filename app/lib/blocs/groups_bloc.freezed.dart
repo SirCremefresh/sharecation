@@ -2584,10 +2584,11 @@ class __$$_SharecationImageLocalCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_SharecationImageLocal implements _SharecationImageLocal {
+class _$_SharecationImageLocal extends _SharecationImageLocal {
   const _$_SharecationImageLocal(
       {required this.externalId, required this.path, final String? $type})
-      : $type = $type ?? 'locale';
+      : $type = $type ?? 'locale',
+        super._();
 
   factory _$_SharecationImageLocal.fromJson(Map<String, dynamic> json) =>
       _$$_SharecationImageLocalFromJson(json);
@@ -2709,10 +2710,11 @@ class _$_SharecationImageLocal implements _SharecationImageLocal {
   }
 }
 
-abstract class _SharecationImageLocal implements SharecationImage {
+abstract class _SharecationImageLocal extends SharecationImage {
   const factory _SharecationImageLocal(
       {required final String externalId,
       required final String path}) = _$_SharecationImageLocal;
+  const _SharecationImageLocal._() : super._();
 
   factory _SharecationImageLocal.fromJson(Map<String, dynamic> json) =
       _$_SharecationImageLocal.fromJson;
@@ -2773,13 +2775,14 @@ class __$$_SharecationImageRemoteCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_SharecationImageRemote implements _SharecationImageRemote {
+class _$_SharecationImageRemote extends _SharecationImageRemote {
   const _$_SharecationImageRemote(
       {required this.externalId,
       required this.imageId,
       required this.url,
       final String? $type})
-      : $type = $type ?? 'remote';
+      : $type = $type ?? 'remote',
+        super._();
 
   factory _$_SharecationImageRemote.fromJson(Map<String, dynamic> json) =>
       _$$_SharecationImageRemoteFromJson(json);
@@ -2905,11 +2908,12 @@ class _$_SharecationImageRemote implements _SharecationImageRemote {
   }
 }
 
-abstract class _SharecationImageRemote implements SharecationImage {
+abstract class _SharecationImageRemote extends SharecationImage {
   const factory _SharecationImageRemote(
       {required final String externalId,
       required final String imageId,
       required final String url}) = _$_SharecationImageRemote;
+  const _SharecationImageRemote._() : super._();
 
   factory _SharecationImageRemote.fromJson(Map<String, dynamic> json) =
       _$_SharecationImageRemote.fromJson;
@@ -2976,14 +2980,15 @@ class __$$_SharecationImageSyncedCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_SharecationImageSynced implements _SharecationImageSynced {
+class _$_SharecationImageSynced extends _SharecationImageSynced {
   const _$_SharecationImageSynced(
       {required this.externalId,
       required this.imageId,
       required this.url,
       required this.path,
       final String? $type})
-      : $type = $type ?? 'synced';
+      : $type = $type ?? 'synced',
+        super._();
 
   factory _$_SharecationImageSynced.fromJson(Map<String, dynamic> json) =>
       _$$_SharecationImageSyncedFromJson(json);
@@ -3113,12 +3118,13 @@ class _$_SharecationImageSynced implements _SharecationImageSynced {
   }
 }
 
-abstract class _SharecationImageSynced implements SharecationImage {
+abstract class _SharecationImageSynced extends SharecationImage {
   const factory _SharecationImageSynced(
       {required final String externalId,
       required final String imageId,
       required final String url,
       required final String path}) = _$_SharecationImageSynced;
+  const _SharecationImageSynced._() : super._();
 
   factory _SharecationImageSynced.fromJson(Map<String, dynamic> json) =
       _$_SharecationImageSynced.fromJson;

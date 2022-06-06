@@ -116,7 +116,7 @@ class PreviewImage extends StatelessWidget {
       synced: (state) {
         return Image.file(File(state.path), fit: BoxFit.fill);
       },
-      orElse: () => Text("shit"),
+      orElse: () => const Text("shit"),
     );
   }
 }

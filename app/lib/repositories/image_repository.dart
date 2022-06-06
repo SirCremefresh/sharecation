@@ -21,6 +21,7 @@ class ImageRepository {
       await io.File(photo.path).rename(path);
       return SharecationImage.locale(externalId: externalId, path: path);
     }
+    return null;
   }
 
   Future<SharecationImage> uploadImage(

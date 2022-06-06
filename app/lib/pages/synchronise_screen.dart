@@ -29,9 +29,9 @@ class SynchroniseScreen extends StatelessWidget {
                         ),
                         TextButton(
                             onPressed: () {
-                              context.read<GroupsBloc>().add(GroupsEvent.loadImages());
+                              context.read<GroupsBloc>().add(const GroupsEvent.loadImages());
                             },
-                            child: Text("Load images from server"))
+                            child: const Text("Load images from server"))
                       ],
                   orElse: () {
                     return [];

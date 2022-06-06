@@ -6,6 +6,8 @@ import 'package:test/test.dart';
 const sampleGroups = SharecationGroups(
   groups: {
     "some-group-id": SharecationGroup(
+      name: 'name',
+      groupId: 'group-id',
       images: {
         "some-locale-image": SharecationImage.locale(
           externalId: "external-id",
@@ -28,7 +30,7 @@ const sampleGroups = SharecationGroups(
 );
 
 const sampleGroupsJson =
-    '{"groups":{"some-group-id":{"images":{"some-locale-image":{"externalId":"external-id","path":"path","type":"locale"},"some-remote-image":{"externalId":"external-id","imageId":"image-id","url":"url","type":"remote"},"some-synced-image":{"externalId":"external-id","imageId":"image-id","url":"url","path":"path","type":"synced"}}}}}';
+    '{"groups":{"some-group-id":{"groupId":"group-id","name":"name","images":{"some-locale-image":{"externalId":"external-id","path":"path","type":"locale"},"some-remote-image":{"externalId":"external-id","imageId":"image-id","url":"url","type":"remote"},"some-synced-image":{"externalId":"external-id","imageId":"image-id","url":"url","path":"path","type":"synced"}}}}}';
 
 void main() {
   test('Should format JSON correctly', () {

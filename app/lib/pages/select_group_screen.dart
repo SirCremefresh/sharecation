@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:sharecation_app/api/contracts/groups/v1/groups.pb.dart';
 import 'package:sharecation_app/blocs/groups_bloc.dart';
+import 'package:sharecation_app/components/create_group_modal.dart';
 
 class SelectGroupScreen extends StatefulWidget {
   const SelectGroupScreen({
@@ -26,27 +26,39 @@ class _SelectGroupScreenState extends State<SelectGroupScreen> {
           BlocBuilder<GroupsBloc, GroupsState>(
             builder: (context, state) {
               return state.when(
-                  loadingState: () => const CircularProgressIndicator(),
-                  loadedState: (groups, activeGroup) =>
-                      buildGroupsList(context, groups));
+                loadingState: () => const CircularProgressIndicator(),
+                loadedState: (groups, userId) =>
+                    buildGroupsList(context, groups.groups),
+              );
             },
           ),
+          TextButton(
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) => const CreateGroup(),
+              );
+            },
+            child: const Text("Create Group"),
+          )
         ],
       ),
     );
   }
 
-  Widget buildGroupsList(BuildContext context, List<Group> groups) {
+  Widget buildGroupsList(
+      BuildContext context, Map<String, SharecationGroup> groups) {
     return Expanded(
       child: ListView.builder(
           padding: EdgeInsets.zero,
           itemCount: groups.length,
           itemBuilder: (BuildContext context, int index) {
+            final key = groups.keys.elementAt(index);
             return TextButton(
               onPressed: () {
-                context.go("/groups/${groups[index].groupId}/gallery");
+                context.go("/groups/${groups[key]!.groupId}/gallery");
               },
-              child: Text(groups[index].name),
+              child: Text(groups[key]!.name),
             );
           }),
     );

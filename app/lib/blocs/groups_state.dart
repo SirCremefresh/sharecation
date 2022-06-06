@@ -4,8 +4,8 @@ part of 'groups_bloc.dart';
 class GroupsState with _$GroupsState {
   const factory GroupsState.loadingState() = _LoadingState;
 
-  const factory GroupsState.loadedState(
-      {required List<Group> groups, required Group activeGroup}) = _LoadedState;
+  const factory GroupsState.loadedState({required SharecationGroups state, required String userId}) =
+      _LoadedState;
 }
 
 @Freezed(unionKey: 'type')
@@ -34,11 +34,23 @@ class SharecationImage with _$SharecationImage {
 
 @freezed
 class SharecationGroup with _$SharecationGroup {
-  const factory SharecationGroup(
-      {required Map<String, SharecationImage> images}) = _SharecationGroup;
+  const factory SharecationGroup({
+    required String groupId,
+    required String name,
+    required Map<String, SharecationImage> images,
+  }) = _SharecationGroup;
 
   factory SharecationGroup.fromJson(Map<String, dynamic> json) =>
       _$SharecationGroupFromJson(json);
+}
+
+@freezed
+class SharecationEmptyGroup with _$SharecationEmptyGroup {
+  const SharecationEmptyGroup._();
+  const factory SharecationEmptyGroup(
+      {required String groupId, required String name}) = _SharecationEmptyGroup;
+
+  SharecationGroup toGroup() => SharecationGroup(name: name, groupId: groupId, images: {});
 }
 
 @freezed

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:sharecation_app/api/contracts/groups/v1/groups.pb.dart';
 import 'package:sharecation_app/blocs/groups_bloc.dart';
 import 'package:sharecation_app/blocs/images_bloc.dart';
+import 'package:sharecation_app/components/create_group_modal.dart';
 
 enum GroupScaffoldTab { groupInfo, swipe, gallery }
 
@@ -79,8 +79,8 @@ class SharecationDrawer extends StatelessWidget {
           BlocBuilder<GroupsBloc, GroupsState>(
             builder: (context, state) => state.when(
               loadingState: () => const CircularProgressIndicator(),
-              loadedState: (groups, activeGroup) =>
-                  DrawerGroupsList(groups: groups),
+              loadedState: (groups, userId) =>
+                  DrawerGroupsList(groups: groups.groups),
             ),
           ),
           TextButton(
@@ -115,7 +115,7 @@ class SharecationDrawer extends StatelessWidget {
 }
 
 class DrawerGroupsList extends StatelessWidget {
-  final List<Group> groups;
+  final Map<String, SharecationGroup> groups;
 
   const DrawerGroupsList({
     required this.groups,
@@ -127,89 +127,22 @@ class DrawerGroupsList extends StatelessWidget {
     return Expanded(
       child: RefreshIndicator(
         onRefresh: () async {
-          context
-              .read<GroupsBloc>()
-              .add(const GroupsEvent.loadEvent(force: true));
+          // context
+          //     .read<GroupsBloc>()
+          //     .add(const GroupsEvent.loadEvent(force: true));
         },
         child: ListView.builder(
             padding: EdgeInsets.zero,
             itemCount: groups.length,
             itemBuilder: (BuildContext context, int index) {
+              final key = groups.keys.elementAt(index);
               return TextButton(
                 onPressed: () {
-                  context.go('/groups/${groups[index].groupId}/info');
+                  context.go('/groups/${groups[key]!.groupId}/info');
                 },
-                child: Text(groups[index].name),
+                child: Text(groups[key]!.name),
               );
             }),
-      ),
-    );
-  }
-}
-
-class CreateGroup extends StatefulWidget {
-  const CreateGroup({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  State<CreateGroup> createState() => _CreateGroupState();
-}
-
-class _CreateGroupState extends State<CreateGroup> {
-  late TextEditingController _controller;
-  String text = "";
-  List<Group> groups = [];
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = TextEditingController();
-    _controller.addListener(() {
-      setState(() {
-        text = _controller.value.text;
-      });
-    });
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Dialog(
-      child: Container(
-        padding: const EdgeInsets.all(5),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Text(
-              "New Group",
-              style: TextStyle(
-                fontSize: 30,
-              ),
-            ),
-            TextField(
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Name',
-              ),
-              controller: _controller,
-            ),
-            TextButton(
-                onPressed: () async {
-                  context
-                      .read<GroupsBloc>()
-                      .add(GroupsEvent.addEvent(name: _controller.value.text));
-                  Navigator.pop(context);
-                },
-                child: const Text("create")),
-          ],
-        ),
       ),
     );
   }

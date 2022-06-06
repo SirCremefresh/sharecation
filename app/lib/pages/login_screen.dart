@@ -8,10 +8,29 @@ import 'package:sharecation_app/blocs/authentication_bloc.dart';
 
 import '../service/api_service.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({
     Key? key,
   }) : super(key: key);
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // FirebaseAuth.instance.userChanges().first.then((user) {
+    //   if (user == null) {
+    //     return;
+    //   }
+    //   context
+    //       .read<AuthenticationBloc>()
+    //       .add(AuthenticationEvent.signedInEvent(userId: user.uid));
+    //   context.go('/groups');
+    // });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,9 +50,9 @@ class LoginScreen extends StatelessWidget {
           if (credentials != null) {
             try {
               await authenticationService.getJwtString();
-              context
-                  .read<AuthenticationBloc>()
-                  .add(const AuthenticationEvent.signedInEvent());
+              context.read<AuthenticationBloc>().add(
+                  AuthenticationEvent.signedInEvent(
+                      userId: credentials.user!.uid));
               context.go('/groups');
             } catch (e) {
               Fluttertoast.showToast(

@@ -62,6 +62,8 @@ Map<String, dynamic> _$$_SharecationImageSyncedToJson(
 
 _$_SharecationGroup _$$_SharecationGroupFromJson(Map<String, dynamic> json) =>
     _$_SharecationGroup(
+      groupId: json['groupId'] as String,
+      name: json['name'] as String,
       images: (json['images'] as Map<String, dynamic>).map(
         (k, e) =>
             MapEntry(k, SharecationImage.fromJson(e as Map<String, dynamic>)),
@@ -70,6 +72,8 @@ _$_SharecationGroup _$$_SharecationGroupFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$_SharecationGroupToJson(_$_SharecationGroup instance) =>
     <String, dynamic>{
+      'groupId': instance.groupId,
+      'name': instance.name,
       'images': instance.images,
     };
 

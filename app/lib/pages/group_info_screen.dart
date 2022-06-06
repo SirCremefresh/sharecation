@@ -35,9 +35,10 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
                 style: TextStyle(fontSize: 20),
               ),
               ...state.maybeWhen<List<Widget>>(
-                  loadedState: (groups, activeGroup) => [
-                        Text("Name: ${activeGroup.name}"),
-                        Text("GroupId: ${activeGroup.groupId}"),
+                  loadedState: (state, userId) => [
+                        Text("Name: ${state.groups[widget.groupId]!.name}"),
+                        Text(
+                            "GroupId: ${state.groups[widget.groupId]!.groupId}"),
                         const NotUploadedPictures(),
                         IconButton(
                           onPressed: () {

@@ -36,12 +36,14 @@ class MainBloc extends Bloc<MainEvent, MainState> {
           final loadedState = _assertLoadedState();
 
           add(MainEvent.loadGroupsForUser(userId: loadedState.userId, loadFromServer: event.loadFromServer, loadFromFile: event.loadFromFile));
+          return null;
         },
         loadImages: (event) async {
           final loadedState = _assertLoadedState();
           for (var group in loadedState.state.groups.values) {
             loadImagesForGroup(group);
           }
+          return null;
         },
         addImage: (event) async {
           _assertLoadedState();
@@ -50,8 +52,11 @@ class MainBloc extends Bloc<MainEvent, MainState> {
           if (sharecationImage == null) return;
           add(MainEvent.imageUpdated(
               groupId: event.groupId, image: sharecationImage));
+          return null;
         },
-        initialLoad: (event) {},
+        initialLoad: (event) {
+          return null;
+        },
         patchImages: (event) async {
           final loadedState = _assertLoadedState();
           final group = loadedState.state.groups[event.groupId]!;
@@ -60,6 +65,7 @@ class MainBloc extends Bloc<MainEvent, MainState> {
             if (storedImage == null) {
             } else {}
           }
+          return null;
         },
         groupsLoaded: (event) async {
           final loadedState = _assertLoadedState();
@@ -77,6 +83,7 @@ class MainBloc extends Bloc<MainEvent, MainState> {
           emit(MainState.loadedState(
               state: SharecationGroups(groups: groups),
               userId: loadedState.userId));
+          return null;
         },
         imageUpdated: (event) async {
           final loadedState = _assertLoadedState();
@@ -101,6 +108,7 @@ class MainBloc extends Bloc<MainEvent, MainState> {
               userId: loadedState.userId,
             ),
           );
+          return null;
         },
         addEvent: (event) async {
           final localState = _assertLoadedState();
@@ -124,6 +132,7 @@ class MainBloc extends Bloc<MainEvent, MainState> {
               userId: localState.userId,
               loadFromFile: false,
               loadFromServer: true));
+          return null;
         }));
   }
 

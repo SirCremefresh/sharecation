@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sharecation_app/blocs/groups_bloc.dart';
-import 'package:sharecation_app/blocs/images_bloc.dart';
+import 'package:sharecation_app/blocs/main_bloc.dart';
 import 'package:sharecation_app/components/group_scaffold.dart';
-import 'package:sharecation_app/dtos/sharecation_image.dart';
 
 class GroupInfoScreen extends StatefulWidget {
   final String groupId;
@@ -23,7 +21,7 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
     return Layout(
       groupScaffoldTab: GroupScaffoldTab.groupInfo,
       groupId: widget.groupId,
-      child: BlocBuilder<GroupsBloc, GroupsState>(
+      child: BlocBuilder<MainBloc, MainState>(
         builder: (context, state) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -35,15 +33,16 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
                 style: TextStyle(fontSize: 20),
               ),
               ...state.maybeWhen<List<Widget>>(
-                  loadedState: (groups, activeGroup) => [
-                        Text("Name: ${activeGroup.name}"),
-                        Text("GroupId: ${activeGroup.groupId}"),
+                  loadedState: (state, userId) => [
+                        Text("Name: ${state.groups[widget.groupId]!.name}"),
+                        Text(
+                            "GroupId: ${state.groups[widget.groupId]!.groupId}"),
                         const NotUploadedPictures(),
                         IconButton(
                           onPressed: () {
-                            context
-                                .read<ImagesBloc>()
-                                .add(const ImagesEvent.uploadEvent());
+                            // context
+                            //     .read<ImagesBloc>()
+                            //     .add(const ImagesEvent.uploadEvent());
                           },
                           icon: const Icon(Icons.cloud_upload_outlined),
                         ),
@@ -64,16 +63,17 @@ class NotUploadedPictures extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ImagesBloc, ImagesState>(builder: (context, state) {
-      return state.when(
-          loadingState: () => const SizedBox.shrink(),
-          loadedState: (images, groupId) {
-            final localImages = images
-                .where((element) =>
-                    element.status == SharecationImageStatus.localOnly)
-                .toList();
-            return Text("Not backed up images ${localImages.length}");
-          });
-    });
+    return const Text("asdf");
+    // return BlocBuilder<ImagesBloc, ImagesState>(builder: (context, state) {
+    //   return state.when(
+    //       loadingState: () => const SizedBox.shrink(),
+    //       loadedState: (images, groupId) {
+    //         final localImages = images
+    //             .where((element) =>
+    //                 element.status == SharecationImageStatus.localOnly)
+    //             .toList();
+    //         return Text("Not backed up images ${localImages.length}");
+    //       });
+    // });
   }
 }

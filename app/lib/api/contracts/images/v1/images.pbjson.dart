@@ -13,12 +13,13 @@ const Image$json = const {
   '1': 'Image',
   '2': const [
     const {'1': 'image_id', '3': 1, '4': 1, '5': 9, '10': 'imageId'},
-    const {'1': 'url', '3': 2, '4': 1, '5': 9, '10': 'url'},
+    const {'1': 'external_id', '3': 2, '4': 1, '5': 9, '10': 'externalId'},
+    const {'1': 'url', '3': 3, '4': 1, '5': 9, '10': 'url'},
   ],
 };
 
 /// Descriptor for `Image`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List imageDescriptor = $convert.base64Decode('CgVJbWFnZRIZCghpbWFnZV9pZBgBIAEoCVIHaW1hZ2VJZBIQCgN1cmwYAiABKAlSA3VybA==');
+final $typed_data.Uint8List imageDescriptor = $convert.base64Decode('CgVJbWFnZRIZCghpbWFnZV9pZBgBIAEoCVIHaW1hZ2VJZBIfCgtleHRlcm5hbF9pZBgCIAEoCVIKZXh0ZXJuYWxJZBIQCgN1cmwYAyABKAlSA3VybA==');
 @$core.Deprecated('Use imagesDescriptor instead')
 const Images$json = const {
   '1': 'Images',

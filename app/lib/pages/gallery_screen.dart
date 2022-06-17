@@ -2,9 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sharecation_app/blocs/images_bloc.dart';
+import 'package:sharecation_app/blocs/main_bloc.dart';
 import 'package:sharecation_app/components/group_scaffold.dart';
-import 'package:sharecation_app/dtos/sharecation_image.dart';
 
 class GalleryScreen extends StatelessWidget {
   final String groupId;
@@ -20,14 +19,15 @@ class GalleryScreen extends StatelessWidget {
       groupScaffoldTab: GroupScaffoldTab.gallery,
       groupId: groupId,
       child: Scaffold(
-          body: BlocBuilder<ImagesBloc, ImagesState>(
+          body: BlocBuilder<MainBloc, MainState>(
         builder: (context, state) => state.when(
             loadingState: () => const CircularProgressIndicator(),
-            loadedState: (images, groupId) {
-              if (images.isEmpty) {
-                return const NoImages();
-              }
-              return ImagesGrid(images: images, groupId: groupId);
+            loadedState: (state, userid) {
+              return ImagesGrid(
+                  images: state.groups[groupId]!.images.values
+                      .where((element) => element.displayable())
+                      .toList(growable: false),
+                  groupId: groupId);
             }),
       )),
     );
@@ -73,9 +73,9 @@ class ImagesGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: () async {
-        context
-            .read<ImagesBloc>()
-            .add(ImagesEvent.loadEvent(groupId: groupId, force: true));
+        // context
+        //     .read<ImagesBloc>()
+        //     .add(ImagesEvent.loadEvent(groupId: groupId, force: true));
       },
       child: GridView.builder(
         padding: const EdgeInsets.all(3),
@@ -106,12 +106,17 @@ class PreviewImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (image.status == SharecationImageStatus.synced) {
-      return Image.file(File(image.path), fit: BoxFit.fill);
-    }
-    return Stack(fit: StackFit.expand, children: [
-      Image.file(File(image.path), fit: BoxFit.fill),
-      const Positioned(right: 4, top: 4, child: Icon(Icons.cloud_off))
-    ]);
+    return image.maybeMap(
+      locale: (state) {
+        return Stack(fit: StackFit.expand, children: [
+          Image.file(File(state.path), fit: BoxFit.fill),
+          const Positioned(right: 4, top: 4, child: Icon(Icons.cloud_off))
+        ]);
+      },
+      synced: (state) {
+        return Image.file(File(state.path), fit: BoxFit.fill);
+      },
+      orElse: () => const Text("shit"),
+    );
   }
 }

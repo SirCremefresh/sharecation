@@ -2,16 +2,34 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sharecation_app/blocs/authentication_bloc.dart';
 
 import '../service/api_service.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({
     Key? key,
   }) : super(key: key);
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // FirebaseAuth.instance.userChanges().first.then((user) {
+    //   if (user == null) {
+    //     return;
+    //   }
+    //   context
+    //       .read<AuthenticationBloc>()
+    //       .add(AuthenticationEvent.signedInEvent(userId: user.uid));
+    //   context.go('/groups');
+    // });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,10 +49,12 @@ class LoginScreen extends StatelessWidget {
           if (credentials != null) {
             try {
               await authenticationService.getJwtString();
-              context
-                  .read<AuthenticationBloc>()
-                  .add(const AuthenticationEvent.signedInEvent());
-              context.go('/groups');
+              var authenticationBloc = context.read<AuthenticationBloc>();
+              authenticationBloc.add(
+                AuthenticationEvent.signedInEvent(
+                  userId: credentials.user!.uid,
+                ),
+              );
             } catch (e) {
               Fluttertoast.showToast(
                   msg: "Error during Sign in",

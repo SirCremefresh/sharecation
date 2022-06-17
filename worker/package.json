@@ -24,7 +24,7 @@
   "devDependencies": {
     "@cloudflare/workers-types": "3.12.0",
     "@miniflare/kv": "2.5.0",
-    "esbuild": "0.14.44",
+    "esbuild": "0.14.45",
     "jest": "28.1.1",
     "jest-config": "28.1.1",
     "jest-environment-miniflare": "2.5.0",

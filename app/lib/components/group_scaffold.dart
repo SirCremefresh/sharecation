@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:sharecation_app/blocs/groups_bloc.dart';
+import 'package:sharecation_app/blocs/main_bloc.dart';
 import 'package:sharecation_app/components/create_group_modal.dart';
 
 enum GroupScaffoldTab { groupInfo, swipe, gallery, none }
@@ -35,8 +35,8 @@ class Layout extends StatelessWidget {
               child: const Icon(Icons.camera),
               onPressed: () async {
                 context
-                    .read<GroupsBloc>()
-                    .add(GroupsEvent.addImage(groupId: groupId!));
+                    .read<MainBloc>()
+                    .add(MainEvent.addImage(groupId: groupId!));
               },
             )
           : null,
@@ -98,7 +98,7 @@ class SharecationDrawer extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           shareCationDrawerHeader(),
-          BlocBuilder<GroupsBloc, GroupsState>(
+          BlocBuilder<MainBloc, MainState>(
             builder: (context, state) => state.when(
               loadingState: () => const CircularProgressIndicator(),
               loadedState: (groups, userId) =>
@@ -155,9 +155,9 @@ class DrawerGroupsList extends StatelessWidget {
     return Expanded(
       child: RefreshIndicator(
         onRefresh: () async {
-          // context
-          //     .read<GroupsBloc>()
-          //     .add(const GroupsEvent.loadEvent(force: true));
+          context
+              .read<MainBloc>()
+              .add(const MainEvent.loadGroups(loadFromServer: true));
         },
         child: ListView.builder(
             padding: EdgeInsets.zero,

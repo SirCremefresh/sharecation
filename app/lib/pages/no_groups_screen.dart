@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:sharecation_app/blocs/groups_bloc.dart';
+import 'package:sharecation_app/blocs/main_bloc.dart';
 import 'package:sharecation_app/components/create_group_modal.dart';
 import 'package:sharecation_app/components/group_scaffold.dart';
 
@@ -11,7 +11,7 @@ class NoGroupsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Layout(
-      child: BlocBuilder<GroupsBloc, GroupsState>(
+      child: BlocBuilder<MainBloc, MainState>(
         builder: (context, state) {
           return state.when(
             loadingState: () => const Center(

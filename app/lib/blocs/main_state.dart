@@ -1,10 +1,10 @@
-part of 'groups_bloc.dart';
+part of 'main_bloc.dart';
 
 @freezed
-class GroupsState with _$GroupsState {
-  const factory GroupsState.loadingState() = _LoadingState;
+class MainState with _$MainState {
+  const factory MainState.loadingState() = _LoadingState;
 
-  const factory GroupsState.loadedState(
+  const factory MainState.loadedState(
       {required SharecationGroups state,
       required String userId}) = _LoadedState;
 }

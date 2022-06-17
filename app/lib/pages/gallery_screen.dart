@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sharecation_app/blocs/groups_bloc.dart';
+import 'package:sharecation_app/blocs/main_bloc.dart';
 import 'package:sharecation_app/components/group_scaffold.dart';
 
 class GalleryScreen extends StatelessWidget {
@@ -19,7 +19,7 @@ class GalleryScreen extends StatelessWidget {
       groupScaffoldTab: GroupScaffoldTab.gallery,
       groupId: groupId,
       child: Scaffold(
-          body: BlocBuilder<GroupsBloc, GroupsState>(
+          body: BlocBuilder<MainBloc, MainState>(
         builder: (context, state) => state.when(
             loadingState: () => const CircularProgressIndicator(),
             loadedState: (state, userid) {

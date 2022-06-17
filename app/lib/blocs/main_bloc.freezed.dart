@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
-part of 'groups_bloc.dart';
+part of 'main_bloc.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -15,7 +15,7 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
-mixin _$GroupsEvent {
+mixin _$MainEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
@@ -31,7 +31,6 @@ mixin _$GroupsEvent {
     required TResult Function(List<SharecationEmptyGroup> groups) groupsLoaded,
     required TResult Function(String groupId, SharecationImage image)
         imageUpdated,
-    required TResult Function(String groupId) selectEvent,
     required TResult Function(String name) addEvent,
   }) =>
       throw _privateConstructorUsedError;
@@ -47,7 +46,6 @@ mixin _$GroupsEvent {
         patchImages,
     TResult Function(List<SharecationEmptyGroup> groups)? groupsLoaded,
     TResult Function(String groupId, SharecationImage image)? imageUpdated,
-    TResult Function(String groupId)? selectEvent,
     TResult Function(String name)? addEvent,
   }) =>
       throw _privateConstructorUsedError;
@@ -63,7 +61,6 @@ mixin _$GroupsEvent {
         patchImages,
     TResult Function(List<SharecationEmptyGroup> groups)? groupsLoaded,
     TResult Function(String groupId, SharecationImage image)? imageUpdated,
-    TResult Function(String groupId)? selectEvent,
     TResult Function(String name)? addEvent,
     required TResult orElse(),
   }) =>
@@ -78,7 +75,6 @@ mixin _$GroupsEvent {
     required TResult Function(_PatchImagesEvent value) patchImages,
     required TResult Function(_GroupsLoadedEvent value) groupsLoaded,
     required TResult Function(_ImageUpdatedEvent value) imageUpdated,
-    required TResult Function(_SelectEvent value) selectEvent,
     required TResult Function(_AddEvent value) addEvent,
   }) =>
       throw _privateConstructorUsedError;
@@ -92,7 +88,6 @@ mixin _$GroupsEvent {
     TResult Function(_PatchImagesEvent value)? patchImages,
     TResult Function(_GroupsLoadedEvent value)? groupsLoaded,
     TResult Function(_ImageUpdatedEvent value)? imageUpdated,
-    TResult Function(_SelectEvent value)? selectEvent,
     TResult Function(_AddEvent value)? addEvent,
   }) =>
       throw _privateConstructorUsedError;
@@ -106,7 +101,6 @@ mixin _$GroupsEvent {
     TResult Function(_PatchImagesEvent value)? patchImages,
     TResult Function(_GroupsLoadedEvent value)? groupsLoaded,
     TResult Function(_ImageUpdatedEvent value)? imageUpdated,
-    TResult Function(_SelectEvent value)? selectEvent,
     TResult Function(_AddEvent value)? addEvent,
     required TResult orElse(),
   }) =>
@@ -114,19 +108,18 @@ mixin _$GroupsEvent {
 }
 
 /// @nodoc
-abstract class $GroupsEventCopyWith<$Res> {
-  factory $GroupsEventCopyWith(
-          GroupsEvent value, $Res Function(GroupsEvent) then) =
-      _$GroupsEventCopyWithImpl<$Res>;
+abstract class $MainEventCopyWith<$Res> {
+  factory $MainEventCopyWith(MainEvent value, $Res Function(MainEvent) then) =
+      _$MainEventCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class _$GroupsEventCopyWithImpl<$Res> implements $GroupsEventCopyWith<$Res> {
-  _$GroupsEventCopyWithImpl(this._value, this._then);
+class _$MainEventCopyWithImpl<$Res> implements $MainEventCopyWith<$Res> {
+  _$MainEventCopyWithImpl(this._value, this._then);
 
-  final GroupsEvent _value;
+  final MainEvent _value;
   // ignore: unused_field
-  final $Res Function(GroupsEvent) _then;
+  final $Res Function(MainEvent) _then;
 }
 
 /// @nodoc
@@ -139,7 +132,7 @@ abstract class _$$_LoadGroupsForUserCopyWith<$Res> {
 
 /// @nodoc
 class __$$_LoadGroupsForUserCopyWithImpl<$Res>
-    extends _$GroupsEventCopyWithImpl<$Res>
+    extends _$MainEventCopyWithImpl<$Res>
     implements _$$_LoadGroupsForUserCopyWith<$Res> {
   __$$_LoadGroupsForUserCopyWithImpl(
       _$_LoadGroupsForUser _value, $Res Function(_$_LoadGroupsForUser) _then)
@@ -190,7 +183,7 @@ class _$_LoadGroupsForUser implements _LoadGroupsForUser {
 
   @override
   String toString() {
-    return 'GroupsEvent.loadGroupsForUser(userId: $userId, loadFromFile: $loadFromFile, loadFromServer: $loadFromServer)';
+    return 'MainEvent.loadGroupsForUser(userId: $userId, loadFromFile: $loadFromFile, loadFromServer: $loadFromServer)';
   }
 
   @override
@@ -234,7 +227,6 @@ class _$_LoadGroupsForUser implements _LoadGroupsForUser {
     required TResult Function(List<SharecationEmptyGroup> groups) groupsLoaded,
     required TResult Function(String groupId, SharecationImage image)
         imageUpdated,
-    required TResult Function(String groupId) selectEvent,
     required TResult Function(String name) addEvent,
   }) {
     return loadGroupsForUser(userId, loadFromFile, loadFromServer);
@@ -253,7 +245,6 @@ class _$_LoadGroupsForUser implements _LoadGroupsForUser {
         patchImages,
     TResult Function(List<SharecationEmptyGroup> groups)? groupsLoaded,
     TResult Function(String groupId, SharecationImage image)? imageUpdated,
-    TResult Function(String groupId)? selectEvent,
     TResult Function(String name)? addEvent,
   }) {
     return loadGroupsForUser?.call(userId, loadFromFile, loadFromServer);
@@ -272,7 +263,6 @@ class _$_LoadGroupsForUser implements _LoadGroupsForUser {
         patchImages,
     TResult Function(List<SharecationEmptyGroup> groups)? groupsLoaded,
     TResult Function(String groupId, SharecationImage image)? imageUpdated,
-    TResult Function(String groupId)? selectEvent,
     TResult Function(String name)? addEvent,
     required TResult orElse(),
   }) {
@@ -293,7 +283,6 @@ class _$_LoadGroupsForUser implements _LoadGroupsForUser {
     required TResult Function(_PatchImagesEvent value) patchImages,
     required TResult Function(_GroupsLoadedEvent value) groupsLoaded,
     required TResult Function(_ImageUpdatedEvent value) imageUpdated,
-    required TResult Function(_SelectEvent value) selectEvent,
     required TResult Function(_AddEvent value) addEvent,
   }) {
     return loadGroupsForUser(this);
@@ -310,7 +299,6 @@ class _$_LoadGroupsForUser implements _LoadGroupsForUser {
     TResult Function(_PatchImagesEvent value)? patchImages,
     TResult Function(_GroupsLoadedEvent value)? groupsLoaded,
     TResult Function(_ImageUpdatedEvent value)? imageUpdated,
-    TResult Function(_SelectEvent value)? selectEvent,
     TResult Function(_AddEvent value)? addEvent,
   }) {
     return loadGroupsForUser?.call(this);
@@ -327,7 +315,6 @@ class _$_LoadGroupsForUser implements _LoadGroupsForUser {
     TResult Function(_PatchImagesEvent value)? patchImages,
     TResult Function(_GroupsLoadedEvent value)? groupsLoaded,
     TResult Function(_ImageUpdatedEvent value)? imageUpdated,
-    TResult Function(_SelectEvent value)? selectEvent,
     TResult Function(_AddEvent value)? addEvent,
     required TResult orElse(),
   }) {
@@ -338,7 +325,7 @@ class _$_LoadGroupsForUser implements _LoadGroupsForUser {
   }
 }
 
-abstract class _LoadGroupsForUser implements GroupsEvent {
+abstract class _LoadGroupsForUser implements MainEvent {
   const factory _LoadGroupsForUser(
       {required final String userId,
       final bool loadFromFile,
@@ -361,7 +348,7 @@ abstract class _$$_LoadGroupsCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_LoadGroupsCopyWithImpl<$Res> extends _$GroupsEventCopyWithImpl<$Res>
+class __$$_LoadGroupsCopyWithImpl<$Res> extends _$MainEventCopyWithImpl<$Res>
     implements _$$_LoadGroupsCopyWith<$Res> {
   __$$_LoadGroupsCopyWithImpl(
       _$_LoadGroups _value, $Res Function(_$_LoadGroups) _then)
@@ -402,7 +389,7 @@ class _$_LoadGroups implements _LoadGroups {
 
   @override
   String toString() {
-    return 'GroupsEvent.loadGroups(loadFromFile: $loadFromFile, loadFromServer: $loadFromServer)';
+    return 'MainEvent.loadGroups(loadFromFile: $loadFromFile, loadFromServer: $loadFromServer)';
   }
 
   @override
@@ -443,7 +430,6 @@ class _$_LoadGroups implements _LoadGroups {
     required TResult Function(List<SharecationEmptyGroup> groups) groupsLoaded,
     required TResult Function(String groupId, SharecationImage image)
         imageUpdated,
-    required TResult Function(String groupId) selectEvent,
     required TResult Function(String name) addEvent,
   }) {
     return loadGroups(loadFromFile, loadFromServer);
@@ -462,7 +448,6 @@ class _$_LoadGroups implements _LoadGroups {
         patchImages,
     TResult Function(List<SharecationEmptyGroup> groups)? groupsLoaded,
     TResult Function(String groupId, SharecationImage image)? imageUpdated,
-    TResult Function(String groupId)? selectEvent,
     TResult Function(String name)? addEvent,
   }) {
     return loadGroups?.call(loadFromFile, loadFromServer);
@@ -481,7 +466,6 @@ class _$_LoadGroups implements _LoadGroups {
         patchImages,
     TResult Function(List<SharecationEmptyGroup> groups)? groupsLoaded,
     TResult Function(String groupId, SharecationImage image)? imageUpdated,
-    TResult Function(String groupId)? selectEvent,
     TResult Function(String name)? addEvent,
     required TResult orElse(),
   }) {
@@ -502,7 +486,6 @@ class _$_LoadGroups implements _LoadGroups {
     required TResult Function(_PatchImagesEvent value) patchImages,
     required TResult Function(_GroupsLoadedEvent value) groupsLoaded,
     required TResult Function(_ImageUpdatedEvent value) imageUpdated,
-    required TResult Function(_SelectEvent value) selectEvent,
     required TResult Function(_AddEvent value) addEvent,
   }) {
     return loadGroups(this);
@@ -519,7 +502,6 @@ class _$_LoadGroups implements _LoadGroups {
     TResult Function(_PatchImagesEvent value)? patchImages,
     TResult Function(_GroupsLoadedEvent value)? groupsLoaded,
     TResult Function(_ImageUpdatedEvent value)? imageUpdated,
-    TResult Function(_SelectEvent value)? selectEvent,
     TResult Function(_AddEvent value)? addEvent,
   }) {
     return loadGroups?.call(this);
@@ -536,7 +518,6 @@ class _$_LoadGroups implements _LoadGroups {
     TResult Function(_PatchImagesEvent value)? patchImages,
     TResult Function(_GroupsLoadedEvent value)? groupsLoaded,
     TResult Function(_ImageUpdatedEvent value)? imageUpdated,
-    TResult Function(_SelectEvent value)? selectEvent,
     TResult Function(_AddEvent value)? addEvent,
     required TResult orElse(),
   }) {
@@ -547,7 +528,7 @@ class _$_LoadGroups implements _LoadGroups {
   }
 }
 
-abstract class _LoadGroups implements GroupsEvent {
+abstract class _LoadGroups implements MainEvent {
   const factory _LoadGroups(
       {final bool loadFromFile, final bool loadFromServer}) = _$_LoadGroups;
 
@@ -566,7 +547,7 @@ abstract class _$$_LoadImagesCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_LoadImagesCopyWithImpl<$Res> extends _$GroupsEventCopyWithImpl<$Res>
+class __$$_LoadImagesCopyWithImpl<$Res> extends _$MainEventCopyWithImpl<$Res>
     implements _$$_LoadImagesCopyWith<$Res> {
   __$$_LoadImagesCopyWithImpl(
       _$_LoadImages _value, $Res Function(_$_LoadImages) _then)
@@ -583,7 +564,7 @@ class _$_LoadImages implements _LoadImages {
 
   @override
   String toString() {
-    return 'GroupsEvent.loadImages()';
+    return 'MainEvent.loadImages()';
   }
 
   @override
@@ -611,7 +592,6 @@ class _$_LoadImages implements _LoadImages {
     required TResult Function(List<SharecationEmptyGroup> groups) groupsLoaded,
     required TResult Function(String groupId, SharecationImage image)
         imageUpdated,
-    required TResult Function(String groupId) selectEvent,
     required TResult Function(String name) addEvent,
   }) {
     return loadImages();
@@ -630,7 +610,6 @@ class _$_LoadImages implements _LoadImages {
         patchImages,
     TResult Function(List<SharecationEmptyGroup> groups)? groupsLoaded,
     TResult Function(String groupId, SharecationImage image)? imageUpdated,
-    TResult Function(String groupId)? selectEvent,
     TResult Function(String name)? addEvent,
   }) {
     return loadImages?.call();
@@ -649,7 +628,6 @@ class _$_LoadImages implements _LoadImages {
         patchImages,
     TResult Function(List<SharecationEmptyGroup> groups)? groupsLoaded,
     TResult Function(String groupId, SharecationImage image)? imageUpdated,
-    TResult Function(String groupId)? selectEvent,
     TResult Function(String name)? addEvent,
     required TResult orElse(),
   }) {
@@ -670,7 +648,6 @@ class _$_LoadImages implements _LoadImages {
     required TResult Function(_PatchImagesEvent value) patchImages,
     required TResult Function(_GroupsLoadedEvent value) groupsLoaded,
     required TResult Function(_ImageUpdatedEvent value) imageUpdated,
-    required TResult Function(_SelectEvent value) selectEvent,
     required TResult Function(_AddEvent value) addEvent,
   }) {
     return loadImages(this);
@@ -687,7 +664,6 @@ class _$_LoadImages implements _LoadImages {
     TResult Function(_PatchImagesEvent value)? patchImages,
     TResult Function(_GroupsLoadedEvent value)? groupsLoaded,
     TResult Function(_ImageUpdatedEvent value)? imageUpdated,
-    TResult Function(_SelectEvent value)? selectEvent,
     TResult Function(_AddEvent value)? addEvent,
   }) {
     return loadImages?.call(this);
@@ -704,7 +680,6 @@ class _$_LoadImages implements _LoadImages {
     TResult Function(_PatchImagesEvent value)? patchImages,
     TResult Function(_GroupsLoadedEvent value)? groupsLoaded,
     TResult Function(_ImageUpdatedEvent value)? imageUpdated,
-    TResult Function(_SelectEvent value)? selectEvent,
     TResult Function(_AddEvent value)? addEvent,
     required TResult orElse(),
   }) {
@@ -715,7 +690,7 @@ class _$_LoadImages implements _LoadImages {
   }
 }
 
-abstract class _LoadImages implements GroupsEvent {
+abstract class _LoadImages implements MainEvent {
   const factory _LoadImages() = _$_LoadImages;
 }
 
@@ -728,8 +703,7 @@ abstract class _$$_AddImageEventCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_AddImageEventCopyWithImpl<$Res>
-    extends _$GroupsEventCopyWithImpl<$Res>
+class __$$_AddImageEventCopyWithImpl<$Res> extends _$MainEventCopyWithImpl<$Res>
     implements _$$_AddImageEventCopyWith<$Res> {
   __$$_AddImageEventCopyWithImpl(
       _$_AddImageEvent _value, $Res Function(_$_AddImageEvent) _then)
@@ -761,7 +735,7 @@ class _$_AddImageEvent implements _AddImageEvent {
 
   @override
   String toString() {
-    return 'GroupsEvent.addImage(groupId: $groupId)';
+    return 'MainEvent.addImage(groupId: $groupId)';
   }
 
   @override
@@ -797,7 +771,6 @@ class _$_AddImageEvent implements _AddImageEvent {
     required TResult Function(List<SharecationEmptyGroup> groups) groupsLoaded,
     required TResult Function(String groupId, SharecationImage image)
         imageUpdated,
-    required TResult Function(String groupId) selectEvent,
     required TResult Function(String name) addEvent,
   }) {
     return addImage(groupId);
@@ -816,7 +789,6 @@ class _$_AddImageEvent implements _AddImageEvent {
         patchImages,
     TResult Function(List<SharecationEmptyGroup> groups)? groupsLoaded,
     TResult Function(String groupId, SharecationImage image)? imageUpdated,
-    TResult Function(String groupId)? selectEvent,
     TResult Function(String name)? addEvent,
   }) {
     return addImage?.call(groupId);
@@ -835,7 +807,6 @@ class _$_AddImageEvent implements _AddImageEvent {
         patchImages,
     TResult Function(List<SharecationEmptyGroup> groups)? groupsLoaded,
     TResult Function(String groupId, SharecationImage image)? imageUpdated,
-    TResult Function(String groupId)? selectEvent,
     TResult Function(String name)? addEvent,
     required TResult orElse(),
   }) {
@@ -856,7 +827,6 @@ class _$_AddImageEvent implements _AddImageEvent {
     required TResult Function(_PatchImagesEvent value) patchImages,
     required TResult Function(_GroupsLoadedEvent value) groupsLoaded,
     required TResult Function(_ImageUpdatedEvent value) imageUpdated,
-    required TResult Function(_SelectEvent value) selectEvent,
     required TResult Function(_AddEvent value) addEvent,
   }) {
     return addImage(this);
@@ -873,7 +843,6 @@ class _$_AddImageEvent implements _AddImageEvent {
     TResult Function(_PatchImagesEvent value)? patchImages,
     TResult Function(_GroupsLoadedEvent value)? groupsLoaded,
     TResult Function(_ImageUpdatedEvent value)? imageUpdated,
-    TResult Function(_SelectEvent value)? selectEvent,
     TResult Function(_AddEvent value)? addEvent,
   }) {
     return addImage?.call(this);
@@ -890,7 +859,6 @@ class _$_AddImageEvent implements _AddImageEvent {
     TResult Function(_PatchImagesEvent value)? patchImages,
     TResult Function(_GroupsLoadedEvent value)? groupsLoaded,
     TResult Function(_ImageUpdatedEvent value)? imageUpdated,
-    TResult Function(_SelectEvent value)? selectEvent,
     TResult Function(_AddEvent value)? addEvent,
     required TResult orElse(),
   }) {
@@ -901,7 +869,7 @@ class _$_AddImageEvent implements _AddImageEvent {
   }
 }
 
-abstract class _AddImageEvent implements GroupsEvent {
+abstract class _AddImageEvent implements MainEvent {
   const factory _AddImageEvent({required final String groupId}) =
       _$_AddImageEvent;
 
@@ -923,7 +891,7 @@ abstract class _$$_InitialLoadEventCopyWith<$Res> {
 
 /// @nodoc
 class __$$_InitialLoadEventCopyWithImpl<$Res>
-    extends _$GroupsEventCopyWithImpl<$Res>
+    extends _$MainEventCopyWithImpl<$Res>
     implements _$$_InitialLoadEventCopyWith<$Res> {
   __$$_InitialLoadEventCopyWithImpl(
       _$_InitialLoadEvent _value, $Res Function(_$_InitialLoadEvent) _then)
@@ -962,7 +930,7 @@ class _$_InitialLoadEvent implements _InitialLoadEvent {
 
   @override
   String toString() {
-    return 'GroupsEvent.initialLoad(groups: $groups)';
+    return 'MainEvent.initialLoad(groups: $groups)';
   }
 
   @override
@@ -998,7 +966,6 @@ class _$_InitialLoadEvent implements _InitialLoadEvent {
     required TResult Function(List<SharecationEmptyGroup> groups) groupsLoaded,
     required TResult Function(String groupId, SharecationImage image)
         imageUpdated,
-    required TResult Function(String groupId) selectEvent,
     required TResult Function(String name) addEvent,
   }) {
     return initialLoad(groups);
@@ -1017,7 +984,6 @@ class _$_InitialLoadEvent implements _InitialLoadEvent {
         patchImages,
     TResult Function(List<SharecationEmptyGroup> groups)? groupsLoaded,
     TResult Function(String groupId, SharecationImage image)? imageUpdated,
-    TResult Function(String groupId)? selectEvent,
     TResult Function(String name)? addEvent,
   }) {
     return initialLoad?.call(groups);
@@ -1036,7 +1002,6 @@ class _$_InitialLoadEvent implements _InitialLoadEvent {
         patchImages,
     TResult Function(List<SharecationEmptyGroup> groups)? groupsLoaded,
     TResult Function(String groupId, SharecationImage image)? imageUpdated,
-    TResult Function(String groupId)? selectEvent,
     TResult Function(String name)? addEvent,
     required TResult orElse(),
   }) {
@@ -1057,7 +1022,6 @@ class _$_InitialLoadEvent implements _InitialLoadEvent {
     required TResult Function(_PatchImagesEvent value) patchImages,
     required TResult Function(_GroupsLoadedEvent value) groupsLoaded,
     required TResult Function(_ImageUpdatedEvent value) imageUpdated,
-    required TResult Function(_SelectEvent value) selectEvent,
     required TResult Function(_AddEvent value) addEvent,
   }) {
     return initialLoad(this);
@@ -1074,7 +1038,6 @@ class _$_InitialLoadEvent implements _InitialLoadEvent {
     TResult Function(_PatchImagesEvent value)? patchImages,
     TResult Function(_GroupsLoadedEvent value)? groupsLoaded,
     TResult Function(_ImageUpdatedEvent value)? imageUpdated,
-    TResult Function(_SelectEvent value)? selectEvent,
     TResult Function(_AddEvent value)? addEvent,
   }) {
     return initialLoad?.call(this);
@@ -1091,7 +1054,6 @@ class _$_InitialLoadEvent implements _InitialLoadEvent {
     TResult Function(_PatchImagesEvent value)? patchImages,
     TResult Function(_GroupsLoadedEvent value)? groupsLoaded,
     TResult Function(_ImageUpdatedEvent value)? imageUpdated,
-    TResult Function(_SelectEvent value)? selectEvent,
     TResult Function(_AddEvent value)? addEvent,
     required TResult orElse(),
   }) {
@@ -1102,7 +1064,7 @@ class _$_InitialLoadEvent implements _InitialLoadEvent {
   }
 }
 
-abstract class _InitialLoadEvent implements GroupsEvent {
+abstract class _InitialLoadEvent implements MainEvent {
   const factory _InitialLoadEvent({required final SharecationGroups groups}) =
       _$_InitialLoadEvent;
 
@@ -1122,7 +1084,7 @@ abstract class _$$_PatchImagesEventCopyWith<$Res> {
 
 /// @nodoc
 class __$$_PatchImagesEventCopyWithImpl<$Res>
-    extends _$GroupsEventCopyWithImpl<$Res>
+    extends _$MainEventCopyWithImpl<$Res>
     implements _$$_PatchImagesEventCopyWith<$Res> {
   __$$_PatchImagesEventCopyWithImpl(
       _$_PatchImagesEvent _value, $Res Function(_$_PatchImagesEvent) _then)
@@ -1167,7 +1129,7 @@ class _$_PatchImagesEvent implements _PatchImagesEvent {
 
   @override
   String toString() {
-    return 'GroupsEvent.patchImages(groupId: $groupId, images: $images)';
+    return 'MainEvent.patchImages(groupId: $groupId, images: $images)';
   }
 
   @override
@@ -1206,7 +1168,6 @@ class _$_PatchImagesEvent implements _PatchImagesEvent {
     required TResult Function(List<SharecationEmptyGroup> groups) groupsLoaded,
     required TResult Function(String groupId, SharecationImage image)
         imageUpdated,
-    required TResult Function(String groupId) selectEvent,
     required TResult Function(String name) addEvent,
   }) {
     return patchImages(groupId, images);
@@ -1225,7 +1186,6 @@ class _$_PatchImagesEvent implements _PatchImagesEvent {
         patchImages,
     TResult Function(List<SharecationEmptyGroup> groups)? groupsLoaded,
     TResult Function(String groupId, SharecationImage image)? imageUpdated,
-    TResult Function(String groupId)? selectEvent,
     TResult Function(String name)? addEvent,
   }) {
     return patchImages?.call(groupId, images);
@@ -1244,7 +1204,6 @@ class _$_PatchImagesEvent implements _PatchImagesEvent {
         patchImages,
     TResult Function(List<SharecationEmptyGroup> groups)? groupsLoaded,
     TResult Function(String groupId, SharecationImage image)? imageUpdated,
-    TResult Function(String groupId)? selectEvent,
     TResult Function(String name)? addEvent,
     required TResult orElse(),
   }) {
@@ -1265,7 +1224,6 @@ class _$_PatchImagesEvent implements _PatchImagesEvent {
     required TResult Function(_PatchImagesEvent value) patchImages,
     required TResult Function(_GroupsLoadedEvent value) groupsLoaded,
     required TResult Function(_ImageUpdatedEvent value) imageUpdated,
-    required TResult Function(_SelectEvent value) selectEvent,
     required TResult Function(_AddEvent value) addEvent,
   }) {
     return patchImages(this);
@@ -1282,7 +1240,6 @@ class _$_PatchImagesEvent implements _PatchImagesEvent {
     TResult Function(_PatchImagesEvent value)? patchImages,
     TResult Function(_GroupsLoadedEvent value)? groupsLoaded,
     TResult Function(_ImageUpdatedEvent value)? imageUpdated,
-    TResult Function(_SelectEvent value)? selectEvent,
     TResult Function(_AddEvent value)? addEvent,
   }) {
     return patchImages?.call(this);
@@ -1299,7 +1256,6 @@ class _$_PatchImagesEvent implements _PatchImagesEvent {
     TResult Function(_PatchImagesEvent value)? patchImages,
     TResult Function(_GroupsLoadedEvent value)? groupsLoaded,
     TResult Function(_ImageUpdatedEvent value)? imageUpdated,
-    TResult Function(_SelectEvent value)? selectEvent,
     TResult Function(_AddEvent value)? addEvent,
     required TResult orElse(),
   }) {
@@ -1310,7 +1266,7 @@ class _$_PatchImagesEvent implements _PatchImagesEvent {
   }
 }
 
-abstract class _PatchImagesEvent implements GroupsEvent {
+abstract class _PatchImagesEvent implements MainEvent {
   const factory _PatchImagesEvent(
       {required final String groupId,
       required final List<SharecationImage> images}) = _$_PatchImagesEvent;
@@ -1332,7 +1288,7 @@ abstract class _$$_GroupsLoadedEventCopyWith<$Res> {
 
 /// @nodoc
 class __$$_GroupsLoadedEventCopyWithImpl<$Res>
-    extends _$GroupsEventCopyWithImpl<$Res>
+    extends _$MainEventCopyWithImpl<$Res>
     implements _$$_GroupsLoadedEventCopyWith<$Res> {
   __$$_GroupsLoadedEventCopyWithImpl(
       _$_GroupsLoadedEvent _value, $Res Function(_$_GroupsLoadedEvent) _then)
@@ -1370,7 +1326,7 @@ class _$_GroupsLoadedEvent implements _GroupsLoadedEvent {
 
   @override
   String toString() {
-    return 'GroupsEvent.groupsLoaded(groups: $groups)';
+    return 'MainEvent.groupsLoaded(groups: $groups)';
   }
 
   @override
@@ -1407,7 +1363,6 @@ class _$_GroupsLoadedEvent implements _GroupsLoadedEvent {
     required TResult Function(List<SharecationEmptyGroup> groups) groupsLoaded,
     required TResult Function(String groupId, SharecationImage image)
         imageUpdated,
-    required TResult Function(String groupId) selectEvent,
     required TResult Function(String name) addEvent,
   }) {
     return groupsLoaded(groups);
@@ -1426,7 +1381,6 @@ class _$_GroupsLoadedEvent implements _GroupsLoadedEvent {
         patchImages,
     TResult Function(List<SharecationEmptyGroup> groups)? groupsLoaded,
     TResult Function(String groupId, SharecationImage image)? imageUpdated,
-    TResult Function(String groupId)? selectEvent,
     TResult Function(String name)? addEvent,
   }) {
     return groupsLoaded?.call(groups);
@@ -1445,7 +1399,6 @@ class _$_GroupsLoadedEvent implements _GroupsLoadedEvent {
         patchImages,
     TResult Function(List<SharecationEmptyGroup> groups)? groupsLoaded,
     TResult Function(String groupId, SharecationImage image)? imageUpdated,
-    TResult Function(String groupId)? selectEvent,
     TResult Function(String name)? addEvent,
     required TResult orElse(),
   }) {
@@ -1466,7 +1419,6 @@ class _$_GroupsLoadedEvent implements _GroupsLoadedEvent {
     required TResult Function(_PatchImagesEvent value) patchImages,
     required TResult Function(_GroupsLoadedEvent value) groupsLoaded,
     required TResult Function(_ImageUpdatedEvent value) imageUpdated,
-    required TResult Function(_SelectEvent value) selectEvent,
     required TResult Function(_AddEvent value) addEvent,
   }) {
     return groupsLoaded(this);
@@ -1483,7 +1435,6 @@ class _$_GroupsLoadedEvent implements _GroupsLoadedEvent {
     TResult Function(_PatchImagesEvent value)? patchImages,
     TResult Function(_GroupsLoadedEvent value)? groupsLoaded,
     TResult Function(_ImageUpdatedEvent value)? imageUpdated,
-    TResult Function(_SelectEvent value)? selectEvent,
     TResult Function(_AddEvent value)? addEvent,
   }) {
     return groupsLoaded?.call(this);
@@ -1500,7 +1451,6 @@ class _$_GroupsLoadedEvent implements _GroupsLoadedEvent {
     TResult Function(_PatchImagesEvent value)? patchImages,
     TResult Function(_GroupsLoadedEvent value)? groupsLoaded,
     TResult Function(_ImageUpdatedEvent value)? imageUpdated,
-    TResult Function(_SelectEvent value)? selectEvent,
     TResult Function(_AddEvent value)? addEvent,
     required TResult orElse(),
   }) {
@@ -1511,7 +1461,7 @@ class _$_GroupsLoadedEvent implements _GroupsLoadedEvent {
   }
 }
 
-abstract class _GroupsLoadedEvent implements GroupsEvent {
+abstract class _GroupsLoadedEvent implements MainEvent {
   const factory _GroupsLoadedEvent(
           {required final List<SharecationEmptyGroup> groups}) =
       _$_GroupsLoadedEvent;
@@ -1534,7 +1484,7 @@ abstract class _$$_ImageUpdatedEventCopyWith<$Res> {
 
 /// @nodoc
 class __$$_ImageUpdatedEventCopyWithImpl<$Res>
-    extends _$GroupsEventCopyWithImpl<$Res>
+    extends _$MainEventCopyWithImpl<$Res>
     implements _$$_ImageUpdatedEventCopyWith<$Res> {
   __$$_ImageUpdatedEventCopyWithImpl(
       _$_ImageUpdatedEvent _value, $Res Function(_$_ImageUpdatedEvent) _then)
@@ -1580,7 +1530,7 @@ class _$_ImageUpdatedEvent implements _ImageUpdatedEvent {
 
   @override
   String toString() {
-    return 'GroupsEvent.imageUpdated(groupId: $groupId, image: $image)';
+    return 'MainEvent.imageUpdated(groupId: $groupId, image: $image)';
   }
 
   @override
@@ -1620,7 +1570,6 @@ class _$_ImageUpdatedEvent implements _ImageUpdatedEvent {
     required TResult Function(List<SharecationEmptyGroup> groups) groupsLoaded,
     required TResult Function(String groupId, SharecationImage image)
         imageUpdated,
-    required TResult Function(String groupId) selectEvent,
     required TResult Function(String name) addEvent,
   }) {
     return imageUpdated(groupId, image);
@@ -1639,7 +1588,6 @@ class _$_ImageUpdatedEvent implements _ImageUpdatedEvent {
         patchImages,
     TResult Function(List<SharecationEmptyGroup> groups)? groupsLoaded,
     TResult Function(String groupId, SharecationImage image)? imageUpdated,
-    TResult Function(String groupId)? selectEvent,
     TResult Function(String name)? addEvent,
   }) {
     return imageUpdated?.call(groupId, image);
@@ -1658,7 +1606,6 @@ class _$_ImageUpdatedEvent implements _ImageUpdatedEvent {
         patchImages,
     TResult Function(List<SharecationEmptyGroup> groups)? groupsLoaded,
     TResult Function(String groupId, SharecationImage image)? imageUpdated,
-    TResult Function(String groupId)? selectEvent,
     TResult Function(String name)? addEvent,
     required TResult orElse(),
   }) {
@@ -1679,7 +1626,6 @@ class _$_ImageUpdatedEvent implements _ImageUpdatedEvent {
     required TResult Function(_PatchImagesEvent value) patchImages,
     required TResult Function(_GroupsLoadedEvent value) groupsLoaded,
     required TResult Function(_ImageUpdatedEvent value) imageUpdated,
-    required TResult Function(_SelectEvent value) selectEvent,
     required TResult Function(_AddEvent value) addEvent,
   }) {
     return imageUpdated(this);
@@ -1696,7 +1642,6 @@ class _$_ImageUpdatedEvent implements _ImageUpdatedEvent {
     TResult Function(_PatchImagesEvent value)? patchImages,
     TResult Function(_GroupsLoadedEvent value)? groupsLoaded,
     TResult Function(_ImageUpdatedEvent value)? imageUpdated,
-    TResult Function(_SelectEvent value)? selectEvent,
     TResult Function(_AddEvent value)? addEvent,
   }) {
     return imageUpdated?.call(this);
@@ -1713,7 +1658,6 @@ class _$_ImageUpdatedEvent implements _ImageUpdatedEvent {
     TResult Function(_PatchImagesEvent value)? patchImages,
     TResult Function(_GroupsLoadedEvent value)? groupsLoaded,
     TResult Function(_ImageUpdatedEvent value)? imageUpdated,
-    TResult Function(_SelectEvent value)? selectEvent,
     TResult Function(_AddEvent value)? addEvent,
     required TResult orElse(),
   }) {
@@ -1724,7 +1668,7 @@ class _$_ImageUpdatedEvent implements _ImageUpdatedEvent {
   }
 }
 
-abstract class _ImageUpdatedEvent implements GroupsEvent {
+abstract class _ImageUpdatedEvent implements MainEvent {
   const factory _ImageUpdatedEvent(
       {required final String groupId,
       required final SharecationImage image}) = _$_ImageUpdatedEvent;
@@ -1737,196 +1681,6 @@ abstract class _ImageUpdatedEvent implements GroupsEvent {
 }
 
 /// @nodoc
-abstract class _$$_SelectEventCopyWith<$Res> {
-  factory _$$_SelectEventCopyWith(
-          _$_SelectEvent value, $Res Function(_$_SelectEvent) then) =
-      __$$_SelectEventCopyWithImpl<$Res>;
-  $Res call({String groupId});
-}
-
-/// @nodoc
-class __$$_SelectEventCopyWithImpl<$Res> extends _$GroupsEventCopyWithImpl<$Res>
-    implements _$$_SelectEventCopyWith<$Res> {
-  __$$_SelectEventCopyWithImpl(
-      _$_SelectEvent _value, $Res Function(_$_SelectEvent) _then)
-      : super(_value, (v) => _then(v as _$_SelectEvent));
-
-  @override
-  _$_SelectEvent get _value => super._value as _$_SelectEvent;
-
-  @override
-  $Res call({
-    Object? groupId = freezed,
-  }) {
-    return _then(_$_SelectEvent(
-      groupId: groupId == freezed
-          ? _value.groupId
-          : groupId // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
-  }
-}
-
-/// @nodoc
-
-class _$_SelectEvent implements _SelectEvent {
-  const _$_SelectEvent({required this.groupId});
-
-  @override
-  final String groupId;
-
-  @override
-  String toString() {
-    return 'GroupsEvent.selectEvent(groupId: $groupId)';
-  }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$_SelectEvent &&
-            const DeepCollectionEquality().equals(other.groupId, groupId));
-  }
-
-  @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(groupId));
-
-  @JsonKey(ignore: true)
-  @override
-  _$$_SelectEventCopyWith<_$_SelectEvent> get copyWith =>
-      __$$_SelectEventCopyWithImpl<_$_SelectEvent>(this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(
-            String userId, bool loadFromFile, bool loadFromServer)
-        loadGroupsForUser,
-    required TResult Function(bool loadFromFile, bool loadFromServer)
-        loadGroups,
-    required TResult Function() loadImages,
-    required TResult Function(String groupId) addImage,
-    required TResult Function(SharecationGroups groups) initialLoad,
-    required TResult Function(String groupId, List<SharecationImage> images)
-        patchImages,
-    required TResult Function(List<SharecationEmptyGroup> groups) groupsLoaded,
-    required TResult Function(String groupId, SharecationImage image)
-        imageUpdated,
-    required TResult Function(String groupId) selectEvent,
-    required TResult Function(String name) addEvent,
-  }) {
-    return selectEvent(groupId);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(String userId, bool loadFromFile, bool loadFromServer)?
-        loadGroupsForUser,
-    TResult Function(bool loadFromFile, bool loadFromServer)? loadGroups,
-    TResult Function()? loadImages,
-    TResult Function(String groupId)? addImage,
-    TResult Function(SharecationGroups groups)? initialLoad,
-    TResult Function(String groupId, List<SharecationImage> images)?
-        patchImages,
-    TResult Function(List<SharecationEmptyGroup> groups)? groupsLoaded,
-    TResult Function(String groupId, SharecationImage image)? imageUpdated,
-    TResult Function(String groupId)? selectEvent,
-    TResult Function(String name)? addEvent,
-  }) {
-    return selectEvent?.call(groupId);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String userId, bool loadFromFile, bool loadFromServer)?
-        loadGroupsForUser,
-    TResult Function(bool loadFromFile, bool loadFromServer)? loadGroups,
-    TResult Function()? loadImages,
-    TResult Function(String groupId)? addImage,
-    TResult Function(SharecationGroups groups)? initialLoad,
-    TResult Function(String groupId, List<SharecationImage> images)?
-        patchImages,
-    TResult Function(List<SharecationEmptyGroup> groups)? groupsLoaded,
-    TResult Function(String groupId, SharecationImage image)? imageUpdated,
-    TResult Function(String groupId)? selectEvent,
-    TResult Function(String name)? addEvent,
-    required TResult orElse(),
-  }) {
-    if (selectEvent != null) {
-      return selectEvent(groupId);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_LoadGroupsForUser value) loadGroupsForUser,
-    required TResult Function(_LoadGroups value) loadGroups,
-    required TResult Function(_LoadImages value) loadImages,
-    required TResult Function(_AddImageEvent value) addImage,
-    required TResult Function(_InitialLoadEvent value) initialLoad,
-    required TResult Function(_PatchImagesEvent value) patchImages,
-    required TResult Function(_GroupsLoadedEvent value) groupsLoaded,
-    required TResult Function(_ImageUpdatedEvent value) imageUpdated,
-    required TResult Function(_SelectEvent value) selectEvent,
-    required TResult Function(_AddEvent value) addEvent,
-  }) {
-    return selectEvent(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_LoadGroupsForUser value)? loadGroupsForUser,
-    TResult Function(_LoadGroups value)? loadGroups,
-    TResult Function(_LoadImages value)? loadImages,
-    TResult Function(_AddImageEvent value)? addImage,
-    TResult Function(_InitialLoadEvent value)? initialLoad,
-    TResult Function(_PatchImagesEvent value)? patchImages,
-    TResult Function(_GroupsLoadedEvent value)? groupsLoaded,
-    TResult Function(_ImageUpdatedEvent value)? imageUpdated,
-    TResult Function(_SelectEvent value)? selectEvent,
-    TResult Function(_AddEvent value)? addEvent,
-  }) {
-    return selectEvent?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_LoadGroupsForUser value)? loadGroupsForUser,
-    TResult Function(_LoadGroups value)? loadGroups,
-    TResult Function(_LoadImages value)? loadImages,
-    TResult Function(_AddImageEvent value)? addImage,
-    TResult Function(_InitialLoadEvent value)? initialLoad,
-    TResult Function(_PatchImagesEvent value)? patchImages,
-    TResult Function(_GroupsLoadedEvent value)? groupsLoaded,
-    TResult Function(_ImageUpdatedEvent value)? imageUpdated,
-    TResult Function(_SelectEvent value)? selectEvent,
-    TResult Function(_AddEvent value)? addEvent,
-    required TResult orElse(),
-  }) {
-    if (selectEvent != null) {
-      return selectEvent(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _SelectEvent implements GroupsEvent {
-  const factory _SelectEvent({required final String groupId}) = _$_SelectEvent;
-
-  String get groupId => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
-  _$$_SelectEventCopyWith<_$_SelectEvent> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
 abstract class _$$_AddEventCopyWith<$Res> {
   factory _$$_AddEventCopyWith(
           _$_AddEvent value, $Res Function(_$_AddEvent) then) =
@@ -1935,7 +1689,7 @@ abstract class _$$_AddEventCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_AddEventCopyWithImpl<$Res> extends _$GroupsEventCopyWithImpl<$Res>
+class __$$_AddEventCopyWithImpl<$Res> extends _$MainEventCopyWithImpl<$Res>
     implements _$$_AddEventCopyWith<$Res> {
   __$$_AddEventCopyWithImpl(
       _$_AddEvent _value, $Res Function(_$_AddEvent) _then)
@@ -1967,7 +1721,7 @@ class _$_AddEvent implements _AddEvent {
 
   @override
   String toString() {
-    return 'GroupsEvent.addEvent(name: $name)';
+    return 'MainEvent.addEvent(name: $name)';
   }
 
   @override
@@ -2003,7 +1757,6 @@ class _$_AddEvent implements _AddEvent {
     required TResult Function(List<SharecationEmptyGroup> groups) groupsLoaded,
     required TResult Function(String groupId, SharecationImage image)
         imageUpdated,
-    required TResult Function(String groupId) selectEvent,
     required TResult Function(String name) addEvent,
   }) {
     return addEvent(name);
@@ -2022,7 +1775,6 @@ class _$_AddEvent implements _AddEvent {
         patchImages,
     TResult Function(List<SharecationEmptyGroup> groups)? groupsLoaded,
     TResult Function(String groupId, SharecationImage image)? imageUpdated,
-    TResult Function(String groupId)? selectEvent,
     TResult Function(String name)? addEvent,
   }) {
     return addEvent?.call(name);
@@ -2041,7 +1793,6 @@ class _$_AddEvent implements _AddEvent {
         patchImages,
     TResult Function(List<SharecationEmptyGroup> groups)? groupsLoaded,
     TResult Function(String groupId, SharecationImage image)? imageUpdated,
-    TResult Function(String groupId)? selectEvent,
     TResult Function(String name)? addEvent,
     required TResult orElse(),
   }) {
@@ -2062,7 +1813,6 @@ class _$_AddEvent implements _AddEvent {
     required TResult Function(_PatchImagesEvent value) patchImages,
     required TResult Function(_GroupsLoadedEvent value) groupsLoaded,
     required TResult Function(_ImageUpdatedEvent value) imageUpdated,
-    required TResult Function(_SelectEvent value) selectEvent,
     required TResult Function(_AddEvent value) addEvent,
   }) {
     return addEvent(this);
@@ -2079,7 +1829,6 @@ class _$_AddEvent implements _AddEvent {
     TResult Function(_PatchImagesEvent value)? patchImages,
     TResult Function(_GroupsLoadedEvent value)? groupsLoaded,
     TResult Function(_ImageUpdatedEvent value)? imageUpdated,
-    TResult Function(_SelectEvent value)? selectEvent,
     TResult Function(_AddEvent value)? addEvent,
   }) {
     return addEvent?.call(this);
@@ -2096,7 +1845,6 @@ class _$_AddEvent implements _AddEvent {
     TResult Function(_PatchImagesEvent value)? patchImages,
     TResult Function(_GroupsLoadedEvent value)? groupsLoaded,
     TResult Function(_ImageUpdatedEvent value)? imageUpdated,
-    TResult Function(_SelectEvent value)? selectEvent,
     TResult Function(_AddEvent value)? addEvent,
     required TResult orElse(),
   }) {
@@ -2107,7 +1855,7 @@ class _$_AddEvent implements _AddEvent {
   }
 }
 
-abstract class _AddEvent implements GroupsEvent {
+abstract class _AddEvent implements MainEvent {
   const factory _AddEvent({required final String name}) = _$_AddEvent;
 
   String get name => throw _privateConstructorUsedError;
@@ -2117,7 +1865,7 @@ abstract class _AddEvent implements GroupsEvent {
 }
 
 /// @nodoc
-mixin _$GroupsState {
+mixin _$MainState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loadingState,
@@ -2160,19 +1908,18 @@ mixin _$GroupsState {
 }
 
 /// @nodoc
-abstract class $GroupsStateCopyWith<$Res> {
-  factory $GroupsStateCopyWith(
-          GroupsState value, $Res Function(GroupsState) then) =
-      _$GroupsStateCopyWithImpl<$Res>;
+abstract class $MainStateCopyWith<$Res> {
+  factory $MainStateCopyWith(MainState value, $Res Function(MainState) then) =
+      _$MainStateCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class _$GroupsStateCopyWithImpl<$Res> implements $GroupsStateCopyWith<$Res> {
-  _$GroupsStateCopyWithImpl(this._value, this._then);
+class _$MainStateCopyWithImpl<$Res> implements $MainStateCopyWith<$Res> {
+  _$MainStateCopyWithImpl(this._value, this._then);
 
-  final GroupsState _value;
+  final MainState _value;
   // ignore: unused_field
-  final $Res Function(GroupsState) _then;
+  final $Res Function(MainState) _then;
 }
 
 /// @nodoc
@@ -2183,8 +1930,7 @@ abstract class _$$_LoadingStateCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_LoadingStateCopyWithImpl<$Res>
-    extends _$GroupsStateCopyWithImpl<$Res>
+class __$$_LoadingStateCopyWithImpl<$Res> extends _$MainStateCopyWithImpl<$Res>
     implements _$$_LoadingStateCopyWith<$Res> {
   __$$_LoadingStateCopyWithImpl(
       _$_LoadingState _value, $Res Function(_$_LoadingState) _then)
@@ -2201,7 +1947,7 @@ class _$_LoadingState implements _LoadingState {
 
   @override
   String toString() {
-    return 'GroupsState.loadingState()';
+    return 'MainState.loadingState()';
   }
 
   @override
@@ -2277,7 +2023,7 @@ class _$_LoadingState implements _LoadingState {
   }
 }
 
-abstract class _LoadingState implements GroupsState {
+abstract class _LoadingState implements MainState {
   const factory _LoadingState() = _$_LoadingState;
 }
 
@@ -2292,7 +2038,7 @@ abstract class _$$_LoadedStateCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_LoadedStateCopyWithImpl<$Res> extends _$GroupsStateCopyWithImpl<$Res>
+class __$$_LoadedStateCopyWithImpl<$Res> extends _$MainStateCopyWithImpl<$Res>
     implements _$$_LoadedStateCopyWith<$Res> {
   __$$_LoadedStateCopyWithImpl(
       _$_LoadedState _value, $Res Function(_$_LoadedState) _then)
@@ -2338,7 +2084,7 @@ class _$_LoadedState implements _LoadedState {
 
   @override
   String toString() {
-    return 'GroupsState.loadedState(state: $state, userId: $userId)';
+    return 'MainState.loadedState(state: $state, userId: $userId)';
   }
 
   @override
@@ -2425,7 +2171,7 @@ class _$_LoadedState implements _LoadedState {
   }
 }
 
-abstract class _LoadedState implements GroupsState {
+abstract class _LoadedState implements MainState {
   const factory _LoadedState(
       {required final SharecationGroups state,
       required final String userId}) = _$_LoadedState;

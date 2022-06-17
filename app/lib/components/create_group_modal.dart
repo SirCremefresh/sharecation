@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sharecation_app/blocs/groups_bloc.dart';
+import 'package:sharecation_app/blocs/main_bloc.dart';
 
 class CreateGroup extends StatefulWidget {
   const CreateGroup({
@@ -57,8 +57,8 @@ class _CreateGroupState extends State<CreateGroup> {
             TextButton(
                 onPressed: () async {
                   context
-                      .read<GroupsBloc>()
-                      .add(GroupsEvent.addEvent(name: _controller.value.text));
+                      .read<MainBloc>()
+                      .add(MainEvent.addEvent(name: _controller.value.text));
                   Navigator.pop(context);
                 },
                 child: const Text("create")),

@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sharecation_app/blocs/authentication_bloc.dart';
-import 'package:sharecation_app/blocs/groups_bloc.dart';
+import 'package:sharecation_app/blocs/main_bloc.dart';
 import 'package:sharecation_app/firebase_options.dart';
 import 'package:sharecation_app/pages/gallery_screen.dart';
 import 'package:sharecation_app/pages/group_info_screen.dart';
@@ -16,6 +16,7 @@ import 'package:sharecation_app/pages/no_groups_screen.dart';
 import 'package:sharecation_app/pages/swipe_screen.dart';
 import 'package:sharecation_app/pages/synchronise_screen.dart';
 import 'package:sharecation_app/repositories/groups_file_accessor_repository.dart';
+import 'package:sharecation_app/repositories/task_repository.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,16 +39,20 @@ class MyApp extends StatelessWidget {
         RepositoryProvider(
           create: (context) => GroupsFileAccessorRepository(),
         ),
+        RepositoryProvider(
+          create: (context) => TaskRepository(),
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
           BlocProvider(
-            create: (context) => GroupsBloc(
-                fileRepository: context.read<GroupsFileAccessorRepository>()),
+            create: (context) => MainBloc(
+              fileRepository: context.read<GroupsFileAccessorRepository>(),
+            ),
           ),
           BlocProvider(
             create: (context) => AuthenticationBloc(
-              groupsBloc: context.read<GroupsBloc>(),
+              mainBloc: context.read<MainBloc>(),
             ),
           ),
         ],
@@ -66,7 +71,7 @@ class AuthenticationGuard extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AuthenticationBloc, AuthenticationState>(
       builder: (context, state) {
-        return state.maybeWhen(
+        return state.when(
           initialState: () {
             final user = FirebaseAuth.instance.currentUser;
             final bloc = context.read<AuthenticationBloc>();
@@ -77,27 +82,24 @@ class AuthenticationGuard extends StatelessWidget {
             }
             return const LoadingScreen();
           },
-          orElse: () {
-            return const Router();
-          },
+          signedInState: (userId) => Router(userId: userId),
+          unAuthenticatedState: () => const MaterialApp(home: LoginScreen()),
         );
       },
     );
   }
 }
 
-class Router extends StatefulWidget {
-  const Router({Key? key}) : super(key: key);
+class Router extends StatelessWidget {
+  final String? userId;
 
-  @override
-  State<Router> createState() => _RouterState();
-}
+  const Router({Key? key, this.userId}) : super(key: key);
 
-class _RouterState extends State<Router> {
   @override
   Widget build(BuildContext context) {
     final _router = getGoRouter(context);
     return MaterialApp.router(
+      routeInformationProvider: _router.routeInformationProvider,
       routeInformationParser: _router.routeInformationParser,
       routerDelegate: _router.routerDelegate,
     );
@@ -106,14 +108,8 @@ class _RouterState extends State<Router> {
   GoRouter getGoRouter(BuildContext context) {
     return GoRouter(
         debugLogDiagnostics: true,
-        initialLocation: '/sign-in',
+        initialLocation: '/groups',
         routes: [
-          GoRoute(
-            path: '/sign-in',
-            builder: (context, state) {
-              return const LoginScreen();
-            },
-          ),
           GoRoute(
               path: '/groups',
               pageBuilder: (context, state) => NoTransitionPage<void>(
@@ -121,13 +117,13 @@ class _RouterState extends State<Router> {
                     child: const NoGroupsScreen(),
                   ),
               redirect: (state) {
-                return context.read<GroupsBloc>().state.whenOrNull<String?>(
-                      loadedState: (state, userId) {
-                        final keys = state.groups.keys;
-                        if(keys.isEmpty) return null;
-                        return "/groups/${state.groups[keys.first]!.groupId}/info";
-                      },
-                    );
+                return context.read<MainBloc>().state.whenOrNull<String?>(
+                  loadedState: (state, userId) {
+                    final keys = state.groups.keys;
+                    if (keys.isEmpty) return null;
+                    return "/groups/${state.groups[keys.first]!.groupId}/info";
+                  },
+                );
               }),
           GoRoute(
             path: '/synchronise',
@@ -163,23 +159,7 @@ class _RouterState extends State<Router> {
             },
           ),
         ],
-        redirect: (state) {
-          final authenticationBloc = context.read<AuthenticationBloc>();
-          return authenticationBloc.state.whenOrNull<String?>(
-            signedInState: (userId) {
-              if (state.location == "/sign-in") {
-                return "/groups";
-              }
-              return null;
-            },
-            unAuthenticatedState: () {
-              if (state.location != "/sign-in") {
-                return "/sign-in";
-              }
-              return null;
-            },
-          );
-        });
+        );
   }
 }
 

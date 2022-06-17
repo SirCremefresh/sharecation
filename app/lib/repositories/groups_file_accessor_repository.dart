@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io' as io;
 
 import 'package:path_provider/path_provider.dart';
-import 'package:sharecation_app/blocs/groups_bloc.dart';
+import 'package:sharecation_app/blocs/main_bloc.dart';
 
 class GroupsFileAccessorRepository {
   SharecationGroups? _content;
@@ -30,20 +30,25 @@ class GroupsFileAccessorRepository {
     return readContent;
   }
 
-  Future<void> write(SharecationGroups newContent) async {
+  Future<void> write(
+      {required String userId, required SharecationGroups newContent}) async {
     _content = newContent;
     final queuePosition = ++_queue;
     if (queuePosition == 1) {
       final file = await _getFile();
       _writeFuture = file.writeAsString(jsonEncode(newContent.toJson()));
       await _writeFuture;
+      if(queuePosition == 1) {
+        _queue = 0;
+        _writeFuture = null;
+      }
       return;
     }
     await _writeFuture!;
     if (queuePosition == _queue) {
       _queue = 0;
       _writeFuture = null;
-      await write(newContent);
+      await write(newContent: newContent, userId: userId);
     }
   }
 

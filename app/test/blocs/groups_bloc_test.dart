@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:sharecation_app/blocs/groups_bloc.dart';
+import 'package:sharecation_app/blocs/main_bloc.dart';
 import 'package:test/test.dart';
 
 const sampleGroups = SharecationGroups(

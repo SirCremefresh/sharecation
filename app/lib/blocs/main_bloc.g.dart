@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'groups_bloc.dart';
+part of 'main_bloc.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator

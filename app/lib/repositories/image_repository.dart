@@ -2,7 +2,7 @@ import 'dart:io' as io;
 
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:sharecation_app/blocs/groups_bloc.dart';
+import 'package:sharecation_app/blocs/main_bloc.dart';
 import 'package:sharecation_app/service/api_service.dart';
 import 'package:uuid/uuid.dart';
 

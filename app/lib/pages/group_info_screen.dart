@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sharecation_app/blocs/groups_bloc.dart';
+import 'package:sharecation_app/blocs/main_bloc.dart';
 import 'package:sharecation_app/components/group_scaffold.dart';
 
 class GroupInfoScreen extends StatefulWidget {
@@ -21,7 +21,7 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
     return Layout(
       groupScaffoldTab: GroupScaffoldTab.groupInfo,
       groupId: widget.groupId,
-      child: BlocBuilder<GroupsBloc, GroupsState>(
+      child: BlocBuilder<MainBloc, MainState>(
         builder: (context, state) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,

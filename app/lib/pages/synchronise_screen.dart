@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sharecation_app/blocs/groups_bloc.dart';
+import 'package:sharecation_app/blocs/main_bloc.dart';
 import 'package:sharecation_app/components/group_scaffold.dart';
 
 class SynchroniseScreen extends StatelessWidget {
@@ -9,7 +9,7 @@ class SynchroniseScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Layout(
-      child: BlocBuilder<GroupsBloc, GroupsState>(
+      child: BlocBuilder<MainBloc, MainState>(
         builder: (context, state) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -29,7 +29,7 @@ class SynchroniseScreen extends StatelessWidget {
                         ),
                         TextButton(
                             onPressed: () {
-                              context.read<GroupsBloc>().add(const GroupsEvent.loadImages());
+                              context.read<MainBloc>().add(const MainEvent.loadImages());
                             },
                             child: const Text("Load images from server"))
                       ],

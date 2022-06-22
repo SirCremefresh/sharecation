@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package authentication.v1;
+
+import "errors/v1/errors.proto";
+
+message Person {
+  string user_id = 1;
+  string firstname = 2;
+  string lastname = 3;
+}
+
+message UpsertPersonRequest {
+  string firstname = 1;
+  string lastname = 2;
+}
+
+message UpsertPersonResponse {
+  oneof response {
+    Person ok = 1;
+    errors.v1.BasicError error = 2;
+  }
+}
+
+message GetPersonOfUserRequest {
+  string user_id = 1;
+}
+
+message GetPersonOfUserResponse {
+  oneof response {
+    Person ok = 1;
+    errors.v1.BasicError error = 2;
+  }
+}

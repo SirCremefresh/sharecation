@@ -18,49 +18,39 @@ const AUTHENTICATION_KV = {
   NEXT_PRIVATE_JWK: 'NEXT_PRIVATE_JWK',
 };
 
-type NestedKVKey<PARAMETERS extends string[], ENTITY> = PARAMETERS extends [infer CURRENT_PARAMETER extends string, ...infer REST extends string[]] ?
+type NestedGetKVKey<PARAMETERS extends string[], ENTITY> = PARAMETERS extends [infer CURRENT_PARAMETER extends string, ...infer REST extends string[]] ?
   {
     [key in CURRENT_PARAMETER]:
-    (variable: string) => REST extends [] ? Promise<ENTITY> : NestedKVKey<REST, ENTITY> & Promise<ENTITY[]>
+    (variable: string) => REST extends [] ? Promise<ENTITY> : NestedGetKVKey<REST, ENTITY> & Promise<ENTITY[]>
   } & (() => Promise<ENTITY[]>)
   :
   () => Promise<ENTITY>
 
-
-// type NestedKVKey<PARAMETERS extends string[], ENTITY> = PARAMETERS extends [infer CURRENT_PARAMETER extends string, ...infer REST extends string[]] ?
-//   CURRENT_PARAMETER extends `${infer CURRENT_PARAMETER_FUNCTION_NAME extends string}()` ?
-//     {
-//       [key in CURRENT_PARAMETER_FUNCTION_NAME]:
-//       (variable: string) => REST extends [] ? Promise<ENTITY> : NestedKVKey<REST, ENTITY> & Promise<ENTITY[]>
-//     }
-//     :
-//     {
-//       [key in CURRENT_PARAMETER]: (() => Promise<ENTITY[]>) // &  NestedKVKey<REST, ENTITY>
-//
-//     }
-//   :
-//   () => Promise<ENTITY>
+type NestedSetKVKey<PARAMETERS extends string[], ENTITY> = PARAMETERS extends [infer CURRENT_PARAMETER extends string, ...infer REST extends string[]] ?
+  {
+    [key in CURRENT_PARAMETER]:
+    REST extends [] ? (variable: string, entity: ENTITY) => Promise<void> : (variable: string) => NestedSetKVKey<REST, ENTITY>
+  }
+  :
+  (entity: ENTITY) => Promise<void>
 
 
-type KVKey<ENTITY> = NestedKVKey<[], ENTITY>
+type GetKVKey<ENTITY> = NestedGetKVKey<[], ENTITY>
 
-// type Func<E extends KvKeyLALA[], ENTITY> = E extends [infer A, ...infer C extends string[]] ?
-//   A extends string ?
-//     {
-//       [key in A]: Func<C, ENTITY>
-//     }
-//     : never :
-//   AsyncFunc<ENTITY>
+type KVKey<ENTITY> = {
+  get: GetKVKey<ENTITY>
+  set: NestedSetKVKey<[], ENTITY>
+}
+
+type NestedKVKey<PARAMETERS extends string[], ENTITY> = {
+  get: NestedGetKVKey<PARAMETERS, ENTITY>
+  set: NestedSetKVKey<PARAMETERS, ENTITY>
+}
 
 
 interface TestKv {
-  // roles: {
-  //   [userId: string]: {
-  //     [roleId: string]: AsyncFunc<string>
-  //   } & AsyncFunc<string[]>
-  // } & AsyncFunc<string[]>;
 
-  roles: NestedKVKey<['userId', 'roleId'], string>;
+  roles: NestedKVKey<['userId', 'roleId'], { firstName: string }>;
   rosles: NestedKVKey<['user', 'userId', 'asdfdds'], string>;
   sdfsd: NestedKVKey<['user', 'userId'], string>;
   privateKey: KVKey<string>;
@@ -68,10 +58,12 @@ interface TestKv {
 
 declare const a: TestKv;
 
-let b3: string = await a.roles.userId('as').roleId('asdf');
-let b4: string[] = await a.roles.userId('as');
-let b6: string[] = await a.sdfsd();
-let b5: string = await a.privateKey();
+let b3: { firstName: string } = await a.roles.get.userId('as').roleId('asdf');
+let b4: { firstName: string }[] = await a.roles.get.userId('as');
+await a.roles.set.userId('asdf').roleId('asd', {firstName: 'asdfsd'});
+let b6: string[] = await a.sdfsd.get();
+let b5: string = await a.privateKey.get();
+await a.privateKey.set('asdf');
 
 console.log(b3, b4, b5, b6);
 

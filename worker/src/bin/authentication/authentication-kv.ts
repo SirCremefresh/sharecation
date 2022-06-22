@@ -31,7 +31,9 @@ type NestedKVKey<PARAMETERS extends string[], ENTITY, META extends {} | void = v
   PARAMETERS extends [infer CURRENT_PARAMETER extends string, ...infer REST extends string[]] ?
     {
       [key in CURRENT_PARAMETER]:
-      (variable: string) => REST extends [] ? MutateKvEntity<ENTITY, META> : NestedKVKey<REST, ENTITY, META>
+      (variable: string) => REST extends [] ?
+        MutateKvEntity<ENTITY, META> :
+        NestedKVKey<REST, ENTITY, META>
     } & { list: () => Promise<KVListResult<META>> }
     :
     MutateKvEntity<ENTITY, META>

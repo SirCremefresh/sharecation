@@ -1,3 +1,4 @@
+import {KVListResult, KVNamespace, KVPutOptions, KVValueMeta} from '@miniflare/kv';
 import {TypedKvNamespace} from '../../lib/typed-kv-namespace';
 
 const AUTHENTICATION_KV = {
@@ -18,11 +19,31 @@ const AUTHENTICATION_KV = {
   NEXT_PRIVATE_JWK: 'NEXT_PRIVATE_JWK',
 };
 
+type MutateKvEntity<ENTITY, META extends {} | void> = META extends void ? {
+  put: (entity: ENTITY, options?: KVPutOptions<META>) => Promise<void>
+  get: () => Promise<ENTITY>
+  delete: () => Promise<void>
+  getWithMetadata: () => Promise<KVValueMeta<ENTITY, META>>
+} : {
+  put: (entity: ENTITY, options: KVPutOptions<META>) => Promise<void>
+  get: () => Promise<ENTITY>
+  delete: () => Promise<void>
+  getWithMetadata: () => Promise<KVValueMeta<ENTITY, META>>
+};
+type NestedMULTIPLEKVKey<PARAMETERS extends string[], ENTITY, META extends {} | void = void> = PARAMETERS extends [infer CURRENT_PARAMETER extends string, ...infer REST extends string[]] ?
+  {
+    [key in CURRENT_PARAMETER]:
+    (variable: string) => REST extends [] ? MutateKvEntity<ENTITY, META> : NestedMULTIPLEKVKey<REST, ENTITY, META>
+  } & { list: () => Promise<KVListResult<META>> }
+  :
+  MutateKvEntity<ENTITY, META>
+
+
 type NestedGetKVKey<PARAMETERS extends string[], ENTITY> = PARAMETERS extends [infer CURRENT_PARAMETER extends string, ...infer REST extends string[]] ?
   {
     [key in CURRENT_PARAMETER]:
-    (variable: string) => REST extends [] ? Promise<ENTITY> : NestedGetKVKey<REST, ENTITY> & Promise<ENTITY[]>
-  } & (() => Promise<ENTITY[]>)
+    (variable: string) => REST extends [] ? Promise<ENTITY> : NestedGetKVKey<REST, ENTITY>
+  } & { list: () => Promise<ENTITY[]> }
   :
   () => Promise<ENTITY>
 
@@ -35,10 +56,8 @@ type NestedSetKVKey<PARAMETERS extends string[], ENTITY> = PARAMETERS extends [i
   (entity: ENTITY) => Promise<void>
 
 
-type GetKVKey<ENTITY> = NestedGetKVKey<[], ENTITY>
-
 type KVKey<ENTITY> = {
-  get: GetKVKey<ENTITY>
+  get: NestedGetKVKey<[], ENTITY>
   set: NestedSetKVKey<[], ENTITY>
 }
 
@@ -49,6 +68,9 @@ type NestedKVKey<PARAMETERS extends string[], ENTITY> = {
 
 
 interface TestKv {
+  test: NestedMULTIPLEKVKey<['userId'], { firstNameE: string }>;
+  testWithMeta: NestedMULTIPLEKVKey<['userId'], { firstNameE: string }, { last: string }>;
+
 
   roles: NestedKVKey<['userId', 'roleId'], { firstName: string }>;
   rosles: NestedKVKey<['user', 'userId', 'asdfdds'], string>;
@@ -58,10 +80,16 @@ interface TestKv {
 
 declare const a: TestKv;
 
+
+console.log(a.test.userId('ads').put({firstNameE: 'asdf'}, {expiration: 'asd'}));
+console.log(a.testWithMeta.userId('ads').put({firstNameE: 'asdf'}, {expiration: 'asd', metadata: {last: 'sd'}}));
+console.log(a.test.userId('ads').put({firstNameE: 'asdf'}));
+console.log(a.test.userId('ads'));
+
 let b3: { firstName: string } = await a.roles.get.userId('as').roleId('asdf');
-let b4: { firstName: string }[] = await a.roles.get.userId('as');
+let b4: { firstName: string }[] = await a.roles.get.userId('as').list();
 await a.roles.set.userId('asdf').roleId('asd', {firstName: 'asdfsd'});
-let b6: string[] = await a.sdfsd.get();
+let b6: string[] = await a.sdfsd.get.list();
 let b5: string = await a.privateKey.get();
 await a.privateKey.set('asdf');
 

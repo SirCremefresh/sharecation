@@ -19,81 +19,40 @@ const AUTHENTICATION_KV = {
   NEXT_PRIVATE_JWK: 'NEXT_PRIVATE_JWK',
 };
 
-type MutateKvEntity<ENTITY, META extends {} | void> = META extends void ? {
-  put: (entity: ENTITY, options?: KVPutOptions<META>) => Promise<void>
-  get: () => Promise<ENTITY>
-  delete: () => Promise<void>
-  getWithMetadata: () => Promise<KVValueMeta<ENTITY, META>>
-} : {
-  put: (entity: ENTITY, options: KVPutOptions<META>) => Promise<void>
+type MutateKvEntity<ENTITY, META extends {} | void> = {
+  put: META extends void ?
+    (entity: ENTITY, options?: KVPutOptions<META>) => Promise<void> :
+    (entity: ENTITY, options: KVPutOptions<META>) => Promise<void>
   get: () => Promise<ENTITY>
   delete: () => Promise<void>
   getWithMetadata: () => Promise<KVValueMeta<ENTITY, META>>
 };
-type NestedMULTIPLEKVKey<PARAMETERS extends string[], ENTITY, META extends {} | void = void> = PARAMETERS extends [infer CURRENT_PARAMETER extends string, ...infer REST extends string[]] ?
-  {
-    [key in CURRENT_PARAMETER]:
-    (variable: string) => REST extends [] ? MutateKvEntity<ENTITY, META> : NestedMULTIPLEKVKey<REST, ENTITY, META>
-  } & { list: () => Promise<KVListResult<META>> }
-  :
-  MutateKvEntity<ENTITY, META>
+type NestedKVKey<PARAMETERS extends string[], ENTITY, META extends {} | void = void> =
+  PARAMETERS extends [infer CURRENT_PARAMETER extends string, ...infer REST extends string[]] ?
+    {
+      [key in CURRENT_PARAMETER]:
+      (variable: string) => REST extends [] ? MutateKvEntity<ENTITY, META> : NestedKVKey<REST, ENTITY, META>
+    } & { list: () => Promise<KVListResult<META>> }
+    :
+    MutateKvEntity<ENTITY, META>
 
-
-type NestedGetKVKey<PARAMETERS extends string[], ENTITY> = PARAMETERS extends [infer CURRENT_PARAMETER extends string, ...infer REST extends string[]] ?
-  {
-    [key in CURRENT_PARAMETER]:
-    (variable: string) => REST extends [] ? Promise<ENTITY> : NestedGetKVKey<REST, ENTITY>
-  } & { list: () => Promise<ENTITY[]> }
-  :
-  () => Promise<ENTITY>
-
-type NestedSetKVKey<PARAMETERS extends string[], ENTITY> = PARAMETERS extends [infer CURRENT_PARAMETER extends string, ...infer REST extends string[]] ?
-  {
-    [key in CURRENT_PARAMETER]:
-    REST extends [] ? (variable: string, entity: ENTITY) => Promise<void> : (variable: string) => NestedSetKVKey<REST, ENTITY>
-  }
-  :
-  (entity: ENTITY) => Promise<void>
-
-
-type KVKey<ENTITY> = {
-  get: NestedGetKVKey<[], ENTITY>
-  set: NestedSetKVKey<[], ENTITY>
-}
-
-type NestedKVKey<PARAMETERS extends string[], ENTITY> = {
-  get: NestedGetKVKey<PARAMETERS, ENTITY>
-  set: NestedSetKVKey<PARAMETERS, ENTITY>
-}
-
+type KVKey<ENTITY, META extends {} | void = void> = NestedKVKey<[], ENTITY, META>
 
 interface TestKv {
-  test: NestedMULTIPLEKVKey<['userId'], { firstNameE: string }>;
-  testWithMeta: NestedMULTIPLEKVKey<['userId'], { firstNameE: string }, { last: string }>;
-
-
-  roles: NestedKVKey<['userId', 'roleId'], { firstName: string }>;
-  rosles: NestedKVKey<['user', 'userId', 'asdfdds'], string>;
-  sdfsd: NestedKVKey<['user', 'userId'], string>;
+  roles: NestedKVKey<['userId', 'roleId'], { firstName: string }, { last: string }>;
   privateKey: KVKey<string>;
 }
 
 declare const a: TestKv;
 
 
-console.log(a.test.userId('ads').put({firstNameE: 'asdf'}, {expiration: 'asd'}));
-console.log(a.testWithMeta.userId('ads').put({firstNameE: 'asdf'}, {expiration: 'asd', metadata: {last: 'sd'}}));
-console.log(a.test.userId('ads').put({firstNameE: 'asdf'}));
-console.log(a.test.userId('ads'));
-
-let b3: { firstName: string } = await a.roles.get.userId('as').roleId('asdf');
-let b4: { firstName: string }[] = await a.roles.get.userId('as').list();
-await a.roles.set.userId('asdf').roleId('asd', {firstName: 'asdfsd'});
-let b6: string[] = await a.sdfsd.get.list();
+let b3: { firstName: string } = await a.roles.userId('as').roleId('asdf').get();
+let b4: KVListResult<{ last: string }> = await a.roles.userId('as').list();
+await a.roles.userId('asdf').roleId('asd').put({firstName: 'asdfsd'}, {metadata: {last: 'dds'}});
 let b5: string = await a.privateKey.get();
-await a.privateKey.set('asdf');
-
-console.log(b3, b4, b5, b6);
+await a.privateKey.put('asdf');
+//
+console.log(b3, b4, b5);
 
 // let v1: string = await a.roles['some-user-id']['group-id']();
 // let v2: string[] = await a.roles['some-user-id']();

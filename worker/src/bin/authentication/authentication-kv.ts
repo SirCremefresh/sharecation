@@ -1,4 +1,4 @@
-import {KVListResult, KVNamespace, KVPutOptions, KVValueMeta} from '@miniflare/kv';
+import {KVListResult, KVNamespace, KVPutOptions, KVValue, KVValueMeta} from '@miniflare/kv';
 import {TypedKvNamespace} from '../../lib/typed-kv-namespace';
 
 const AUTHENTICATION_KV = {
@@ -19,24 +19,25 @@ const AUTHENTICATION_KV = {
   NEXT_PRIVATE_JWK: 'NEXT_PRIVATE_JWK',
 };
 
-type MutateKvEntity<ENTITY, META extends {} | void> = {
+type AccessKvEntity<ENTITY, META extends {} | void> = {
   put: META extends void ?
     (entity: ENTITY, options?: KVPutOptions<META>) => Promise<void> :
     (entity: ENTITY, options: KVPutOptions<META>) => Promise<void>
-  get: () => Promise<ENTITY>
+  get: () => KVValue<ENTITY>
   delete: () => Promise<void>
   getWithMetadata: () => Promise<KVValueMeta<ENTITY, META>>
 };
+type ListKvEntity<META extends {} | void = void> = { list: () => Promise<KVListResult<META>> };
 type NestedKVKey<PARAMETERS extends string[], ENTITY, META extends {} | void = void> =
   PARAMETERS extends [infer CURRENT_PARAMETER extends string, ...infer REST extends string[]] ?
     {
       [key in CURRENT_PARAMETER]:
       (variable: string) => REST extends [] ?
-        MutateKvEntity<ENTITY, META> :
+        AccessKvEntity<ENTITY, META> :
         NestedKVKey<REST, ENTITY, META>
-    } & { list: () => Promise<KVListResult<META>> }
+    } & ListKvEntity<META>
     :
-    MutateKvEntity<ENTITY, META>
+    AccessKvEntity<ENTITY, META>
 
 type KVKey<ENTITY, META extends {} | void = void> = NestedKVKey<[], ENTITY, META>
 

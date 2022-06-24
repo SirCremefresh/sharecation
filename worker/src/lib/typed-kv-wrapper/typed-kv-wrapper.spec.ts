@@ -9,7 +9,7 @@ interface TestKv {
 declare const getMiniflareBindings: () => { [key: string]: KVNamespace };
 const {COMMON} = getMiniflareBindings();
 
-test('sign key', async () => {
+test('put to typed', async () => {
   const kvInstance = getTypedKVInstance<TestKv>(COMMON);
   await kvInstance.privateKey.put('hello');
   expect(await COMMON.get('privateKey:')).toEqual('hello');

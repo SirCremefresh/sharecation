@@ -35,10 +35,17 @@ function recursiveProxy(kvNamespace: KVNamespace<string>) {
       if (method === 'get') {
         return () => kvNamespace.get(path);
       } else if (method === 'put') {
-        return () => kvNamespace.get(path);
+        return (entity: any) => {
+          console.log('put ', path, entity);
+          return kvNamespace.put(path, entity);
+        };
       } else if (method === 'list') {
         return (options?: KVNamespaceListOptions) => kvNamespace.list(options);
       } else {
+        if (path === '') {
+          path += method + ':'
+          return proxy;
+        }
         return (variable: string) => {
           path += method + ':' + variable + ':';
           return proxy;

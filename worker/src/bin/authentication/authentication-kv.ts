@@ -1,4 +1,3 @@
-import {KVListResult, KVNamespace, KVPutOptions, KVValue, KVValueMeta} from '@miniflare/kv';
 import {TypedKvNamespace} from '../../lib/typed-kv-namespace';
 
 const AUTHENTICATION_KV = {
@@ -19,43 +18,6 @@ const AUTHENTICATION_KV = {
   NEXT_PRIVATE_JWK: 'NEXT_PRIVATE_JWK',
 };
 
-type AccessKvEntity<ENTITY, META extends {} | void> = {
-  put: META extends void ?
-    (entity: ENTITY, options?: KVPutOptions<META>) => Promise<void> :
-    (entity: ENTITY, options: KVPutOptions<META>) => Promise<void>
-  get: () => KVValue<ENTITY>
-  delete: () => Promise<void>
-  getWithMetadata: () => Promise<KVValueMeta<ENTITY, META>>
-};
-type ListKvEntity<META extends {} | void = void> = { list: () => Promise<KVListResult<META>> };
-type NestedKVKey<PARAMETERS extends string[], ENTITY, META extends {} | void = void> =
-  PARAMETERS extends [infer CURRENT_PARAMETER extends string, ...infer REST extends string[]] ?
-    {
-      [key in CURRENT_PARAMETER]:
-      (variable: string) => REST extends [] ?
-        AccessKvEntity<ENTITY, META> :
-        NestedKVKey<REST, ENTITY, META>
-    } & ListKvEntity<META>
-    :
-    AccessKvEntity<ENTITY, META>
-
-type KVKey<ENTITY, META extends {} | void = void> = NestedKVKey<[], ENTITY, META>
-
-interface TestKv {
-  roles: NestedKVKey<['userId', 'roleId'], { firstName: string }, { last: string }>;
-  privateKey: KVKey<string>;
-}
-
-declare const a: TestKv;
-
-
-let b3: { firstName: string } = await a.roles.userId('as').roleId('asdf').get();
-let b4: KVListResult<{ last: string }> = await a.roles.userId('as').list();
-await a.roles.userId('asdf').roleId('asd').put({firstName: 'asdfsd'}, {metadata: {last: 'dds'}});
-let b5: string = await a.privateKey.get();
-await a.privateKey.put('asdf');
-//
-console.log(b3, b4, b5);
 
 // let v1: string = await a.roles['some-user-id']['group-id']();
 // let v2: string[] = await a.roles['some-user-id']();

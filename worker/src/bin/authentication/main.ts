@@ -11,6 +11,7 @@ import {
   RoleBinding,
   Roles,
 } from '../../contracts/authentication/v1/authentication';
+import {Person, UpsertPersonRequest, UpsertPersonResponse} from '../../contracts/authentication/v1/person';
 import {GetPublicJwksResponse, PublicJwks} from '../../contracts/authentication/v1/public_jwk';
 import {BasicError_BasicErrorCode} from '../../contracts/errors/v1/errors';
 import {getDurableObjectInstance} from '../../lib/durable-object-wrapper/durable-object-accessor';
@@ -59,6 +60,23 @@ export default {
               }))
             });
           }),
+      ),
+      route(
+        'POST',
+        ['v1', 'get-public-jwks'],
+        addAuthenticationGuard(
+          protoBuf(
+            UpsertPersonRequest,
+            UpsertPersonResponse,
+            async (request, env, context) => {
+
+              return createProtoBufOkResponse<Person>({
+                userId: context.user.userId,
+                firstname: '',
+                lastname: '',
+              });
+            }),
+        )
       ),
       route(
         'POST',

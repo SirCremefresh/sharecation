@@ -1,4 +1,4 @@
-import { TypedKvNamespace } from '../../lib/typed-kv-namespace';
+import {TypedKvNamespace} from '../../lib/typed-kv-namespace';
 
 const AUTHENTICATION_KV = {
   USERS_ROLES: 'USERS_ROLES:',
@@ -17,6 +17,10 @@ const AUTHENTICATION_KV = {
   CURRENT_PRIVATE_JWK: 'CURRENT_PRIVATE_JWK',
   NEXT_PRIVATE_JWK: 'NEXT_PRIVATE_JWK',
 };
+
+
+// let v1: string = await a.roles['some-user-id']['group-id']();
+// let v2: string[] = await a.roles['some-user-id']();
 
 export const createAuthenticationKv = (kv: KVNamespace) =>
   new TypedKvNamespace(AUTHENTICATION_KV, kv);

@@ -30,26 +30,28 @@ export type KVKey<ENTITY, META extends {} | void = void> = NestedKVKey<[], ENTIT
 
 function recursiveProxy(kvNamespace: KVNamespace<string>) {
   let path = '';
-  const proxy = new Proxy({} as unknown as any, {
-    get(_, method: string): any {
-      if (method === 'get') {
-        return () => kvNamespace.get(path);
-      } else if (method === 'put') {
-        return (entity: any) => {
-          console.log('put ', path, entity);
-          return kvNamespace.put(path, entity);
-        };
-      } else if (method === 'list') {
-        return (options?: KVNamespaceListOptions) => kvNamespace.list(options);
-      } else {
-        if (path === '') {
-          path += method + ':'
-          return proxy;
-        }
-        return (variable: string) => {
-          path += method + ':' + variable + ':';
-          return proxy;
-        };
+  const proxy = new Proxy({} as any, {
+    get: function (_, method: string): any {
+      if (path === '') {
+        path = method + ':';
+        return proxy;
+      }
+      switch (method) {
+        case 'get':
+          return () => kvNamespace.get(path);
+        case 'put':
+          return (entity: any, options: any) => kvNamespace.put(path, JSON.stringify(entity), options);
+        case 'list':
+          return (options?: { limit?: number, cursor?: string }) => kvNamespace.list({
+            cursor: options?.cursor,
+            limit: options?.limit,
+            prefix: path
+          });
+        default:
+          return (variable: string) => {
+            path += method + ':' + variable + ':';
+            return proxy;
+          };
       }
     }
   });

@@ -8,7 +8,7 @@ type AccessKvEntity<ENTITY, META extends {} | void> = {
   put: META extends void ?
     (entity: ENTITY, options?: KVNamespacePutOptions) => Promise<void> :
     (entity: ENTITY, options: KVNamespacePutOptionsTyped<META>) => Promise<void>
-  get: () => ENTITY,
+  get: () => Promise<ENTITY>,
   delete: () => Promise<void>
   getWithMetadata: () => Promise<KVNamespaceGetWithMetadataResult<ENTITY, META>>
 };
@@ -38,7 +38,7 @@ function recursiveProxy(kvNamespace: KVNamespace<string>) {
       }
       switch (method) {
         case 'get':
-          return () => kvNamespace.get(path);
+          return () => kvNamespace.get(path, 'json');
         case 'put':
           return (entity: any, options: any) => kvNamespace.put(path, JSON.stringify(entity), options);
         case 'list':

@@ -12,7 +12,7 @@ type AccessKvEntity<ENTITY, META extends {} | void> = {
   delete: () => Promise<void>
   getWithMetadata: () => Promise<KVNamespaceGetWithMetadataResult<ENTITY, META>>
 };
-type ListKvEntity<META extends {} | void = void> = { list: () => Promise<KVNamespaceListResult<META>> };
+type ListKvEntity<META extends {} | void = void> = { list: (options?: { limit?: number, cursor?: string }) => Promise<KVNamespaceListResult<META>> };
 
 export type NestedKVKey<PARAMETERS extends string[], ENTITY, META extends {} | void = void> =
   PARAMETERS extends [infer CURRENT_PARAMETER extends string, ...infer REST extends string[]] ?
@@ -28,34 +28,34 @@ export type NestedKVKey<PARAMETERS extends string[], ENTITY, META extends {} | v
 export type KVKey<ENTITY, META extends {} | void = void> = NestedKVKey<[], ENTITY, META>
 
 
-function recursiveProxy(kvNamespace: KVNamespace<string>) {
-  let path = '';
-  const proxy = new Proxy({} as any, {
+function recursiveProxy(kvNamespace: KVNamespace, currentPath: string = '') {
+  return new Proxy({} as any, {
     get: function (_, method: string): any {
-      if (path === '') {
-        path = method + ':';
-        return proxy;
+      if (currentPath === '') {
+        return recursiveProxy(kvNamespace, method + ':');
       }
       switch (method) {
         case 'get':
-          return () => kvNamespace.get(path, 'json');
+          return () => kvNamespace.get(currentPath, 'json');
+        case 'getWithMetadata':
+          return () => kvNamespace.getWithMetadata(currentPath, 'json');
+        case 'delete':
+          return () => kvNamespace.delete(currentPath);
         case 'put':
-          return (entity: any, options: any) => kvNamespace.put(path, JSON.stringify(entity), options);
+          return (entity: any, options: any) => kvNamespace.put(currentPath, JSON.stringify(entity), options);
         case 'list':
           return (options?: { limit?: number, cursor?: string }) => kvNamespace.list({
             cursor: options?.cursor,
             limit: options?.limit,
-            prefix: path
+            prefix: currentPath
           });
         default:
           return (variable: string) => {
-            path += method + ':' + variable + ':';
-            return proxy;
+            return recursiveProxy(kvNamespace, currentPath + method + ':' + variable + ':');
           };
       }
     }
   });
-  return proxy;
 }
 
 export function getTypedKVInstance<KV extends {}>(

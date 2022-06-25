@@ -19,9 +19,6 @@ const AUTHENTICATION_KV = {
 };
 
 
-// let v1: string = await a.roles['some-user-id']['group-id']();
-// let v2: string[] = await a.roles['some-user-id']();
-
 export const createAuthenticationKv = (kv: KVNamespace) =>
   new TypedKvNamespace(AUTHENTICATION_KV, kv);
 

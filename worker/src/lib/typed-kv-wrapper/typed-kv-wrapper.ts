@@ -4,6 +4,18 @@ interface KVNamespacePutOptionsTyped<Metadata> extends KVNamespacePutOptions {
   metadata: Metadata;
 }
 
+interface KVNamespaceListResultTyped<Metadata> extends KVNamespaceListResult<Metadata> {
+  keys: KVNamespaceListKeyTyped<Metadata>[];
+  list_complete: boolean;
+  cursor?: string;
+}
+
+interface KVNamespaceListKeyTyped<Metadata> extends KVNamespaceListKey<Metadata> {
+  name: string;
+  expiration?: number;
+  metadata: Metadata;
+}
+
 type AccessKvEntity<ENTITY, META extends {} | void> = {
   put: META extends void ?
     (entity: ENTITY, options?: KVNamespacePutOptions) => Promise<void> :
@@ -12,7 +24,12 @@ type AccessKvEntity<ENTITY, META extends {} | void> = {
   delete: () => Promise<void>
   getWithMetadata: () => Promise<KVNamespaceGetWithMetadataResult<ENTITY, META>>
 };
-type ListKvEntity<META extends {} | void = void> = { list: (options?: { limit?: number, cursor?: string }) => Promise<KVNamespaceListResult<META>> };
+type ListKvEntity<META extends {} | void = void> = {
+  list: (options?: { limit?: number, cursor?: string }) =>
+    META extends void ?
+      Promise<KVNamespaceListResult<undefined>> :
+      Promise<KVNamespaceListResultTyped<META>>
+};
 
 export type NestedKVKey<PARAMETERS extends string[], ENTITY, META extends {} | void = void> =
   PARAMETERS extends [infer CURRENT_PARAMETER extends string, ...infer REST extends string[]] ?

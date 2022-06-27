@@ -32,12 +32,7 @@ export default {
                 env.AUTHENTICATION,
               );
               const userId = context.proto.body.userId ?? crypto.randomUUID();
-              const jwtData = await generateSharecationJwt(
-                userId,
-                context.proto.body.roles,
-                authenticationKv,
-                context,
-              );
+              const jwtData = await generateSharecationJwt(userId, context.proto.body.roles, authenticationKv, context);
               return createProtoBufOkResponse<User>({
                 userId,
                 jwtString: jwtData.jwtString,

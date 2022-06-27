@@ -64,7 +64,7 @@ export default {
       context.logger.info('Starting Authentication CronJob');
       const authenticationKv = createAuthenticationKv(env.AUTHENTICATION);
 
-      const { privateKey, kid, privateJwkString, currentPublicKeys } =
+      const { privateKey, kid, privateJwk, currentPublicKeys } =
         await generateAndStoreNewSigningKeys(authenticationKv, context);
       await loadAndSaveGoogleVerifyingKeys(authenticationKv, context);
 
@@ -77,7 +77,7 @@ export default {
             workerName: account.workerName,
             environment: env.ENVIRONMENT,
             name: account.envVariable,
-            value: privateJwkString,
+            value: JSON.stringify(privateJwk),
           }),
         ),
         ...publicKeyConfigs(accounts).map((account) =>

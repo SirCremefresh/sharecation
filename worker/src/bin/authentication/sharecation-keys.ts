@@ -1,14 +1,13 @@
-import { generateJwt } from '../../lib/authentication/jwt';
-import { isNotNullOrUndefined, isNullOrUndefined } from '../../lib/lib';
-import { LoggerContext } from '../../lib/middleware/context';
-import { TypedKvNamespace } from '../../lib/typed-kv-namespace';
-import type { AUTHENTICATION_KV } from './authentication-kv';
+import {generateJwt} from '../../lib/authentication/jwt';
+import {isNotNullOrUndefined, isNullOrUndefined} from '../../lib/lib';
+import {LoggerContext} from '../../lib/middleware/context';
+import type {AuthenticationKv} from './authentication-kv';
 
 const KEY_ALGORITHM = {
   name: 'RSA-PSS',
   modulusLength: 1024,
   publicExponent: new Uint8Array([0x01, 0x00, 0x01]),
-  hash: { name: 'SHA-256' },
+  hash: {name: 'SHA-256'},
 };
 const JWK_FORMAT = 'jwk';
 const EIGHT_HOURS_IN_SECONDS = 8 * 60 * 60;
@@ -22,12 +21,9 @@ let privateKeyAndLoadingTime: {
 export async function generateSharecationJwt(
   userId: string,
   roles: string[],
-  authenticationKv: TypedKvNamespace<AUTHENTICATION_KV>,
+  authenticationKv: AuthenticationKv,
   context: LoggerContext,
-): Promise<{
-  jwtString: string;
-  payload: { sub: string; exp: number; roles: string[] };
-}> {
+): Promise<{ jwtString: string; payload: { sub: string; exp: number; roles: string[] } }> {
   const privateKey = await getPrivateKey(authenticationKv, context);
   const exp = Math.floor(Date.now() / 1000) + EIGHT_HOURS_IN_SECONDS;
   return await generateJwt(
@@ -40,7 +36,7 @@ export async function generateSharecationJwt(
 }
 
 async function getPrivateKey(
-  authenticationKv: TypedKvNamespace<AUTHENTICATION_KV>,
+  authenticationKv: AuthenticationKv,
   context: LoggerContext,
 ): Promise<{ cryptoKey: CryptoKey; kid: string }> {
   if (isNotNullOrUndefined(privateKeyAndLoadingTime)) {
@@ -53,12 +49,11 @@ async function getPrivateKey(
     }
   }
   context.logger.info('Getting private key from KV');
-  const privateJwk = await authenticationKv.namespace.get<
-    JsonWebKey & { kid: string }
-  >(authenticationKv.keys.CURRENT_PRIVATE_JWK, 'json');
+
+  const privateJwk = await authenticationKv.currentPrivateJWK.get();
   if (isNullOrUndefined(privateJwk)) {
     throw new Error(
-      `No private key found in KV with key: ${authenticationKv.keys.CURRENT_PRIVATE_JWK}.`,
+      `No currentPrivateJWK found in KV.`,
     );
   }
   const cryptoKey = await crypto.subtle.importKey(

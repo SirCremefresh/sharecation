@@ -1,4 +1,4 @@
-import {TypedKvNamespace} from '../../lib/typed-kv-namespace';
+import {getTypedKVInstance, KVKey, NestedKVKey} from '../../lib/typed-kv-wrapper/typed-kv-wrapper';
 
 const AUTHENTICATION_KV = {
   USERS_ROLES: 'USERS_ROLES:',
@@ -18,11 +18,17 @@ const AUTHENTICATION_KV = {
   NEXT_PRIVATE_JWK: 'NEXT_PRIVATE_JWK',
 };
 
+export interface AuthenticationKv {
+  roles: NestedKVKey<['userId', 'roleId'], string, string>;
+  nextPrivateJWK: KVKey<JsonWebKey & { kid: string }>;
+  currentPrivateJWK: KVKey<JsonWebKey & { kid: string }>;
+  currentPublicJWKS: KVKey<Array<JsonWebKey & { kid: string }>>;
+  googleVerifyingJWKS: NestedKVKey<['kid'], JsonWebKey>;
+  publicJWKS: NestedKVKey<['kid'], JsonWebKey & { kid: string }>;
+  privateJWKS: NestedKVKey<['kid'], JsonWebKey & { kid: string }>;
+}
 
-// let v1: string = await a.roles['some-user-id']['group-id']();
-// let v2: string[] = await a.roles['some-user-id']();
 
 export const createAuthenticationKv = (kv: KVNamespace) =>
-  new TypedKvNamespace(AUTHENTICATION_KV, kv);
+  getTypedKVInstance<AuthenticationKv>(kv);
 
-export type AUTHENTICATION_KV = typeof AUTHENTICATION_KV;

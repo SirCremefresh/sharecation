@@ -45,11 +45,11 @@ export type NestedKVKey<PARAMETERS extends string[], ENTITY, META extends {} | v
 export type KVKey<ENTITY, META extends {} | void = void> = NestedKVKey<[], ENTITY, META>
 
 
-function recursiveProxy(kvNamespace: KVNamespace, currentPath: string = '') {
+function getTypedKvInstanceForPath(kvNamespace: KVNamespace, currentPath: string = '') {
   return new Proxy({} as any, {
     get: function (_, method: string): any {
       if (currentPath === '') {
-        return recursiveProxy(kvNamespace, method + ':');
+        return getTypedKvInstanceForPath(kvNamespace, method + ':');
       }
       switch (method) {
         case 'get':
@@ -68,7 +68,7 @@ function recursiveProxy(kvNamespace: KVNamespace, currentPath: string = '') {
           });
         default:
           return (variable: string) => {
-            return recursiveProxy(kvNamespace, currentPath + method + ':' + variable + ':');
+            return getTypedKvInstanceForPath(kvNamespace, currentPath + method + ':' + variable + ':');
           };
       }
     }
@@ -77,5 +77,5 @@ function recursiveProxy(kvNamespace: KVNamespace, currentPath: string = '') {
 
 export function getTypedKVInstance<KV extends {}>(
   kvNamespace: KVNamespace): KV {
-  return recursiveProxy(kvNamespace);
+  return getTypedKvInstanceForPath(kvNamespace);
 }

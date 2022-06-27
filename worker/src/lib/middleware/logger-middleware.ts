@@ -1,6 +1,12 @@
-import {Logger} from 'workers-loki-logger';
-import {logError} from '../logger';
-import {isAuthenticatedContext, isRequestIdContext, isRouteContext, isTestingContext, LoggerContext} from './context';
+import { Logger } from 'workers-loki-logger';
+import { logError } from '../logger';
+import {
+  isAuthenticatedContext,
+  isRequestIdContext,
+  isRouteContext,
+  isTestingContext,
+  LoggerContext,
+} from './context';
 
 export interface LoggerConfig {
   LOKI_SECRET: string;
@@ -18,20 +24,21 @@ function addLoggerToContext<CONTEXT extends {}>(
     stream: {
       service: serviceName,
       environment: loggingConfig.ENVIRONMENT,
-    }
+    },
   });
-  return Object.assign(context, {logger});
+  return Object.assign(context, { logger });
 }
 
 function isString(type: any): type is string {
   return typeof type === 'string';
 }
 
-export function addLoggerContext<ENV extends LoggerConfig,
+export function addLoggerContext<
+  ENV extends LoggerConfig,
   REQUEST,
   CONTEXT extends {},
   RESPONSE,
-  >(
+>(
   serviceNameParam: string | (() => string),
   fn: (
     request: REQUEST,
@@ -40,12 +47,10 @@ export function addLoggerContext<ENV extends LoggerConfig,
   ) => Promise<RESPONSE>,
 ) {
   return async (request: REQUEST, env: ENV, cfContext: CONTEXT) => {
-    const serviceName = isString(serviceNameParam) ? serviceNameParam : serviceNameParam();
-    const context = addLoggerToContext(
-      serviceName,
-      env,
-      cfContext
-    );
+    const serviceName = isString(serviceNameParam)
+      ? serviceNameParam
+      : serviceNameParam();
+    const context = addLoggerToContext(serviceName, env, cfContext);
     let response;
     try {
       response = await fn(request, env, context);

@@ -1,5 +1,5 @@
-import {isNullOrUndefined} from '../../lib/lib';
-import {ROLES} from '../../lib/roles';
+import { isNullOrUndefined } from '../../lib/lib';
+import { ROLES } from '../../lib/roles';
 
 interface ServiceAccountConfig {
   type: 'service-account';
@@ -72,14 +72,14 @@ export function getAccounts(environment: string) {
 }
 
 const accounts: AccountConfig[] = [
-  ...defaultService({workerName: 'sharecation-authentication'}),
+  ...defaultService({ workerName: 'sharecation-authentication' }),
   ...defaultService({
     workerName: 'sharecation-dev-tools',
     onlyEnvironment: 'development',
   }),
-  ...defaultService({workerName: 'sharecation-groups'}),
-  ...defaultService({workerName: 'sharecation-images'}),
-  ...defaultService({workerName: 'sharecation-ping'}),
+  ...defaultService({ workerName: 'sharecation-groups' }),
+  ...defaultService({ workerName: 'sharecation-images' }),
+  ...defaultService({ workerName: 'sharecation-ping' }),
   {
     type: 'service-account',
     workerName: 'sharecation-groups',
@@ -94,9 +94,9 @@ const accounts: AccountConfig[] = [
 ];
 
 function defaultService({
-                          workerName,
-                          onlyEnvironment,
-                        }: {
+  workerName,
+  onlyEnvironment,
+}: {
   workerName: string;
   onlyEnvironment?: 'production' | 'development';
 }): AccountConfig[] {

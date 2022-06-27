@@ -1,9 +1,12 @@
-import {getTypedKVInstance, KVKey, NestedKVKey} from '../../lib/typed-kv-wrapper/typed-kv-wrapper';
+import {
+  getTypedKVInstance,
+  KVKey,
+  NestedKVKey,
+} from '../../lib/typed-kv-wrapper/typed-kv-wrapper';
 
 const AUTHENTICATION_KV = {
   USERS_ROLES: 'USERS_ROLES:',
-  USER_ROLES: (userId: string) =>
-    `${AUTHENTICATION_KV.USERS_ROLES}${userId}:`,
+  USER_ROLES: (userId: string) => `${AUTHENTICATION_KV.USERS_ROLES}${userId}:`,
   USER_ROLE: (userId: string, role: string) =>
     `${AUTHENTICATION_KV.USER_ROLES(userId)}${role}`,
   GOOGLE_VERIFYING_JWKS: 'GOOGLE_VERIFYING_JWKS:',
@@ -28,7 +31,5 @@ export interface AuthenticationKv {
   privateJWKS: NestedKVKey<['kid'], JsonWebKey & { kid: string }>;
 }
 
-
 export const createAuthenticationKv = (kv: KVNamespace) =>
   getTypedKVInstance<AuthenticationKv>(kv);
-

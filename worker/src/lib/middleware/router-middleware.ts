@@ -1,7 +1,7 @@
-import {BasicError_BasicErrorCode} from '../../contracts/errors/v1/errors';
-import {createBasicErrorResponse} from '../http/response';
-import {isNotNullOrUndefined} from '../lib';
-import {LoggerContext, RouteContext} from './context';
+import { BasicError_BasicErrorCode } from '../../contracts/errors/v1/errors';
+import { createBasicErrorResponse } from '../http/response';
+import { isNotNullOrUndefined } from '../lib';
+import { LoggerContext, RouteContext } from './context';
 
 type Method = 'GET' | 'POST' | 'DELETE';
 
@@ -21,11 +21,12 @@ interface RouteConfig<ENV, CONTEXT, ROUTE_FUNCTION> {
   fn: ROUTE_FUNCTION;
 }
 
-export function route<REQUEST extends Request,
+export function route<
+  REQUEST extends Request,
   ENV,
   CONTEXT,
   RESPONSE extends Response,
-  >(
+>(
   method: Method,
   path: Array<ParamConfig | string>,
   fn: RouteFunction<REQUEST, ENV, CONTEXT, RESPONSE>,
@@ -38,7 +39,7 @@ export function route<REQUEST extends Request,
 }
 
 export function pathParam(paramName: string): ParamConfig {
-  return {paramName};
+  return { paramName };
 }
 
 function checkRouteMatchAndParseContext(
@@ -73,14 +74,17 @@ function checkRouteMatchAndParseContext(
   };
 }
 
-export function addRouter<REQUEST extends Request,
+export function addRouter<
+  REQUEST extends Request,
   ENV,
   CONTEXT extends LoggerContext,
   RESPONSE extends Response,
-  >(
-  routes: RouteConfig<ENV,
+>(
+  routes: RouteConfig<
+    ENV,
     CONTEXT,
-    RouteFunction<REQUEST, ENV, CONTEXT, RESPONSE>>[],
+    RouteFunction<REQUEST, ENV, CONTEXT, RESPONSE>
+  >[],
 ) {
   return async (request: REQUEST, env: ENV, context: CONTEXT) => {
     let pathname = new URL(request.url).pathname;

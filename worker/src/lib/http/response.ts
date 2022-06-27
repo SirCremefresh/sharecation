@@ -1,8 +1,8 @@
-import {MessageType} from '@protobuf-ts/runtime';
-import {BasicError} from '../../contracts/errors/v1/errors';
-import {isProtoBufContext} from '../middleware/context';
-import {responseContainsBasicError} from '../protobuf-util';
-import {MessageFormat, messageFormatToMediaType} from './types';
+import { MessageType } from '@protobuf-ts/runtime';
+import { BasicError } from '../../contracts/errors/v1/errors';
+import { isProtoBufContext } from '../middleware/context';
+import { responseContainsBasicError } from '../protobuf-util';
+import { MessageFormat, messageFormatToMediaType } from './types';
 
 export function createProtoBufResponse(
   body: {},
@@ -23,10 +23,10 @@ export function createBasicErrorResponse(basicError: BasicError, context: {}) {
     isProtoBufContext(context) &&
     responseContainsBasicError(context.proto.responseType)
   ) {
-    return createProtoBufResponse({error: basicError}, context);
+    return createProtoBufResponse({ error: basicError }, context);
   }
   return _createRawResponse(
-    JSON.stringify({error: BasicError.toJson(basicError)}),
+    JSON.stringify({ error: BasicError.toJson(basicError) }),
     MessageFormat.JSON,
   );
 }

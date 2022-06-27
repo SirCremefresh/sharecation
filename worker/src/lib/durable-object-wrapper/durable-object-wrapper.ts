@@ -1,15 +1,31 @@
-import {LoggerContext, RequestIdContext} from '../middleware/context';
-import {addLoggerContext, LoggerConfig} from '../middleware/logger-middleware';
-import {onDurableObjectFetch} from '../starter/on-durable-object-fetch';
+import { LoggerContext, RequestIdContext } from '../middleware/context';
+import {
+  addLoggerContext,
+  LoggerConfig,
+} from '../middleware/logger-middleware';
+import { onDurableObjectFetch } from '../starter/on-durable-object-fetch';
 
 type Invalid<ERROR_ARRAY> = ERROR_ARRAY & Error;
-type DurableObjectMethod = (body: any, context: RequestIdContext & LoggerContext) => Promise<any>;
+type DurableObjectMethod = (
+  body: any,
+  context: RequestIdContext & LoggerContext,
+) => Promise<any>;
 export type CheckDurableObjectMethods<DURABLE_OBJECT> = {
-  [KEY in keyof DURABLE_OBJECT]: DURABLE_OBJECT[KEY] extends Function ?
-    (DURABLE_OBJECT[KEY] extends DurableObjectMethod ? DURABLE_OBJECT[KEY] :
-      Invalid<['Method: ', KEY, ' is not valid DurableObjectMethod expected: ', DurableObjectMethod, ', received: ', DURABLE_OBJECT[KEY]]>) : DURABLE_OBJECT[KEY]
-}
-
+  [KEY in keyof DURABLE_OBJECT]: DURABLE_OBJECT[KEY] extends Function
+    ? DURABLE_OBJECT[KEY] extends DurableObjectMethod
+      ? DURABLE_OBJECT[KEY]
+      : Invalid<
+          [
+            'Method: ',
+            KEY,
+            ' is not valid DurableObjectMethod expected: ',
+            DurableObjectMethod,
+            ', received: ',
+            DURABLE_OBJECT[KEY],
+          ]
+        >
+    : DURABLE_OBJECT[KEY];
+};
 
 export abstract class DurableObjectWrapper<Env extends LoggerConfig> {
   protected abstract env: Env;
@@ -32,17 +48,16 @@ export abstract class DurableObjectWrapper<Env extends LoggerConfig> {
           });
         } catch (error) {
           context.logger.error('An error occurred in durable object', error);
-          return new Response(JSON.stringify({reason: 'unknown'}), {
+          return new Response(JSON.stringify({ reason: 'unknown' }), {
             status: 500,
             headers: {
               'content-type': 'application/json',
             },
           });
         }
-      }
+      },
     ),
   );
 
-  protected constructor(public readonly serviceName: string) {
-  }
+  protected constructor(public readonly serviceName: string) {}
 }

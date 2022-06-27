@@ -11,32 +11,45 @@ import {
   RoleBinding,
   Roles,
 } from '../../contracts/authentication/v1/authentication';
-import {Person, UpsertPersonRequest, UpsertPersonResponse} from '../../contracts/authentication/v1/person';
-import {GetPublicJwksResponse, PublicJwks} from '../../contracts/authentication/v1/public_jwk';
-import {BasicError_BasicErrorCode} from '../../contracts/errors/v1/errors';
-import {getDurableObjectInstance} from '../../lib/durable-object-wrapper/durable-object-accessor';
-import {isNullOrUndefined} from '../../lib/lib';
-import {logInfo} from '../../lib/logger';
-import {addAuthenticatedToContext, addAuthenticationGuard,} from '../../lib/middleware/authenticated-middleware';
+import {
+  Person,
+  UpsertPersonRequest,
+  UpsertPersonResponse,
+} from '../../contracts/authentication/v1/person';
+import {
+  GetPublicJwksResponse,
+  PublicJwks,
+} from '../../contracts/authentication/v1/public_jwk';
+import { BasicError_BasicErrorCode } from '../../contracts/errors/v1/errors';
+import { getDurableObjectInstance } from '../../lib/durable-object-wrapper/durable-object-accessor';
+import { isNullOrUndefined } from '../../lib/lib';
+import { logInfo } from '../../lib/logger';
+import {
+  addAuthenticatedToContext,
+  addAuthenticationGuard,
+} from '../../lib/middleware/authenticated-middleware';
 import {
   createProtoBufBasicErrorResponse,
   createProtoBufOkResponse,
   protoBuf,
 } from '../../lib/middleware/protobuf-middleware';
-import {addRouter, route} from '../../lib/middleware/router-middleware';
-import {hasRole, ROLES} from '../../lib/roles';
-import {onFetch} from '../../lib/starter/on-fetch';
-import {AuthenticationEnvironmentVariables} from './authentication-environment-variables';
-import {createAuthenticationKv} from './authentication-kv';
-import {verifyGoogleJwt} from './google-keys';
-import {RolesStorage} from './roles-storage';
-import {generateSharecationJwt} from './sharecation-keys';
+import { addRouter, route } from '../../lib/middleware/router-middleware';
+import { hasRole, ROLES } from '../../lib/roles';
+import { onFetch } from '../../lib/starter/on-fetch';
+import { AuthenticationEnvironmentVariables } from './authentication-environment-variables';
+import { createAuthenticationKv } from './authentication-kv';
+import { verifyGoogleJwt } from './google-keys';
+import { RolesStorage } from './roles-storage';
+import { generateSharecationJwt } from './sharecation-keys';
 // Make durable object visible
-export {RolesStorage} from './roles-storage';
+export { RolesStorage } from './roles-storage';
 
 const SERVICE_NAME = 'authentication';
 
-function getRolesStorageInstance(namespace: DurableObjectNamespace, context: {}) {
+function getRolesStorageInstance(
+  namespace: DurableObjectNamespace,
+  context: {},
+) {
   return getDurableObjectInstance(RolesStorage, namespace, '0', context);
 }
 
@@ -48,18 +61,17 @@ export default {
       route(
         'POST',
         ['v1', 'get-public-jwks'],
-        protoBuf(
-          null,
-          GetPublicJwksResponse,
-          async (request, env, _) => {
-            const publicKeys = JSON.parse(env.PUBLIC_KEYS) as Array<JsonWebKey & { kid: string }>;
-            return createProtoBufOkResponse<PublicJwks>({
-              jwks: publicKeys.map(publicJwk => ({
-                jwk: JSON.stringify(publicJwk),
-                kid: publicJwk.kid
-              }))
-            });
-          }),
+        protoBuf(null, GetPublicJwksResponse, async (request, env, _) => {
+          const publicKeys = JSON.parse(env.PUBLIC_KEYS) as Array<
+            JsonWebKey & { kid: string }
+          >;
+          return createProtoBufOkResponse<PublicJwks>({
+            jwks: publicKeys.map((publicJwk) => ({
+              jwk: JSON.stringify(publicJwk),
+              kid: publicJwk.kid,
+            })),
+          });
+        }),
       ),
       route(
         'POST',
@@ -69,14 +81,14 @@ export default {
             UpsertPersonRequest,
             UpsertPersonResponse,
             async (request, env, context) => {
-
               return createProtoBufOkResponse<Person>({
                 userId: context.user.userId,
                 firstname: '',
                 lastname: '',
               });
-            }),
-        )
+            },
+          ),
+        ),
       ),
       route(
         'POST',
@@ -86,9 +98,7 @@ export default {
           CreateAuthenticationWithFirebaseResponse,
           async (request, env, context) => {
             const jwtString = context.proto.body.firebaseJwtString;
-            const authenticationKv = createAuthenticationKv(
-              env.AUTHENTICATION,
-            );
+            const authenticationKv = createAuthenticationKv(env.AUTHENTICATION);
             const userId = await verifyGoogleJwt(
               jwtString,
               authenticationKv,
@@ -101,8 +111,11 @@ export default {
                 BasicError_BasicErrorCode.BAD_REQUEST,
               );
             }
-            const rolesStorage = getRolesStorageInstance(env.ROLES_STORAGE, context);
-            const roles = await rolesStorage.getRolesOfUser({userId});
+            const rolesStorage = getRolesStorageInstance(
+              env.ROLES_STORAGE,
+              context,
+            );
+            const roles = await rolesStorage.getRolesOfUser({ userId });
             context = addAuthenticatedToContext(
               userId,
               new Set(roles),
@@ -134,10 +147,10 @@ export default {
             CreateRoleBindingRequest,
             CreateRoleBindingResponse,
             async (request, env, context) => {
-              const {userId, role} = context.proto.body;
+              const { userId, role } = context.proto.body;
               if (!hasRole(ROLES.ADMIN_ROLES_WRITE, context)) {
                 context.logger.warn(
-                  `User tried to create role without having permission. requiredRole=${ROLES.ADMIN_ROLES_WRITE}, userId=${context.user.userId}, roles=${context.user.roles}`
+                  `User tried to create role without having permission. requiredRole=${ROLES.ADMIN_ROLES_WRITE}, userId=${context.user.userId}, roles=${context.user.roles}`,
                 );
                 return createProtoBufBasicErrorResponse(
                   `Not allowed to add role to user. userId=${userId}, role=${role}, requiredRole=${ROLES.ADMIN_ROLES_WRITE}`,
@@ -145,11 +158,13 @@ export default {
                 );
               }
 
-
               context.logger.info(`Adding role to user. role=${role}`);
 
-              const rolesStorage = getRolesStorageInstance(env.ROLES_STORAGE, context);
-              await rolesStorage.addRoleToUser({userId, role});
+              const rolesStorage = getRolesStorageInstance(
+                env.ROLES_STORAGE,
+                context,
+              );
+              await rolesStorage.addRoleToUser({ userId, role });
 
               return createProtoBufOkResponse<RoleBinding>({
                 userId,
@@ -167,7 +182,7 @@ export default {
             DeleteRoleBindingRequest,
             DeleteRoleBindingResponse,
             async (request, env, context) => {
-              const {userId, role} = context.proto.body;
+              const { userId, role } = context.proto.body;
               if (!hasRole(ROLES.ADMIN_ROLES_DELETE, context)) {
                 context.logger.warn(
                   `User tried to delete role without having permission. requiredRole=${ROLES.ADMIN_ROLES_DELETE}, userId=${context.user.userId}, roles=${context.user.roles}`,
@@ -179,9 +194,12 @@ export default {
                 );
               }
 
-              const rolesStorage = getRolesStorageInstance(env.ROLES_STORAGE, context);
+              const rolesStorage = getRolesStorageInstance(
+                env.ROLES_STORAGE,
+                context,
+              );
               context.logger.info(`Deleting role ${role}`);
-              await rolesStorage.deleteRoleOfUser({userId, role});
+              await rolesStorage.deleteRoleOfUser({ userId, role });
 
               return createProtoBufOkResponse<RoleBinding>({
                 userId,
@@ -205,9 +223,12 @@ export default {
                   BasicError_BasicErrorCode.UNAUTHENTICATED,
                 );
               }
-              const {userId} = context.proto.body;
-              const rolesStorage = getRolesStorageInstance(env.ROLES_STORAGE, context);
-              const roles = await rolesStorage.getRolesOfUser({userId});
+              const { userId } = context.proto.body;
+              const rolesStorage = getRolesStorageInstance(
+                env.ROLES_STORAGE,
+                context,
+              );
+              const roles = await rolesStorage.getRolesOfUser({ userId });
 
               logInfo(
                 `Got roles of user. roles=[${roles.join(', ')}]`,

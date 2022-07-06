@@ -1,10 +1,16 @@
-import {MessageType} from '@protobuf-ts/runtime';
-import {BasicError, BasicError_BasicErrorCode,} from '../../contracts/errors/v1/errors';
-import {getRequestFormat, getResponseFormat} from '../http/request';
-import {createBasicErrorResponse, createProtoBufResponse,} from '../http/response';
-import {MessageFormat} from '../http/types';
-import {isNotNullOrUndefined} from '../lib';
-import {LoggerContext, ProtoBufContext} from './context';
+import { MessageType } from '@protobuf-ts/runtime';
+import {
+  BasicError,
+  BasicError_BasicErrorCode,
+} from '../../contracts/errors/v1/errors';
+import { getRequestFormat, getResponseFormat } from '../http/request';
+import {
+  createBasicErrorResponse,
+  createProtoBufResponse,
+} from '../http/response';
+import { MessageFormat } from '../http/types';
+import { isNotNullOrUndefined } from '../lib';
+import { LoggerContext, ProtoBufContext } from './context';
 
 export function createProtoBufOkResponse<TYPE>(data: TYPE): {
   response: {
@@ -59,13 +65,14 @@ async function extractedRequestBody<REQUEST_BODY extends {}>(
   return requestBody;
 }
 
-export function protoBuf<REQUEST extends Request,
+export function protoBuf<
+  REQUEST extends Request,
   ENV extends {},
   CONTEXT extends LoggerContext,
   RESPONSE extends Response,
   REQUEST_BODY extends {},
   RESPONSE_BODY extends {},
-  >(
+>(
   requestType: MessageType<REQUEST_BODY> | null,
   responseType: MessageType<RESPONSE_BODY>,
   fn: (
@@ -124,7 +131,7 @@ export function protoBuf<REQUEST extends Request,
         `An unknown error occurred while handling the request. requestBody=${JSON.stringify(
           requestBody,
         )}`,
-        e
+        e,
       );
       const basicError: BasicError = {
         message: 'An unknown error occurred',

@@ -1,8 +1,7 @@
 import { generateJwt } from '../../lib/authentication/jwt';
 import { isNotNullOrUndefined, isNullOrUndefined } from '../../lib/lib';
 import { LoggerContext } from '../../lib/middleware/context';
-import { TypedKvNamespace } from '../../lib/typed-kv-namespace';
-import type { AUTHENTICATION_KV } from './authentication-kv';
+import type { AuthenticationKv } from './authentication-kv';
 
 const KEY_ALGORITHM = {
   name: 'RSA-PSS',
@@ -22,7 +21,7 @@ let privateKeyAndLoadingTime: {
 export async function generateSharecationJwt(
   userId: string,
   roles: string[],
-  authenticationKv: TypedKvNamespace<AUTHENTICATION_KV>,
+  authenticationKv: AuthenticationKv,
   context: LoggerContext,
 ): Promise<{
   jwtString: string;
@@ -40,7 +39,7 @@ export async function generateSharecationJwt(
 }
 
 async function getPrivateKey(
-  authenticationKv: TypedKvNamespace<AUTHENTICATION_KV>,
+  authenticationKv: AuthenticationKv,
   context: LoggerContext,
 ): Promise<{ cryptoKey: CryptoKey; kid: string }> {
   if (isNotNullOrUndefined(privateKeyAndLoadingTime)) {
@@ -53,13 +52,10 @@ async function getPrivateKey(
     }
   }
   context.logger.info('Getting private key from KV');
-  const privateJwk = await authenticationKv.namespace.get<
-    JsonWebKey & { kid: string }
-  >(authenticationKv.keys.CURRENT_PRIVATE_JWK, 'json');
+
+  const privateJwk = await authenticationKv.currentPrivateJWK.get();
   if (isNullOrUndefined(privateJwk)) {
-    throw new Error(
-      `No private key found in KV with key: ${authenticationKv.keys.CURRENT_PRIVATE_JWK}.`,
-    );
+    throw new Error(`No currentPrivateJWK found in KV.`);
   }
   const cryptoKey = await crypto.subtle.importKey(
     JWK_FORMAT,

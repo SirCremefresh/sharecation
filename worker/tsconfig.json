@@ -18,5 +18,5 @@
     "allowSyntheticDefaultImports": false,
     "skipLibCheck": true,
     "baseUrl": "./src"
-  },
+  }
 }

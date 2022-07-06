@@ -5,12 +5,12 @@ const CORS_HEADERS = {
   'Access-Control-Max-Age': '3600',
 };
 
-
-export function addCors<REQUEST extends Request,
+export function addCors<
+  REQUEST extends Request,
   ENV,
   CONTEXT,
   RESPONSE extends Response,
-  >(
+>(
   fn: (request: REQUEST, env: ENV, context: CONTEXT) => Promise<RESPONSE>,
 ): (request: REQUEST, env: ENV, context: CONTEXT) => Promise<Response> {
   return async (

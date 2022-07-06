@@ -1,5 +1,5 @@
-import {expect, jest, test} from '@jest/globals';
-import {logError} from './logger';
+import { expect, jest, test } from '@jest/globals';
+import { logError } from './logger';
 
 function mockLoggerContext() {
   const errorCalls: Array<[string, any]> = [];
@@ -8,15 +8,14 @@ function mockLoggerContext() {
       error: function () {
         errorCalls.push(arguments as unknown as [string, any]);
       },
-    }
+    },
   };
-  return {errorCalls, loggerContext};
+  return { errorCalls, loggerContext };
 }
 
 test('logError without error object should call loggerContext', async () => {
-  const {errorCalls, loggerContext} = mockLoggerContext();
-  jest.spyOn(console, 'error').mockImplementation(() => {
-  });
+  const { errorCalls, loggerContext } = mockLoggerContext();
+  jest.spyOn(console, 'error').mockImplementation(() => {});
 
   logError('some-message', loggerContext);
 
@@ -27,9 +26,8 @@ test('logError without error object should call loggerContext', async () => {
 });
 
 test('logError with error object should call loggerContext', async () => {
-  const {errorCalls, loggerContext} = mockLoggerContext();
-  jest.spyOn(console, 'error').mockImplementation(() => {
-  });
+  const { errorCalls, loggerContext } = mockLoggerContext();
+  jest.spyOn(console, 'error').mockImplementation(() => {});
   const error = new Error('some-error');
 
   logError('some-message', error, loggerContext);
@@ -41,11 +39,13 @@ test('logError with error object should call loggerContext', async () => {
 });
 
 test('logError without loggerContext should log to console', async () => {
-  jest.spyOn(console, 'error').mockImplementation(() => {
-  });
+  jest.spyOn(console, 'error').mockImplementation(() => {});
 
   logError('some-message', {});
 
   expect(console.error).toBeCalledTimes(1);
-  expect(console.error).toBeCalledWith('some-message error=undefined', undefined);
+  expect(console.error).toBeCalledWith(
+    'some-message error=undefined',
+    undefined,
+  );
 });

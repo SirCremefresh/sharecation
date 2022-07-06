@@ -1,4 +1,4 @@
-import {AuthenticatedContext} from './middleware/context';
+import { AuthenticatedContext } from './middleware/context';
 
 export const ROLES = {
   GROUP_MEMBER: (groupId: string) => `${ROLES.GROUPS}${groupId}:member`,
@@ -8,10 +8,7 @@ export const ROLES = {
   ADMIN_ROLES_DELETE: 'admin:roles:delete',
 };
 
-export function hasRole(
-  role: string,
-  context: AuthenticatedContext,
-): boolean {
+export function hasRole(role: string, context: AuthenticatedContext): boolean {
   return context.user.roles.has(role);
 }
 

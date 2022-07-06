@@ -1,6 +1,5 @@
 import { LoggerContext } from '../../lib/middleware/context';
-import { TypedKvNamespace } from '../../lib/typed-kv-namespace';
-import { AUTHENTICATION_KV } from '../authentication/authentication-kv';
+import { AuthenticationKv } from '../authentication/authentication-kv';
 
 const KEY_ALGORITHM = {
   name: 'RSA-PSS',
@@ -11,13 +10,13 @@ const KEY_ALGORITHM = {
 const JWK_FORMAT = 'jwk';
 
 export async function generateAndStoreNewSigningKeys(
-  authenticationKv: TypedKvNamespace<AUTHENTICATION_KV>,
+  authenticationKv: AuthenticationKv,
   context: ExecutionContext & LoggerContext,
 ): Promise<{
   privateKey: CryptoKey;
   currentPublicKeys: JsonWebKey[];
   kid: string;
-  privateJwkString: string;
+  privateJwk: JsonWebKey;
 }> {
   context.logger.info(
     `Generating new signing and verifying keys with algorithm: ${JSON.stringify(
@@ -41,49 +40,31 @@ export async function generateAndStoreNewSigningKeys(
   context.logger.info(
     `Storing new signing and verifying keys with kid: ${privateJkw.kid}`,
   );
-  const publicJwkKey = authenticationKv.keys.PUBLIC_JWK(privateJkw.kid);
-  const privateJwkKey = authenticationKv.keys.PRIVATE_JWK(privateJkw.kid);
-  const publicJwkString = JSON.stringify(publicJkw);
-  const privateJwkString = JSON.stringify(privateJkw);
   const currentPrivateKey =
-    (await authenticationKv.namespace.get(
-      authenticationKv.keys.NEXT_PRIVATE_JWK,
-    )) ?? privateJwkString;
+    (await authenticationKv.nextPrivateJWK.get()) ?? privateJkw;
   const currentPublicKeys = [
-    ...((await authenticationKv.namespace.get<JsonWebKey[]>(
-      authenticationKv.keys.CURRENT_PUBLIC_JWKS,
-      'json',
-    )) ?? []),
+    ...((await authenticationKv.currentPublicJWKS.get()) ?? []),
     publicJkw,
   ].slice(-3);
   await Promise.all([
-    authenticationKv.namespace.put(publicJwkKey, publicJwkString),
-    authenticationKv.namespace.put(privateJwkKey, privateJwkString),
-    authenticationKv.namespace.put(
-      authenticationKv.keys.NEXT_PRIVATE_JWK,
-      privateJwkString,
-    ),
-    authenticationKv.namespace.put(
-      authenticationKv.keys.CURRENT_PRIVATE_JWK,
-      currentPrivateKey,
-    ),
-    authenticationKv.namespace.put(
-      authenticationKv.keys.CURRENT_PUBLIC_JWKS,
-      JSON.stringify(currentPublicKeys),
-    ),
+    authenticationKv.publicJWKS.kid(publicJkw.kid).put(publicJkw),
+    authenticationKv.privateJWKS.kid(privateJkw.kid).put(privateJkw),
+    authenticationKv.nextPrivateJWK.put(privateJkw),
+    authenticationKv.currentPrivateJWK.put(currentPrivateKey),
+    authenticationKv.currentPublicJWKS.put(currentPublicKeys),
   ]);
 
   context.logger.info(
-    `Stored new signing and verifying keys to KV keys ${publicJwkKey} and ${privateJwkKey}, currentPublicKeys=${JSON.stringify(
-      currentPublicKeys,
-    )}`,
+    `Stored new signing and verifying keys with kid=${
+      currentPrivateKey.kid
+    }, currentPublicKeys=${JSON.stringify(currentPublicKeys)}`,
   );
 
   return {
     privateKey,
     kid: privateJkw.kid,
     currentPublicKeys,
-    privateJwkString: currentPrivateKey,
+    privateJwk: currentPrivateKey,
   };
 }
 

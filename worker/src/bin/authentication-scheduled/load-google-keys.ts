@@ -1,11 +1,10 @@
 import { LoggerContext } from '../../lib/middleware/context';
-import { TypedKvNamespace } from '../../lib/typed-kv-namespace';
-import { AUTHENTICATION_KV } from '../authentication/authentication-kv';
+import { AuthenticationKv } from '../authentication/authentication-kv';
 
 const TWO_WEEKS_IN_SECONDS = 14 * 24 * 60 * 60;
 
 export async function loadAndSaveGoogleVerifyingKeys(
-  authenticationKv: TypedKvNamespace<AUTHENTICATION_KV>,
+  authenticationKv: AuthenticationKv,
   context: LoggerContext,
 ): Promise<void> {
   const EXPIRATION = { expirationTtl: TWO_WEEKS_IN_SECONDS };
@@ -23,15 +22,9 @@ export async function loadAndSaveGoogleVerifyingKeys(
 
   await Promise.all(
     response.keys.map((jwk) => {
-      authenticationKv.namespace.put(
-        authenticationKv.keys.GOOGLE_VERIFYING_JWK(jwk.kid),
-        JSON.stringify(jwk),
-        EXPIRATION,
-      );
+      authenticationKv.googleVerifyingJWKS.kid(jwk.kid).put(jwk, EXPIRATION);
     }),
   );
 
-  context.logger.info(
-    `Stored Google signing keys to ${authenticationKv.keys.GOOGLE_VERIFYING_JWKS}`,
-  );
+  context.logger.info(`Stored Google signing keys to kv`);
 }

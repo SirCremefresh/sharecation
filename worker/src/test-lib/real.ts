@@ -1,3 +1,3 @@
-export function magic() {
+export function getRealMagic() {
   return 21;
 }

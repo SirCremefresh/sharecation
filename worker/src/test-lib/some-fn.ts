@@ -1,6 +1,7 @@
-import {magic} from './real';
+import {getRealMagic} from './real';
 
 
 export function getMagic() {
-  return magic();
+  console.log('the mock is: ', getRealMagic)
+  return getRealMagic();
 }

@@ -1,8 +1,5 @@
-import {expect, jest, test} from '@jest/globals';
-
-export const getRealMagicMock = jest.fn();
-
-jest.unstable_mockModule('./real', () => ({getRealMagic: getRealMagicMock}));
+import {expect, test} from '@jest/globals';
+import {getRealMagicMock} from './real-mock';
 
 const {getMagic} = await import('./some-fn');
 

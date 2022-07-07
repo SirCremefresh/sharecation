@@ -1,9 +1,5 @@
-// import {jest} from '@jest/globals';
+import {jest} from '@jest/globals';
 
-// export const getRealMagicMock = jest.fn();
+export const getRealMagicMock = jest.fn();
 
-// jest.mock('./real.ts', () => {
-//   console.log('getting the mock');
-//
-//   return ({__esModule: true, getRealMagic: 12, getRealMagic1: getRealMagicMock});
-// });
+jest.unstable_mockModule('./real', () => ({getRealMagic: getRealMagicMock}));

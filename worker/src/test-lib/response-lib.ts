@@ -1,27 +1,24 @@
-import {expect} from '@jest/globals';
-import {BasicError} from '../contracts/errors/v1/errors';
+import { expect } from '@jest/globals';
+import { BasicError } from '../contracts/errors/v1/errors';
 
 type GenericResponse<OK> = {
   response:
     | {
-    oneofKind: 'ok';
-    ok: OK;
-  }
+        oneofKind: 'ok';
+        ok: OK;
+      }
     | {
-    oneofKind: 'error';
-    error: BasicError;
-  }
+        oneofKind: 'error';
+        error: BasicError;
+      }
     | {
-    oneofKind: undefined;
-  };
+        oneofKind: undefined;
+      };
 };
 
 function expectOk<OK>(
   responseBody: GenericResponse<OK>,
 ): asserts responseBody is { response: { oneofKind: 'ok'; ok: OK } } {
-  if (responseBody.response.oneofKind !== 'ok') {
-    console.log(responseBody.response);
-  }
   expect(responseBody.response.oneofKind).toEqual('ok');
 }
 

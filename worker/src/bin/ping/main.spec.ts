@@ -1,14 +1,12 @@
-import {describe, expect, test} from '@jest/globals';
-import {GetPingRequest, GetPingResponse,} from '../../contracts/pings/v1/pings';
-import {Headers, MediaType} from '../../lib/http/types';
-import {mockLoggerMiddleware} from '../../lib/middleware/logger-middleware.mock';
-import {buildFakeContext} from '../../test-lib/context-lib';
-import {unwrapOk} from '../../test-lib/response-lib';
-
-mockLoggerMiddleware();
-
-const {default: ping} = await import('./main');
-
+import { describe, expect, test } from '@jest/globals';
+import {
+  GetPingRequest,
+  GetPingResponse,
+} from '../../contracts/pings/v1/pings';
+import { Headers, MediaType } from '../../lib/http/types';
+import { buildFakeContext } from '../../test-lib/context-lib';
+import { unwrapOk } from '../../test-lib/response-lib';
+import ping from './main';
 
 describe('Ping', () => {
   test('Should return pong with given pingId', async () => {
@@ -23,7 +21,7 @@ describe('Ping', () => {
 
     const response = await ping.fetch(
       request,
-      {ENVIRONMENT: 'test', LOKI_SECRET: 'some'},
+      { ENVIRONMENT: 'test', LOKI_SECRET: 'some' },
       buildFakeContext(),
     );
 
@@ -49,7 +47,7 @@ describe('Ping', () => {
 
     const response = await ping.fetch(
       request,
-      {ENVIRONMENT: 'test', LOKI_SECRET: 'some'},
+      { ENVIRONMENT: 'test', LOKI_SECRET: 'some' },
       buildFakeContext(),
     );
 

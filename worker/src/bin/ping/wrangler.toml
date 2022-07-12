@@ -1,6 +1,7 @@
 name = "sharecation-ping"
 compatibility_date = "2022-04-01"
 legacy_env = true
+main = "./main.ts"
 
 [vars]
 ENVIRONMENT = ""

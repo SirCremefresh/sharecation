@@ -1,63 +1,33 @@
-import {describe, expect, test} from '@jest/globals';
-import {GetPingRequest, GetPingResponse,} from '../../contracts/pings/v1/pings';
-import {Headers, MediaType} from '../../lib/http/types';
-import {mockLoggerMiddleware} from '../../lib/middleware/logger-middleware.mock';
-import {buildFakeContext} from '../../test-lib/context-lib';
-import {unwrapOk} from '../../test-lib/response-lib';
+import {Miniflare} from 'miniflare';
+import {describe, test} from '@jest/globals';
 
-mockLoggerMiddleware();
-
-const {default: ping} = await import('./main');
-
-
+const mf = new Miniflare({
+  envPath: true,
+  packagePath: true,
+  wranglerConfigPath: true,
+  scriptPath: './src/bin/ping/dist/main.js',
+  modules: true,
+});
+//
 describe('Ping', () => {
-  test('Should return pong with given pingId', async () => {
-    let pingId = 'some-id';
-    const getPingRequest: GetPingRequest = {
-      pingId,
-    };
-    const request = new Request('https://fake.url/v1/get-ping', {
-      method: 'POST',
-      body: GetPingRequest.toJsonString(getPingRequest),
-    });
-
-    const response = await ping.fetch(
-      request,
-      {ENVIRONMENT: 'test', LOKI_SECRET: 'some'},
-      buildFakeContext(),
-    );
-
-    const responseBody = GetPingResponse.fromJsonString(await response.text());
-    const pingResponse = unwrapOk(responseBody);
-    expect(pingResponse.pingId).toEqual(pingId);
-    expect(pingResponse.message).toEqual('pong');
+  test('Should return pong with given pingId1', async () => {
+  await mf.reload();
+    const res = await mf.dispatchFetch('http://localhost:8787/').then(res => res.text());
+    console.log(res)
   });
-
-  test('Should return pong with given pingId protobuf', async () => {
-    let pingId = 'some-id';
-    const getPingRequest: GetPingRequest = {
-      pingId,
-    };
-    const request = new Request('https://fake.url/v1/get-ping', {
-      method: 'POST',
-      body: GetPingRequest.toBinary(getPingRequest),
-      headers: {
-        [Headers.ACCEPT]: MediaType.APPLICATION_OCTET_STREAM,
-        [Headers.CONTENT_TYPE]: MediaType.APPLICATION_OCTET_STREAM,
-      },
-    });
-
-    const response = await ping.fetch(
-      request,
-      {ENVIRONMENT: 'test', LOKI_SECRET: 'some'},
-      buildFakeContext(),
-    );
-
-    const responseBody = GetPingResponse.fromBinary(
-      new Uint8Array(await response.arrayBuffer()),
-    );
-    const pingResponse = unwrapOk(responseBody);
-    expect(pingResponse.pingId).toEqual(pingId);
-    expect(pingResponse.message).toEqual('pong');
+  test('Should return pong with given pingId2', async () => {
+  await mf.reload();
+    const res = await mf.dispatchFetch('http://localhost:8787/').then(res => res.text());
+    console.log(res)
+  });
+  test('Should return pong with given pingId3', async () => {
+  await mf.reload();
+    const res = await mf.dispatchFetch('http://localhost:8787/').then(res => res.text());
+    console.log(res)
+  });
+  test('Should return pong with given pingId4', async () => {
+  await mf.reload();
+    const res = await mf.dispatchFetch('http://localhost:8787/').then(res => res.text());
+    console.log(res)
   });
 });

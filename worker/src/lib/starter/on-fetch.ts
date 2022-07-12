@@ -6,6 +6,8 @@ import {addCors} from '../middleware/cors-middleware';
 import {addLoggerContext} from '../middleware/logger-middleware';
 import {addRequestId} from '../middleware/request-id-middleware';
 
+declare const SOME_COOL: string;
+
 export function onFetch<ENV extends {
   LOKI_SECRET: string;
   ENVIRONMENT: string;
@@ -21,6 +23,9 @@ export function onFetch<ENV extends {
 ) {
   const packedFn = initialContextGetter ?? addCors(addRequestId(addLoggerContext(serviceName, fn)));
   return async (request: Request, env: ENV, context: ExecutionContext) => {
+    console.log(globalThis.SOME_COOL as any)
+    console.log(globalThis)
+
     try {
       return await packedFn(request, env, context);
     } catch (e) {

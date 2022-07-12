@@ -32,7 +32,7 @@
     "prettier": "2.7.1",
     "ts-jest": "28.0.5",
     "typescript": "4.7.4",
-    "wrangler": "2.0.17"
+    "wrangler": "2.0.18"
   },
   "dependencies": {
     "@protobuf-ts/runtime": "2.7.0",

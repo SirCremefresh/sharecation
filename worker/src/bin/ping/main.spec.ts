@@ -8,11 +8,10 @@ import {unwrapOk} from '../../test-lib/response-lib';
 
 const out = await build({
   entryPoints: ['src/bin/ping/main.ts'],
-  outfile: 'src/bin/ping/dist/main2.js',
   bundle: true,
   format: 'esm',
+  write: false
 });
-console.log(out);
 
 function getUrl(request: Request | string) {
   if (typeof request === 'string') {
@@ -51,7 +50,7 @@ const mf = new Miniflare({
     {type: 'ESModule', include: ['**/*.js'], fallthrough: true},
     {type: 'Text', include: ['**/*.txt']},
   ],
-  scriptPath: 'src/bin/ping/dist/main2.js',
+  script: out.outputFiles[0].text,
   modules: true,
 });
 //

@@ -9,16 +9,6 @@ export interface BaseContext {
   };
 }
 
-export interface TestingContext {
-  test: true;
-}
-
-export function isTestingContext<T extends BaseContext>(
-  context: T | undefined | null,
-): context is T & TestingContext {
-  return isNotNullOrUndefined(context) && context.hasOwnProperty('test');
-}
-
 export interface AuthenticatedContext {
   user: {
     userId: string;

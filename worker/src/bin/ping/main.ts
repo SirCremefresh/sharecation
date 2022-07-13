@@ -1,14 +1,7 @@
-import {
-  GetPingRequest,
-  GetPingResponse,
-  Ping,
-} from '../../contracts/pings/v1/pings';
-import {
-  createProtoBufOkResponse,
-  protoBuf,
-} from '../../lib/middleware/protobuf-middleware';
-import { addRouter, route } from '../../lib/middleware/router-middleware';
-import { onFetch } from '../../lib/starter/on-fetch';
+import {GetPingRequest, GetPingResponse, Ping,} from '../../contracts/pings/v1/pings';
+import {createProtoBufOkResponse, protoBuf,} from '../../lib/middleware/protobuf-middleware';
+import {addRouter, route} from '../../lib/middleware/router-middleware';
+import {onFetch} from '../../lib/starter/on-fetch';
 
 type Environment = {
   LOKI_SECRET: string;

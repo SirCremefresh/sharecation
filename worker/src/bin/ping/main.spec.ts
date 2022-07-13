@@ -45,22 +45,20 @@ const mf = new Miniflare({
   envPath: true,
   packagePath: true,
   wranglerConfigPath: true,
-  wranglerConfigEnv: 'testing',
-  modulesRules: [
-    {type: 'ESModule', include: ['**/*.js'], fallthrough: true},
-    {type: 'Text', include: ['**/*.txt']},
-  ],
   script: out.outputFiles[0].text,
   modules: true,
+  bindings: {
+    ENVIRONMENT: 'testing',
+    LOKI_SECRET: 'some-secret',
+  },
 });
-//
-
 
 describe('Ping', () => {
   test('Should return pong with given pingId', async () => {
     const fetchStub = new FetchStub();
     fetchStub.addStub(new URLPattern('https://logs-prod-eu-west-0.grafana.net/loki/api/v1/push'),
       async (request, requestInitr) => {
+        console.log(requestInitr);
         return new Response('{}', {status: 200});
       });
     await mf.setOptions({

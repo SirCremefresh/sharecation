@@ -6,9 +6,6 @@ main = "./main.ts"
 [vars]
 ENVIRONMENT = ""
 
-[env.testing]
-vars = { ENVIRONMENT = "testing" }
-
 [env.development]
 vars = { ENVIRONMENT = "development" }
 

@@ -28,9 +28,8 @@ class MockLoggerReceiver implements LoggerReceiver {
 
 export function mockLoggerMiddleware() {
   // @ts-ignore
-  let url = new URL(import.meta.url).pathname.replace('.mock.ts', '');
-  console.log(url);
-  let mockLoggerReceiver = new MockLoggerReceiver();
+  const url = new URL(import.meta.url).pathname.replace('.mock.ts', '');
+  const mockLoggerReceiver = new MockLoggerReceiver();
 
   jest.unstable_mockModule(url, () => ({
     addLoggerContext: (serviceNameParam: any, fn: any) => {

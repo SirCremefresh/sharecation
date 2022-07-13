@@ -1,13 +1,19 @@
-import { MessageType } from '@protobuf-ts/runtime';
-import { Logger } from 'workers-loki-logger';
-import { MessageFormat } from '../http/types';
-import { isNotNullOrUndefined } from '../lib';
+import {MessageType} from '@protobuf-ts/runtime';
+import {Logger} from 'workers-loki-logger';
+import {MessageFormat} from '../http/types';
+import {isNotNullOrUndefined} from '../lib';
+
+export interface BaseContext {
+  base: {
+    fetch: typeof fetch;
+  };
+}
 
 export interface TestingContext {
   test: true;
 }
 
-export function isTestingContext<T extends {}>(
+export function isTestingContext<T extends BaseContext>(
   context: T | undefined | null,
 ): context is T & TestingContext {
   return isNotNullOrUndefined(context) && context.hasOwnProperty('test');

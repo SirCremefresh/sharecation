@@ -1,6 +1,7 @@
-import { Logger } from 'workers-loki-logger';
-import { logError } from '../logger';
+import {Logger} from 'workers-loki-logger';
+import {logError} from '../logger';
 import {
+  BaseContext,
   isAuthenticatedContext,
   isRequestIdContext,
   isRouteContext,
@@ -13,7 +14,7 @@ export interface LoggerConfig {
   ENVIRONMENT: string;
 }
 
-function addLoggerToContext<CONTEXT extends {}>(
+function addLoggerToContext<CONTEXT extends BaseContext>(
   serviceName: string,
   loggingConfig: LoggerConfig,
   context: CONTEXT,
@@ -21,24 +22,24 @@ function addLoggerToContext<CONTEXT extends {}>(
   const logger = new Logger({
     lokiSecret: loggingConfig.LOKI_SECRET,
     cloudflareContext: context,
+    fetch: context.base.fetch,
     stream: {
       service: serviceName,
       environment: loggingConfig.ENVIRONMENT,
     },
   });
-  return Object.assign(context, { logger });
+  return Object.assign(context, {logger});
 }
 
 function isString(type: any): type is string {
   return typeof type === 'string';
 }
 
-export function addLoggerContext<
-  ENV extends LoggerConfig,
+export function addLoggerContext<ENV extends LoggerConfig,
   REQUEST,
-  CONTEXT extends {},
+  CONTEXT extends BaseContext,
   RESPONSE,
->(
+  >(
   serviceNameParam: string | (() => string),
   fn: (
     request: REQUEST,
@@ -81,13 +82,13 @@ export function addLoggerContextToSchedule<ENV extends LoggerConfig>(
   fn: (
     event: ScheduledEvent,
     env: ENV,
-    context: ExecutionContext & LoggerContext,
+    context: ExecutionContext & LoggerContext & BaseContext,
   ) => Promise<void>,
 ) {
   return async (
     event: ScheduledEvent,
     env: ENV,
-    cfContext: ExecutionContext,
+    cfContext: ExecutionContext & BaseContext,
   ) => {
     const context = addLoggerToContext(serviceName, env, cfContext);
     try {

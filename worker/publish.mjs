@@ -1,5 +1,5 @@
-import { spawn } from 'child_process';
-import { fileURLToPath } from 'url';
+import {spawn} from 'child_process';
+import {fileURLToPath} from 'url';
 import path from 'path';
 import fs from 'fs';
 
@@ -21,7 +21,7 @@ process.argv.slice(2).forEach((arg) => {
 
 function getAllBinNames() {
   const BIN_DIR = path.join(dirname, 'src', 'bin');
-  const files = fs.readdirSync(BIN_DIR, { withFileTypes: true });
+  const files = fs.readdirSync(BIN_DIR, {withFileTypes: true});
   return files.filter((file) => file.isDirectory()).map((file) => file.name);
 }
 

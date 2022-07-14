@@ -59,9 +59,6 @@ async function main() {
       path.join(binPath, 'main.ts'),
       '--config',
       path.join(binPath, 'wrangler.toml'),
-      '--dry-run',
-      '--outdir',
-      path.join(binPath, 'dist'),
       '--env',
       args.environment,
     ]);

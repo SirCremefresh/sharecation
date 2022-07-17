@@ -2,7 +2,7 @@ import type { MessageType } from '@protobuf-ts/runtime';
 import type { BasicError } from '../contracts/errors/v1/errors';
 import { BasicError_BasicErrorCode } from '../contracts/errors/v1/errors';
 import { logError, logInfo } from './logger';
-import { isRequestIdContext } from './middleware/context';
+import {BaseContext, isRequestIdContext} from './middleware/context';
 import { responseContainsBasicError } from './protobuf-util';
 import { requestIdHeader } from './request-id-header';
 
@@ -17,7 +17,7 @@ export async function callApi<
   service: string,
   environment: string,
   path: string,
-  context: {},
+  context: BaseContext,
 ): Promise<RESPONSE_TYPE['response']> {
   logInfo(
     `Calling API of service=${service} environment=${environment} path=${path}`,
@@ -25,7 +25,7 @@ export async function callApi<
   );
   const bodyString = requestType.toJsonString(body);
   try {
-    return await fetch(
+    return await context.base.fetch(
       `https://sharecation-${service}-${environment}.dowo.ch${path}`,
       {
         method: 'POST',

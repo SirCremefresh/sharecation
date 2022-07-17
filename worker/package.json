@@ -10,6 +10,7 @@
     "clean": "node clean.mjs",
     "format": "prettier --write '**/*.{ts,mjs,css,json,md}'",
     "test": "NODE_OPTIONS=--experimental-vm-modules jest",
+    "test:watch": "NODE_OPTIONS=--experimental-vm-modules jest --watchAll",
     "publish:development": "node publish.mjs --environment=development",
     "publish:development:ping": "node publish.mjs --environment=development --bins=ping",
     "publish:development:images": "node publish.mjs --environment=development --bins=images",

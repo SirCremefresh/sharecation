@@ -13,6 +13,7 @@ import {
 import { callApi } from '../../lib/api';
 import { isNotNullOrUndefined } from '../../lib/lib';
 import { addAuthenticationGuard } from '../../lib/middleware/authenticated-middleware';
+import {BaseContext} from '../../lib/middleware/context';
 import {
   createProtoBufBasicErrorResponse,
   createProtoBufOkResponse,
@@ -36,7 +37,7 @@ function addGroupRoleBinding(
   serviceAccount: string,
   userId: string,
   newGroupId: string,
-  context: {},
+  context: BaseContext,
 ) {
   return callApi(
     CreateRoleBindingRequest,

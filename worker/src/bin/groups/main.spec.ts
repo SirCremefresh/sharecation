@@ -26,13 +26,18 @@ describe('Groups', () => {
 
   test('get groups with two groups', async () => {
     const testRun = await testContainer.initTest();
-    const jwtString = await testRun.getJwt({roles: ['groups:group-id-1']});
-    let kvNamespace = await testContainer.mf.getKVNamespace('GROUPS');
-    await kvNamespace.put('groups:group-id-1:', JSON.stringify({
+    const jwtString = await testRun.getJwt({roles: ['groups:group-id-1', 'groups:group-id-2']});
+    const kvNamespace = await testContainer.mf.getKVNamespace('GROUPS');
+    const group1 = {
       groupId: 'group-id-1',
       name: 'group-name-1',
-    }));
-    console.log(jwtString)
+    };
+    const group2 = {
+      groupId: 'group-id-2',
+      name: 'group-name-2',
+    };
+    await kvNamespace.put('groups:group-id-1:', JSON.stringify(group1));
+    await kvNamespace.put('groups:group-id-2:', JSON.stringify(group2));
     // getTypedKVInstance<AuthenticationKv>(await testContainer.mf.getKVNamespace('GROUPS') as KVNamespace);
 
     const response = await testRun.dispatchFetch('https://fake.url/v1/get-groups', {
@@ -44,7 +49,11 @@ describe('Groups', () => {
     });
 
     const pingResponse = unwrapOk(GetGroupsResponse.fromJsonString(await response.text()));
-    expect(pingResponse.groups.length).toEqual(1);
+    expect(pingResponse.groups.length).toEqual(2);
+    expect(pingResponse.groups[0].groupId).toEqual(group1.groupId);
+    expect(pingResponse.groups[0].name).toEqual(group1.name);
+    expect(pingResponse.groups[1].groupId).toEqual(group2.groupId);
+    expect(pingResponse.groups[1].name).toEqual(group2.name);
   });
 
   test('create group', async () => {

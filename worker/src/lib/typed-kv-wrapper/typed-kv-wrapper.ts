@@ -79,7 +79,11 @@ function getTypedKvInstanceForPath(
         case 'getOptional':
           return () => kvNamespace.get(currentPath, 'json');
         case 'get':
-          return () => assertNotNullOrUndefined(kvNamespace.get(currentPath, 'json'));
+          return () => {
+            const result = kvNamespace.get(currentPath, 'json');
+            assertNotNullOrUndefined(result);
+            return result;
+          };
         case 'getWithMetadata':
           return () => kvNamespace.getWithMetadata(currentPath, 'json');
         case 'delete':

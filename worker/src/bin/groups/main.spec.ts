@@ -4,10 +4,10 @@ import {Miniflare} from 'miniflare';
 import {CreateRoleBindingResponse, RoleBinding} from '../../contracts/authentication/v1/authentication';
 import {CreateGroupRequest, CreateGroupResponse, GetGroupsResponse} from '../../contracts/groups/v1/groups';
 import {generateJwt} from '../../lib/authentication/jwt';
-import {isNotNullOrUndefined} from '../../lib/lib';
 import {createProtoBufOkResponse} from '../../lib/middleware/protobuf-middleware';
 import {unwrapOk} from '../../test-lib/response-lib';
 import {exportPublicAndPrivateInJwk, generateKeys} from '../authentication-scheduled/generate-sharecation-keys';
+import {FetchStub} from './fetch-stub-testing';
 
 const out = await build({
   entryPoints: ['src/bin/groups/main.ts'],
@@ -15,61 +15,6 @@ const out = await build({
   format: 'esm',
   write: false
 });
-
-function getUrl(request: Request | string) {
-  if (typeof request === 'string') {
-    return request;
-  }
-  return request.url;
-}
-
-class RequestStub {
-  private readonly calls: { request: Request | string, requestInit?: RequestInit | Request }[] = [];
-
-  constructor(
-    public readonly urlPattern: URLPattern,
-    private readonly handler: (request: Request | string, requestInitr?: RequestInit | Request) => PromiseLike<Response>,
-  ) {
-  }
-
-  public async handle(request: Request | string, requestInit?: RequestInit | Request) {
-    this.calls.push({request, requestInit});
-    return this.handler(request, requestInit);
-  }
-
-  public wasCalledExactly(times: number = 1) {
-    expect(this.calls.length).toBe(times);
-  }
-
-  public wasCalled(atLeastTimes: number = 1) {
-    expect(this.calls.length).toBeGreaterThanOrEqual(atLeastTimes);
-  }
-
-  public getLastJsonBody(): any {
-    this.wasCalled();
-    return JSON.parse(this.calls[this.calls.length - 1]!.requestInit!.body as string);
-  }
-}
-
-class FetchStub {
-  private stubs: RequestStub[] = [];
-
-  addStub(urlPattern: URLPattern, handler: (request: Request | string, requestInitr?: RequestInit | Request) => PromiseLike<Response>) {
-    const requestStub = new RequestStub(urlPattern, handler);
-    this.stubs.push(requestStub);
-    return requestStub;
-  }
-
-  getFetch() {
-    return async (request: Request | string, requestInitr?: RequestInit | Request) => {
-      const stub = this.stubs.find(stub => stub.urlPattern.test(getUrl(request)));
-      if (isNotNullOrUndefined(stub)) {
-        return stub.handle(request, requestInitr);
-      }
-      throw new Error(`No stub found for request=${JSON.stringify(request)}, requestInitr=${JSON.stringify(requestInitr)}`);
-    };
-  }
-}
 
 const mf = new Miniflare({
   envPath: true,

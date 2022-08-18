@@ -3,6 +3,7 @@ import {build} from 'esbuild';
 import {Miniflare} from 'miniflare';
 import {exportPublicAndPrivateInJwk, generateKeys} from '../bin/authentication-scheduled/generate-sharecation-keys';
 import {generateJwt} from '../lib/authentication/jwt';
+import {getTypedKVInstance} from '../lib/typed-kv-wrapper/typed-kv-wrapper';
 import {FetchStub} from './fetch-stub-testing';
 
 class TestRunContainer {
@@ -11,7 +12,7 @@ class TestRunContainer {
     public readonly privateKey: CryptoKey,
     public readonly publicJkw: JsonWebKey & { kid: string },
     public readonly globalFetchStub: FetchStub,
-    public readonly mf: Miniflare,
+    private readonly mf: Miniflare,
   ) {
   }
 
@@ -28,6 +29,10 @@ class TestRunContainer {
 
   dispatchFetch(url: string, options: RequestInit) {
     return this.mf.dispatchFetch(url, options);
+  }
+
+  async getKv<KV extends {}>(namespace: string) {
+    return getTypedKVInstance<KV>(await this.mf.getKVNamespace(namespace) as KVNamespace);
   }
 }
 

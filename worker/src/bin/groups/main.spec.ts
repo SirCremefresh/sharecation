@@ -23,21 +23,39 @@ function getUrl(request: Request | string) {
   return request.url;
 }
 
+class RequestStub {
+  public timesCalled = 0;
+
+  constructor(
+    public readonly urlPattern: URLPattern,
+    private readonly handler: (request: Request | string, requestInitr?: RequestInit | Request) => PromiseLike<Response>,
+  ) {
+  }
+
+  public async handle(request: Request | string, requestInit?: RequestInit | Request) {
+    this.timesCalled++;
+    return this.handler(request, requestInit);
+  }
+
+  public wasCalled() {
+    expect(this.timesCalled).toBeGreaterThan(0);
+  }
+}
+
 class FetchStub {
-  private stubs: {
-    urlPattern: URLPattern,
-    handler: (request: Request | string, requestInitr?: RequestInit | Request) => PromiseLike<Response>
-  }[] = [];
+  private stubs: RequestStub[] = [];
 
   addStub(urlPattern: URLPattern, handler: (request: Request | string, requestInitr?: RequestInit | Request) => PromiseLike<Response>) {
-    this.stubs.push({urlPattern, handler});
+    const requestStub = new RequestStub(urlPattern, handler);
+    this.stubs.push(requestStub);
+    return requestStub;
   }
 
   getFetch() {
     return async (request: Request | string, requestInitr?: RequestInit | Request) => {
       const stub = this.stubs.find(stub => stub.urlPattern.test(getUrl(request)));
       if (isNotNullOrUndefined(stub)) {
-        return stub.handler(request, requestInitr);
+        return stub.handle(request, requestInitr);
       }
       throw new Error(`No stub found for request=${JSON.stringify(request)}, requestInitr=${JSON.stringify(requestInitr)}`);
     };
@@ -99,10 +117,10 @@ describe('Groups', () => {
 
   test('create group', async () => {
     const responsqwere: CreateRoleBindingResponse = createProtoBufOkResponse<RoleBinding>({
-      userId:'some-user-id',
-      role:'some-role-id',
+      userId: 'some-user-id',
+      role: 'some-role-id',
     });
-    console.log(CreateRoleBindingResponse.toJsonString(responsqwere))
+    console.log(CreateRoleBindingResponse.toJsonString(responsqwere));
 
 
     const fetchStub = new FetchStub();
@@ -111,11 +129,11 @@ describe('Groups', () => {
         console.log(requestInitr);
         return new Response('{}', {status: 200});
       });
-    fetchStub.addStub(new URLPattern('https://sharecation-authentication-development.dowo.ch/v1/create-role-binding'),
+    const createRoleRequestStub = fetchStub.addStub(new URLPattern('https://sharecation-authentication-development.dowo.ch/v1/create-role-binding'),
       async (request, requestInitr) => {
         const response: CreateRoleBindingResponse = createProtoBufOkResponse<RoleBinding>({
-          userId:'some-user-id',
-          role:'some-role-id',
+          userId: 'some-user-id',
+          role: 'some-role-id',
         });
         return new Response(CreateRoleBindingResponse.toJsonString(response), {status: 200});
       });
@@ -153,5 +171,6 @@ describe('Groups', () => {
     const responseBody = CreateGroupResponse.fromJsonString(await response.text());
     const pingResponse = unwrapOk(responseBody);
     expect(pingResponse.name).toEqual('Some-cool-name');
+    createRoleRequestStub.wasCalled();
   });
 });

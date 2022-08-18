@@ -31,6 +31,19 @@ class TestRunContainer {
     return this.mf.dispatchFetch(url, options);
   }
 
+  async post(options: { path: string, body?: string, authenticated?: { roles: string[] } }) {
+    const headers: { [key: string]: string } = {};
+    if (options.authenticated) {
+      const jwtString = await this.getJwt({roles: options.authenticated.roles});
+      headers['Authorization'] = `Bearer ${jwtString}`;
+    }
+    return await this.dispatchFetch(`https://fake.url${options.path}`, {
+      method: 'POST',
+      body: options.body ?? null,
+      headers
+    });
+  }
+
   async getKv<KV extends {}>(namespace: string) {
     return getTypedKVInstance<KV>(await this.mf.getKVNamespace(namespace) as KVNamespace);
   }

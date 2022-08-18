@@ -45,6 +45,12 @@ export class FetchStub {
     return requestStub;
   }
 
+  addStaticStub(urlPattern: URLPattern, response: Response) {
+    const requestStub = new RequestStub(urlPattern, async (_1, _2) => response);
+    this.stubs.push(requestStub);
+    return requestStub;
+  }
+
   getFetch() {
     return async (request: Request | string, requestInitr?: RequestInit | Request) => {
       const stub = this.stubs.find(stub => stub.urlPattern.test(getUrl(request)));

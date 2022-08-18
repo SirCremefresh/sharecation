@@ -11,13 +11,11 @@ const testContainer = await getTestingContainer('groups');
 describe('Groups', () => {
   test('get groups has no groups', async () => {
     const testRun = await testContainer.initTest();
-    const jwtString = await testRun.getJwt({roles: []});
 
-    const response = await testRun.dispatchFetch('https://fake.url/v1/get-groups', {
-      method: 'POST',
-      body: null,
-      headers: {
-        'Authorization': `Bearer ${jwtString}`,
+    const response = await testRun.post({
+      path: '/v1/get-groups',
+      authenticated: {
+        roles: []
       }
     });
 
@@ -27,7 +25,6 @@ describe('Groups', () => {
 
   test('get groups with two groups', async () => {
     const testRun = await testContainer.initTest();
-    const jwtString = await testRun.getJwt({roles: ['groups:group-id-1', 'groups:group-id-2']});
     const kvNamespace = await testRun.getKv<GroupsKv>('GROUPS');
     const group1 = {
       groupId: 'group-id-1',
@@ -42,11 +39,10 @@ describe('Groups', () => {
     await kvNamespace.groups.groupId(group1.groupId).put(group1);
     await kvNamespace.groups.groupId(group2.groupId).put(group2);
 
-    const response = await testRun.dispatchFetch('https://fake.url/v1/get-groups', {
-      method: 'POST',
-      body: null,
-      headers: {
-        'Authorization': `Bearer ${jwtString}`,
+    const response = await testRun.post({
+      path: '/v1/get-groups',
+      authenticated: {
+        roles: ['groups:group-id-1', 'groups:group-id-2']
       }
     });
 
@@ -60,7 +56,6 @@ describe('Groups', () => {
 
   test('get groups ignore role for not existing group', async () => {
     const testRun = await testContainer.initTest();
-    const jwtString = await testRun.getJwt({roles: ['groups:group-id-2', 'groups:group-id-not-existing']});
     const kvNamespace = await testRun.getKv<GroupsKv>('GROUPS');
     const group1 = {
       groupId: 'group-id-2',
@@ -69,11 +64,10 @@ describe('Groups', () => {
     };
     await kvNamespace.groups.groupId(group1.groupId).put(group1);
 
-    const response = await testRun.dispatchFetch('https://fake.url/v1/get-groups', {
-      method: 'POST',
-      body: null,
-      headers: {
-        'Authorization': `Bearer ${jwtString}`,
+    const response = await testRun.post({
+      path: '/v1/get-groups',
+      authenticated: {
+        roles: ['groups:group-id-2', 'groups:group-id-not-existing']
       }
     });
 
@@ -85,24 +79,19 @@ describe('Groups', () => {
 
   test('create group', async () => {
     const testRun = await testContainer.initTest();
-    const jwtString = await testRun.getJwt({roles: []});
+    const createRoleRequestStub = testRun.globalFetchStub.addStaticStub(new URLPattern('https://sharecation-authentication-development.dowo.ch/v1/create-role-binding'),
+      new Response(CreateRoleBindingResponse.toJsonString(createProtoBufOkResponse({
+        userId: 'some-user-id',
+        role: 'some-role-id',
+      })), {status: 200}));
 
-    const createRoleRequestStub = testRun.globalFetchStub.addStub(new URLPattern('https://sharecation-authentication-development.dowo.ch/v1/create-role-binding'),
-      async (_1, _2) => {
-        return new Response(CreateRoleBindingResponse.toJsonString(createProtoBufOkResponse({
-          userId: 'some-user-id',
-          role: 'some-role-id',
-        })), {status: 200});
-      });
-
-
-    const response = await testRun.dispatchFetch('https://fake.url/v1/create-group', {
-      method: 'POST',
+    const response = await testRun.post({
+      path: '/v1/create-group',
       body: CreateGroupRequest.toJsonString({
         name: 'Some-cool-name'
       }),
-      headers: {
-        'Authorization': `Bearer ${jwtString}`,
+      authenticated: {
+        roles: []
       }
     });
 

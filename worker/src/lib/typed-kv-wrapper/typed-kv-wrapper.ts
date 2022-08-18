@@ -79,8 +79,8 @@ function getTypedKvInstanceForPath(
         case 'getOptional':
           return () => kvNamespace.get(currentPath, 'json');
         case 'get':
-          return () => {
-            const result = kvNamespace.get(currentPath, 'json');
+          return async () => {
+            const result = await kvNamespace.get(currentPath, 'json');
             assertNotNullOrUndefined(result);
             return result;
           };

@@ -3,7 +3,7 @@ import {CreateRoleBindingResponse} from '../../contracts/authentication/v1/authe
 import {CreateGroupRequest, CreateGroupResponse, GetGroupsResponse} from '../../contracts/groups/v1/groups';
 import {createProtoBufOkResponse} from '../../lib/middleware/protobuf-middleware';
 import {unwrapOk} from '../../test-lib/response-lib';
-import {getTestingContainer} from './util-test';
+import {getTestingContainer} from '../../test-lib/test-container';
 
 const testContainer = await getTestingContainer('groups');
 

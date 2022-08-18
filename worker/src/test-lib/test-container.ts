@@ -1,8 +1,8 @@
 import {RequestInit} from '@miniflare/core';
 import {build} from 'esbuild';
 import {Miniflare} from 'miniflare';
-import {generateJwt} from '../../lib/authentication/jwt';
-import {exportPublicAndPrivateInJwk, generateKeys} from '../authentication-scheduled/generate-sharecation-keys';
+import {generateJwt} from '../lib/authentication/jwt';
+import {exportPublicAndPrivateInJwk, generateKeys} from '../bin/authentication-scheduled/generate-sharecation-keys';
 import {FetchStub} from './fetch-stub-testing';
 
 class TestRunContainer {

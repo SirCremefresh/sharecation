@@ -1,5 +1,5 @@
 import {expect} from '@jest/globals';
-import {isNotNullOrUndefined} from '../../lib/lib';
+import {isNotNullOrUndefined} from '../lib/lib';
 
 function getUrl(request: Request | string) {
   if (typeof request === 'string') {

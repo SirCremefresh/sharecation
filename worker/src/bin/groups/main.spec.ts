@@ -24,7 +24,7 @@ function getUrl(request: Request | string) {
 }
 
 class RequestStub {
-  public timesCalled = 0;
+  private readonly calls: { request: Request | string, requestInit?: RequestInit | Request }[] = [];
 
   constructor(
     public readonly urlPattern: URLPattern,
@@ -33,12 +33,21 @@ class RequestStub {
   }
 
   public async handle(request: Request | string, requestInit?: RequestInit | Request) {
-    this.timesCalled++;
+    this.calls.push({request, requestInit});
     return this.handler(request, requestInit);
   }
 
-  public wasCalled() {
-    expect(this.timesCalled).toBeGreaterThan(0);
+  public wasCalledExactly(times: number = 1) {
+    expect(this.calls.length).toBe(times);
+  }
+
+  public wasCalled(atLeastTimes: number = 1) {
+    expect(this.calls.length).toBeGreaterThanOrEqual(atLeastTimes);
+  }
+
+  public getLastJsonBody(): any {
+    this.wasCalled();
+    return JSON.parse(this.calls[this.calls.length - 1]!.requestInit!.body as string);
   }
 }
 
@@ -171,6 +180,7 @@ describe('Groups', () => {
     const responseBody = CreateGroupResponse.fromJsonString(await response.text());
     const pingResponse = unwrapOk(responseBody);
     expect(pingResponse.name).toEqual('Some-cool-name');
-    createRoleRequestStub.wasCalled();
+    createRoleRequestStub.wasCalledExactly(1);
+    expect(createRoleRequestStub.getLastJsonBody().role).toEqual(`groups:${pingResponse.groupId}:member`);
   });
 });

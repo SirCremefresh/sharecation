@@ -1,8 +1,8 @@
 import {RequestInit} from '@miniflare/core';
 import {build} from 'esbuild';
 import {Miniflare} from 'miniflare';
-import {generateJwt} from '../lib/authentication/jwt';
 import {exportPublicAndPrivateInJwk, generateKeys} from '../bin/authentication-scheduled/generate-sharecation-keys';
+import {generateJwt} from '../lib/authentication/jwt';
 import {FetchStub} from './fetch-stub-testing';
 
 class TestRunContainer {
@@ -11,7 +11,7 @@ class TestRunContainer {
     public readonly privateKey: CryptoKey,
     public readonly publicJkw: JsonWebKey & { kid: string },
     public readonly globalFetchStub: FetchStub,
-    public readonly testingContainer: TestingContainer,
+    public readonly mf: Miniflare,
   ) {
   }
 
@@ -27,12 +27,12 @@ class TestRunContainer {
   }
 
   dispatchFetch(url: string, options: RequestInit) {
-    return this.testingContainer.mf.dispatchFetch(url, options);
+    return this.mf.dispatchFetch(url, options);
   }
 }
 
 class TestingContainer {
-  constructor(public readonly mf: Miniflare) {
+  constructor(private readonly serviceName: string, private readonly script: string) {
   }
 
   async initTest() {
@@ -41,7 +41,19 @@ class TestingContainer {
     const {privateKey, publicKey} = await generateKeys();
     const {publicJkw} = await exportPublicAndPrivateInJwk(publicKey, privateKey);
 
-    await this.mf.setOptions({
+
+    const miniflare = new Miniflare({
+      envPath: true,
+      packagePath: true,
+      wranglerConfigPath: `./src/bin/${this.serviceName}/wrangler.toml`,
+      wranglerConfigEnv: 'development',
+      script: this.script,
+      modules: true,
+      bindings: {
+        ENVIRONMENT: 'testing',
+        LOKI_SECRET: 'some-secret',
+        PUBLIC_KEYS: JSON.stringify([publicJkw])
+      },
       globals: {
         TESTING_BASE_CONTEXT: {
           base: {
@@ -49,18 +61,14 @@ class TestingContainer {
           }
         }
       },
-      bindings: {
-        ENVIRONMENT: 'testing',
-        LOKI_SECRET: 'some-secret',
-        PUBLIC_KEYS: JSON.stringify([publicJkw])
-      },
     });
+
     return new TestRunContainer(
       publicKey,
       privateKey,
       publicJkw,
       globalFetchStub,
-      this
+      miniflare,
     );
   }
 
@@ -80,18 +88,6 @@ export async function getTestingContainer(serviceName: string) {
     write: false
   });
 
-  const miniflare = new Miniflare({
-    envPath: true,
-    packagePath: true,
-    wranglerConfigPath: `./src/bin/${serviceName}/wrangler.toml`,
-    wranglerConfigEnv: 'development',
-    script: buildOutput.outputFiles[0].text,
-    modules: true,
-    bindings: {
-      ENVIRONMENT: 'testing',
-      LOKI_SECRET: 'some-secret',
-    },
-  });
-  return new TestingContainer(miniflare);
+  return new TestingContainer(serviceName, buildOutput.outputFiles[0].text);
 }
 

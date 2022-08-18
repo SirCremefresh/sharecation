@@ -4,6 +4,7 @@ import {CreateGroupRequest, CreateGroupResponse, GetGroupsResponse} from '../../
 import {createProtoBufOkResponse} from '../../lib/middleware/protobuf-middleware';
 import {unwrapOk} from '../../test-lib/response-lib';
 import {getTestingContainer} from '../../test-lib/test-container';
+import {createGroupsKv} from './groups-kv';
 
 const testContainer = await getTestingContainer('groups');
 
@@ -27,18 +28,19 @@ describe('Groups', () => {
   test('get groups with two groups', async () => {
     const testRun = await testContainer.initTest();
     const jwtString = await testRun.getJwt({roles: ['groups:group-id-1', 'groups:group-id-2']});
-    const kvNamespace = await testContainer.mf.getKVNamespace('GROUPS');
+    const kvNamespace = createGroupsKv(await testRun.mf.getKVNamespace('GROUPS') as KVNamespace);
     const group1 = {
       groupId: 'group-id-1',
       name: 'group-name-1',
+      createdAt: 'created-at',
     };
     const group2 = {
       groupId: 'group-id-2',
       name: 'group-name-2',
+      createdAt: 'created-at',
     };
-    await kvNamespace.put('groups:group-id-1:', JSON.stringify(group1));
-    await kvNamespace.put('groups:group-id-2:', JSON.stringify(group2));
-    // getTypedKVInstance<AuthenticationKv>(await testContainer.mf.getKVNamespace('GROUPS') as KVNamespace);
+    await kvNamespace.groups.groupId(group1.groupId).put(group1);
+    await kvNamespace.groups.groupId(group2.groupId).put(group2);
 
     const response = await testRun.dispatchFetch('https://fake.url/v1/get-groups', {
       method: 'POST',
@@ -58,14 +60,14 @@ describe('Groups', () => {
 
   test('get groups ignore role for not existing group', async () => {
     const testRun = await testContainer.initTest();
-    const jwtString = await testRun.getJwt({roles: ['groups:group-id-1', 'groups:group-id-not-existing']});
-    const kvNamespace = await testContainer.mf.getKVNamespace('GROUPS');
+    const jwtString = await testRun.getJwt({roles: ['groups:group-id-2', 'groups:group-id-not-existing']});
+    const kvNamespace = createGroupsKv(await testRun.mf.getKVNamespace('GROUPS') as KVNamespace);
     const group1 = {
-      groupId: 'group-id-1',
+      groupId: 'group-id-2',
       name: 'group-name-1',
+      createdAt: 'created-at',
     };
-    await kvNamespace.put('groups:group-id-1:', JSON.stringify(group1));
-    // getTypedKVInstance<AuthenticationKv>(await testContainer.mf.getKVNamespace('GROUPS') as KVNamespace);
+    await kvNamespace.groups.groupId(group1.groupId).put(group1);
 
     const response = await testRun.dispatchFetch('https://fake.url/v1/get-groups', {
       method: 'POST',

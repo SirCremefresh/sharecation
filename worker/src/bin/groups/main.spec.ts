@@ -56,6 +56,31 @@ describe('Groups', () => {
     expect(pingResponse.groups[1].name).toEqual(group2.name);
   });
 
+  test('get groups ignore role for not existing group', async () => {
+    const testRun = await testContainer.initTest();
+    const jwtString = await testRun.getJwt({roles: ['groups:group-id-1', 'groups:group-id-not-existing']});
+    const kvNamespace = await testContainer.mf.getKVNamespace('GROUPS');
+    const group1 = {
+      groupId: 'group-id-1',
+      name: 'group-name-1',
+    };
+    await kvNamespace.put('groups:group-id-1:', JSON.stringify(group1));
+    // getTypedKVInstance<AuthenticationKv>(await testContainer.mf.getKVNamespace('GROUPS') as KVNamespace);
+
+    const response = await testRun.dispatchFetch('https://fake.url/v1/get-groups', {
+      method: 'POST',
+      body: null,
+      headers: {
+        'Authorization': `Bearer ${jwtString}`,
+      }
+    });
+
+    const pingResponse = unwrapOk(GetGroupsResponse.fromJsonString(await response.text()));
+    expect(pingResponse.groups.length).toEqual(1);
+    expect(pingResponse.groups[0].groupId).toEqual(group1.groupId);
+    expect(pingResponse.groups[0].name).toEqual(group1.name);
+  });
+
   test('create group', async () => {
     const testRun = await testContainer.initTest();
     const jwtString = await testRun.getJwt({roles: []});

@@ -1,5 +1,5 @@
 import {describe, expect, test} from '@jest/globals';
-import {CreateRoleBindingResponse, RoleBinding} from '../../contracts/authentication/v1/authentication';
+import {CreateRoleBindingResponse} from '../../contracts/authentication/v1/authentication';
 import {CreateGroupRequest, CreateGroupResponse, GetGroupsResponse} from '../../contracts/groups/v1/groups';
 import {createProtoBufOkResponse} from '../../lib/middleware/protobuf-middleware';
 import {unwrapOk} from '../../test-lib/response-lib';
@@ -30,12 +30,11 @@ describe('Groups', () => {
     const jwtString = await testRun.getJwt({roles: []});
 
     const createRoleRequestStub = testRun.globalFetchStub.addStub(new URLPattern('https://sharecation-authentication-development.dowo.ch/v1/create-role-binding'),
-      async (request, requestInitr) => {
-        const response: CreateRoleBindingResponse = createProtoBufOkResponse<RoleBinding>({
+      async (_1, _2) => {
+        return new Response(CreateRoleBindingResponse.toJsonString(createProtoBufOkResponse({
           userId: 'some-user-id',
           role: 'some-role-id',
-        });
-        return new Response(CreateRoleBindingResponse.toJsonString(response), {status: 200});
+        })), {status: 200});
       });
 
 

@@ -66,7 +66,7 @@ class TestingContainer {
 
   private addLockiStub(fetchStub: FetchStub) {
     fetchStub.addStub(new URLPattern('https://logs-prod-eu-west-0.grafana.net/loki/api/v1/push'),
-      async (request, requestInitr) => {
+      async (_1, _2) => {
         return new Response('{}', {status: 200});
       });
   }

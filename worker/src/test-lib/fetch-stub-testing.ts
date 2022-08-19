@@ -45,8 +45,10 @@ export class FetchStub {
     return requestStub;
   }
 
-  addStaticStub(urlPattern: URLPattern, response: Response) {
-    const requestStub = new RequestStub(urlPattern, async (_1, _2) => response);
+  addStaticOkStub(urlPattern: URLPattern, body: string) {
+    const requestStub = new RequestStub(urlPattern, async (_1, _2) =>
+      new Response(body, {status: 200})
+    );
     this.stubs.push(requestStub);
     return requestStub;
   }

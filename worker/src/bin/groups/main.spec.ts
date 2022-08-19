@@ -79,11 +79,13 @@ describe('Groups', () => {
 
   test('create group', async () => {
     const testRun = await testContainer.initTest();
-    const createRoleRequestStub = testRun.globalFetchStub.addStaticStub(new URLPattern('https://sharecation-authentication-development.dowo.ch/v1/create-role-binding'),
-      new Response(CreateRoleBindingResponse.toJsonString(createProtoBufOkResponse({
+    const createRoleRequestStub = testRun.globalFetchStub.addStaticOkStub(
+      new URLPattern('https://sharecation-authentication-development.dowo.ch/v1/create-role-binding'),
+      CreateRoleBindingResponse.toJsonString(createProtoBufOkResponse({
         userId: 'some-user-id',
         role: 'some-role-id',
-      })), {status: 200}));
+      }))
+    );
 
     const response = await testRun.post({
       path: '/v1/create-group',

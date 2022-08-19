@@ -1,6 +1,7 @@
 name = "sharecation-groups"
-compatibility_date = "2022-04-01"
+compatibility_date = "2022-07-14"
 legacy_env = true
+main = "./main.ts"
 
 [vars]
 ENVIRONMENT = ""

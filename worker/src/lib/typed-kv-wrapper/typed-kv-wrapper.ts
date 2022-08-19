@@ -1,3 +1,5 @@
+import {assertNotNullOrUndefined} from '../lib';
+
 interface KVNamespacePutOptionsTyped<Metadata> extends KVNamespacePutOptions {
   expiration?: number;
   expirationTtl?: number;
@@ -26,6 +28,7 @@ type AccessKvEntity<ENTITY, META extends {} | void> = {
         options: KVNamespacePutOptionsTyped<META>,
       ) => Promise<void>;
   get: () => Promise<ENTITY>;
+  getOptional: () => Promise<ENTITY | null>;
   delete: () => Promise<void>;
   getWithMetadata: () => Promise<
     KVNamespaceGetWithMetadataResult<ENTITY, META>
@@ -73,8 +76,14 @@ function getTypedKvInstanceForPath(
         return getTypedKvInstanceForPath(kvNamespace, method + ':');
       }
       switch (method) {
-        case 'get':
+        case 'getOptional':
           return () => kvNamespace.get(currentPath, 'json');
+        case 'get':
+          return async () => {
+            const result = await kvNamespace.get(currentPath, 'json');
+            assertNotNullOrUndefined(result);
+            return result;
+          };
         case 'getWithMetadata':
           return () => kvNamespace.getWithMetadata(currentPath, 'json');
         case 'delete':

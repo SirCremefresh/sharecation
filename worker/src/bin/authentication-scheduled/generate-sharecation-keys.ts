@@ -9,6 +9,15 @@ const KEY_ALGORITHM = {
 };
 const JWK_FORMAT = 'jwk';
 
+export async function generateKeys() {
+  const {publicKey, privateKey} = (await crypto.subtle.generateKey(
+    KEY_ALGORITHM,
+    true,
+    ['sign', 'verify'],
+  )) as CryptoKeyPair;
+  return {publicKey, privateKey};
+}
+
 export async function generateAndStoreNewSigningKeys(
   authenticationKv: AuthenticationKv,
   context: ExecutionContext & LoggerContext,
@@ -23,19 +32,12 @@ export async function generateAndStoreNewSigningKeys(
       KEY_ALGORITHM,
     )}`,
   );
-  const { publicKey, privateKey } = (await crypto.subtle.generateKey(
-    KEY_ALGORITHM,
-    true,
-    ['sign', 'verify'],
-  )) as CryptoKeyPair;
+  const {publicKey, privateKey} = await generateKeys();
   context.logger.info('Generated new signing and verifying keys');
 
-  const { publicJkw: publicJkwWithoutKid, privateJkw: privateJkwWithoutKid } =
+  const { publicJkw, privateJkw } =
     await exportPublicAndPrivateInJwk(publicKey, privateKey);
   context.logger.info('Converted new signing and verifying keys to JWKs');
-  const kid = crypto.randomUUID();
-  const privateJkw = { ...privateJkwWithoutKid, kid };
-  const publicJkw = { ...publicJkwWithoutKid, kid };
 
   context.logger.info(
     `Storing new signing and verifying keys with kid: ${privateJkw.kid}`,
@@ -68,14 +70,15 @@ export async function generateAndStoreNewSigningKeys(
   };
 }
 
-async function exportPublicAndPrivateInJwk(
+export async function exportPublicAndPrivateInJwk(
   publicKey: CryptoKey,
   privateKey: CryptoKey,
-): Promise<{ publicJkw: JsonWebKey; privateJkw: JsonWebKey }> {
+): Promise<{ publicJkw: JsonWebKey & {kid: string}; privateJkw: JsonWebKey& {kid: string} }> {
+  const kid = crypto.randomUUID();
   const FORMAT = JWK_FORMAT;
   const [publicJkw, privateJkw] = (await Promise.all([
     crypto.subtle.exportKey(FORMAT, publicKey),
     crypto.subtle.exportKey(FORMAT, privateKey),
   ])) as [JsonWebKey, JsonWebKey];
-  return { publicJkw, privateJkw };
+  return { publicJkw: {kid, ...publicJkw}, privateJkw: {kid,...privateJkw} };
 }

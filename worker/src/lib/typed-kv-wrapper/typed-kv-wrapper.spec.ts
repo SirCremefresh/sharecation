@@ -1,5 +1,5 @@
-import { describe, expect, test } from '@jest/globals';
-import { getTypedKVInstance, KVKey, NestedKVKey } from './typed-kv-wrapper';
+import {describe, expect, test} from '@jest/globals';
+import {getTypedKVInstance, KVKey, NestedKVKey} from './typed-kv-wrapper';
 
 interface TestKv {
   roles: NestedKVKey<['userId', 'roleId'], { roleName: string }>;
@@ -8,7 +8,7 @@ interface TestKv {
 }
 
 declare const getMiniflareBindings: () => { [key: string]: KVNamespace };
-const { COMMON } = getMiniflareBindings();
+const {COMMON} = getMiniflareBindings();
 
 describe('typed-kv', () => {
   test('put on kvKey', async () => {
@@ -26,7 +26,7 @@ describe('typed-kv', () => {
   });
 
   test('put on nestedKvKey', async () => {
-    const testValue = { roleName: 'some-role-name' };
+    const testValue = {roleName: 'some-role-name'};
     const kvInstance = getTypedKVInstance<TestKv>(COMMON);
     await kvInstance.roles
       .userId('some-user-id')
@@ -41,7 +41,7 @@ describe('typed-kv', () => {
   });
 
   test('get on nestedKvKey', async () => {
-    const testValue = { roleName: crypto.randomUUID() };
+    const testValue = {roleName: crypto.randomUUID()};
     const kvInstance = getTypedKVInstance<TestKv>(COMMON);
     await COMMON.put(
       'roles:userId:some-user-id:roleId:some-role-id:',
@@ -55,9 +55,20 @@ describe('typed-kv', () => {
     ).toEqual(testValue);
   });
 
+  test('get on not existing nestedKvKey should fail', async () => {
+    const kvInstance = getTypedKVInstance<TestKv>(COMMON);
+
+    await expect(
+      kvInstance.roles
+        .userId('not')
+        .roleId('existing')
+        .get(),
+    ).rejects.toBeInstanceOf(Error);
+  });
+
   test('list on nestedKvKey', async () => {
-    const testValue1 = { roleName: crypto.randomUUID() };
-    const testValue2 = { roleName: crypto.randomUUID() };
+    const testValue1 = {roleName: crypto.randomUUID()};
+    const testValue2 = {roleName: crypto.randomUUID()};
     const userId = crypto.randomUUID();
     const kvInstance = getTypedKVInstance<TestKv>(COMMON);
     const user = kvInstance.roles.userId(userId);
@@ -76,18 +87,18 @@ describe('typed-kv', () => {
   });
 
   test('list on nestedKvKey with metadata', async () => {
-    const testValue1 = { firstName: crypto.randomUUID() };
-    const testValue2 = { firstName: crypto.randomUUID() };
+    const testValue1 = {firstName: crypto.randomUUID()};
+    const testValue2 = {firstName: crypto.randomUUID()};
     const userId1 = '1' + crypto.randomUUID();
     const userId2 = '2' + crypto.randomUUID();
     const kvInstance = getTypedKVInstance<TestKv>(COMMON);
 
     await kvInstance.users
       .userId(userId1)
-      .put(testValue1, { metadata: testValue1 });
+      .put(testValue1, {metadata: testValue1});
     await kvInstance.users
       .userId(userId2)
-      .put(testValue2, { metadata: testValue2 });
+      .put(testValue2, {metadata: testValue2});
 
     const roles = await kvInstance.users.list();
     expect(roles.keys.length).toEqual(2);

@@ -1,8 +1,5 @@
-import {
-  CreateRoleBindingRequest,
-  CreateRoleBindingResponse,
-} from '../../contracts/authentication/v1/authentication';
-import { BasicError_BasicErrorCode } from '../../contracts/errors/v1/errors';
+import {CreateRoleBindingRequest, CreateRoleBindingResponse,} from '../../contracts/authentication/v1/authentication';
+import {BasicError_BasicErrorCode} from '../../contracts/errors/v1/errors';
 import {
   CreateGroupRequest,
   CreateGroupResponse,
@@ -10,19 +7,19 @@ import {
   Group,
   Groups,
 } from '../../contracts/groups/v1/groups';
-import { callApi } from '../../lib/api';
-import { isNotNullOrUndefined } from '../../lib/lib';
-import { addAuthenticationGuard } from '../../lib/middleware/authenticated-middleware';
+import {callApi} from '../../lib/api';
+import {isNotNullOrUndefined} from '../../lib/lib';
+import {addAuthenticationGuard} from '../../lib/middleware/authenticated-middleware';
+import {BaseContext} from '../../lib/middleware/context';
 import {
   createProtoBufBasicErrorResponse,
   createProtoBufOkResponse,
   protoBuf,
 } from '../../lib/middleware/protobuf-middleware';
-import { addRouter, route } from '../../lib/middleware/router-middleware';
-import { ROLES } from '../../lib/roles';
-import { onFetch } from '../../lib/starter/on-fetch';
-import { TypedKvNamespace } from '../../lib/typed-kv-namespace';
-import { GROUPS_KV } from './groups-kv';
+import {addRouter, route} from '../../lib/middleware/router-middleware';
+import {ROLES} from '../../lib/roles';
+import {onFetch} from '../../lib/starter/on-fetch';
+import {createGroupsKv} from './groups-kv';
 
 type Environment = {
   LOKI_SECRET: string;
@@ -36,7 +33,7 @@ function addGroupRoleBinding(
   serviceAccount: string,
   userId: string,
   newGroupId: string,
-  context: {},
+  context: BaseContext,
 ) {
   return callApi(
     CreateRoleBindingRequest,
@@ -53,11 +50,6 @@ function addGroupRoleBinding(
   );
 }
 
-interface GroupKv {
-  name: string;
-  groupId: string;
-  createdAt: string;
-}
 
 // noinspection JSUnusedGlobalSymbols
 export default {
@@ -91,16 +83,13 @@ export default {
                 );
               }
 
-              const groupsKv = new TypedKvNamespace(GROUPS_KV, env.GROUPS);
-              const value: GroupKv = {
+
+              const groupsKv = createGroupsKv(env.GROUPS);
+              await groupsKv.groups.groupId(newGroupId).put({
                 createdAt: new Date().toISOString(),
                 groupId: newGroupId,
                 name: context.proto.body.name,
-              };
-              await groupsKv.namespace.put(
-                groupsKv.keys.GROUP(newGroupId),
-                JSON.stringify(value),
-              );
+              });
 
               return createProtoBufOkResponse<Group>({
                 groupId: newGroupId,
@@ -113,17 +102,12 @@ export default {
           'POST',
           ['v1', 'get-groups'],
           protoBuf(null, GetGroupsResponse, async (request, env, context) => {
-            const groupsKv = new TypedKvNamespace(GROUPS_KV, env.GROUPS);
+            const groupsKv = createGroupsKv(env.GROUPS);
 
             const groupsPromises = Array.from(context.user.roles)
               .filter((role) => role.startsWith(ROLES.GROUPS))
               .map((role) => role.split(':')[1] as string)
-              .map((groupId) =>
-                groupsKv.namespace.get<GroupKv>(
-                  groupsKv.keys.GROUP(groupId),
-                  'json',
-                ),
-              );
+              .map((groupId) => groupsKv.groups.groupId(groupId).getOptional());
 
             const groups: Group[] = (await Promise.all(groupsPromises))
               .filter(isNotNullOrUndefined)

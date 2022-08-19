@@ -1,5 +1,5 @@
 name = "sharecation-authentication-scheduled"
-compatibility_date = "2022-04-01"
+compatibility_date = "2022-07-14"
 usage_model = "unbound"
 legacy_env = true
 workers_dev = false

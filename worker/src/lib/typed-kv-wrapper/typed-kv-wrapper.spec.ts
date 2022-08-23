@@ -1,4 +1,6 @@
 import {describe, expect, test} from '@jest/globals';
+import {KVNamespace as MiniflareKVNamespace} from '@miniflare/kv';
+import {MemoryStorage} from '@miniflare/storage-memory';
 import {getTypedKVInstance, KVKey, NestedKVKey} from './typed-kv-wrapper';
 
 interface TestKv {
@@ -7,8 +9,7 @@ interface TestKv {
   privateKey: KVKey<string>;
 }
 
-declare const getMiniflareBindings: () => { [key: string]: KVNamespace };
-const {COMMON} = getMiniflareBindings();
+const COMMON = new MiniflareKVNamespace(new MemoryStorage()) as KVNamespace;
 
 describe('typed-kv', () => {
   test('put on kvKey', async () => {

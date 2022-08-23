@@ -1,8 +1,9 @@
 import {describe, expect, test} from '@jest/globals';
 import {CreateRoleBindingResponse} from '../../contracts/authentication/v1/authentication';
+import {BasicError_BasicErrorCode} from '../../contracts/errors/v1/errors';
 import {CreateGroupRequest, CreateGroupResponse, GetGroupsResponse} from '../../contracts/groups/v1/groups';
 import {createProtoBufOkResponse} from '../../lib/middleware/protobuf-middleware';
-import {unwrapOk} from '../../test-lib/response-lib';
+import {unwrapError, unwrapOk} from '../../test-lib/response-lib';
 import {getTestingContainer} from '../../test-lib/test-container';
 import {GroupsKv} from './groups-kv';
 
@@ -21,6 +22,18 @@ describe('Groups', () => {
 
     const pingResponse = unwrapOk(GetGroupsResponse.fromJsonString(await response.text()));
     expect(pingResponse.groups.length).toEqual(0);
+  });
+
+  test('get groups un authenticated', async () => {
+    const testRun = await testContainer.initTest();
+
+    const response = await testRun.post({
+      path: '/v1/get-groups',
+    });
+
+    const pingResponse = unwrapError(GetGroupsResponse.fromJsonString(await response.text()));
+    expect(pingResponse.code).toEqual(BasicError_BasicErrorCode.UNAUTHENTICATED);
+    expect(pingResponse.message).toEqual('Authentication was unsuccessful');
   });
 
   test('get groups with two groups', async () => {
@@ -79,11 +92,13 @@ describe('Groups', () => {
 
   test('create group', async () => {
     const testRun = await testContainer.initTest();
-    const createRoleRequestStub = testRun.globalFetchStub.addStaticStub(new URLPattern('https://sharecation-authentication-development.dowo.ch/v1/create-role-binding'),
-      new Response(CreateRoleBindingResponse.toJsonString(createProtoBufOkResponse({
+    const createRoleRequestStub = testRun.globalFetchStub.addStaticOkStub(
+      new URLPattern('https://sharecation-authentication-development.dowo.ch/v1/create-role-binding'),
+      CreateRoleBindingResponse.toJsonString(createProtoBufOkResponse({
         userId: 'some-user-id',
         role: 'some-role-id',
-      })), {status: 200}));
+      }))
+    );
 
     const response = await testRun.post({
       path: '/v1/create-group',

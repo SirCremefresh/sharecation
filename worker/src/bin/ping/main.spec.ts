@@ -1,118 +1,43 @@
 import {describe, expect, test} from '@jest/globals';
-import {build} from 'esbuild';
-import {Miniflare} from 'miniflare';
 import {GetPingRequest, GetPingResponse} from '../../contracts/pings/v1/pings';
-import {Headers, MediaType} from '../../lib/http/types';
-import {isNotNullOrUndefined} from '../../lib/lib';
+import {MediaType} from '../../lib/http/types';
 import {unwrapOk} from '../../test-lib/response-lib';
+import {getTestingContainer} from '../../test-lib/test-container';
 
-const out = await build({
-  entryPoints: ['src/bin/ping/main.ts'],
-  bundle: true,
-  format: 'esm',
-  write: false
-});
-
-function getUrl(request: Request | string) {
-  if (typeof request === 'string') {
-    return request;
-  }
-  return request.url;
-}
-
-class FetchStub {
-  private stubs: {
-    urlPattern: URLPattern,
-    handler: (request: Request | string, requestInitr?: RequestInit | Request) => PromiseLike<Response>
-  }[] = [];
-
-  addStub(urlPattern: URLPattern, handler: (request: Request | string, requestInitr?: RequestInit | Request) => PromiseLike<Response>) {
-    this.stubs.push({urlPattern, handler});
-  }
-
-  getFetch() {
-    return async (request: Request | string, requestInitr?: RequestInit | Request) => {
-      const stub = this.stubs.find(stub => stub.urlPattern.test(getUrl(request)));
-      if (isNotNullOrUndefined(stub)) {
-        return stub.handler(request, requestInitr);
-      }
-      throw new Error('No stub found');
-    };
-  }
-}
-
-const mf = new Miniflare({
-  envPath: true,
-  packagePath: true,
-  wranglerConfigPath: true,
-  script: out.outputFiles[0].text,
-  modules: true,
-  bindings: {
-    ENVIRONMENT: 'testing',
-    LOKI_SECRET: 'some-secret',
-  },
-});
+const testContainer = await getTestingContainer('ping');
 
 describe('Ping', () => {
   test('Should return pong with given pingId', async () => {
-    const fetchStub = new FetchStub();
-    fetchStub.addStub(new URLPattern('https://logs-prod-eu-west-0.grafana.net/loki/api/v1/push'),
-      async (request, requestInitr) => {
-        console.log(requestInitr);
-        return new Response('{}', {status: 200});
-      });
-    await mf.setOptions({
-      globals: {
-        TESTING_BASE_CONTEXT: {
-          base: {
-            fetch: fetchStub.getFetch()
-          }
-        }
-      }
-    });
+    const testRun = await testContainer.initTest();
+
     let pingId = 'some-id';
     const getPingRequest: GetPingRequest = {
       pingId,
     };
 
-    const response = await mf.dispatchFetch('https://fake.url/v1/get-ping', {
-      method: 'POST',
+    const response = await testRun.post({
+      path: '/v1/get-ping',
       body: GetPingRequest.toJsonString(getPingRequest),
     });
 
-    const responseBody = GetPingResponse.fromJsonString(await response.text());
-    const pingResponse = unwrapOk(responseBody);
+    const pingResponse = unwrapOk(GetPingResponse.fromJsonString(await response.text()));
     expect(pingResponse.pingId).toEqual(pingId);
     expect(pingResponse.message).toEqual('pong');
   });
 
   test('Should return pong with given pingId protobuf', async () => {
-    const fetchStub = new FetchStub();
-    fetchStub.addStub(new URLPattern('https://logs-prod-eu-west-0.grafana.net/loki/api/v1/push'),
-      async (request, requestInitr) => {
-        return new Response('{}', {status: 200});
-      });
-    await mf.setOptions({
-      globals: {
-        TESTING_BASE_CONTEXT: {
-          base: {
-            fetch: fetchStub.getFetch()
-          }
-        }
-      }
-    });
+    const testRun = await testContainer.initTest();
+
     let pingId = 'some-id';
     const getPingRequest: GetPingRequest = {
       pingId,
     };
 
-    const response = await mf.dispatchFetch('https://fake.url/v1/get-ping', {
-      method: 'POST',
+    const response = await testRun.post({
+      path: '/v1/get-ping',
       body: GetPingRequest.toBinary(getPingRequest),
-      headers: {
-        [Headers.ACCEPT]: MediaType.APPLICATION_OCTET_STREAM,
-        [Headers.CONTENT_TYPE]: MediaType.APPLICATION_OCTET_STREAM,
-      },
+      accept: MediaType.APPLICATION_OCTET_STREAM,
+      contentType: MediaType.APPLICATION_OCTET_STREAM,
     });
 
     const responseBody = GetPingResponse.fromBinary(
@@ -123,3 +48,4 @@ describe('Ping', () => {
     expect(pingResponse.message).toEqual('pong');
   });
 });
+

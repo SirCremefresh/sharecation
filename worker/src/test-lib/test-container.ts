@@ -3,6 +3,7 @@ import {build} from 'esbuild';
 import {Miniflare} from 'miniflare';
 import {exportPublicAndPrivateInJwk, generateKeys} from '../bin/authentication-scheduled/generate-sharecation-keys';
 import {generateJwt} from '../lib/authentication/jwt';
+import {MediaType} from '../lib/http/types';
 import {getTypedKVInstance} from '../lib/typed-kv-wrapper/typed-kv-wrapper';
 import {FetchStub} from './fetch-stub-testing';
 
@@ -31,11 +32,17 @@ class TestRunContainer {
     return this.mf.dispatchFetch(url, options);
   }
 
-  async post(options: { path: string, body?: string, authenticated?: { roles: string[] } }) {
+  async post(options: { path: string, body?: string | Uint8Array, contentType?: MediaType; accept?: MediaType, authenticated?: { roles: string[] } }) {
     const headers: { [key: string]: string } = {};
     if (options.authenticated) {
       const jwtString = await this.getJwt({roles: options.authenticated.roles});
       headers['Authorization'] = `Bearer ${jwtString}`;
+    }
+    if (options.contentType) {
+      headers['Content-Type'] = options.contentType;
+    }
+    if (options.accept) {
+      headers['Accept'] = options.accept;
     }
     return await this.dispatchFetch(`https://fake.url${options.path}`, {
       method: 'POST',

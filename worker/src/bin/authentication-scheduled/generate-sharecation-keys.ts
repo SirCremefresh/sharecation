@@ -43,9 +43,9 @@ export async function generateAndStoreNewSigningKeys(
     `Storing new signing and verifying keys with kid: ${privateJkw.kid}`,
   );
   const currentPrivateKey =
-    (await authenticationKv.nextPrivateJWK.get()) ?? privateJkw;
+    (await authenticationKv.nextPrivateJWK.getOptional()) ?? privateJkw;
   const currentPublicKeys = [
-    ...((await authenticationKv.currentPublicJWKS.get()) ?? []),
+    ...((await authenticationKv.currentPublicJWKS.getOptional()) ?? []),
     publicJkw,
   ].slice(-3);
   await Promise.all([

@@ -331,9 +331,9 @@ abstract class _LoadGroupsForUser implements MainEvent {
       final bool loadFromFile,
       final bool loadFromServer}) = _$_LoadGroupsForUser;
 
-  String get userId => throw _privateConstructorUsedError;
-  bool get loadFromFile => throw _privateConstructorUsedError;
-  bool get loadFromServer => throw _privateConstructorUsedError;
+  String get userId;
+  bool get loadFromFile;
+  bool get loadFromServer;
   @JsonKey(ignore: true)
   _$$_LoadGroupsForUserCopyWith<_$_LoadGroupsForUser> get copyWith =>
       throw _privateConstructorUsedError;
@@ -532,8 +532,8 @@ abstract class _LoadGroups implements MainEvent {
   const factory _LoadGroups(
       {final bool loadFromFile, final bool loadFromServer}) = _$_LoadGroups;
 
-  bool get loadFromFile => throw _privateConstructorUsedError;
-  bool get loadFromServer => throw _privateConstructorUsedError;
+  bool get loadFromFile;
+  bool get loadFromServer;
   @JsonKey(ignore: true)
   _$$_LoadGroupsCopyWith<_$_LoadGroups> get copyWith =>
       throw _privateConstructorUsedError;
@@ -873,7 +873,7 @@ abstract class _AddImageEvent implements MainEvent {
   const factory _AddImageEvent({required final String groupId}) =
       _$_AddImageEvent;
 
-  String get groupId => throw _privateConstructorUsedError;
+  String get groupId;
   @JsonKey(ignore: true)
   _$$_AddImageEventCopyWith<_$_AddImageEvent> get copyWith =>
       throw _privateConstructorUsedError;
@@ -1068,7 +1068,7 @@ abstract class _InitialLoadEvent implements MainEvent {
   const factory _InitialLoadEvent({required final SharecationGroups groups}) =
       _$_InitialLoadEvent;
 
-  SharecationGroups get groups => throw _privateConstructorUsedError;
+  SharecationGroups get groups;
   @JsonKey(ignore: true)
   _$$_InitialLoadEventCopyWith<_$_InitialLoadEvent> get copyWith =>
       throw _privateConstructorUsedError;
@@ -1271,8 +1271,8 @@ abstract class _PatchImagesEvent implements MainEvent {
       {required final String groupId,
       required final List<SharecationImage> images}) = _$_PatchImagesEvent;
 
-  String get groupId => throw _privateConstructorUsedError;
-  List<SharecationImage> get images => throw _privateConstructorUsedError;
+  String get groupId;
+  List<SharecationImage> get images;
   @JsonKey(ignore: true)
   _$$_PatchImagesEventCopyWith<_$_PatchImagesEvent> get copyWith =>
       throw _privateConstructorUsedError;
@@ -1466,7 +1466,7 @@ abstract class _GroupsLoadedEvent implements MainEvent {
           {required final List<SharecationEmptyGroup> groups}) =
       _$_GroupsLoadedEvent;
 
-  List<SharecationEmptyGroup> get groups => throw _privateConstructorUsedError;
+  List<SharecationEmptyGroup> get groups;
   @JsonKey(ignore: true)
   _$$_GroupsLoadedEventCopyWith<_$_GroupsLoadedEvent> get copyWith =>
       throw _privateConstructorUsedError;
@@ -1673,8 +1673,8 @@ abstract class _ImageUpdatedEvent implements MainEvent {
       {required final String groupId,
       required final SharecationImage image}) = _$_ImageUpdatedEvent;
 
-  String get groupId => throw _privateConstructorUsedError;
-  SharecationImage get image => throw _privateConstructorUsedError;
+  String get groupId;
+  SharecationImage get image;
   @JsonKey(ignore: true)
   _$$_ImageUpdatedEventCopyWith<_$_ImageUpdatedEvent> get copyWith =>
       throw _privateConstructorUsedError;
@@ -1858,7 +1858,7 @@ class _$_AddEvent implements _AddEvent {
 abstract class _AddEvent implements MainEvent {
   const factory _AddEvent({required final String name}) = _$_AddEvent;
 
-  String get name => throw _privateConstructorUsedError;
+  String get name;
   @JsonKey(ignore: true)
   _$$_AddEventCopyWith<_$_AddEvent> get copyWith =>
       throw _privateConstructorUsedError;
@@ -2176,8 +2176,8 @@ abstract class _LoadedState implements MainState {
       {required final SharecationGroups state,
       required final String userId}) = _$_LoadedState;
 
-  SharecationGroups get state => throw _privateConstructorUsedError;
-  String get userId => throw _privateConstructorUsedError;
+  SharecationGroups get state;
+  String get userId;
   @JsonKey(ignore: true)
   _$$_LoadedStateCopyWith<_$_LoadedState> get copyWith =>
       throw _privateConstructorUsedError;
@@ -2452,7 +2452,9 @@ class _$_SharecationImageLocal extends _SharecationImageLocal {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_SharecationImageLocalToJson(this);
+    return _$$_SharecationImageLocalToJson(
+      this,
+    );
   }
 }
 
@@ -2466,8 +2468,8 @@ abstract class _SharecationImageLocal extends SharecationImage {
       _$_SharecationImageLocal.fromJson;
 
   @override
-  String get externalId => throw _privateConstructorUsedError;
-  String get path => throw _privateConstructorUsedError;
+  String get externalId;
+  String get path;
   @override
   @JsonKey(ignore: true)
   _$$_SharecationImageLocalCopyWith<_$_SharecationImageLocal> get copyWith =>
@@ -2650,7 +2652,9 @@ class _$_SharecationImageRemote extends _SharecationImageRemote {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_SharecationImageRemoteToJson(this);
+    return _$$_SharecationImageRemoteToJson(
+      this,
+    );
   }
 }
 
@@ -2665,9 +2669,9 @@ abstract class _SharecationImageRemote extends SharecationImage {
       _$_SharecationImageRemote.fromJson;
 
   @override
-  String get externalId => throw _privateConstructorUsedError;
-  String get imageId => throw _privateConstructorUsedError;
-  String get url => throw _privateConstructorUsedError;
+  String get externalId;
+  String get imageId;
+  String get url;
   @override
   @JsonKey(ignore: true)
   _$$_SharecationImageRemoteCopyWith<_$_SharecationImageRemote> get copyWith =>
@@ -2860,7 +2864,9 @@ class _$_SharecationImageSynced extends _SharecationImageSynced {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_SharecationImageSyncedToJson(this);
+    return _$$_SharecationImageSyncedToJson(
+      this,
+    );
   }
 }
 
@@ -2876,10 +2882,10 @@ abstract class _SharecationImageSynced extends SharecationImage {
       _$_SharecationImageSynced.fromJson;
 
   @override
-  String get externalId => throw _privateConstructorUsedError;
-  String get imageId => throw _privateConstructorUsedError;
-  String get url => throw _privateConstructorUsedError;
-  String get path => throw _privateConstructorUsedError;
+  String get externalId;
+  String get imageId;
+  String get url;
+  String get path;
   @override
   @JsonKey(ignore: true)
   _$$_SharecationImageSyncedCopyWith<_$_SharecationImageSynced> get copyWith =>
@@ -3042,7 +3048,9 @@ class _$_SharecationGroup implements _SharecationGroup {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_SharecationGroupToJson(this);
+    return _$$_SharecationGroupToJson(
+      this,
+    );
   }
 }
 
@@ -3057,12 +3065,11 @@ abstract class _SharecationGroup implements SharecationGroup {
       _$_SharecationGroup.fromJson;
 
   @override
-  String get groupId => throw _privateConstructorUsedError;
+  String get groupId;
   @override
-  String get name => throw _privateConstructorUsedError;
+  String get name;
   @override
-  Map<String, SharecationImage> get images =>
-      throw _privateConstructorUsedError;
+  Map<String, SharecationImage> get images;
   @override
   @JsonKey(ignore: true)
   _$$_SharecationGroupCopyWith<_$_SharecationGroup> get copyWith =>
@@ -3199,9 +3206,9 @@ abstract class _SharecationEmptyGroup extends SharecationEmptyGroup {
   const _SharecationEmptyGroup._() : super._();
 
   @override
-  String get groupId => throw _privateConstructorUsedError;
+  String get groupId;
   @override
-  String get name => throw _privateConstructorUsedError;
+  String get name;
   @override
   @JsonKey(ignore: true)
   _$$_SharecationEmptyGroupCopyWith<_$_SharecationEmptyGroup> get copyWith =>
@@ -3330,7 +3337,9 @@ class _$_SharecationGroups implements _SharecationGroups {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_SharecationGroupsToJson(this);
+    return _$$_SharecationGroupsToJson(
+      this,
+    );
   }
 }
 
@@ -3343,8 +3352,7 @@ abstract class _SharecationGroups implements SharecationGroups {
       _$_SharecationGroups.fromJson;
 
   @override
-  Map<String, SharecationGroup> get groups =>
-      throw _privateConstructorUsedError;
+  Map<String, SharecationGroup> get groups;
   @override
   @JsonKey(ignore: true)
   _$$_SharecationGroupsCopyWith<_$_SharecationGroups> get copyWith =>

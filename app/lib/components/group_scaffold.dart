@@ -129,14 +129,14 @@ class SharecationDrawer extends StatelessWidget {
     return const SizedBox(
       height: 64.0,
       child: DrawerHeader(
+        decoration: BoxDecoration(color: Colors.black),
+        margin: EdgeInsets.all(0.0),
+        padding: EdgeInsets.all(0.0),
         child: Text(
           'Groups',
           textAlign: TextAlign.center,
           style: TextStyle(color: Colors.white, fontSize: 30),
         ),
-        decoration: BoxDecoration(color: Colors.black),
-        margin: EdgeInsets.all(0.0),
-        padding: EdgeInsets.all(0.0),
       ),
     );
   }

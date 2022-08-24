@@ -443,8 +443,8 @@ abstract class _LoadEvent implements ImagesEvent {
   const factory _LoadEvent({required final String groupId, final bool force}) =
       _$_LoadEvent;
 
-  String get groupId => throw _privateConstructorUsedError;
-  bool get force => throw _privateConstructorUsedError;
+  String get groupId;
+  bool get force;
   @JsonKey(ignore: true)
   _$$_LoadEventCopyWith<_$_LoadEvent> get copyWith =>
       throw _privateConstructorUsedError;
@@ -768,8 +768,8 @@ abstract class _LoadedState implements ImagesState {
       {required final List<SharecationImage> images,
       required final String groupId}) = _$_LoadedState;
 
-  List<SharecationImage> get images => throw _privateConstructorUsedError;
-  String get groupId => throw _privateConstructorUsedError;
+  List<SharecationImage> get images;
+  String get groupId;
   @JsonKey(ignore: true)
   _$$_LoadedStateCopyWith<_$_LoadedState> get copyWith =>
       throw _privateConstructorUsedError;

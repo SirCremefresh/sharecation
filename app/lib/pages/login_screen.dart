@@ -45,11 +45,11 @@ class _LoginScreenState extends State<LoginScreen> {
           Text('Sign in with google')
         ]),
         onPressed: () async {
+          var authenticationBloc = context.read<AuthenticationBloc>();
           final credentials = await signInWithGoogle();
           if (credentials != null) {
             try {
               await authenticationService.getJwtString();
-              var authenticationBloc = context.read<AuthenticationBloc>();
               authenticationBloc.add(
                 AuthenticationEvent.signedInEvent(
                   userId: credentials.user!.uid,

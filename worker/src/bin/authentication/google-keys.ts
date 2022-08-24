@@ -21,7 +21,7 @@ async function getGoogleVerifyingKey(
   if (isNotNullOrUndefined(key)) {
     return key;
   }
-  const jwk = await kv.googleVerifyingJWKS.kid(kid).get();
+  const jwk = await kv.googleVerifyingJWKS.kid(kid).getOptional();
   if (isNullOrUndefined(jwk)) {
     return null;
   }

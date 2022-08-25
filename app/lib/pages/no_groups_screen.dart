@@ -11,16 +11,20 @@ class NoGroupsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Layout(
-      child: BlocBuilder<MainBloc, MainState>(
+      child: BlocConsumer<MainBloc, MainState>(
+        listener: (context, state) =>
+            state.whenOrNull(loadedState: (groups, userId) {
+          if (groups.groups.isNotEmpty) {
+            groutToGroup(context, groups);
+          }
+          return null;
+        }),
         builder: (context, state) {
           return state.when(
             loadingState: () => const Center(
               child: CircularProgressIndicator(),
             ),
             loadedState: (groups, userId) {
-              if (groups.groups.isNotEmpty) {
-                groutToGroup(context, groups);
-              }
               return Center(
                 child: Column(
                   children: [
@@ -46,7 +50,6 @@ class NoGroupsScreen extends StatelessWidget {
 
   Future<void> groutToGroup(
       BuildContext context, SharecationGroups groups) async {
-    await Future.delayed(const Duration(milliseconds: 10));
     context
         .go("/groups/${groups.groups[groups.groups.keys.first]!.groupId}/info");
   }

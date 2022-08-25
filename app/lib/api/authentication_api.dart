@@ -12,23 +12,23 @@ class AuthenticationApi {
   Future<CreateAuthenticationWithFirebaseResponse> createJwt({
     required CreateAuthenticationWithFirebaseRequest createJwtRequest,
   }) async {
-    const _path = r'/v1/create-authentication-with-firebase';
-    final _options = Options(
+    const path = r'/v1/create-authentication-with-firebase';
+    final options = Options(
         method: r'POST',
         contentType: 'application/json',
         responseType: ResponseType.bytes,
         headers: {'Accept': 'application/octet-stream'});
     var requestBody = createJwtRequest.toProto3Json();
-    final _response =
-        await _dio.request(_path, data: requestBody, options: _options);
+    final response =
+        await _dio.request(path, data: requestBody, options: options);
 
     try {
       return CreateAuthenticationWithFirebaseResponse.fromBuffer(
-          _response.data!);
+          response.data!);
     } catch (error, stackTrace) {
       throw DioError(
-        requestOptions: _response.requestOptions,
-        response: _response,
+        requestOptions: response.requestOptions,
+        response: response,
         type: DioErrorType.other,
         error: error,
       )..stackTrace = stackTrace;

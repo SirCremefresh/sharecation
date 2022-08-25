@@ -202,7 +202,7 @@ abstract class _SignedInEvent implements AuthenticationEvent {
   const factory _SignedInEvent({required final String userId}) =
       _$_SignedInEvent;
 
-  String get userId => throw _privateConstructorUsedError;
+  String get userId;
   @JsonKey(ignore: true)
   _$$_SignedInEventCopyWith<_$_SignedInEvent> get copyWith =>
       throw _privateConstructorUsedError;
@@ -735,7 +735,7 @@ abstract class _SignedInState implements AuthenticationState {
   const factory _SignedInState({required final String userId}) =
       _$_SignedInState;
 
-  String get userId => throw _privateConstructorUsedError;
+  String get userId;
   @JsonKey(ignore: true)
   _$$_SignedInStateCopyWith<_$_SignedInState> get copyWith =>
       throw _privateConstructorUsedError;

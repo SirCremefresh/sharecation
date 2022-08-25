@@ -8,8 +8,8 @@ import 'package:uuid/uuid.dart';
 
 class ImageRepository {
   Future<SharecationImage?> saveImage({required String groupId}) async {
-    final ImagePicker _picker = ImagePicker();
-    final XFile? photo = await _picker.pickImage(source: ImageSource.camera);
+    final ImagePicker picker = ImagePicker();
+    final XFile? photo = await picker.pickImage(source: ImageSource.camera);
     if (photo != null) {
       io.Directory appDocDir = await getApplicationDocumentsDirectory();
       var directory = io.Directory("${appDocDir.path}/groups/$groupId");

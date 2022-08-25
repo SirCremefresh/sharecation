@@ -16,13 +16,13 @@ class ImagesApi {
           'https://sharecation-images-$environment.donato-wolfisberg.workers.dev'));
 
   Future<Image> uploadImage(String groupId, XFile file) async {
-    const _path = r'/v1/create-image';
-    final _options = Options(
+    const path = r'/v1/create-image';
+    final options = Options(
         method: r'POST',
         contentType: 'application/json',
         responseType: ResponseType.bytes,
         headers: {
-          r'Authorization': 'Bearer ' + await _jwtStringGetter(),
+          r'Authorization': 'Bearer ${await _jwtStringGetter()}',
           'Accept': 'application/octet-stream'
         });
 
@@ -31,16 +31,16 @@ class ImagesApi {
       'file': await MultipartFile.fromFile(file.path, filename: file.name),
     });
 
-    var _response =
-        await _dio.request(_path, data: formData, options: _options);
+    var response =
+        await _dio.request(path, data: formData, options: options);
     try {
       var getImagesByGroupIdResponse =
-          CreateImageResponse.fromBuffer(_response.data!);
+          CreateImageResponse.fromBuffer(response.data!);
       return getImagesByGroupIdResponse.ok;
     } catch (error, stackTrace) {
       throw DioError(
-        requestOptions: _response.requestOptions,
-        response: _response,
+        requestOptions: response.requestOptions,
+        response: response,
         type: DioErrorType.other,
         error: error,
       )..stackTrace = stackTrace;
@@ -52,32 +52,32 @@ class ImagesApi {
   }
 
   Future<List<Image>> getImagesByGroupId(String groupId) async {
-    const _path = r'/v1/get-images-by-group-id';
-    final _options = Options(
+    const path = r'/v1/get-images-by-group-id';
+    final options = Options(
         method: r'POST',
         contentType: 'application/json',
         responseType: ResponseType.bytes,
         headers: {
-          r'Authorization': 'Bearer ' + await _jwtStringGetter(),
+          r'Authorization': 'Bearer ${await _jwtStringGetter()}',
           'Accept': 'application/octet-stream'
         });
     var requestBody =
         GetImagesByGroupIdRequest(groupId: groupId).toProto3Json();
 
-    final _response = await _dio.request(
-      _path,
+    final response = await _dio.request(
+      path,
       data: requestBody,
-      options: _options,
+      options: options,
     );
 
     try {
       var getImagesByGroupIdResponse =
-          GetImagesByGroupIdResponse.fromBuffer(_response.data!);
+          GetImagesByGroupIdResponse.fromBuffer(response.data!);
       return getImagesByGroupIdResponse.ok.images;
     } catch (error, stackTrace) {
       throw DioError(
-        requestOptions: _response.requestOptions,
-        response: _response,
+        requestOptions: response.requestOptions,
+        response: response,
         type: DioErrorType.other,
         error: error,
       )..stackTrace = stackTrace;

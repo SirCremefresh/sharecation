@@ -23,10 +23,8 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  BlocOverrides.runZoned(
-    () => runApp(const MyApp()),
-    blocObserver: CustomBlocObserver(),
-  );
+  Bloc.observer = CustomBlocObserver();
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -97,69 +95,69 @@ class Router extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _router = getGoRouter(context);
+    final router = getGoRouter(context);
     return MaterialApp.router(
-      routeInformationProvider: _router.routeInformationProvider,
-      routeInformationParser: _router.routeInformationParser,
-      routerDelegate: _router.routerDelegate,
+      routeInformationProvider: router.routeInformationProvider,
+      routeInformationParser: router.routeInformationParser,
+      routerDelegate: router.routerDelegate,
     );
   }
 
   GoRouter getGoRouter(BuildContext context) {
     return GoRouter(
-        debugLogDiagnostics: true,
-        initialLocation: '/groups',
-        routes: [
-          GoRoute(
-              path: '/groups',
-              pageBuilder: (context, state) => NoTransitionPage<void>(
-                    key: state.pageKey,
-                    child: const NoGroupsScreen(),
-                  ),
-              redirect: (state) {
-                return context.read<MainBloc>().state.whenOrNull<String?>(
-                  loadedState: (state, userId) {
-                    final keys = state.groups.keys;
-                    if (keys.isEmpty) return null;
-                    return "/groups/${state.groups[keys.first]!.groupId}/info";
-                  },
-                );
-              }),
-          GoRoute(
-            path: '/synchronise',
+      debugLogDiagnostics: true,
+      initialLocation: '/groups',
+      routes: [
+        GoRoute(
+            path: '/groups',
             pageBuilder: (context, state) => NoTransitionPage<void>(
-              key: state.pageKey,
-              child: const SynchroniseScreen(),
-            ),
+                  key: state.pageKey,
+                  child: const NoGroupsScreen(),
+                ),
+            redirect: (state) {
+              return context.read<MainBloc>().state.whenOrNull<String?>(
+                loadedState: (state, userId) {
+                  final keys = state.groups.keys;
+                  if (keys.isEmpty) return null;
+                  return "/groups/${state.groups[keys.first]!.groupId}/info";
+                },
+              );
+            }),
+        GoRoute(
+          path: '/synchronise',
+          pageBuilder: (context, state) => NoTransitionPage<void>(
+            key: state.pageKey,
+            child: const SynchroniseScreen(),
           ),
-          GoRoute(
-            path: '/groups/:groupId/info',
+        ),
+        GoRoute(
+          path: '/groups/:groupId/info',
+          pageBuilder: (context, state) {
+            final groupId = state.params["groupId"]!;
+            return NoTransitionPage<void>(
+              child: GroupInfoScreen(groupId: groupId),
+            );
+          },
+        ),
+        GoRoute(
+            path: '/groups/:groupId/gallery',
             pageBuilder: (context, state) {
               final groupId = state.params["groupId"]!;
               return NoTransitionPage<void>(
-                child: GroupInfoScreen(groupId: groupId),
+                child: GalleryScreen(groupId: groupId),
               );
-            },
-          ),
-          GoRoute(
-              path: '/groups/:groupId/gallery',
-              pageBuilder: (context, state) {
-                final groupId = state.params["groupId"]!;
-                return NoTransitionPage<void>(
-                  child: GalleryScreen(groupId: groupId),
-                );
-              }),
-          GoRoute(
-            path: '/groups/:groupId/swipe',
-            pageBuilder: (context, state) {
-              final groupId = state.params["groupId"]!;
-              return NoTransitionPage<void>(
-                child: SwipeScreen(groupId: groupId),
-              );
-            },
-          ),
-        ],
-        );
+            }),
+        GoRoute(
+          path: '/groups/:groupId/swipe',
+          pageBuilder: (context, state) {
+            final groupId = state.params["groupId"]!;
+            return NoTransitionPage<void>(
+              child: SwipeScreen(groupId: groupId),
+            );
+          },
+        ),
+      ],
+    );
   }
 }
 

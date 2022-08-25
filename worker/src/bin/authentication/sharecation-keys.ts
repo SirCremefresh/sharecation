@@ -53,7 +53,7 @@ async function getPrivateKey(
   }
   context.logger.info('Getting private key from KV');
 
-  const privateJwk = await authenticationKv.currentPrivateJWK.get();
+  const privateJwk = await authenticationKv.currentPrivateJWK.getOptional();
   if (isNullOrUndefined(privateJwk)) {
     throw new Error(`No currentPrivateJWK found in KV.`);
   }

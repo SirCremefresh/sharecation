@@ -17,10 +17,10 @@ class AuthenticationService {
   _CurrentAuthentication? _current;
 
   Future<String> getJwtString() async {
-    return (await getCurrent()).jwtString;
+    return (await _getCurrent()).jwtString;
   }
 
-  Future<_CurrentAuthentication> getCurrent() async {
+  Future<_CurrentAuthentication> _getCurrent() async {
     if (_isCurrentValid()) {
       return _current!;
     }

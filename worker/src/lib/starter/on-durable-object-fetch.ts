@@ -3,18 +3,7 @@ import {createBasicErrorResponse} from '../http/response';
 import {logError} from '../logger';
 import {BaseContext, RequestIdContext} from '../middleware/context';
 import {addRequestId} from '../middleware/request-id-middleware';
-
-declare global {
-  // noinspection ES6ConvertVarToLetConst
-  var TESTING_BASE_CONTEXT: BaseContext | undefined | null;
-}
-
-const BASE_CONTEXT: BaseContext = {
-  base: {
-    fetch: (request: Request | string,
-            requestInitr?: RequestInit | Request) => fetch(request, requestInitr),
-  }
-};
+import {BASE_CONTEXT} from './base-context';
 
 export function onDurableObjectFetch<ENV extends {} = {}>(
   envGetter: () => ENV,

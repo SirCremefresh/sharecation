@@ -15,22 +15,22 @@ class GroupsApi {
           'https://sharecation-groups-$environment.donato-wolfisberg.workers.dev'));
 
   Future<List<Group>> getGroups() async {
-    const _path = r'/v1/get-groups';
-    final _options =
+    const path = r'/v1/get-groups';
+    final options =
         Options(method: r'POST', responseType: ResponseType.bytes, headers: {
-      r'Authorization': 'Bearer ' + await _jwtStringGetter(),
+      r'Authorization': 'Bearer ${await _jwtStringGetter()}',
       'Accept': 'application/octet-stream'
     });
 
-    var _response = await _dio.request(_path, options: _options);
+    var response = await _dio.request(path, options: options);
     try {
       var getImagesByGroupIdResponse =
-          GetGroupsResponse.fromBuffer(_response.data!);
+          GetGroupsResponse.fromBuffer(response.data!);
       return getImagesByGroupIdResponse.ok.groups;
     } catch (error, stackTrace) {
       throw DioError(
-        requestOptions: _response.requestOptions,
-        response: _response,
+        requestOptions: response.requestOptions,
+        response: response,
         type: DioErrorType.other,
         error: error,
       )..stackTrace = stackTrace;
@@ -40,26 +40,26 @@ class GroupsApi {
   Future<Group> createGroup({
     required String groupName,
   }) async {
-    const _path = r'/v1/create-group';
-    final _options = Options(
+    const path = r'/v1/create-group';
+    final options = Options(
         method: r'POST',
         contentType: 'application/json',
         responseType: ResponseType.bytes,
         headers: {
-          r'Authorization': 'Bearer ' + await _jwtStringGetter(),
+          r'Authorization': 'Bearer ${await _jwtStringGetter()}',
           'Accept': 'application/octet-stream'
         });
     var requestBody = CreateGroupRequest(name: groupName).toProto3Json();
-    final _response =
-        await _dio.request(_path, data: requestBody, options: _options);
+    final response =
+        await _dio.request(path, data: requestBody, options: options);
 
     try {
-      var responseBody = CreateGroupResponse.fromBuffer(_response.data!);
+      var responseBody = CreateGroupResponse.fromBuffer(response.data!);
       return responseBody.ok;
     } catch (error, stackTrace) {
       throw DioError(
-        requestOptions: _response.requestOptions,
-        response: _response,
+        requestOptions: response.requestOptions,
+        response: response,
         type: DioErrorType.other,
         error: error,
       )..stackTrace = stackTrace;

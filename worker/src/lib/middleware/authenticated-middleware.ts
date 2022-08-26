@@ -5,7 +5,7 @@ import { createBasicErrorResponse } from '../http/response';
 import { isNullOrUndefined } from '../lib';
 import { AuthenticatedContext, LoggerContext } from './context';
 
-export function addAuthenticatedToContext<CONTEXT>(
+export function addAuthenticatedToContext<CONTEXT extends {}>(
   userId: string,
   roles: Set<string>,
   context: CONTEXT,

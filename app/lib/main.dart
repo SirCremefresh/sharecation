@@ -37,9 +37,6 @@ class MyApp extends StatelessWidget {
         RepositoryProvider(
           create: (context) => GroupsFileAccessorRepository(),
         ),
-        RepositoryProvider(
-          create: (context) => TaskRepository(),
-        ),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -54,7 +51,12 @@ class MyApp extends StatelessWidget {
             ),
           ),
         ],
-        child: const AuthenticationGuard(),
+        child: RepositoryProvider(
+          create: (context) => TaskRepository(
+            mainBloc: context.read<MainBloc>()
+          ),
+            child: const AuthenticationGuard()
+        ),
       ),
     );
   }
@@ -114,7 +116,7 @@ class Router extends StatelessWidget {
                   key: state.pageKey,
                   child: const NoGroupsScreen(),
                 ),
-            redirect: (state) {
+            redirect: (_, state) {
               return context.read<MainBloc>().state.whenOrNull<String?>(
                 loadedState: (state, userId) {
                   final keys = state.groups.keys;

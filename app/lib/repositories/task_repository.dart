@@ -85,7 +85,7 @@ class PictureUploadTask extends Task {
   PictureUploadTask(this.data);
 
   @override
-  Future<void> start(MainBloc mainBloc, TaskRepository _) async {
+  Future<void> start(MainBloc mainBloc, TaskRepository taskRepository) async {
     await ImageRepository()
         .uploadImage(groupId: data.groupId, externalId: data.externalId);
   }

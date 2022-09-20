@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sharecation_app/blocs/main_bloc.dart';
+import 'package:sharecation_app/blocs/task_bloc.dart';
 import 'package:sharecation_app/components/group_scaffold.dart';
 
 class GroupInfoScreen extends StatefulWidget {
@@ -47,7 +48,10 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
                           icon: const Icon(Icons.cloud_upload_outlined),
                         ),
                       ],
-                  orElse: () => [])
+                  orElse: () => []),
+              BlocBuilder<TaskBloc, TaskState>(builder: (context, state)  {
+                return Text("tasks + ${state.taskRuns.map((e) => "${e.taskConfig.getName()} - ${e.taskRunId} - ${e.taskState}").join("\n ")}");
+              })
             ],
           );
         },

@@ -25,27 +25,21 @@ class ImageRepository {
   }
 
   Future<SharecationImage> uploadImage(
-      {required String groupId, required String path}) async {
+      {required String groupId, required String externalId}) async {
+    io.Directory appDocDir = await getApplicationDocumentsDirectory();
+    final path = "${appDocDir.path}/groups/$groupId/$externalId.png";
     final file = XFile(path);
     final uploadedImage = await api.images.uploadImage(
       groupId,
       file,
     );
 
-    final appDocDir = await getApplicationDocumentsDirectory();
-    final syncedDirectory =
-        io.Directory('${appDocDir.path}/groups/$groupId/synced/');
-    if ((await syncedDirectory.exists()) == false) {
-      await syncedDirectory.create(recursive: true);
-    }
-    var newPath =
-        '${appDocDir.path}/groups/$groupId/synced/${uploadedImage.imageId}';
-    await io.File(path).rename(newPath);
-    // return SharecationImage.synced(
-    //     path: newPath,
-    //     imageId: uploadedImage.imageId,
-    //     status: SharecationImageStatus.synced);
-    throw Exception("TODO");
+    return SharecationImage.synced(
+      externalId: uploadedImage.externalId,
+      path: path,
+      imageId: uploadedImage.imageId,
+      url: uploadedImage.url,
+    );
   }
 
   Future<void> downloadImagesFromServer({required String groupId}) async {

@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sharecation_app/blocs/authentication_bloc.dart';
 import 'package:sharecation_app/blocs/main_bloc.dart';
+import 'package:sharecation_app/blocs/task_bloc.dart';
 import 'package:sharecation_app/firebase_options.dart';
 import 'package:sharecation_app/pages/gallery_screen.dart';
 import 'package:sharecation_app/pages/group_info_screen.dart';
@@ -37,12 +38,13 @@ class MyApp extends StatelessWidget {
         RepositoryProvider(
           create: (context) => GroupsFileAccessorRepository(),
         ),
-        RepositoryProvider(
-          create: (context) => TaskRepository(),
-        ),
       ],
       child: MultiBlocProvider(
         providers: [
+          BlocProvider(
+            create: (context) => TaskBloc(
+            ),
+          ),
           BlocProvider(
             create: (context) => MainBloc(
               fileRepository: context.read<GroupsFileAccessorRepository>(),
@@ -54,7 +56,13 @@ class MyApp extends StatelessWidget {
             ),
           ),
         ],
-        child: const AuthenticationGuard(),
+        child: RepositoryProvider(
+          create: (context) => TaskRepository(
+            mainBloc: context.read<MainBloc>(),
+            taskBloc: context.read<TaskBloc>()
+          ),
+            child: const AuthenticationGuard()
+        ),
       ),
     );
   }
@@ -114,7 +122,7 @@ class Router extends StatelessWidget {
                   key: state.pageKey,
                   child: const NoGroupsScreen(),
                 ),
-            redirect: (state) {
+            redirect: (_, state) {
               return context.read<MainBloc>().state.whenOrNull<String?>(
                 loadedState: (state, userId) {
                   final keys = state.groups.keys;

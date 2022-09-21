@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sharecation_app/blocs/main_bloc.dart';
 import 'package:sharecation_app/components/create_group_modal.dart';
+import 'package:sharecation_app/repositories/task_repository.dart';
 
 enum GroupScaffoldTab { groupInfo, swipe, gallery, none }
 
@@ -34,9 +35,10 @@ class Layout extends StatelessWidget {
           ? FloatingActionButton(
               child: const Icon(Icons.camera),
               onPressed: () async {
-                context
-                    .read<MainBloc>()
-                    .add(MainEvent.addImage(groupId: groupId!));
+                // context
+                //     .read<MainBloc>()
+                //     .add(MainEvent.addImage(groupId: groupId!));
+                context.read<TaskRepository>().addTask(TaskConfig.createImage(groupId: groupId!));
               },
             )
           : null,

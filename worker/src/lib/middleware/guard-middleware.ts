@@ -5,7 +5,7 @@ import { isLoggerContext } from './context';
 export function addGuard<
   REQUEST extends Request,
   ENV,
-  CONTEXT,
+  CONTEXT extends {},
   RESPONSE extends Response,
 >(
   guard: (request: REQUEST, env: ENV, context: CONTEXT) => boolean,

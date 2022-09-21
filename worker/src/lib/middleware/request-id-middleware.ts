@@ -6,7 +6,7 @@ import { RequestIdContext } from './context';
 export function addRequestId<
   REQUEST extends Request,
   ENV,
-  CONTEXT,
+  CONTEXT extends {},
   RESPONSE extends Response,
 >(
   fn: (

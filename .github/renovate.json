@@ -5,6 +5,14 @@
   "baseBranches": [
     "development"
   ],
+  "packageRules": [
+    {
+      "groupName": "dart-json",
+      "matchPackagePrefixes": [
+        "^json_"
+      ]
+    }
+  ],
   "regexManagers": [
     {
       "fileMatch": [

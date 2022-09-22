@@ -18,6 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$TaskRun {
   TaskConfig get taskConfig => throw _privateConstructorUsedError;
   String get taskRunId => throw _privateConstructorUsedError;
+  DateTime get createdAt => throw _privateConstructorUsedError;
   TaskState get taskState => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -28,7 +29,11 @@ mixin _$TaskRun {
 abstract class $TaskRunCopyWith<$Res> {
   factory $TaskRunCopyWith(TaskRun value, $Res Function(TaskRun) then) =
       _$TaskRunCopyWithImpl<$Res>;
-  $Res call({TaskConfig taskConfig, String taskRunId, TaskState taskState});
+  $Res call(
+      {TaskConfig taskConfig,
+      String taskRunId,
+      DateTime createdAt,
+      TaskState taskState});
 
   $TaskConfigCopyWith<$Res> get taskConfig;
 }
@@ -45,6 +50,7 @@ class _$TaskRunCopyWithImpl<$Res> implements $TaskRunCopyWith<$Res> {
   $Res call({
     Object? taskConfig = freezed,
     Object? taskRunId = freezed,
+    Object? createdAt = freezed,
     Object? taskState = freezed,
   }) {
     return _then(_value.copyWith(
@@ -56,6 +62,10 @@ class _$TaskRunCopyWithImpl<$Res> implements $TaskRunCopyWith<$Res> {
           ? _value.taskRunId
           : taskRunId // ignore: cast_nullable_to_non_nullable
               as String,
+      createdAt: createdAt == freezed
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
       taskState: taskState == freezed
           ? _value.taskState
           : taskState // ignore: cast_nullable_to_non_nullable
@@ -77,7 +87,11 @@ abstract class _$$_TaskRunCopyWith<$Res> implements $TaskRunCopyWith<$Res> {
           _$_TaskRun value, $Res Function(_$_TaskRun) then) =
       __$$_TaskRunCopyWithImpl<$Res>;
   @override
-  $Res call({TaskConfig taskConfig, String taskRunId, TaskState taskState});
+  $Res call(
+      {TaskConfig taskConfig,
+      String taskRunId,
+      DateTime createdAt,
+      TaskState taskState});
 
   @override
   $TaskConfigCopyWith<$Res> get taskConfig;
@@ -96,6 +110,7 @@ class __$$_TaskRunCopyWithImpl<$Res> extends _$TaskRunCopyWithImpl<$Res>
   $Res call({
     Object? taskConfig = freezed,
     Object? taskRunId = freezed,
+    Object? createdAt = freezed,
     Object? taskState = freezed,
   }) {
     return _then(_$_TaskRun(
@@ -107,6 +122,10 @@ class __$$_TaskRunCopyWithImpl<$Res> extends _$TaskRunCopyWithImpl<$Res>
           ? _value.taskRunId
           : taskRunId // ignore: cast_nullable_to_non_nullable
               as String,
+      createdAt: createdAt == freezed
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
       taskState: taskState == freezed
           ? _value.taskState
           : taskState // ignore: cast_nullable_to_non_nullable
@@ -121,6 +140,7 @@ class _$_TaskRun implements _TaskRun {
   const _$_TaskRun(
       {required this.taskConfig,
       required this.taskRunId,
+      required this.createdAt,
       required this.taskState});
 
   @override
@@ -128,11 +148,13 @@ class _$_TaskRun implements _TaskRun {
   @override
   final String taskRunId;
   @override
+  final DateTime createdAt;
+  @override
   final TaskState taskState;
 
   @override
   String toString() {
-    return 'TaskRun(taskConfig: $taskConfig, taskRunId: $taskRunId, taskState: $taskState)';
+    return 'TaskRun(taskConfig: $taskConfig, taskRunId: $taskRunId, createdAt: $createdAt, taskState: $taskState)';
   }
 
   @override
@@ -143,6 +165,7 @@ class _$_TaskRun implements _TaskRun {
             const DeepCollectionEquality()
                 .equals(other.taskConfig, taskConfig) &&
             const DeepCollectionEquality().equals(other.taskRunId, taskRunId) &&
+            const DeepCollectionEquality().equals(other.createdAt, createdAt) &&
             const DeepCollectionEquality().equals(other.taskState, taskState));
   }
 
@@ -151,6 +174,7 @@ class _$_TaskRun implements _TaskRun {
       runtimeType,
       const DeepCollectionEquality().hash(taskConfig),
       const DeepCollectionEquality().hash(taskRunId),
+      const DeepCollectionEquality().hash(createdAt),
       const DeepCollectionEquality().hash(taskState));
 
   @JsonKey(ignore: true)
@@ -163,12 +187,15 @@ abstract class _TaskRun implements TaskRun {
   const factory _TaskRun(
       {required final TaskConfig taskConfig,
       required final String taskRunId,
+      required final DateTime createdAt,
       required final TaskState taskState}) = _$_TaskRun;
 
   @override
   TaskConfig get taskConfig;
   @override
   String get taskRunId;
+  @override
+  DateTime get createdAt;
   @override
   TaskState get taskState;
   @override

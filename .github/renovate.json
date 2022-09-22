@@ -11,6 +11,13 @@
       "matchPackagePatterns": [
         "^json_"
       ]
+    },
+    {
+      "groupName": "angular",
+      "matchPackagePatterns": [
+        "^@angular-eslint\\/",
+        "^@angular\\/"
+      ]
     }
   ],
   "regexManagers": [

@@ -7,16 +7,28 @@
   ],
   "packageRules": [
     {
+      "matchUpdateTypes": ["patch", "pin"],
+      "automerge": true
+    },
+    {
       "groupName": "dart-json",
       "matchPackagePatterns": [
         "^json_"
       ]
     },
     {
+      "groupName": "jest",
+      "matchPackagePatterns": [
+        "^jest",
+        "^ts-jest"
+      ]
+    },
+    {
       "groupName": "angular",
       "matchPackagePatterns": [
         "^@angular-eslint\\/",
-        "^@angular\\/"
+        "^@angular\\/",
+        "^@angular-devkit\\/"
       ]
     }
   ],

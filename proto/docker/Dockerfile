@@ -2,7 +2,7 @@ FROM ubuntu:22.04
 
 ARG DART_VERSION="2.16.1"
 # renovate: datasource=github-tags depName=nodejs/node versioning=node
-ARG NODE_VERSION="16"
+ARG NODE_VERSION="18"
 # renovate: datasource=github-tags depName=bufbuild/buf
 ARG BUF_VERSION="v1.9.0"
 # renovate: datasource=npm depName=@protobuf-ts/plugin

@@ -23,7 +23,7 @@
     "@angular/router": "14.2.12",
     "@protobuf-ts/runtime": "2.8.2",
     "rxjs": "7.8.0",
-    "tslib": "2.4.1",
+    "tslib": "2.5.0",
     "zone.js": "0.12.0"
   },
   "devDependencies": {
